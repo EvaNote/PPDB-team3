@@ -1,0 +1,53 @@
+//https://dbdiagram.io/d/5e4d289207a7395d994dd6ac
+//Sommige varchars (merken, kleuren) door enums vervangen?
+
+Enum gender_enum{
+  Male
+  Female
+  Other
+}
+
+Table users as U {
+  email varchar [pk]
+  username varchar
+  first_name varchar
+  last_name verchar
+  gender gender_enum
+  created_at timestamp
+  country_code int
+  profile_picture varchar
+  age int
+  adress varchar
+    password_hash varchar
+}
+
+Table cars as C{
+  email varchar [pk,ref: > U.email]
+  year int
+  max_passengers int
+  color varchar
+  brand varchar
+  license_plate varchar
+  fuel varchar
+  fuel_usage int
+}
+
+
+//Trip requests is a trips
+//Trip plan is a trip
+
+Table trips as T{
+  test test
+}
+
+Table trip_plan as P{
+  creator_mail varchar [ref: > U.email]
+  start_location varchar
+  end_location varchar
+  start_time timestamp
+  end_time timestamp
+}
+
+Table trip_requests as R{
+    creator_mail varchar [ref: > U.email]
+}
