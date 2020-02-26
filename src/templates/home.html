@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% block content %}
+{% for user in users %}
+    <article class="media content-section">
+        <div class="media-body">
+            <div class="article-metadata">
+                <p class="article-title mr-2">{{ user.first_name }} {{ user.last_name }}</p>
+                <small class="text-muted">joined on {{ user.joined_on }}</small>
+            </div>
+            <p class="article-content">Email: {{ user.email }}</p>
+        </div>
+    </article>
+{% endfor %}
+{% endblock content %}
