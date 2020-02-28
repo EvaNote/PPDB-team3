@@ -20,11 +20,19 @@ def home():
 def about():
     return render_template('about.html', title='About')
 
+@app.route("/account")
+def account():
+    return render_template('account.html', title='Account')
+
+@app.route("/account/edit")
+def editaccount():
+    return render_template('editaccount.html', title='Edit account info')
 
 @app.route("/register", methods=['GET', 'POST'])
 def register():
     form = RegistrationForm()
     # check if input is valid
+
     if form.validate_on_submit():
         flash(f'Account created for {form.email.data}.', 'success')
         return redirect(url_for('home'))
