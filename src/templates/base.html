@@ -19,25 +19,24 @@
     {% endif %}
 </head>
 <body>
-<!-- Navigation bar -->
-<nav class="navbar navbar-expand-md navbar-light bg-light shadow-sm mb-4">
-    <div class="container">
-        <!-- Left side of navbar -->
-        <div class="logo">
-            <a class="navbar-brand" href={{ url_for('home') }}>
-                <img src="{{ url_for('static', filename="logo.svg") }}" class="float-left mr-2" height=auto width="32px"
-                     alt="logo">
-                <span>Campus carpool</span>
-            </a>
-        </div>
-        <!-- menu icon and navigation options -->
+<!-- content wrapper (used to keep footer at the bottom of the screen) -->
+<div id="wrap">
+    <!-- navbar -->
+    <nav class="navbar navbar-expand-md navbar-light bg-light shadow-sm">
+        <!-- logo and name -->
+        <a class="navbar-brand d-flex align-items-center" href={{ url_for('home') }}>
+            <img src="{{ url_for('static', filename="logo.svg") }}" class="float-left mr-2" width="32px" alt="logo">
+            <span class="d-none d-sm-block">Campus carpool</span>
+        </a>
+        <!-- end of logo and name -->
+        <!-- menu -->
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarMenu">
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarMenu">
             <ul class="navbar-nav ml-auto">
                 <li class="nav-item">
-                    <a class="nav-link active" href={{ url_for('home') }}>Home</a>
+                    <a class="nav-link active" href={{ url_for('home') }}>Home</a> <!-- TODO change active link -->
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href={{ url_for('about') }}>Find a ride</a>
@@ -50,43 +49,34 @@
                 </li>
             </ul>
         </div>
-    </div>
-</nav>
+        <!-- end of menu -->
+    </nav>
+    <!-- end of navbar -->
 
-<!-- Content -->
-<main role="main">
-    <div class="container">
+    <!-- content -->
+    <main id="main" role="main">
         {% block content %}{% endblock %}
-    </div>
-</main>
+    </main>
+    <!-- end of content -->
+</div>
 
-<!-- Footer -->
-<footer class="page-footer font-small bg-info text-light">
-    <div class="container text-md-left mt-5">
-        <div class="row mt-3">
-            <div class="col-md-3 col-lg-4 col-xl-3 mx-auto mb-4 text-center">
-                <h6 class="text-uppercase">About us</h6>
-                <hr class="mb-4 mt-0 d-inline-block mx-auto text-info">
+<!-- footer -->
+<footer class="footer bg-info">
+    <div class="container">
+        <div class="row py-3">
+            <div class="col footer-link text-center">
+                <a class="text-uppercase text-light" href="{{ url_for('about') }}">About us</a>
             </div>
-            <div class="col-md-3 col-lg-4 col-xl-3 mx-auto mb-4 text-center">
-                <h6 class="text-uppercase">Contact</h6>
-                <hr class=" mb-4 mt-0 d-inline-block mx-auto">
-            </div>
-            <div class="col-md-3 col-lg-4 col-xl-3 mx-auto mb-4 text-center">
-                <h6 class="text-uppercase">Products</h6>
-                <hr class="mb-4 mt-0 d-inline-block mx-auto">
-            </div>
-            <div class="col-md-3 col-lg-4 col-xl-3 mx-auto mb-4 text-center">
-                <h6 class="text-uppercase">Yeet</h6>
-                <hr class="mb-4 mt-0 d-inline-block mx-auto">
+            <div class="col footer-link text-center">
+                <a class="text-uppercase text-light" href="{{ url_for('about') }}">Contact</a>
             </div>
         </div>
     </div>
-
-    <div class="footer-copyright text-center py-3">
+    <div class="footer-copyright text-center pt-3">
         &copy; 2020 Copyright
     </div>
 </footer>
+<!-- end of footer -->
 
 <!-- Optional JavaScript -->
 <!-- jQuery first, then Popper.js, then Bootstrap JS -->

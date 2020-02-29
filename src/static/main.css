@@ -1,7 +1,15 @@
-@import url('https://fonts.googleapis.com/css?family=Montserrat&display=swap');
 
-.logo span {
-    line-height: 50px;
+html, body {
+    height: 100%;
+}
+
+#wrap {
+  min-height: 100%;
+}
+
+#main {
+  overflow:auto;
+  padding-bottom:150px; /*this needs to be bigger than footer height*/
 }
 
 hr {
@@ -12,6 +20,13 @@ hr {
     margin: 1em 0;
     padding: 0;
     width: 60px;
+}
+
+.footer {
+  position: relative;
+  margin-top: -116px; /* negative value of footer height */
+  clear:both;
+  padding-top:20px;
 }
 
 .footer-copyright {
