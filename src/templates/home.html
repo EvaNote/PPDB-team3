@@ -1,14 +1,17 @@
 {% extends "base.html" %}
 {% block content %}
-{% for user in users %}
-    <article class="media content-section">
-        <div class="media-body">
-            <div class="article-metadata">
-                <p class="article-title mr-2">{{ user.first_name }} {{ user.last_name }}</p>
-                <small class="text-muted">joined on {{ user.joined_on }}</small>
-            </div>
-            <p class="article-content">Email: {{ user.email }}</p>
-        </div>
-    </article>
-{% endfor %}
+    {# Code to test if database connection works - prints all users to home page #}
+    {#{% for user in users %}#}
+    {#    <article class="media content-section">#}
+    {#        <div class="media-body">#}
+    {#            <div class="article-metadata">#}
+    {#                <p class="article-title mr-2">{{ user.first_name }} {{ user.last_name }}</p>#}
+    {#                <small class="text-muted">joined on {{ user.joined_on }}</small>#}
+    {#            </div>#}
+    {#            <p class="article-content">Email: {{ user.email }}</p>#}
+    {#        </div>#}
+    {#    </article>#}
+    {#{% endfor %}#}
+    <h1>Content section</h1>
+    <p>This is a content section. It has content</p>
 {% endblock content %}

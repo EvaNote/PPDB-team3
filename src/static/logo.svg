@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="280" height="336" viewBox="0 0 280 336">
+  <defs>
+    <clipPath id="clip-Artboard_3">
+      <rect width="280" height="336"/>
+    </clipPath>
+  </defs>
+  <g id="Artboard_3" data-name="Artboard – 3" clip-path="url(#clip-Artboard_3)">
+    <rect width="280" height="336" fill="#fff"/>
+    <g id="Group_1" data-name="Group 1" transform="translate(-2084 -1056)">
+      <path id="Flosj_2" data-name="Flosj 2" d="M84.557,217c-27,0,0,32,0,32S111.557,217,84.557,217Z" transform="translate(2251.443 975)"/>
+      <rect id="Flosj_1" data-name="Flosj 1" width="8" height="72" transform="translate(2332 1128)"/>
+      <rect id="Wheel_1" data-name="Wheel 1" width="32" height="48" rx="5" transform="translate(2124 1344)"/>
+      <rect id="Wheel_2" data-name="Wheel 2" width="32" height="48" rx="5" transform="translate(2284 1344)"/>
+      <rect id="Motor" width="264" height="96" rx="25" transform="translate(2092 1272)"/>
+      <circle id="Light_2" data-name="Light 2" cx="24" cy="24" r="24" transform="translate(2276 1296)" fill="#fff"/>
+      <circle id="Light_1" data-name="Light 1" cx="24" cy="24" r="24" transform="translate(2116 1296)" fill="#fff"/>
+      <rect id="Vent_2" data-name="Vent 2" width="56" height="8" rx="4" transform="translate(2196 1328)" fill="#fff"/>
+      <rect id="Vent_1" data-name="Vent 1" width="56" height="8" rx="4" transform="translate(2196 1304)" fill="#fff"/>
+      <path id="Roof_B" data-name="Roof B" d="M152,337l72-80H328l72,80Z" transform="translate(1948 943)"/>
+      <path id="Roof_W" data-name="Roof W" d="M160,313l48-56h88l48,56Z" transform="translate(1972 951)" fill="#fff"/>
+      <path id="Union_5" data-name="Union 5" d="M120,55V-1H240V55c0,4.418-26.862,8-60,8S120,59.418,120,55Z" transform="translate(2044 1161)"/>
+      <path id="Hat_2" data-name="Hat 2" d="M275.5,169,136,105,275.5,41,416,105Z" transform="translate(1948 1031)" fill="#fff"/>
+      <path id="Hat_1" data-name="Hat 1" d="M275.5,169,136,105,275.5,41,416,105Z" transform="translate(1948 1015)"/>
+    </g>
+  </g>
+</svg>
