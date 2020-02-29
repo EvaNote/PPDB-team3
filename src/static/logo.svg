@@ -1,26 +1,3 @@
-<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="280" height="336" viewBox="0 0 280 336">
-  <defs>
-    <clipPath id="clip-Artboard_3">
-      <rect width="280" height="336"/>
-    </clipPath>
-  </defs>
-  <g id="Artboard_3" data-name="Artboard – 3" clip-path="url(#clip-Artboard_3)">
-    <rect width="280" height="336" fill="#fff"/>
-    <g id="Group_1" data-name="Group 1" transform="translate(-2084 -1056)">
-      <path id="Flosj_2" data-name="Flosj 2" d="M84.557,217c-27,0,0,32,0,32S111.557,217,84.557,217Z" transform="translate(2251.443 975)"/>
-      <rect id="Flosj_1" data-name="Flosj 1" width="8" height="72" transform="translate(2332 1128)"/>
-      <rect id="Wheel_1" data-name="Wheel 1" width="32" height="48" rx="5" transform="translate(2124 1344)"/>
-      <rect id="Wheel_2" data-name="Wheel 2" width="32" height="48" rx="5" transform="translate(2284 1344)"/>
-      <rect id="Motor" width="264" height="96" rx="25" transform="translate(2092 1272)"/>
-      <circle id="Light_2" data-name="Light 2" cx="24" cy="24" r="24" transform="translate(2276 1296)" fill="#fff"/>
-      <circle id="Light_1" data-name="Light 1" cx="24" cy="24" r="24" transform="translate(2116 1296)" fill="#fff"/>
-      <rect id="Vent_2" data-name="Vent 2" width="56" height="8" rx="4" transform="translate(2196 1328)" fill="#fff"/>
-      <rect id="Vent_1" data-name="Vent 1" width="56" height="8" rx="4" transform="translate(2196 1304)" fill="#fff"/>
-      <path id="Roof_B" data-name="Roof B" d="M152,337l72-80H328l72,80Z" transform="translate(1948 943)"/>
-      <path id="Roof_W" data-name="Roof W" d="M160,313l48-56h88l48,56Z" transform="translate(1972 951)" fill="#fff"/>
-      <path id="Union_5" data-name="Union 5" d="M120,55V-1H240V55c0,4.418-26.862,8-60,8S120,59.418,120,55Z" transform="translate(2044 1161)"/>
-      <path id="Hat_2" data-name="Hat 2" d="M275.5,169,136,105,275.5,41,416,105Z" transform="translate(1948 1031)" fill="#fff"/>
-      <path id="Hat_1" data-name="Hat 1" d="M275.5,169,136,105,275.5,41,416,105Z" transform="translate(1948 1015)"/>
-    </g>
-  </g>
+<svg id="Car" xmlns="http://www.w3.org/2000/svg" width="280" height="280" viewBox="0 0 280 280">
+  <path id="Car-2" data-name="Car" d="M205,280a5.005,5.005,0,0,1-5-5V260H72v15a5.005,5.005,0,0,1-5,5H45a5.005,5.005,0,0,1-5-5V260H33A24.979,24.979,0,0,1,8,235V205a24.924,24.924,0,0,1,7.322-17.678q.335-.335.68-.655h0l64-59.26V97.252L139.5,120h0L200,97.034v30.373l64,59.259h0q.344.32.679.654A24.924,24.924,0,0,1,272,205v30a24.979,24.979,0,0,1-25,25H232v15a5.005,5.005,0,0,1-5,5Zm1.658-78.427a24.664,24.664,0,0,0-7.628,4.286,20.175,20.175,0,0,0-5.143,6.357,17.007,17.007,0,0,0,0,15.57,20.161,20.161,0,0,0,5.143,6.358,24.642,24.642,0,0,0,7.628,4.286,28.555,28.555,0,0,0,18.684,0,24.626,24.626,0,0,0,7.629-4.286,20.163,20.163,0,0,0,5.143-6.358,17.007,17.007,0,0,0,0-15.57,20.165,20.165,0,0,0-5.143-6.357,24.66,24.66,0,0,0-7.629-4.286,28.54,28.54,0,0,0-18.684,0Zm-160,0a24.66,24.66,0,0,0-7.629,4.286,20.177,20.177,0,0,0-5.143,6.357,17.007,17.007,0,0,0,0,15.57,20.163,20.163,0,0,0,5.143,6.358,24.642,24.642,0,0,0,7.629,4.286,28.552,28.552,0,0,0,18.683,0,24.626,24.626,0,0,0,7.629-4.286,20.163,20.163,0,0,0,5.143-6.358,17.007,17.007,0,0,0,0-15.57,20.165,20.165,0,0,0-5.143-6.357,24.66,24.66,0,0,0-7.629-4.286,28.537,28.537,0,0,0-18.683,0ZM112,230a3.336,3.336,0,0,0,3.333,3.334h49.333a3.333,3.333,0,1,0,0-6.666H115.332A3.337,3.337,0,0,0,112,230Zm0-20a3.336,3.336,0,0,0,3.333,3.334h49.333a3.334,3.334,0,1,0,0-6.667H115.332A3.337,3.337,0,0,0,112,210ZM48,173.333H232l-38.122-37.062a108.152,108.152,0,0,1-11.451,1.777A405.564,405.564,0,0,1,140,140a405.607,405.607,0,0,1-42.427-1.953,107.929,107.929,0,0,1-11.452-1.778Zm216,13.333,0,0ZM264,186.666Zm0,0h0Zm-16-73.1V65.481L139.5,106.667,0,53.333,139.5,0,280,53.333l-24,9.111v51.126C276.091,116.2,252,140,252,140S227.908,116.2,248,113.569Z" transform="translate(0 0)"/>
 </svg>
