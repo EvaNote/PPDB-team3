@@ -1,7 +1,8 @@
 {% extends "base.html" %}
 {% block content %}
-    <div class="text-center"><h1 class="text-info">Uw tekst hier</h1></div>
+    <div class="text-center"><h1 class="text-info">{% block contentTitle %}{% endblock %}</h1></div>
     <div class="content-section border-info p-4 mb-5">
+        {% block contentContent %}{% endblock %}
     </div>
 
 {% endblock content %}
