@@ -12,6 +12,9 @@
     <!-- Custom CSS -->
     <link rel="stylesheet" href="{{ url_for('static', filename='main.css') }}">
 
+    <!-- Font Awesome -->
+    <script src="https://kit.fontawesome.com/60565be3bc.js" crossorigin="anonymous"></script>
+
     {% if title %}
         <title>Campus Carpool - {{ title }}</title>
     {% else %}
@@ -22,7 +25,7 @@
 <!-- content wrapper (used to keep footer at the bottom of the screen) -->
 <div id="wrap">
     <!-- navbar -->
-    <nav class="navbar navbar-expand-md navbar-light bg-light shadow-sm">
+    <nav class="navbar navbar-expand-md navbar-light bg-light shadow fixed-top">
         <!-- logo and name -->
         <a class="navbar-brand d-flex align-items-center" href={{ url_for('home') }}>
             <img src="{{ url_for('static', filename="logo.svg") }}" class="float-left mr-2" width="32px" alt="logo">
@@ -47,6 +50,15 @@
                 <li class="nav-item">
                     <a class="nav-link" href={{ url_for('register') }}>Sign up</a>
                 </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" id="dropdownMenuButton" data-toggle="dropdown"
+                       aria-haspopup="true" aria-expanded="false">Language</a>
+                    <div class="dropdown-menu dropdown-primary" aria-labelledby="dropdownMenuButton">
+                        <a class="dropdown-item" href="#">NL</a>
+                        <a class="dropdown-item" href="#">FR</a>
+                        <a class="dropdown-item" href="#">EN</a>
+                    </div>
+                </li>
             </ul>
         </div>
         <!-- end of menu -->
@@ -64,15 +76,18 @@
 <footer class="footer bg-info">
     <div class="container">
         <div class="row py-3">
-            <div class="col footer-link text-center">
-                <a class="text-uppercase text-light" href="{{ url_for('about') }}">About us</a>
+            <div class="col-sm-4 footer-link text-center mb-3">
+                <a class="btn text-uppercase text-light" href="{{ url_for('about') }}">About us</a>
             </div>
-            <div class="col footer-link text-center">
-                <a class="text-uppercase text-light" href="{{ url_for('about') }}">Contact</a>
+            <div class="col-sm-4 footer-link text-center mb-3">
+                <a class="btn text-uppercase text-light" href="{{ url_for('about') }}">FAQ</a>
+            </div>
+            <div class="col-sm-4 footer-link text-center mb-3">
+                <a class="btn text-uppercase text-light" href="{{ url_for('about') }}">Contact</a>
             </div>
         </div>
     </div>
-    <div class="footer-copyright text-center pt-3">
+    <div class="footer-copyright text-center">
         &copy; 2020 Copyright
     </div>
 </footer>

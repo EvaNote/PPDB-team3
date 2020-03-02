@@ -1,35 +1,30 @@
 {% extends "base.html" %}
 {% block content %}
-    {# Code to test if database connection works - prints all users to home page #}
-    {#{% for user in users %}#}
-    {#    <article class="media content-section">#}
-    {#        <div class="media-body">#}
-    {#            <div class="article-metadata">#}
-    {#                <p class="article-title mr-2">{{ user.first_name }} {{ user.last_name }}</p>#}
-    {#                <small class="text-muted">joined on {{ user.joined_on }}</small>#}
-    {#            </div>#}
-    {#            <p class="article-content">Email: {{ user.email }}</p>#}
-    {#        </div>#}
-    {#    </article>#}
-    {#{% endfor %}#}
-    <div class="container">
-        <h1>Content section</h1>
-        <p>This is a content section. It has content</p>
-        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Adipisci animi assumenda blanditiis consectetur,
-            culpa
-            cum in ipsa iusto maxime non nostrum nulla quia quod, quos ratione soluta veniam voluptas. Ad at aut itaque
-            natus nemo praesentium quod sunt ullam voluptate voluptatum! Dolor earum excepturi nobis voluptas.
-            Consequuntur
-            cumque dolor in nobis ratione, temporibus veritatis voluptas? Ab aut blanditiis commodi cum cumque
-            distinctio
-            dolores ea eligendi error eveniet exercitationem facilis fuga itaque laboriosam magni maxime minima modi
-            numquam
-            odio perspiciatis quaerat quam qui rem repellat saepe sequi similique, sit unde vero voluptate. Accusamus ad
-            alias eum incidunt perspiciatis rem, repellendus. Ab aliquid, amet eos in iusto, molestias nesciunt numquam
-            odio
-            optio porro praesentium quasi quidem saepe, tempora voluptatem. Aliquam amet, commodi cupiditate dolore eos
-            error et facere hic id in iusto molestiae necessitatibus, nostrum nulla perferendis quam quo ratione
-            recusandae
-            repellendus, repudiandae rerum saepe sed ullam vero vitae voluptates voluptatum? Harum?</p>
-    </div>
+    <!-- landing page -->
+    <header class="masthead">
+        <div class="container h-100">
+            <div class="row h-100 align-items-end">
+                <div class="col-12 text-center text-dark">
+                    <h1 class="display-4">Be cool. Carpool.</h1>
+                    <p class="lead">Make it easy for yourself to get to college or university.</p>
+                    <a class="btn btn-info mt-3" href="#">Find A Ride</a>
+                </div>
+                <div class="col-12 text-center text-light">
+                    <i class="fas fa-angle-down fa-3x text-light"></i>
+                </div>
+            </div>
+        </div>
+    </header>
+    <!-- end of landing page -->
+
+    <!-- first content section -->
+    <section class="py-5 bg-light">
+        <div class="container">
+            <h2 class="font-weight-light">Page Content</h2>
+            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Repellendus ab nulla dolorum autem nisi
+                officiis blanditiis voluptatem hic, assumenda aspernatur facere ipsam nemo ratione cumque magnam enim
+                fugiat reprehenderit expedita.</p>
+        </div>
+    </section>
+    <!-- end of first content section -->
 {% endblock content %}
