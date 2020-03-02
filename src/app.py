@@ -9,6 +9,7 @@ app.config['SECRET_KEY'] = config_data['SECRET_KEY']
 connection = DBConnection(dbname=config_data['dbname'], dbuser=config_data['dbuser'])
 user_access = UserAccess(connection)
 
+
 @app.route("/")
 @app.route("/home")
 def home():

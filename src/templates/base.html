@@ -68,6 +68,18 @@
     <!-- content -->
     <main id="main" role="main">
         {% block content %}{% endblock %}
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                <div class="row fixed-bottom justify-content-center">
+                    {% for category, message in messages %}
+                        <div id="message" class="col-8 alert alert-{{ category }}">
+                            <button type="button" class="close" data-dismiss="alert">&times;</button>
+                            {{ message }}
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        {% endwith %}
     </main>
     <!-- end of content -->
 </div>
