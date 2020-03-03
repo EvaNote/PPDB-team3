@@ -1,3 +1,8 @@
+
+html, body {
+    height: 100vh;
+}
+
 body {
     background: #ffffff;
     color: #333333;
@@ -15,4 +20,56 @@ h1, h2, h3, h4, h5, h6 {
 .content-section {
     border: 3px solid;
     border-radius: 60px;
+}
+
+.nav-item {
+    padding: 0 0.5rem;
+}
+
+#wrap {
+    min-height: 100%;
+}
+
+#main {
+    padding-top: 58px;
+    padding-bottom: 130px; /*this needs to be bigger than footer height*/
+}
+
+.landing-page {
+    overflow: auto;
+    height: 100vh;
+    margin-top: -58px; /* negative value of padding-top in main */
+
+}
+
+#message {
+    max-width: 500px;
+}
+
+hr {
+    display: block;
+    height: 1px;
+    border: 0;
+    border-top: 1px solid #ffffff;
+    margin: 1em 0;
+    padding: 0;
+    width: 60px;
+}
+
+.footer {
+    position: relative;
+    margin-top: -130px; /* negative value of footer height */
+    clear: both;
+    padding-top: 20px;
+}
+
+.footer-copyright {
+    color: #d0d0d0;
+}
+
+.masthead {
+    height: 100vh;
+    min-height: 500px;
+    background: url('https://source.unsplash.com/qd-zd2MoeE8/') no-repeat center center fixed;
+    background-size: cover;
 }

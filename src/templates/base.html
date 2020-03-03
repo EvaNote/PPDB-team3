@@ -3,65 +3,118 @@
 <head>
     <!-- Required meta tags -->
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=yes">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
     <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+          integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
 
     <!-- Custom CSS -->
     <link rel="stylesheet" href="{{ url_for('static', filename='main.css') }}">
 
+    <!-- Font Awesome -->
+    <script src="https://kit.fontawesome.com/60565be3bc.js" crossorigin="anonymous"></script>
+
     {% if title %}
-        <title>Carpool - {{ title }}</title>
+        <title>Campus Carpool - {{ title }}</title>
     {% else %}
-        <title>Carpool</title>
+        <title>Campus Carpool</title>
     {% endif %}
 </head>
 <body>
-    <header class="site-header">
-        <nav class="navbar navbar-expand-md navbar-dark bg-info fixed-top">
-            <div class="container">
-                <a class="navbar-brand mr-4" href={{ url_for('home') }}>Carpool</a>
-                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarToggle" aria-controls="navbarToggle" aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="collapse navbar-collapse" id="navbarToggle">
-                    <div class="navbar-nav mr-auto">
-                        <a class="nav-item nav-link" href={{ url_for('home') }}>Home</a>
-                        <a class="nav-item nav-link" href={{ url_for('about') }}>About</a>
+<!-- content wrapper (used to keep footer at the bottom of the screen) -->
+<div id="wrap">
+    <!-- navbar -->
+    <nav class="navbar navbar-expand-md navbar-light bg-light shadow fixed-top">
+        <!-- logo and name -->
+        <a class="navbar-brand d-flex align-items-center" href={{ url_for('home') }}>
+            <img src="{{ url_for('static', filename="logo.svg") }}" class="float-left mr-2" width="32px" alt="logo">
+            <span class="d-none d-sm-block">Campus carpool</span>
+        </a>
+        <!-- end of logo and name -->
+        <!-- menu -->
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarMenu">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarMenu">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item">
+                    <a class="nav-link active" href={{ url_for('home') }}>Home</a> <!-- TODO change active link -->
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href={{ url_for('about') }}>Find a ride</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href={{ url_for('login') }}>Log in</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href={{ url_for('register') }}>Sign up</a>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" id="dropdownMenuButton" data-toggle="dropdown"
+                       aria-haspopup="true" aria-expanded="false">Language</a>
+                    <div class="dropdown-menu dropdown-primary" aria-labelledby="dropdownMenuButton">
+                        <a class="dropdown-item" href="#">NL</a>
+                        <a class="dropdown-item" href="#">FR</a>
+                        <a class="dropdown-item" href="#">EN</a>
                     </div>
-                    <!-- Navbar Right Side -->
-                    <div class="navbar-nav">
-                        <a class="nav-item nav-link" href={{ url_for('login') }}>Login</a>
-                        <a class="nav-item nav-link" href={{ url_for('register') }}>Register</a>
-                    </div>
-                </div>
-            </div>
-        </nav>
-    </header>
+                </li>
+            </ul>
+        </div>
+        <!-- end of menu -->
+    </nav>
+    <!-- end of navbar -->
 
-    <main role="main" class="container">
-        <div class="row">
-            <div class="col-md-8">
-                {% with messages = get_flashed_messages(with_categories=true) %}
-                    {% if messages %}
-                        {% for category, message in messages %}
-                            <div class="alert alert-{{ category }}">
-                                {{ message }}
-                            </div>
-                        {% endfor %}
-                    {% endif %}
-                {% endwith %}
-                {% block content %}{% endblock %}
+    <!-- content -->
+    <main id="main" role="main">
+        {% block content %}{% endblock %}
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                <div class="row fixed-bottom justify-content-center">
+                    {% for category, message in messages %}
+                        <div id="message" class="col-8 alert alert-{{ category }}">
+                            <button type="button" class="close" data-dismiss="alert">&times;</button>
+                            {{ message }}
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        {% endwith %}
+    </main>
+    <!-- end of content -->
+</div>
+
+<!-- footer -->
+<footer class="footer bg-info">
+    <div class="container">
+        <div class="row py-3">
+            <div class="col-sm-4 footer-link text-center mb-3">
+                <a class="btn text-uppercase text-light" href="{{ url_for('about') }}">About us</a>
+            </div>
+            <div class="col-sm-4 footer-link text-center mb-3">
+                <a class="btn text-uppercase text-light" href="{{ url_for('about') }}">FAQ</a>
+            </div>
+            <div class="col-sm-4 footer-link text-center mb-3">
+                <a class="btn text-uppercase text-light" href="{{ url_for('about') }}">Contact</a>
             </div>
         </div>
-    </main>
+    </div>
+    <div class="footer-copyright text-center">
+        &copy; 2020 Copyright
+    </div>
+</footer>
+<!-- end of footer -->
 
-
-    <!-- Optional JavaScript -->
-    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
-    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+<!-- Optional JavaScript -->
+<!-- jQuery first, then Popper.js, then Bootstrap JS -->
+<script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
+        integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
+        crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+        integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+        crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
+        integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
+        crossorigin="anonymous"></script>
 </body>
 </html>
