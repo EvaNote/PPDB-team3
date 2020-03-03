@@ -1,7 +1,29 @@
-{% extends "base.html" %}
-{% block content %}
-    <div class="text-center"><h1 class="text-info">Uw tekst hier</h1></div>
-    <div class="content-section border-info p-4 mb-5">
-    </div>
+{% extends "roundborder.html" %}
+{% block contentTitle %}
+    Inloggen
+{% endblock contentTitle %}
+{% block contentContent %}
+    <div class="container">
+        <div class="row ">
+            <div class="col-md-2">
+                <div class="text-right text-info">
+                    <b>Email</b>
+                </div>
+            </div>
+            <div class="col-md-10">
+                <div class="form-group form-control-sm" type="text">
+                    {% if form.email.errors %}
+                        {{ form.email(class="form-control is-invalid") }}
+                        <div class="invalid-feedback">
+                            {% for error in form.email.errors %}
+                                <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        {{ form.email(class="form-control form-control-lg") }}
+                    {% endif %}
+                </div>
+            </div>
+        </div>
 
-{% endblock content %}
+{% endblock contentContent %}
