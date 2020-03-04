@@ -13,9 +13,9 @@ class Car:
         self.picture = picture
 
     def get(cursor, id):
-        cursor.execute("SELECT number_plate,color,brand,model,nr_seats,construction_year,fuel_consumption,fuel,user_id,picture FROM car WHERE id = %s", (id,))
-        number_plate,color,brand,model,nr_seats,construction_year,fuel_consumption,fuel,user_id,picture = cursor.fetchone()
-        return Car(number_plate,color,brand,model,nr_seats,construction_year,fuel_consumption,fuel,user_id,picture)
+        cursor.execute("SELECT id,number_plate,color,brand,model,nr_seats,construction_year,fuel_consumption,fuel,user_id,picture FROM car WHERE id = %s", (id,))
+        id,number_plate,color,brand,model,nr_seats,construction_year,fuel_consumption,fuel,user_id,picture = cursor.fetchone()
+        return Car(id,number_plate,color,brand,model,nr_seats,construction_year,fuel_consumption,fuel,user_id,picture)
 
     def to_dict(self):
         return {'id': self.id, 'number_plate': self.number_plate, 'color': self.color, 'brand': self.brand, 'model': self.model,
