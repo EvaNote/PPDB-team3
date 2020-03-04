@@ -40,6 +40,10 @@ def account_edit():
 def myrides():
     return render_template('myrides.html', title='My rides')
 
+@app.route("/user")
+def user():
+    return render_template('user.html', title='User profile')
+
 @app.route("/register", methods=['GET', 'POST'])
 def register():
     form = RegistrationForm()

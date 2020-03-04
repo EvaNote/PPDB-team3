@@ -1,14 +1,13 @@
 {% extends "roundborder.html" %}
 {% block contentTitle %}
-    My account
+    User profile: Robbe Lauwers
 {% endblock contentTitle %}
 {% block contentContent %}
                 <img src="{{ url_for('static', filename="default.png") }}" class="float-left mr-2" width="127px" alt="profile pic"><br>
-    <a class="btn btn-info" href="{{ url_for('account_edit') }}" role="button">Edit account</a>
         <!-- TODO link -->
-        <a class="btn btn-info" href="{{ url_for('about') }}" role="button">My reviews (FIX LINK)</a>
+        <a class="btn btn-info" href="{{ url_for('about') }}" role="button"> Reviews (FIX LINK)</a>
         <!-- TODO link -->
-        <a class="btn btn-info" href="{{ url_for('myrides') }}" role="button">My rides (FIX LINK)</a>
+        <a class="btn btn-info" href="{{ url_for('myrides') }}" role="button">Contact (FIX LINK)</a>
     <div>
         <br>
     <b>First name</b>
@@ -28,47 +27,8 @@
     M
     </div>
     <br>
-        <div>
-    <b>email</b>
-        <br>
-    test@testtest.test
-    </div>
-        <br>
-        <div>
-    <b>Birth date</b>
-        <br>
-    01/01/2000
-    </div>
-        <br>
-    <div>
-    <b>Phone number</b>
-        <br>
-    + 32 123 12 12 12
-    </div>
-        <br>
 
     <div class="border-top pt-3"></div>
-
-        <div>
-    <b>street + number</b>
-        <br>
-    J. Doestreet 42
-    </div>
-        <br>
-            <div>
-    <b>zip code</b>
-        <br>
-    1234
-    </div>
-        <br>
-            <div>
-    <b>municipality</b>
-        <br>
-    Rumst
-    </div>
-        <br>
-
-        <div class="border-top pt-3"></div>
 
                 <div>
     <b>Brand</b>
@@ -116,9 +76,5 @@
         <br>
     Gasoline
     </div>
-        <br>
-
-    <!-- TODO link -->
-        <a class="btn btn-info" href="{{ url_for('myrides') }}" role="button">Add car (FIX LINK)</a>
 <br>
 {% endblock contentContent %}
