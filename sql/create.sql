@@ -2,6 +2,7 @@
 address table, doesn't need a user in case the address is
 a destination. all fields are required
 */
+DROP TABLE IF EXISTS address CASCADE;
 CREATE TABLE address (
     id SERIAL PRIMARY KEY,
     country VARCHAR(256) NOT NULL,
@@ -14,6 +15,7 @@ CREATE TABLE address (
 /*
 type for gender, 2 options
 */
+DROP TYPE IF EXISTS gender_type CASCADE;
 CREATE TYPE gender_type AS ENUM (
     'M',
     'F'
@@ -23,6 +25,7 @@ CREATE TYPE gender_type AS ENUM (
 user table, last name & age are required
 gender either M or F from gender_type
 */
+DROP TABLE IF EXISTS user CASCADE;
 CREATE TABLE user (
     id SERIAL PRIMARY KEY,
     email VARCHAR(256) NOT NULL,
@@ -38,6 +41,7 @@ CREATE TABLE user (
 /*
 type for fuel, 5 options (for now?)
 */
+DROP TYPE IF EXISTS fuel_type CASCADE;
 CREATE TYPE fuel_type AS ENUM (
     'benzine', /* = gasoline = petrol */
     'diesel',
@@ -51,6 +55,7 @@ car table, color/brand/model is optional
 optional picture
 fuel from 5 fuel options (fuel_type)
 */
+DROP TABLE IF EXISTS car CASCADE;
 CREATE TABLE car (
     id SERIAL PRIMARY KEY,
     number_plate VARCHAR(10) NOT NULL,
@@ -70,6 +75,7 @@ ride table, belongs to a user
 has a departure time (date + time) that's required
 arrival time is not required
 */
+DROP TABLE IF EXISTS ride CASCADE;
 CREATE TABLE ride (
     id SERIAL PRIMARY KEY,
     departure_time DATETIME NOT NULL,
@@ -84,6 +90,7 @@ picture table for profile picture (user) and picture of car
 (not required for either -> doesn't go in user/car tables)
 filename is path to file
 */
+DROP TABLE IF EXISTS picture CASCADE;
 CREATE TABLE picture (
     id SERIAL PRIMARY KEY,
     filename VARCHAR(256),
