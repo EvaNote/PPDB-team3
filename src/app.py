@@ -16,7 +16,6 @@ def home():
     users = user_access.get_users()
     return render_template('home.html', users=users)
 
-
 @app.route("/about")
 def about():
     return render_template('about.html', title='About')
@@ -33,9 +32,13 @@ def contact():
 def account():
     return render_template('account.html', title='Account')
 
-@app.route("/account/edit")
-def editaccount():
-    return render_template('editaccount.html', title='Edit account info')
+@app.route("/edit")
+def account_edit():
+    return render_template('account_edit.html', title='Edit account info')
+
+@app.route("/mycars")
+def mycars():
+    return render_template('mycars.html', title='My cars')
 
 @app.route("/register", methods=['GET', 'POST'])
 def register():

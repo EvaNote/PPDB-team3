@@ -1,0 +1,62 @@
+{% extends "roundborder.html" %}
+{% block contentTitle %}
+    Mijn account
+{% endblock contentTitle %}
+{% block contentContent %}
+    <a class="btn btn-info" href="{{ url_for('account_edit') }}" role="button">Edit account</a>
+    <div>
+        <br>
+    <b>First name</b>
+        <br>
+    Robbe
+    </div>
+    <br>
+    <div>
+    <b>Last name</b>
+        <br>
+    Lauwers
+    </div>
+    <br>
+        <div>
+    <b>email</b>
+        <br>
+    test@testtest.test
+    </div>
+        <br>
+        <div>
+    <b>Birth date</b>
+        <br>
+    01/01/2000
+    </div>
+        <br>
+
+    <div class="border-top pt-3"></div>
+
+        <div>
+    <b>street + number</b>
+        <br>
+    J. Doestreet 42
+    </div>
+        <br>
+            <div>
+    <b>zip code</b>
+        <br>
+    1234
+    </div>
+        <br>
+            <div>
+    <b>municipality</b>
+        <br>
+    Rumst
+    </div>
+        <br>
+            <div>
+    <b>Phone number</b>
+        <br>
+    + 32 123 12 12 12
+    </div>
+        <br>
+
+        <a class="btn btn-info" href="{{ url_for('mycars') }}" role="button">My cars</a>
+<br>
+{% endblock contentContent %}
