@@ -35,6 +35,9 @@ CREATE TABLE user (
     address REFERENCES address(id)
 );
 
+/*
+type for fuel, 5 options (for now?)
+*/
 CREATE TYPE fuel_type AS ENUM (
     'benzine', /* = gasoline = petrol */
     'diesel',
@@ -46,6 +49,7 @@ CREATE TYPE fuel_type AS ENUM (
 /*
 car table, color/brand/model is optional
 optional picture
+fuel from 5 fuel options (fuel_type)
 */
 CREATE TABLE car (
     id SERIAL PRIMARY KEY,
