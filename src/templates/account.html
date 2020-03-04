@@ -3,6 +3,7 @@
     Mijn account
 {% endblock contentTitle %}
 {% block contentContent %}
+                <img src="{{ url_for('static', filename="default.png") }}" class="float-left mr-2" width="127px" alt="progile pic"><br>
     <a class="btn btn-info" href="{{ url_for('account_edit') }}" role="button">Edit account</a>
         <!-- TODO link -->
         <a class="btn btn-info" href="{{ url_for('about') }}" role="button">My reviews (FIX LINK)</a>
