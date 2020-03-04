@@ -82,6 +82,7 @@ CREATE TABLE ride (
 /*
 picture table for profile picture (user) and picture of car
 (not required for either -> doesn't go in user/car tables)
+filename is path to file
 */
 CREATE TABLE picture (
     id SERIAL PRIMARY KEY,
