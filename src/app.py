@@ -21,13 +21,16 @@ def home():
 def about():
     return render_template('about.html', title='About')
 
+
 @app.route("/account")
 def account():
     return render_template('account.html', title='Account')
 
+
 @app.route("/account/edit")
 def editaccount():
     return render_template('editaccount.html', title='Edit account info')
+
 
 @app.route("/register", methods=['GET', 'POST'])
 def register():
