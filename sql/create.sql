@@ -93,5 +93,5 @@ filename is path to file
 DROP TABLE IF EXISTS picture CASCADE;
 CREATE TABLE picture (
     id SERIAL PRIMARY KEY,
-    filename VARCHAR(256),
+    filename VARCHAR(256) NOT NULL
 );
