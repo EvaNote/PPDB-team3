@@ -4,6 +4,10 @@
 {% endblock contentTitle %}
 {% block contentContent %}
     <a class="btn btn-info" href="{{ url_for('account_edit') }}" role="button">Edit account</a>
+        <!-- TODO link -->
+        <a class="btn btn-info" href="{{ url_for('about') }}" role="button">My reviews (FIX LINK)</a>
+        <!-- TODO link -->
+        <a class="btn btn-info" href="{{ url_for('myrides') }}" role="button">My rides (FIX LINK)</a>
     <div>
         <br>
     <b>First name</b>
@@ -113,8 +117,7 @@
     </div>
         <br>
 
-
-
-        <a class="btn btn-info" href="{{ url_for('mycars') }}" role="button">Add car (FIX LINK, JOHN)</a>
+    <!-- TODO link -->
+        <a class="btn btn-info" href="{{ url_for('myrides') }}" role="button">Add car (FIX LINK)</a>
 <br>
 {% endblock contentContent %}

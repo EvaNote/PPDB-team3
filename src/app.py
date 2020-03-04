@@ -36,9 +36,9 @@ def account():
 def account_edit():
     return render_template('account_edit.html', title='Edit account info')
 
-@app.route("/mycars")
-def mycars():
-    return render_template('mycars.html', title='My cars')
+@app.route("/myrides")
+def myrides():
+    return render_template('myrides.html', title='My rides')
 
 @app.route("/register", methods=['GET', 'POST'])
 def register():
