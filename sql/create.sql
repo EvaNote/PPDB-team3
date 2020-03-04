@@ -75,8 +75,8 @@ CREATE TABLE ride (
     departure_time DATETIME NOT NULL,
     arrival_time DATETIME,
     user_id REFERENCES user(id) NOT NULL,
-    address_to REFERENCES address(id),
-    address_from REFERENCES address(id)
+    address_to REFERENCES address(id) NOT NULL,
+    address_from REFERENCES address(id) NOT NULL
 );
 
 /*
