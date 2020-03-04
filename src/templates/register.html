@@ -1,10 +1,12 @@
 {% extends "roundborder.html" %}
+{% block contentTitle %}
+    Join Today
+{% endblock contentTitle %}
 {% block contentContent %}
     <form method="POST" action="">
         {{ form.hidden_tag() }}
         <!-- display the form -->
         <fieldset class="form-group">
-            <legend class="border-bottom mb-4">Join Today</legend>
             <div class="form-group">
                 {{ form.first_name.label(class="form-control-label") }}
                 {% if form.first_name.errors %}
