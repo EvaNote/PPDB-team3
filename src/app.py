@@ -1,7 +1,8 @@
 from flask import Flask, render_template, url_for, flash, redirect
-from forms import RegistrationForm, LoginForm
 from config import config_data
 from models import *
+from forms import *
+
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = config_data['SECRET_KEY']

@@ -28,7 +28,7 @@
     <nav class="navbar navbar-expand-md navbar-light bg-light shadow fixed-top">
         <!-- logo and name -->
         <a class="navbar-brand d-flex align-items-center" href={{ url_for('home') }}>
-            <img src="{{ url_for('static', filename="logo.svg") }}" class="float-left mr-2" width="32px" alt="logo">
+            <img src="{{ url_for('static', filename="images/logo.svg") }}" class="float-left mr-2" width="32px" alt="logo">
             <span class="d-none d-sm-block">Campus carpool</span>
         </a>
         <!-- end of logo and name -->
@@ -43,7 +43,7 @@
                         <a class="nav-link active" href={{ url_for('home') }}>Home</a> <!-- TODO change active link -->
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href={{ url_for('about') }}>Find a ride</a>
+                        <a class="nav-link" href={{ url_for('findride') }}>Find a ride</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href={{ url_for('myrides') }}>My rides</a>
@@ -59,7 +59,7 @@
                         <a class="nav-link active" href={{ url_for('home') }}>Home</a> <!-- TODO change active link -->
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href={{ url_for('about') }}>Find a ride</a>
+                        <a class="nav-link" href={{ url_for('findride') }}>Find a ride</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href={{ url_for('login') }}>Log in</a>
