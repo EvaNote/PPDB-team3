@@ -1,5 +1,5 @@
 from flask import Flask, render_template, url_for, flash, redirect
-from forms import RegistrationForm, LoginForm, ReviewForm, Reviews
+from forms import RegistrationForm, LoginForm
 from config import config_data
 from models import *
 
@@ -85,6 +85,13 @@ def reviews():
 def exampleuser_reviews():
     form = Reviews()
     return render_template("my_reviews.html", title='Reviews of example user', form=form, loggedIn=True)
+
+@app.route("/findride", methods=['GET', 'POST'])
+def findride():
+    form = FindRideForm()
+    if form.validate_on_submit():
+        flash('You have been logged in successfully.', 'success')
+    return render_template("findride.html", title="Find a ride", form=form)
 
 
 if __name__ == '__main__':

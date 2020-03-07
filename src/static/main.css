@@ -139,3 +139,8 @@ hr {
 .display_rate > input:checked ~ label {
     color: #ffc700;
 }
+
+.map {
+    border: 3px solid;
+    border-color: #17a2b8;
+}

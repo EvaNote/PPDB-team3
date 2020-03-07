@@ -1,8 +1,9 @@
-{% extends "roundborder.html" %}
-{% block contentTitle %}
-    Inloggen
-{% endblock contentTitle %}
-{% block contentContent %}
+{% extends "base.html" %}
+{% block content %}
+<div class="text-center pt-5">
+    <h1 class="text-info font-weight-normal"> {{ title }}</h1>
+</div>
+<div class="content-section border-info p-4 mx-5 mb-5"> <!-- container with rounded border -->
     <form method="POST" action="">
         {{ form.hidden_tag() }}
         <!-- display the form -->
@@ -45,4 +46,6 @@
             <a href="#">Forgot your password?</a>
         </small>
     </form>
-{% endblock contentContent %}
+</div>
+
+{% endblock content %}

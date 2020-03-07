@@ -29,3 +29,10 @@ class Reviews(FlaskForm):
     submit_value = Markup('<b>Hello</b>')
     filter = SubmitField('<b>Hello</b>')
     search = StringField('')
+
+
+
+class FindRideForm(FlaskForm):
+    fromField = StringField('From', validators=[DataRequired()])
+    toField = StringField('To', validators=[DataRequired()])
+    submit = SubmitField('Search')
