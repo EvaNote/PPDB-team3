@@ -3,7 +3,7 @@
     My account
 {% endblock contentTitle %}
 {% block contentContent %}
-                <img src="{{ url_for('static', filename="default.png") }}" class="float-left mr-2" width="127px" alt="profile pic"><br>
+                <img src="{{ url_for('static', filename="temp_profile_pic.png") }}" class="float-left mr-2" width="127px" alt="profile pic"><br>
     <a class="btn btn-info" href="{{ url_for('account_edit') }}" role="button">Edit account</a>
         <!-- TODO link -->
         <a class="btn btn-info" href="{{ url_for('exampleuser_reviews') }}" role="button">My reviews</a>
