@@ -1,4 +1,5 @@
 from flask import Flask, render_template, url_for, flash, redirect
+from forms import RegistrationForm, LoginForm
 from config import config_data
 from models import *
 from forms import *
@@ -55,6 +56,20 @@ def register():
         return redirect(url_for('home'))
     return render_template("register.html", title="Register", form=form, loggedIn=False)
 
+@app.route("/ride_info")
+def ride_details():
+    return render_template("ride_information.html", title="Ride information")
+@app.route("/ride_history")
+def ride_history():
+    return render_template("ride_history.html", title="Ride history")
+
+@app.route("/add_vehicle", methods=['GET', 'POST'])
+def add_vehicle():
+    form = VehicleForm()
+    if form.validate_on_submit():
+        flash(f'Vehicle registered!', 'success')
+        return redirect(url_for('add_vehicle'))
+    return render_template("add_vehicle.html", title="Add Vehicle", form=form)
 
 @app.route("/login", methods=['GET', 'POST'])
 def login():

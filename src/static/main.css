@@ -73,6 +73,98 @@ hr {
     background-size: cover;
 }
 
+
+.center {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  width: 50%;
+}
+
+.spacer {
+    background-color: tomato;
+    margin-left: 10px;
+}
+/*
+.search-box{
+    position: absolute;
+    top: 10%;
+    left: 80%;
+    transform: translate(-50%, -50%);
+    background: #2f3640;
+    height: 40px;
+    border-radius: 40px;
+    padding: 10px;
+}
+
+.search-box:hover > .search-txt{
+    background: white;
+}
+.search-box:hover > .search-btn{
+    width: 240px;
+    padding: 0 6px;
+}
+.search-btn{
+    color: #e84118;
+    float: right;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: #2f3640;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: 0.4s;
+}
+
+.search-txt{
+    border: none;
+    background: none;
+    outline: none;
+    float: left;
+    padding: 0;
+    color: white;
+    font-size: 16px;
+    transition: 0.4s;
+    line-height: 40px;
+    width: 0px;
+}
+
+ */
+
+.ride_history_wrap_3{
+  margin-left: 5%;
+  margin-right: 5%;
+  border-radius: 15px;
+  border: 2px solid #17a2b8;
+  width: 100%;
+  position: relative;
+  display: inline-block;
+  height: auto;
+  margin-bottom: 10px;
+}
+.ride_history_wrap_1{
+  border-radius: 10px;
+  background: #17a2b8;
+  font-size:100%;
+  width:20%;
+  position: relative;
+  display: inline-block;
+  height: auto;
+  text-align: center;
+ }
+.ride_history_wrap_2{
+  border-radius: 25px;
+  font-size:100%;
+  width:50%;
+  position: relative;
+  display: inline-block;
+  height: auto;
+  text-align: center;
+  border-color: #17a2b8;
+
+ }
+
 .checked {
   color: orange;
 }
