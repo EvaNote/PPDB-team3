@@ -12,5 +12,6 @@ before_script:
   - psql -c 'CREATE ROLE app WITH LOGIN CREATEDB;'
   - psql -c 'CREATE DATABASE dbcarpool OWNER app;'
   - psql -f sql/schema.sql dbcarpool
+  - psql 'GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA user TO app;'
 script:
   - python app_test.py
