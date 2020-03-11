@@ -1,14 +1,30 @@
 {% extends "base.html" %}
 {% block content %}
-{% for user in users %}
-    <article class="media content-section">
-        <div class="media-body">
-            <div class="article-metadata">
-                <p class="article-title mr-2">{{ user.first_name }} {{ user.last_name }}</p>
-                <small class="text-muted">joined on {{ user.joined_on }}</small>
+    <!-- landing page -->
+    <div class="landing-page masthead">
+        <div class="container h-100">
+            <div class="row h-100 align-items-end">
+                <div class="col-12 text-center text-dark">
+                    <h1 class="display-4">Be cool. Carpool.</h1>
+                    <p class="lead">Make it easy for yourself to get to college or university.</p>
+                    <a class="btn btn-info mt-3" href={{ url_for('findride') }}>Find A Ride</a>
+                </div>
+                <div class="col-12 text-center text-light">
+                    <i class="fas fa-angle-down fa-3x text-light"></i>
+                </div>
             </div>
-            <p class="article-content">Email: {{ user.email }}</p>
         </div>
-    </article>
-{% endfor %}
+    </div>
+    <!-- end of landing page -->
+
+    <!-- first content section -->
+    <section class="py-5 bg-light">
+        <div class="container">
+            <h2 class="font-weight-light">Page Content</h2>
+            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Repellendus ab nulla dolorum autem nisi
+                officiis blanditiis voluptatem hic, assumenda aspernatur facere ipsam nemo ratione cumque magnam enim
+                fugiat reprehenderit expedita.</p>
+        </div>
+    </section>
+    <!-- end of first content section -->
 {% endblock content %}

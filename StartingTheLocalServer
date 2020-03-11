@@ -1,4 +1,2 @@
 source env/bin/activate
-cd src/ProgDBTutor
-python app.py
-
+python src/app.py
