@@ -13,4 +13,3 @@ before_script:
   - psql -c 'CREATE DATABASE travis_ci_test; OWNER app;'
 script:
   - python app_test.py
-create database
