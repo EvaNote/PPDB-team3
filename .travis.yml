@@ -11,6 +11,6 @@ install:
 before_script:
   - psql -c 'CREATE ROLE app WITH LOGIN CREATEDB;'
   - psql -c 'CREATE DATABASE dbcarpool OWNER app;'
-  - psql < sql/schema.sql
+  - psql -f sql/schema.sql dbcarpool
 script:
   - python app_test.py
