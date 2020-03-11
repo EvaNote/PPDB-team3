@@ -10,6 +10,6 @@ install:
   - pip install -r requirements.txt
 before_script:
   - psql -c 'CREATE ROLE app WITH LOGIN CREATEDB;'
-  - psql -c 'CREATE DATABASE travis_ci_test; OWNER app;'
+  - psql -c 'CREATE DATABASE travis_ci_test OWNER app;'
 script:
   - python app_test.py
