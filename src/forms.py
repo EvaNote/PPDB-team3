@@ -19,6 +19,7 @@ class LoginForm(FlaskForm):
     remember_me = BooleanField('Remember me')
     submit = SubmitField('Log in')
 
+
 class VehicleForm(FlaskForm):
     brand = StringField('Brand', validators=[DataRequired()])
     color = StringField('Color', validators=[DataRequired()])
@@ -31,7 +32,6 @@ class VehicleForm(FlaskForm):
     submit = SubmitField('Register vehicle')
 
 
-
 class ReviewForm(FlaskForm):
     msg = StringField('', validators=[DataRequired()])
     submit = SubmitField('Submit')
@@ -41,7 +41,6 @@ class Reviews(FlaskForm):
     submit_value = Markup('<b>Hello</b>')
     filter = SubmitField('<b>Hello</b>')
     search = StringField('')
-
 
 
 class FindRideForm(FlaskForm):
