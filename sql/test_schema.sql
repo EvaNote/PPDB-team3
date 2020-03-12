@@ -1,4 +1,3 @@
-GRANT ALL PRIVILEGES ON TABLE user TO dbcarpool;
 DROP TABLE IF EXISTS "user";
 CREATE TABLE "user" (
 	"first_name" VARCHAR NOT NULL,
