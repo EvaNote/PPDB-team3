@@ -13,5 +13,6 @@ before_script:
   - psql -c 'CREATE DATABASE dbcarpool OWNER app;'
   - psql -f sql/test_schema.sql dbcarpool
   - psql -c 'GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA public TO app;'
+  - ls /etc/postgresql/10.7/main
 script:
   - python app_test.py
