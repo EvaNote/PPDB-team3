@@ -11,8 +11,6 @@ install:
 before_script:
   - psql -c 'CREATE ROLE app WITH LOGIN CREATEDB;'
   - psql -c 'CREATE DATABASE dbcarpool OWNER app;'
-  - ls /etc/postgresql/9.6/main
-  - sudo cat /etc/postgresql/9.6/main/pg_hba.conf
   - sudo cp pg_hba_travis.conf /etc/postgresql/9.6/main/pg_hba.conf
   - sudo systemctl restart postgresql
   - psql dbcarpool -U app -f sql/test_schema.sql
