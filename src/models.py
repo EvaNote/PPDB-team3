@@ -3,9 +3,9 @@ import psycopg2
 
 # Class that represents the connection to the database.
 class DBConnection:
-    def __init__(self,dbname,dbuser):
+    def __init__(self, dbname, dbuser):
         try:
-            self.conn = psycopg2.connect("dbname='{}' user='{}'".format(dbname,dbuser))
+            self.conn = psycopg2.connect("dbname='{}' user='{}'".format(dbname, dbuser))
         except:
             print('ERROR: Unable to connect to database')
             raise Exception('Unable to connect to database')

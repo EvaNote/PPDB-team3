@@ -1,0 +1,128 @@
+{% extends "roundborder.html" %}
+
+{% block contentTitle %}
+{{ title }}
+{% endblock contentTitle %}
+
+
+{% block contentContent %}
+<form method="POST" action="">
+    {{ form.hidden_tag() }}
+
+    <fieldset class="form-group">
+        <div class="row">
+            <div class="col-md-auto" style="float: left; margin-top: 23px">
+                <div class="form-group">
+                    <button class="btn btn-outline-info">
+                        <i class="fas fa-filter fa-2x"></i> Filter
+                    </button>
+                </div>
+            </div>
+            <div class="col">
+                <div class="form-group" style="float: none">
+                {{ form.search.label(class="form-control-label") }}
+                {% if form.search.errors %}
+                    {{ form.search(class="form-control is-invalid") }}
+                    <div class="invalid-feedback">
+                        {% for error in form.email.errors %}
+                            <span>{{ error }}</span>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    {{ form.search(class="form-control form-control-lg", style="width: 100%", value="Search...") }}
+                {% endif %}
+                </div>
+            </div>
+            <div class="col-md-auto" style="float: right; margin-top: 23px">
+                <div class="nav-item dropdown">
+                    <button class="btn btn-outline-info" id="dropdownSortButton" data-toggle="dropdown" aria-haspopup="true"
+                       aria-expanded="false"><i class="fas fa-sort-amount-up-alt fa-2x"></i> Sort</button>
+                    <div class="dropdown-menu dropdown-primary" aria-labelledby="dropdownSortButton">
+                        <a class="dropdown-item" href="#">A-Z</a>
+                        <a class="dropdown-item" href="#">Z-A</a>
+                        <a class="dropdown-item" href="#">New-Old</a>
+                        <a class="dropdown-item" href="#">Old-New</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    <div class="content-section border-light p-4 mx-5 mb-5">
+        <div class="row">
+            <div class="display_rate col-md-auto" style="float: left; margin-top: 10px">
+                <label for="star5" title="text">5 stars</label>
+                <label for="star4" title="text">4 stars</label>
+                <label for="star3" title="text">3 stars</label>
+                <label for="star2" title="text">2 stars</label>
+                <label for="star1" title="text">1 star</label>
+            </div>
+            <div class="col text-center" style="margin-top: 23px">
+                <h2>Het was zeer gezellig</h2>
+            </div>
+            <div class="col-md-auto" style="float: right">
+                <b>April 25th, 2019</b> by <b>An Kasteels</b>
+                <img src="{{ url_for('static', filename="images/temp_profile_pic.png") }}" alt="HTML5 Icon" style="width:100px;height:100px;border-radius:50%;margin-left:10px" >
+            </div>
+        </div>
+        <div class="row" style="margin-left: 12px">
+            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Repellendus ab nulla dolorum autem nisi
+                officiis blanditiis voluptatem hic, assumenda aspernatur facere ipsam nemo ratione cumque magnam enim
+                fugiat reprehenderit expedita.</p>
+        </div>
+    </div>
+    <div class="content-section border-light p-4 mx-5 mb-5">
+        <div class="row">
+            <div class="display_rate col-md-auto" style="float: left; margin-top: 10px">
+                <label for="star5" title="text">5 stars</label>
+                <label for="star4" title="text">4 stars</label>
+                <label for="star3" title="text">3 stars</label>
+                <label for="star2" title="text">2 stars</label>
+                <label for="star1" title="text">1 star</label>
+            </div>
+            <div class="col text-center" style="margin-top: 23px">
+                <h2>Voor herhaling vatbaar</h2>
+            </div>
+            <div class="col-md-auto" style="float: right">
+                <b>March 22th, 2019</b> by <b>Victor Plancken</b>
+                <img src="{{ url_for('static', filename="images/temp_profile_pic.png") }}" alt="HTML5 Icon" style="width:100px;height:100px;border-radius:50%;margin-left:10px" >
+            </div>
+        </div>
+        <div class="row" style="margin-left: 12px">
+            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Repellendus ab nulla dolorum autem nisi
+                officiis blanditiis voluptatem hic, assumenda aspernatur facere ipsam nemo ratione cumque magnam enim
+                fugiat reprehenderit expedita.</p>
+        </div>
+    </div>
+    <div class="content-section border-light p-4 mx-5 mb-5">
+        <div class="row">
+            <div class="display_rate col-md-auto" style="float: left; margin-top: 10px">
+                <label for="star5" title="text">5 stars</label>
+                <label for="star4" title="text">4 stars</label>
+                <label for="star3" title="text">3 stars</label>
+                <label for="star2" title="text">2 stars</label>
+                <label for="star1" title="text">1 star</label>
+            </div>
+            <div class="col text-center" style="margin-top: 23px">
+                <h2>Stipte chauffeur</h2>
+            </div>
+            <div class="col-md-auto" style="float: right">
+                <b>Februari 21th, 2019</b> by <b>Margot DeVinck</b>
+                <img src="{{ url_for('static', filename="images/temp_profile_pic.png") }}" alt="HTML5 Icon" style="width:100px;height:100px;border-radius:50%;margin-left:10px" >
+            </div>
+        </div>
+        <div class="row" style="margin-left: 12px">
+            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Repellendus ab nulla dolorum autem nisi
+                officiis blanditiis voluptatem hic, assumenda aspernatur facere ipsam nemo ratione cumque magnam enim
+                fugiat reprehenderit expedita.</p>
+        </div>
+    </div>
+    </fieldset>
+
+
+
+
+</form>
+
+
+
+
+{% endblock contentContent %}

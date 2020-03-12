@@ -1,0 +1,54 @@
+{% extends "roundborder.html" %}
+
+{% block contentTitle %}Ride History
+
+
+{% endblock contentTitle %}
+
+
+{% block contentContent %}
+    <div class="row">
+        <div class="col-md-3">
+            <div class="search-box">
+                <input class="search-txt"  type="text" name="" placeholder="Type to search">
+                <a class="search-btn" href="#"></a>
+                <i class="fas fa-search"></i>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div>
+                <form>
+                    <fieldset>
+                    <p>
+                    <label>sort by</label>
+                    <select id = "myList">
+                        <option value = "1">Date</option>
+                        <option value = "2">two</option>
+                        <option value = "3">three</option>
+                        <option value = "4">four</option>
+                    </select>
+                    </p>
+                    </fieldset>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="ride_history_wrap_3">
+            <div class="ride_history_wrap_1">Date</div>
+            <div class="ride_history_wrap_2">From-To</div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="ride_history_wrap_3">
+            <div class="ride_history_wrap_1">Date</div>
+            <div class="ride_history_wrap_2">From-To</div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="ride_history_wrap_3">
+            <div class="ride_history_wrap_1">Date</div>
+            <div class="ride_history_wrap_2">From-To</div>
+        </div>
+    </div>
+{% endblock contentContent %}

@@ -1,0 +1,79 @@
+{% extends "roundborder.html" %}
+{% block contentTitle %}
+    User profile: Robbe Lauwers
+{% endblock contentTitle %}
+{% block contentContent %}
+                <img src="{{ url_for('static', filename="images/temp_profile_pic.png") }}" class="float-left mr-2" width="127px" alt="profile pic"><br>
+        <a class="btn btn-info" href="{{ url_for('exampleuser_reviews') }}" role="button"> Reviews </a>
+        <!-- TODO link -->
+        <a class="btn btn-info" href="{{ url_for('myrides') }}" role="button">Contact</a>
+    <div>
+        <br>
+    <b>First name</b>
+        <br>
+    Robbe
+    </div>
+    <br>
+    <div>
+    <b>Last name</b>
+        <br>
+    Lauwers
+    </div>
+    <br>
+        <div>
+    <b>gender</b>
+        <br>
+    M
+    </div>
+    <br>
+
+    <div class="border-top pt-3"></div>
+
+                <div>
+    <b>Brand</b>
+        <br>
+    Toyota
+    </div>
+        <br>
+                <div>
+    <b>Type</b>
+        <br>
+    Yaris
+    </div>
+        <br>
+                <div>
+    <b>Color</b>
+        <br>
+    Red
+    </div>
+        <br>
+                <div>
+    <b>License plate</b>
+        <br>
+    1-CAR-123
+    </div>
+        <br>
+                <div>
+    <b>nr. seats</b>
+        <br>
+    4
+    </div>
+        <br>
+                <div>
+    <b>Year</b>
+        <br>
+    2015
+    </div>
+        <br>
+                <div>
+    <b>Fuel usage</b>
+        <br>
+    7,8l/100km
+    </div>
+        <br>            <div>
+    <b>Fuel type</b>
+        <br>
+    Gasoline
+    </div>
+<br>
+{% endblock contentContent %}

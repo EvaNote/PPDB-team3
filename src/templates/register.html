@@ -1,11 +1,13 @@
 {% extends "base.html" %}
 {% block content %}
-    <div class="content-section">
+    <div class="text-center pt-5">
+        <h1 class="text-info font-weight-normal">{{ title }}</h1>
+    </div>
+    <div class="content-section border-info p-4 mx-5 mb-5"> <!-- container with rounded border -->
         <form method="POST" action="">
             {{ form.hidden_tag() }}
             <!-- display the form -->
             <fieldset class="form-group">
-                <legend class="border-bottom mb-4">Join Today</legend>
                 <div class="form-group">
                     {{ form.first_name.label(class="form-control-label") }}
                     {% if form.first_name.errors %}
@@ -76,10 +78,10 @@
                 {{ form.submit(class="btn btn-outline-info") }}
             </div>
         </form>
-    </div>
-    <div class="border-top pt-3">
-        <small class="text-muted">
-            Already have an account? <a class="ml-2" href="{{ url_for('login') }}">Log in</a>
-        </small>
+        <div class="border-top pt-3">
+            <small class="text-muted">
+                Already have an account? <a class="ml-2" href="{{ url_for('login') }}">Log in</a>
+            </small>
+        </div>
     </div>
 {% endblock content %}

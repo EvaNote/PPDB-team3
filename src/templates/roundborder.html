@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+{% block content %}
+    <div class="text-center pt-5">
+        <h1 class="text-info font-weight-normal">{% block contentTitle %}{% endblock %}</h1>
+    </div>
+    <div class="content-section border-info p-4 mx-4 mb-1 text-break">
+        {% block contentContent %}{% endblock %}
+    </div>
+{% endblock content %}
