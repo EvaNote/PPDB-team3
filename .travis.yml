@@ -12,8 +12,8 @@ before_script:
   - psql -c 'CREATE ROLE app WITH LOGIN CREATEDB;'
   - psql -c 'CREATE DATABASE dbcarpool OWNER app;'
   - psql -f sql/test_schema.sql dbcarpool
-  - psql -c 'GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA public TO app;'
   - ls /etc/postgresql/9.6/main
-  - sudo cat /etc/postgresql/9.6/main/pg_hba.conf
+  - sudo cat /etc/postgresql/9.6/main/pg_hba_travis.conf
+  - sudo cp pg_hba_travis.conf /etc/postgresql/9.6/main/pg_hba.conf
 script:
   - python app_test.py
