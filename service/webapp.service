@@ -14,7 +14,7 @@ User=app
 Group=www-data
 
 # We'll then map out the working directory and set the PATH environmental variable so that the init system knows where our the executables for the process are located (within our virtual environment).
-WorkingDirectory=/home/app/PPDB-team3/src/
+WorkingDirectory=/home/app/PPDB-team3/
 Environment="PATH=/home/app/PPDB-team3/env/bin"
 
 # We'll then specify the commanded to start the service
