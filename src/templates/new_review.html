@@ -8,12 +8,10 @@
 {% block contentContent %}
     <form method="POST" action="">
         {{ form.hidden_tag() }}
-        <div class="row" style="margin-left: 20px">
-            <div class="col-md-auto">
-                <fieldset class="form-group">
-                    {#
-                https://codepen.io/hesguru/pen/BaybqXv
-    #}
+        <div class="row">
+            <div class="col-md-3">
+                <fieldset class="form-group margin-b">
+                    {# source https://codepen.io/hesguru/pen/BaybqXv #}
                     <div class="rate">
                         <input type="radio" id="star5" name="rate" value="5"/>
                         <label for="star5" title="text">5 stars</label>
@@ -28,27 +26,25 @@
                     </div>
                 </fieldset>
                 <fieldset class="form-group">
-
-                    <div style="margin-bottom:20px"></div>
                     <div>
-                        <img src="../static/images/temp_profile_pic.png" alt="HTML5 Icon"
-                             style="width:100px;height:100px;border-radius:50%;margin-right:10px">
-                        <b>Jos Vermeulen</b>
+                        <img class="display-profile-pic-review" src="../static/images/temp_profile_pic.png"
+                             alt="HTML5 Icon">
+                        <b class="display-name">Jos Vermeulen</b>
                     </div>
                 </fieldset>
             </div>
-            <div class="col">
-                <fieldset class="form-group" style="margin-top:110px">
+            <div class="col-md-9">
+                <fieldset class="form-group title-input margin-b">
                     <div class="form-control form-control-lg">
-                        Title: summarise your experience in one sentence.
+                        Pick a title
                     </div>
                 </fieldset>
             </div>
         </div>
-        <div class="row" style="margin-left: 7px">
+        <div class="row">
             <div class="col">
                 <!-- display the form -->
-                <fieldset class="form-group">
+                <fieldset class="form-group review-input margin-b">
                     <div class="form-group">
                         {{ form.msg.label(class="form-control-label") }}
                         {% if form.msg.errors %}
@@ -67,8 +63,8 @@
             </div>
 
         </div>
-        <div class="row" style="margin-left: 20px">
-            <div class="form-group">
+        <div class="row">
+            <div class="form-group submit-btn">
                 {{ form.submit(class="btn btn-outline-info") }}
             </div>
         </div>
