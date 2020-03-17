@@ -71,12 +71,6 @@ class ProperlyLoaded(FlaskTestCase):
     def test_newreview_properly_loaded(self):
         assert self.client.get("/newreview").status_code == 200
 
-    def test_reviews_properly_loaded(self):
-        assert self.client.get("/reviews").status_code == 200
-
-    def test_exampleuser_reviews_properly_loaded(self):
-        assert self.client.get("/exampleuser/reviews").status_code == 200
-
     def test_findride_properly_loaded(self):
         assert self.client.get("/findride").status_code == 200
 

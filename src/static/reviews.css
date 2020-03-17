@@ -157,21 +157,21 @@
     }
 
     .display-title {
-        font-size: 240%;
+        font-size: 180%;
         float: left;
         padding-left: 0;
         margin-left: 0 !important;
     }
 
     .display-profile-pic-review {
-        width: 150px;
-        height: 150px;
+        width: 125px;
+        height: 125px;
         border-radius: 50%;
         margin-right: 10px;
     }
 
     .display-name {
-        font-size: 140%;
+        font-size: 110%;
         margin-left: 0 !important;
     }
 

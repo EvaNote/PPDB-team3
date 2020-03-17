@@ -1,11 +1,12 @@
-{% extends "roundborder.html" %}
+{% extends "reviews.html" %}
 {% block contentTitle %}
     My account
 {% endblock contentTitle %}
-{% block contentContent %}
-                <img src="{{ url_for('static', filename="images/temp_profile_pic.png") }}" class="float-left mr-2" width="127px" alt="profile pic"><br>
+{% block profileContent %}
+    <img src="{{ url_for('static', filename="images/temp_profile_pic.png") }}" class="float-left mr-2" width="127px"
+         alt="profile pic" style="border-radius: 50%"><br>
     <a class="btn btn-info" href="{{ url_for('account_edit') }}" role="button">Edit account</a>
-        <a class="btn btn-info" href="{{ url_for('exampleuser_reviews') }}" role="button">My reviews</a>
+    {#        <a class="btn btn-info" href="{{ url_for('exampleuser_reviews') }}" role="button">My reviews</a>#}
         <a class="btn btn-info" href="{{ url_for('ride_history') }}" role="button">My rides</a>
     <div>
         <br>
@@ -118,4 +119,5 @@
 
         <a class="btn btn-info" href="{{ url_for('add_vehicle') }}" role="button">Add car</a>
 <br>
-{% endblock contentContent %}
+
+{% endblock profileContent %}

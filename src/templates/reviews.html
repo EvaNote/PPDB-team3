@@ -1,0 +1,151 @@
+{% extends "roundborder.html" %}
+{% block contentTitle %}{% endblock %}
+{% block contentContent %}
+    {% block profileContent %}{% endblock %}
+
+    <div class="text-center pt-5 border-info" style="margin-top: 50px; margin-bottom: 30px; border-top: 3px solid">
+        <h1 class="text-info font-weight-normal">Reviews</h1>
+    </div>
+
+    <form method="POST" action="">
+        {{ form.hidden_tag() }}
+
+        <fieldset class="form-group" id="ribbon">
+            <div class="row">
+                <div class="col">
+                    <div class="col-md-auto filter-btn">
+                        {#                <div class="form-group">#}
+                        <button class="btn btn-outline-info btn-size">
+                            <i class="fas fa-filter"></i> Filter
+                        </button>
+                        {#                </div>#}
+                    </div>
+                    <div class="col-md-auto sort-btn">
+                        <div class="nav-item dropdown sort-dropdown">
+                            <button class="btn btn-outline-info btn-size" id="dropdownSortButton" data-toggle="dropdown"
+                                    aria-haspopup="true"
+                                    aria-expanded="false"><i class="fas fa-sort-amount-up-alt"></i> Sort
+                            </button>
+                            <div class="dropdown-menu dropdown-primary" aria-labelledby="dropdownSortButton">
+                                <a class="dropdown-item" href="#">A-Z</a>
+                                <a class="dropdown-item" href="#">Z-A</a>
+                                <a class="dropdown-item" href="#">New-Old</a>
+                                <a class="dropdown-item" href="#">Old-New</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col">
+                    <div class="form-group" id="search-bar">
+                        {{ form.search.label(class="form-control-label") }}
+                        {% if form.search.errors %}
+                            {{ form.search(class="form-control is-invalid") }}
+                            <div class="invalid-feedback">
+                                {% for error in form.email.errors %}
+                                    <span>{{ error }}</span>
+                                {% endfor %}
+                            </div>
+                        {% else %}
+                            {{ form.search(class="form-control form-control-lg search-size", style="width: 100%", value="Search...") }}
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            <div class="content-section border-light p-4 mx-5 mb-5 display-review">
+                <div class="row">
+                    <div class="display_rate col-md-auto margin-b">
+                        <label for="star5" title="text">5 stars</label>
+                        <label for="star4" title="text">4 stars</label>
+                        <label for="star3" title="text">3 stars</label>
+                        <label for="star2" title="text">2 stars</label>
+                        <label for="star1" title="text">1 star</label>
+                    </div>
+                </div>
+                <div class="row" style="margin-left: 0">
+                    <div class="col display-title">
+                        <b>Het was zeer gezellig</b>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col display-name">
+                        <b>April 25th, 2019</b> by <b>An Kasteels</b>
+                    </div>
+                </div>
+                <div class="row" style="margin-left: 0">
+                    <img class="display-profile-pic-review"
+                         src="{{ url_for('static', filename="images/temp_profile_pic.png") }}" alt="HTML5 Icon">
+                </div>
+                <div class="row display-review">
+                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Repellendus ab nulla dolorum autem nisi
+                        officiis blanditiis voluptatem hic, assumenda aspernatur facere ipsam nemo ratione cumque magnam
+                        enim
+                        fugiat reprehenderit expedita.</p>
+                </div>
+            </div>
+            <div class="content-section border-light p-4 mx-5 mb-5 display-review">
+                <div class="row">
+                    <div class="display_rate col-md-auto margin-b">
+                        <label for="star5" title="text">5 stars</label>
+                        <label for="star4" title="text">4 stars</label>
+                        <label for="star3" title="text">3 stars</label>
+                        <label for="star2" title="text">2 stars</label>
+                        <label for="star1" title="text">1 star</label>
+                    </div>
+                </div>
+                <div class="row" style="margin-left: 0">
+                    <div class="col display-title">
+                        <b>Voor herhaling vatbaar</b>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col display-name">
+                        <b>March 22th, 2019</b> by <b>Victor Plancken</b>
+                    </div>
+                </div>
+                <div class="row" style="margin-left: 0">
+                    <img class="display-profile-pic-review"
+                         src="{{ url_for('static', filename="images/temp_profile_pic.png") }}" alt="HTML5 Icon">
+                </div>
+                <div class="row display-review">
+                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Repellendus ab nulla dolorum autem nisi
+                        officiis blanditiis voluptatem hic, assumenda aspernatur facere ipsam nemo ratione cumque magnam
+                        enim
+                        fugiat reprehenderit expedita.</p>
+                </div>
+            </div>
+            <div class="content-section border-light p-4 mx-5 mb-5 display-review">
+                <div class="row">
+                    <div class="display_rate col-md-auto margin-b">
+                        <label for="star5" title="text">5 stars</label>
+                        <label for="star4" title="text">4 stars</label>
+                        <label for="star3" title="text">3 stars</label>
+                        <label for="star2" title="text">2 stars</label>
+                        <label for="star1" title="text">1 star</label>
+                    </div>
+                </div>
+                <div class="row" style="margin-left: 0">
+                    <div class="col display-title">
+                        <b>Stipte chauffeur</b>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col display-name">
+                        <b>Februari 21th, 2019</b> by <b>Margot DeVinck</b>
+                    </div>
+                </div>
+                <div class="row" style="margin-left: 0">
+                    <img class="display-profile-pic-review"
+                         src="{{ url_for('static', filename="images/temp_profile_pic.png") }}" alt="HTML5 Icon">
+                </div>
+                <div class="row display-review">
+                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Repellendus ab nulla dolorum autem nisi
+                        officiis blanditiis voluptatem hic, assumenda aspernatur facere ipsam nemo ratione cumque magnam
+                        enim
+                        fugiat reprehenderit expedita.</p>
+                </div>
+            </div>
+        </fieldset>
+    </form>
+{% endblock contentContent %}

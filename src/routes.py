@@ -26,7 +26,8 @@ def contact():
 
 @app.route("/account")
 def account():
-    return render_template('account.html', title='Account', loggedIn=True)
+    form = Reviews()
+    return render_template('account.html', title='Account', form=form, loggedIn=True)
 
 
 @app.route("/edit")
@@ -41,7 +42,8 @@ def myrides():
 
 @app.route("/user")
 def user():
-    return render_template('user.html', title='User profile', loggedIn=False)
+    form = Reviews()
+    return render_template('user.html', title='User profile', form=form, loggedIn=False)
 
 
 @app.route("/register", methods=['GET', 'POST'])
@@ -94,16 +96,16 @@ def newreview():
     return render_template('new_review.html', title='New review', form=form, loggedIn=True)
 
 
-@app.route("/reviews", methods=['GET', 'POST'])
-def reviews():
-    form = Reviews()
-    return render_template("my_reviews.html", title='My Reviews', form=form, loggedIn=True)
-
-
-@app.route("/exampleuser/reviews", methods=['GET', 'POST'])
-def exampleuser_reviews():
-    form = Reviews()
-    return render_template("my_reviews.html", title='Reviews of example user', form=form, loggedIn=True)
+# @app.route("/reviews", methods=['GET', 'POST'])
+# def reviews():
+#     form = Reviews()
+#     return render_template("my_reviews.html", title='My Reviews', form=form, loggedIn=True)
+#
+#
+# @app.route("/exampleuser/reviews", methods=['GET', 'POST'])
+# def exampleuser_reviews():
+#     form = Reviews()
+#     return render_template("my_reviews.html", title='Reviews of example user', form=form, loggedIn=True)
 
 
 @app.route("/findride", methods=['GET', 'POST'])
