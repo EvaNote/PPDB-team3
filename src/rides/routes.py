@@ -1,7 +1,23 @@
-from flask import Blueprint, flash, render_template
+from flask import Blueprint, flash, render_template, g, current_app, abort
 from src.rides.forms import FindRideForm
 
-rides = Blueprint('rides', __name__)
+rides = Blueprint('rides', __name__, url_prefix='/<lang_code>')
+
+
+@rides.url_defaults
+def add_language_code(endpoint, values):
+    values.setdefault('lang_code', g.lang_code)
+
+
+@rides.url_value_preprocessor
+def pull_lang_code(endpoint, values):
+    g.lang_code = values.pop('lang_code')
+
+
+@rides.before_request
+def before_request():
+    if g.lang_code not in current_app.config['SUPPORTED_LANGUAGES']:
+        abort(404)
 
 
 @rides.route("/findride", methods=['GET', 'POST'])

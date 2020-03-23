@@ -7,7 +7,7 @@
                 <div class="col-12 text-center text-dark">
                     <h1 class="display-4">Be cool. Carpool.</h1>
                     <p class="lead">{{ _('Make it easy for yourself to get to college or university.') }}</p>
-                    <a class="btn btn-info mt-3" href={{ url_for('rides.findride') }}>Find A Ride</a>
+                    <a class="btn btn-info mt-3" href={{ url_for('rides.findride') }}>{{ _('Find A Ride') }}</a>
                 </div>
                 <div class="col-12 text-center text-light">
                     <i class="fas fa-angle-down fa-3x text-light"></i>
@@ -20,7 +20,7 @@
     <!-- first content section -->
     <section class="py-5 bg-light">
         <div class="container">
-            <h2 class="font-weight-light">Page Content</h2>
+            <h2 class="font-weight-light">{{ _('Content') }}</h2>
             <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Repellendus ab nulla dolorum autem nisi
                 officiis blanditiis voluptatem hic, assumenda aspernatur facere ipsam nemo ratione cumque magnam enim
                 fugiat reprehenderit expedita.</p>

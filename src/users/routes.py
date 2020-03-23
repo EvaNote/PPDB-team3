@@ -1,8 +1,24 @@
-from flask import Blueprint, render_template, flash, redirect, url_for
+from flask import Blueprint, render_template, flash, redirect, url_for, g, current_app, abort
 from src.reviews.forms import Reviews
 from src.users.forms import LoginForm, RegistrationForm, VehicleForm
 
-users = Blueprint('users', __name__)
+users = Blueprint('users', __name__, url_prefix='/<lang_code>')
+
+
+@users.url_defaults
+def add_language_code(endpoint, values):
+    values.setdefault('lang_code', g.lang_code)
+
+
+@users.url_value_preprocessor
+def pull_lang_code(endpoint, values):
+    g.lang_code = values.pop('lang_code')
+
+
+@users.before_request
+def before_request():
+    if g.lang_code not in current_app.config['SUPPORTED_LANGUAGES']:
+        abort(404)
 
 
 @users.route("/account")

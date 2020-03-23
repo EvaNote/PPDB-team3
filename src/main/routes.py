@@ -1,6 +1,22 @@
-from flask import Blueprint, render_template
+from flask import Blueprint, render_template, g, current_app, abort
 
-main = Blueprint('main', __name__)
+main = Blueprint('main', __name__, url_prefix='/<lang_code>')
+
+
+@main.url_defaults
+def add_language_code(endpoint, values):
+    values.setdefault('lang_code', g.lang_code)
+
+
+@main.url_value_preprocessor
+def pull_lang_code(endpoint, values):
+    g.lang_code = values.pop('lang_code')
+
+
+@main.before_request
+def before_request():
+    if g.lang_code not in current_app.config['SUPPORTED_LANGUAGES']:
+        abort(404)
 
 
 @main.route("/")
