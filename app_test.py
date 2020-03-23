@@ -1,20 +1,12 @@
 import os
 import tempfile
-import sys
-from flask import Flask
-from src.config import config_data
-from src.models import *
-from src import app
 import unittest
+from src import create_app, TestConfig
 
-import pytest
-
-from run import *
+app = create_app(TestConfig)
 
 
 # source: https://github.com/pallets/flask/blob/master/examples/tutorial/tests/conftest.py
-
-
 class FlaskTestCase(unittest.TestCase):
 
     def setUp(self):

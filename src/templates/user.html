@@ -5,9 +5,9 @@
 {% block profileContent %}
     <img src="{{ url_for('static', filename="images/temp_profile_pic.png") }}" class="float-left mr-2" width="127px"
          alt="profile pic" style="border-radius: 50%"><br>
-    {#        <a class="btn btn-info" href="{{ url_for('exampleuser_reviews') }}" role="button"> Reviews </a>#}
+    {#        <a class="btn btn-info" href="{{ url_for('reviews.exampleuser_reviews') }}" role="button"> Reviews </a>#}
         <!-- TODO link -->
-        <a class="btn btn-info" href="{{ url_for('myrides') }}" role="button">Contact</a>
+        <a class="btn btn-info" href="{{ url_for('users.myrides') }}" role="button">Contact</a>
     <div>
         <br>
     <b>First name</b>
