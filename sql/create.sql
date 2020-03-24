@@ -96,3 +96,19 @@ CREATE TABLE picture (
     id SERIAL PRIMARY KEY,
     filename VARCHAR(256) NOT NULL
 );
+
+/*
+review table for a review, is connected to 2 people: the writer and the reviewed person
+also holds an amount of stars, the title of the review and the text
+title and text can be empty, it's possible to only leave the star review
+*/
+
+DROP TABLE IF EXISTS review CASCADE;
+CREATE TABLE review (
+    id SERIAL PRIMARY KEY,
+    user_for REFERENCES user(id) NOT NULL,
+    user_from REFERENCES user(id) NOT NULL,
+    amount_of_stars INTEGER NOT NULL
+    title VARCHAR(256)
+    review_text VARCHAR(1000)
+);
