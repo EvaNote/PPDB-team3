@@ -1,13 +1,13 @@
 {% extends "reviews.html" %}
 {% block contentTitle %}
-    My account
+    {{_('My account')}}
 {% endblock contentTitle %}
 {% block profileContent %}
     <img src="{{ url_for('static', filename="images/temp_profile_pic.png") }}" class="float-left mr-2" width="127px"
          alt="profile pic" style="border-radius: 50%"><br>
-    <a class="btn btn-info" href="{{ url_for('users.account_edit') }}" role="button">Edit account</a>
+    <a class="btn btn-info" href="{{ url_for('users.account_edit') }}" role="button">{{ _('Edit account') }}</a>
     {#        <a class="btn btn-info" href="{{ url_for('rides.exampleuser_reviews') }}" role="button">My reviews</a>#}
-        <a class="btn btn-info" href="{{ url_for('rides.ride_history') }}" role="button">My rides</a>
+        <a class="btn btn-info" href="{{ url_for('rides.ride_history') }}" role="button">{{ _('My rides') }}</a>
     <div>
         <br>
     <b>{{ _('First name') }}</b>
