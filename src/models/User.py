@@ -1,7 +1,7 @@
 class User:
-    def __init__(self, id, email, first_name, last_name, age, gender, active_since, picture, address):
+    def __init__(self, email, first_name, last_name, age, gender, active_since, picture, address):
         # gender is M or F, active_since is a date, address & picture are id's that reference an address & picture
-        self.id = id
+        #self.id = id
         self.email = email
         self.first_name = first_name
         self.last_name = last_name
@@ -11,11 +11,18 @@ class User:
         self.picture = picture
         self.address = address
 
+<<<<<<< HEAD
     def get(dbconnect, id):
         cursor = dbconnect.get_cursor()
         cursor.execute("SELECT id,email,first_name,last_name,age,gender,active_since,picture,address FROM user WHERE id = %s", (id,))
         id,email,first_name,last_name,age,gender,active_since,picture,address = cursor.fetchone()
         return User(id,email,first_name,last_name,age,gender,active_since,picture,address)
+=======
+    def get(cursor, id):
+        cursor.execute("SELECT id, email, first_name, last_name, age, gender, active_since, picture, address FROM user WHERE id = %s", (id,))
+        id, email, first_name, last_name, age, gender, active_since, picture, address = cursor.fetchone()
+        return User(id, email, first_name, last_name, age, gender, active_since, picture, address)
+>>>>>>> Login
 
     def get_all(dbconnect):
         cursor = dbconnect.get_cursor()
