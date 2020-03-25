@@ -2,7 +2,7 @@
 <!-- https://www.youtube.com/watch?v=I2dJuNwlIH0  -->
 {% extends "roundborder.html" %}
 {% block contentTitle %}
-    Add Vehicle
+    {{ _('Add vehicle') }}
 {% endblock contentTitle %}
 {% block contentContent %}
     <!-- form method="POST" action=""-->
@@ -88,7 +88,7 @@
                 {% endif %}
             </div>
             <div class="form-group">
-                Fuel Type:
+                {{ _('Fuel type') }}:
                 {{ form.fuelType}}
             </div>
 
@@ -96,5 +96,4 @@
         <div class="form-group">
             {{ form.submit(class="btn btn-outline-info") }}
         </div>
-    </form>
 {% endblock contentContent %}

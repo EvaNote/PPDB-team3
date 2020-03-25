@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2020-03-25 14:01+0100\n"
+"POT-Creation-Date: 2020-03-25 15:36+0100\n"
 "PO-Revision-Date: 2020-03-23 16:24+0100\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: nl\n"
@@ -60,24 +60,26 @@ msgstr ""
 msgid "My rides"
 msgstr "Mijn ritten"
 
-#: src/templates/account.html:13
+#: src/templates/account.html:13 src/templates/account_edit.html:9
 msgid "First name"
 msgstr ""
 
-#: src/templates/account.html:19
+#: src/templates/account.html:19 src/templates/account_edit.html:13
+#: src/templates/user.html:19
 msgid "Last name"
 msgstr ""
 
-#: src/templates/account.html:25
+#: src/templates/account.html:25 src/templates/account_edit.html:19
+#: src/templates/user.html:25
 msgid "Gender"
 msgstr ""
 
-#: src/templates/account.html:31
+#: src/templates/account.html:31 src/templates/account_edit.html:44
 msgid "email"
 msgstr ""
 
-#: src/templates/account.html:37
-msgid "Birth date"
+#: src/templates/account.html:37 src/templates/account_edit.html:49
+msgid "Date of birth"
 msgstr ""
 
 #: src/templates/account.html:43
@@ -96,15 +98,15 @@ msgstr ""
 msgid "City"
 msgstr ""
 
-#: src/templates/account.html:73
+#: src/templates/account.html:73 src/templates/user.html:34
 msgid "Brand"
 msgstr ""
 
-#: src/templates/account.html:79
+#: src/templates/account.html:79 src/templates/user.html:40
 msgid "Type"
 msgstr ""
 
-#: src/templates/account.html:85
+#: src/templates/account.html:85 src/templates/user.html:46
 msgid "Color"
 msgstr ""
 
@@ -112,20 +114,41 @@ msgstr ""
 msgid "License plate"
 msgstr ""
 
-#: src/templates/account.html:97
+#: src/templates/account.html:97 src/templates/user.html:52
 msgid "nr. seats"
 msgstr ""
 
-#: src/templates/account.html:103
+#: src/templates/account.html:103 src/templates/user.html:58
 msgid "Year"
 msgstr ""
 
-#: src/templates/account.html:109
+#: src/templates/account.html:109 src/templates/user.html:64
 msgid "Fuel usage"
 msgstr ""
 
-#: src/templates/account.html:114
+#: src/templates/account.html:114 src/templates/add_vehicle.html:91
+#: src/templates/user.html:69
 msgid "Fuel type"
+msgstr ""
+
+#: src/templates/account.html:120
+msgid "Add car"
+msgstr ""
+
+#: src/templates/account_edit.html:24
+msgid "Male"
+msgstr ""
+
+#: src/templates/account_edit.html:30
+msgid "Female"
+msgstr ""
+
+#: src/templates/account_edit.html:36
+msgid "Other"
+msgstr ""
+
+#: src/templates/add_vehicle.html:5
+msgid "Add vehicle"
 msgstr ""
 
 #: src/templates/base.html:45 src/templates/base.html:62
@@ -156,6 +179,21 @@ msgstr "Taal"
 msgid "About us"
 msgstr "Over ons"
 
+#: src/templates/contact.html:8
+msgid "If there are any problems with the site, please contact"
+msgstr ""
+
+#: src/templates/contact.html:11
+msgid "or"
+msgstr ""
+
+#: src/templates/faq.html:7
+msgid ""
+"    <b>Will Campus Carpool be available in other languages?</b>\n"
+"        <br>\n"
+"    We are currently translating Campus Carpool into Dutch and French"
+msgstr ""
+
 #: src/templates/home.html:9
 msgid "Make it easy for yourself to get to college or university."
 msgstr "Maak het jezelf gemakkelijk om je hogeschool of universiteit te bereiken."
@@ -168,6 +206,45 @@ msgstr "Vind een rit"
 msgid "Content"
 msgstr "Inhoud"
 
+#: src/templates/new_review.html:17
+msgid "5 stars"
+msgstr ""
+
+#: src/templates/new_review.html:19
+msgid "4 stars"
+msgstr ""
+
+#: src/templates/new_review.html:21
+msgid "3 stars"
+msgstr ""
+
+#: src/templates/new_review.html:23
+msgid "2 stars"
+msgstr ""
+
+#: src/templates/new_review.html:25
+msgid "1 star"
+msgstr ""
+
+#: src/templates/new_review.html:39
+msgid "Pick a title"
+msgstr ""
+
+#: src/templates/user.html:3
+msgid "User profile"
+msgstr ""
+
+#: src/templates/user.html:10
+msgid "Contact"
+msgstr ""
+
+#: src/templates/user.html:13
+msgid "First Name"
+msgstr ""
+
 #~ msgid "Contact"
 #~ msgstr "Contact"
+
+#~ msgid "Birth date"
+#~ msgstr ""
 
