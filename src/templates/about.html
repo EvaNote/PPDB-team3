@@ -1,22 +1,24 @@
 {% extends "roundborder.html" %}
 {% block contentTitle %}
-    About Campus Carpool
+    {{  _('About Campus Carpool')}}
 {% endblock contentTitle %}
 {% block contentContent %}
     <p class="text-center">
+    {{ _('
     <b>
     Campus Carpool is an application that makes it possible to carpool from and to a university. We purposefully limit
     our target audience to professors, student, assistants and employees of uiversities.
     </b>
     <br>
     On one hand, this increases the change to match rides (as either the start or finish will be a university), and on
-    the other hand, because students are well aware that transport isn't free
+    the other hand, because students are well aware that transport isn\'t free
     <br>
     Public transport is not always a quick way to get to campus. Carpooling can sometimes be a solution for a poor
     connection. Other times, it could be the answer to public transport strikes.
     <br>
     By having multiple people share a car, fuel costs are reduced, making carpooling financially attractive. We hope
     that our app helps you find a travel buddy to your campus.
+    ')}}
 </p>
 
 {% endblock contentContent %}

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2020-03-23 17:28+0100\n"
+"POT-Creation-Date: 2020-03-25 14:01+0100\n"
 "PO-Revision-Date: 2020-03-23 16:24+0100\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: nl\n"
@@ -18,6 +18,116 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.8.0\n"
 
+#: src/templates/about.html:3
+msgid "About Campus Carpool"
+msgstr ""
+
+#: src/templates/about.html:7
+msgid ""
+"\n"
+"    <b>\n"
+"    Campus Carpool is an application that makes it possible to carpool "
+"from and to a university. We purposefully limit\n"
+"    our target audience to professors, student, assistants and employees "
+"of uiversities.\n"
+"    </b>\n"
+"    <br>\n"
+"    On one hand, this increases the change to match rides (as either the "
+"start or finish will be a university), and on\n"
+"    the other hand, because students are well aware that transport isn't "
+"free\n"
+"    <br>\n"
+"    Public transport is not always a quick way to get to campus. "
+"Carpooling can sometimes be a solution for a poor\n"
+"    connection. Other times, it could be the answer to public transport "
+"strikes.\n"
+"    <br>\n"
+"    By having multiple people share a car, fuel costs are reduced, making"
+" carpooling financially attractive. We hope\n"
+"    that our app helps you find a travel buddy to your campus.\n"
+"    "
+msgstr ""
+
+#: src/templates/account.html:3
+msgid "My account"
+msgstr ""
+
+#: src/templates/account.html:8
+msgid "Edit account"
+msgstr ""
+
+#: src/templates/account.html:10 src/templates/base.html:52
+msgid "My rides"
+msgstr "Mijn ritten"
+
+#: src/templates/account.html:13
+msgid "First name"
+msgstr ""
+
+#: src/templates/account.html:19
+msgid "Last name"
+msgstr ""
+
+#: src/templates/account.html:25
+msgid "Gender"
+msgstr ""
+
+#: src/templates/account.html:31
+msgid "email"
+msgstr ""
+
+#: src/templates/account.html:37
+msgid "Birth date"
+msgstr ""
+
+#: src/templates/account.html:43
+msgid "Phone number"
+msgstr ""
+
+#: src/templates/account.html:52
+msgid "street + number"
+msgstr ""
+
+#: src/templates/account.html:58
+msgid "Zip code"
+msgstr ""
+
+#: src/templates/account.html:64
+msgid "City"
+msgstr ""
+
+#: src/templates/account.html:73
+msgid "Brand"
+msgstr ""
+
+#: src/templates/account.html:79
+msgid "Type"
+msgstr ""
+
+#: src/templates/account.html:85
+msgid "Color"
+msgstr ""
+
+#: src/templates/account.html:91
+msgid "License plate"
+msgstr ""
+
+#: src/templates/account.html:97
+msgid "nr. seats"
+msgstr ""
+
+#: src/templates/account.html:103
+msgid "Year"
+msgstr ""
+
+#: src/templates/account.html:109
+msgid "Fuel usage"
+msgstr ""
+
+#: src/templates/account.html:114
+msgid "Fuel type"
+msgstr ""
+
 #: src/templates/base.html:45 src/templates/base.html:62
 msgid "Home"
 msgstr "Home"
@@ -25,10 +135,6 @@ msgstr "Home"
 #: src/templates/base.html:49 src/templates/base.html:66
 msgid "Find a ride"
 msgstr "Vind een rit"
-
-#: src/templates/base.html:52
-msgid "My rides"
-msgstr "Mijn ritten"
 
 #: src/templates/base.html:58
 msgid "Log out"
