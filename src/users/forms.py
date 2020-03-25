@@ -1,6 +1,9 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, SubmitField, BooleanField, DateField, SelectField
-from wtforms.validators import DataRequired, Email, Length, EqualTo
+from wtforms import StringField, PasswordField, SubmitField, BooleanField, SelectField, DateField
+from wtforms.validators import DataRequired, Length, Email, EqualTo, ValidationError
+from jinja2 import Markup
+from src import connection
+from src.models import UserAccess
 
 
 class RegistrationForm(FlaskForm):
@@ -10,6 +13,11 @@ class RegistrationForm(FlaskForm):
     password = PasswordField('Password', validators=[DataRequired(), Length(min=8)])
     confirm_password = PasswordField('Confirm password', validators=[DataRequired(), EqualTo('password')])
     submit = SubmitField('Sign up')
+
+    def validate_email(self, email):  # j
+        if UserAccess(connection).get_user(email.data):
+            raise ValidationError('The email is already registered.')
+
 
 
 class LoginForm(FlaskForm):

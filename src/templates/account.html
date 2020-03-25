@@ -12,13 +12,13 @@
         <br>
     <b>{{ _('First name') }}</b>
         <br>
-    Robbe
+    {{ current_user.first_name }}
     </div>
     <br>
     <div>
     <b> {{  _('Last name') }}</b>
         <br>
-    Lauwers
+    {{  current_user.last_name }}
     </div>
     <br>
         <div>
@@ -30,7 +30,7 @@
         <div>
     <b>{{_('email')}}</b>
         <br>
-    robbe.lauwers@student.uantwerpen.be
+    {{ current_user.email }}
     </div>
         <br>
         <div>

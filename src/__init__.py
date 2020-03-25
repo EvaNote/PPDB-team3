@@ -7,12 +7,18 @@ from src.main.routes import main
 from src.reviews.routes import reviews
 from src.rides.routes import rides
 from src.users.routes import users
+from src.DBConnect import DBConnection
+import os
+from flask_bcrypt import Bcrypt
+from flask_login import LoginManager
 
 # connect to database
 connection = DBConnection(dbname=BaseConfig.DB_NAME, dbuser=BaseConfig.DB_USER)
 user_access = UserAccess(connection)
 # create Babel extension which is used for making our app multilingual
 babel = Babel()
+bcrypt = Bcrypt()
+login_manager = LoginManager()
 
 
 # source: https://flask-user.readthedocs.io/en/v0.6/internationalization.html
@@ -50,4 +56,6 @@ def create_app(config_class=BaseConfig):
     app.add_url_rule('/', 'home', redirect_root_to_home)
     # initialize extensions with the app
     babel.init_app(app)
+    bcrypt.init_app(app)
+    login_manager.init_app(app)
     return app
