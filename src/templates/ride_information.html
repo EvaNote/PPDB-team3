@@ -1,5 +1,5 @@
 {% extends "roundborder.html" %}
-{% block contentTitle %}Ride Information
+{% block contentTitle %}{{ _('Ride Information') }}
 
 {% endblock contentTitle %}
 
@@ -12,42 +12,42 @@
     <div class="row">
         <div class="col-md-3">
             <div>
-                <i class="far fa-calendar-alt ">&nbsp;Date</i>
+                <i class="far fa-calendar-alt ">&nbsp;{{ _('Date') }}Date</i>
             </div>
             <div>
-                <i class="far fa-clock">&nbsp;Departure</i>
+                <i class="far fa-clock">&nbsp;{{ _('Departure') }}</i>
             </div>
             <div>
-                <i class="fas fa-clock">&nbsp;Arrival</i>
+                <i class="fas fa-clock">&nbsp;{{ _('Arrival') }}</i>
             </div>
             <div>
             </div>
         </div>
         <div class="col-md-3">
             <div>
-                <i class="fas fa-map-marker">&nbsp;From</i>
+                <i class="fas fa-map-marker">&nbsp;{{ _('From') }}</i>
             </div>
             <div>
                 <i class="fas fa-map-pin">&nbsp;</i>
             </div>
             <div>
-                <i class="fas fa-flag-checkered">&nbsp;Destination</i>
+                <i class="fas fa-flag-checkered">&nbsp;{{ _('Destination') }}</i>
             </div>
         </div>
         <div class="col-md-3">
             <div>
-                <i class="fas fa-user-tie">&nbsp; Driver</i>
+                <i class="fas fa-user-tie">&nbsp; {{ _('Driver') }}</i>
             </div>
             <div>
-                <i class="fas fa-user">&nbsp; Passenger</i>
+                <i class="fas fa-user">&nbsp; {{_('Passenger')}}</i>
             </div>
             <div>
-                <i class="fas fa-user">&nbsp; Passenger</i>
+                <i class="fas fa-user">&nbsp; {{_('Passenger')}}</i>
             </div>
         </div>
 
         <div class="col-md-2">
-            <button type="button" class="btn btn-danger">Cancel</button>
+            <button type="button" class="btn btn-danger">{{ _('Cancel') }}</button>
         </div>
     </div>
 {% endblock contentContent %}
