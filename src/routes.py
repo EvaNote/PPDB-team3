@@ -1,13 +1,10 @@
 from flask import render_template, url_for, flash, redirect, jsonify
 from src import app, bcrypt
 from src.forms import *
-<<<<<<< HEAD
-
-=======
 from src.models import User, UserAccess
 from flask_login import login_user, current_user, logout_user
 from src import connection
->>>>>>> Login
+
 @app.route("/")
 @app.route("/home")
 def home():
@@ -32,12 +29,9 @@ def contact():
 
 @app.route("/account")
 def account():
-<<<<<<< HEAD
-    form = Reviews()
-    return render_template('account.html', title='Account', form=form, loggedIn=True)
-=======
+    #form = Reviews()
+    #return render_template('account.html', title='Account', form=form, loggedIn=True)
     return render_template('account.html', title='Account')
->>>>>>> Login
 
 
 @app.route("/edit")
@@ -52,12 +46,9 @@ def myrides():
 
 @app.route("/user")
 def user():
-<<<<<<< HEAD
-    form = Reviews()
-    return render_template('user.html', title='User profile', form=form, loggedIn=False)
-=======
+    #form = Reviews()
+    #return render_template('user.html', title='User profile', form=form, loggedIn=False)
     return render_template('user.html', title='User profile')
->>>>>>> Login
 
 
 @app.route("/register", methods=['GET', 'POST'])
@@ -127,29 +118,18 @@ def newreview():
     return render_template('new_review.html', title='New review', form=form)
 
 
-<<<<<<< HEAD
-# @app.route("/reviews", methods=['GET', 'POST'])
-# def reviews():
-#     form = Reviews()
-#     return render_template("my_reviews.html", title='My Reviews', form=form, loggedIn=True)
-#
-#
-# @app.route("/exampleuser/reviews", methods=['GET', 'POST'])
-# def exampleuser_reviews():
-#     form = Reviews()
-#     return render_template("my_reviews.html", title='Reviews of example user', form=form, loggedIn=True)
-=======
 @app.route("/reviews", methods=['GET', 'POST'])
 def reviews():
     form = Reviews()
+    #return render_template("my_reviews.html", title='My Reviews', form=form, loggedIn=True)
     return render_template("my_reviews.html", title='My Reviews', form=form)
 
 
 @app.route("/exampleuser/reviews", methods=['GET', 'POST'])
 def exampleuser_reviews():
     form = Reviews()
+    #return render_template("my_reviews.html", title='Reviews of example user', form=form, loggedIn=True)
     return render_template("my_reviews.html", title='Reviews of example user', form=form)
->>>>>>> Login
 
 
 @app.route("/findride", methods=['GET', 'POST'])
