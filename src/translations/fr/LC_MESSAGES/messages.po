@@ -1,0 +1,250 @@
+# French translations for PROJECT.
+# Copyright (C) 2020 ORGANIZATION
+# This file is distributed under the same license as the PROJECT project.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2020.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PROJECT VERSION\n"
+"Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
+"POT-Creation-Date: 2020-03-25 15:36+0100\n"
+"PO-Revision-Date: 2020-03-23 16:50+0100\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language: fr\n"
+"Language-Team: fr <LL@li.org>\n"
+"Plural-Forms: nplurals=2; plural=(n > 1)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.8.0\n"
+
+#: src/templates/about.html:3
+msgid "About Campus Carpool"
+msgstr ""
+
+#: src/templates/about.html:7
+msgid ""
+"\n"
+"    <b>\n"
+"    Campus Carpool is an application that makes it possible to carpool "
+"from and to a university. We purposefully limit\n"
+"    our target audience to professors, student, assistants and employees "
+"of uiversities.\n"
+"    </b>\n"
+"    <br>\n"
+"    On one hand, this increases the change to match rides (as either the "
+"start or finish will be a university), and on\n"
+"    the other hand, because students are well aware that transport isn't "
+"free\n"
+"    <br>\n"
+"    Public transport is not always a quick way to get to campus. "
+"Carpooling can sometimes be a solution for a poor\n"
+"    connection. Other times, it could be the answer to public transport "
+"strikes.\n"
+"    <br>\n"
+"    By having multiple people share a car, fuel costs are reduced, making"
+" carpooling financially attractive. We hope\n"
+"    that our app helps you find a travel buddy to your campus.\n"
+"    "
+msgstr ""
+
+#: src/templates/account.html:3
+msgid "My account"
+msgstr ""
+
+#: src/templates/account.html:8
+msgid "Edit account"
+msgstr ""
+
+#: src/templates/account.html:10 src/templates/base.html:52
+msgid "My rides"
+msgstr "Mes trajets"
+
+#: src/templates/account.html:13 src/templates/account_edit.html:9
+msgid "First name"
+msgstr ""
+
+#: src/templates/account.html:19 src/templates/account_edit.html:13
+#: src/templates/user.html:19
+msgid "Last name"
+msgstr ""
+
+#: src/templates/account.html:25 src/templates/account_edit.html:19
+#: src/templates/user.html:25
+msgid "Gender"
+msgstr ""
+
+#: src/templates/account.html:31 src/templates/account_edit.html:44
+msgid "email"
+msgstr ""
+
+#: src/templates/account.html:37 src/templates/account_edit.html:49
+msgid "Date of birth"
+msgstr ""
+
+#: src/templates/account.html:43
+msgid "Phone number"
+msgstr ""
+
+#: src/templates/account.html:52
+msgid "street + number"
+msgstr ""
+
+#: src/templates/account.html:58
+msgid "Zip code"
+msgstr ""
+
+#: src/templates/account.html:64
+msgid "City"
+msgstr ""
+
+#: src/templates/account.html:73 src/templates/user.html:34
+msgid "Brand"
+msgstr ""
+
+#: src/templates/account.html:79 src/templates/user.html:40
+msgid "Type"
+msgstr ""
+
+#: src/templates/account.html:85 src/templates/user.html:46
+msgid "Color"
+msgstr ""
+
+#: src/templates/account.html:91
+msgid "License plate"
+msgstr ""
+
+#: src/templates/account.html:97 src/templates/user.html:52
+msgid "nr. seats"
+msgstr ""
+
+#: src/templates/account.html:103 src/templates/user.html:58
+msgid "Year"
+msgstr ""
+
+#: src/templates/account.html:109 src/templates/user.html:64
+msgid "Fuel usage"
+msgstr ""
+
+#: src/templates/account.html:114 src/templates/add_vehicle.html:91
+#: src/templates/user.html:69
+msgid "Fuel type"
+msgstr ""
+
+#: src/templates/account.html:120
+msgid "Add car"
+msgstr ""
+
+#: src/templates/account_edit.html:24
+msgid "Male"
+msgstr ""
+
+#: src/templates/account_edit.html:30
+msgid "Female"
+msgstr ""
+
+#: src/templates/account_edit.html:36
+msgid "Other"
+msgstr ""
+
+#: src/templates/add_vehicle.html:5
+msgid "Add vehicle"
+msgstr ""
+
+#: src/templates/base.html:45 src/templates/base.html:62
+msgid "Home"
+msgstr "Accueil"
+
+#: src/templates/base.html:49 src/templates/base.html:66
+msgid "Find a ride"
+msgstr "Trouvez un trajet"
+
+#: src/templates/base.html:58
+msgid "Log out"
+msgstr "Se déconnecter"
+
+#: src/templates/base.html:69
+msgid "Log in"
+msgstr "Se connecter"
+
+#: src/templates/base.html:72
+msgid "Sign up"
+msgstr "S'inscrire"
+
+#: src/templates/base.html:77
+msgid "Language"
+msgstr "Langue"
+
+#: src/templates/base.html:114
+msgid "About us"
+msgstr "À propos"
+
+#: src/templates/contact.html:8
+msgid "If there are any problems with the site, please contact"
+msgstr ""
+
+#: src/templates/contact.html:11
+msgid "or"
+msgstr ""
+
+#: src/templates/faq.html:7
+msgid ""
+"    <b>Will Campus Carpool be available in other languages?</b>\n"
+"        <br>\n"
+"    We are currently translating Campus Carpool into Dutch and French"
+msgstr ""
+
+#: src/templates/home.html:9
+msgid "Make it easy for yourself to get to college or university."
+msgstr "Facilitez-vous la route vers votre collège ou université."
+
+#: src/templates/home.html:10
+msgid "Find A Ride"
+msgstr "Trouvez un trajet"
+
+#: src/templates/home.html:23
+msgid "Content"
+msgstr "Contenu"
+
+#: src/templates/new_review.html:17
+msgid "5 stars"
+msgstr ""
+
+#: src/templates/new_review.html:19
+msgid "4 stars"
+msgstr ""
+
+#: src/templates/new_review.html:21
+msgid "3 stars"
+msgstr ""
+
+#: src/templates/new_review.html:23
+msgid "2 stars"
+msgstr ""
+
+#: src/templates/new_review.html:25
+msgid "1 star"
+msgstr ""
+
+#: src/templates/new_review.html:39
+msgid "Pick a title"
+msgstr ""
+
+#: src/templates/user.html:3
+msgid "User profile"
+msgstr ""
+
+#: src/templates/user.html:10
+msgid "Contact"
+msgstr ""
+
+#: src/templates/user.html:13
+msgid "First Name"
+msgstr ""
+
+#~ msgid "Contact"
+#~ msgstr ""
+
+#~ msgid "Birth date"
+#~ msgstr ""
+

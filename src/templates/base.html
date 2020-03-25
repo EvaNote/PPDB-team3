@@ -28,8 +28,9 @@
     <!-- navbar -->
     <nav class="navbar navbar-expand-md navbar-light bg-light shadow fixed-top">
         <!-- logo and name -->
-        <a class="navbar-brand d-flex align-items-center" href={{ url_for('home') }}>
-            <img src="{{ url_for('static', filename="images/logo.svg") }}" class="float-left mr-2" width="32px" alt="logo">
+        <a class="navbar-brand d-flex align-items-center" href={{ url_for('main.home') }}>
+            <img src="{{ url_for('static', filename="images/logo.svg") }}" class="float-left mr-2" width="32px"
+                 alt="logo">
             <span class="d-none d-sm-block">Campus carpool</span>
         </a>
         <!-- end of logo and name -->
@@ -41,41 +42,43 @@
             <ul class="navbar-nav ml-auto">
                 {% if loggedIn %}
                     <li class="nav-item">
-                        <a class="nav-link active" href={{ url_for('home') }}>Home</a> <!-- TODO change active link -->
+                        <a class="nav-link active" href={{ url_for('main.home') }}>{{ _('Home') }}</a>
+                        <!-- TODO change active link -->
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href={{ url_for('findride') }}>Find a ride</a>
+                        <a class="nav-link" href={{ url_for('rides.findride') }}>{{ _('Find a ride') }}</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href={{ url_for('myrides') }}>My rides</a>
+                        <a class="nav-link" href={{ url_for('users.myrides') }}>{{ _('My rides') }}</a>
                     </li>
                     {#                    <li class="nav-item">#}
-                    {#                        <a class="nav-link" href={{ url_for('reviews') }}>My reviews</a>#}
+                    {#                        <a class="nav-link" href={{ url_for('reviews.reviews') }}>My reviews</a>#}
                     {#                    </li>#}
                     <li class="nav-item">
-                        <a class="nav-link" href={{ url_for('login') }}>Log out</a>
+                        <a class="nav-link" href={{ url_for('users.login') }}>{{ _('Log out') }}</a>
                     </li>
                 {% else %}
                     <li class="nav-item">
-                        <a class="nav-link active" href={{ url_for('home') }}>Home</a> <!-- TODO change active link -->
+                        <a class="nav-link active" href={{ url_for('main.home') }}>{{ _('Home') }}</a>
+                        <!-- TODO change active link -->
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href={{ url_for('findride') }}>Find a ride</a>
+                        <a class="nav-link" href={{ url_for('rides.findride') }}>{{ _('Find a ride') }}</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href={{ url_for('login') }}>Log in</a>
+                        <a class="nav-link" href={{ url_for('users.login') }}>{{ _('Log in') }}</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href={{ url_for('register') }}>Sign up</a>
+                        <a class="nav-link" href={{ url_for('users.register') }}>{{ _('Sign up') }}</a>
                     </li>
                 {% endif %}
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" id="dropdownMenuButton" data-toggle="dropdown"
-                       aria-haspopup="true" aria-expanded="false">Language</a>
+                       aria-haspopup="true" aria-expanded="false">{{ _('Language') }}</a>
                     <div class="dropdown-menu dropdown-primary" aria-labelledby="dropdownMenuButton">
-                        <a class="dropdown-item" href="#">NL</a>
-                        <a class="dropdown-item" href="#">FR</a>
-                        <a class="dropdown-item" href="#">EN</a>
+                        <a class="dropdown-item" href="{{ url_for(request.endpoint, lang_code='nl') }}">NL</a>
+                        <a class="dropdown-item" href="{{ url_for(request.endpoint, lang_code='fr') }}">FR</a>
+                        <a class="dropdown-item" href="{{ url_for(request.endpoint, lang_code='en') }}">EN</a>
                     </div>
                 </li>
             </ul>
@@ -104,17 +107,17 @@
 </div>
 
 <!-- footer -->
-<footer class="footer bg-info">
+<footer class="footer bg-dark">
     <div class="container">
         <div class="row py-3">
             <div class="col-sm-4 footer-link text-center mb-3">
-                <a class="btn text-uppercase text-light" href="{{ url_for('about') }}">About us</a>
+                <a class="btn text-uppercase text-light" href="{{ url_for('main.about') }}">{{ _('About us') }}</a>
             </div>
             <div class="col-sm-4 footer-link text-center mb-3">
-                <a class="btn text-uppercase text-light" href="{{ url_for('faq') }}">FAQ</a>
+                <a class="btn text-uppercase text-light" href="{{ url_for('main.faq') }}">FAQ</a>
             </div>
             <div class="col-sm-4 footer-link text-center mb-3">
-                <a class="btn text-uppercase text-light" href="{{ url_for('contact') }}">Contact</a>
+                <a class="btn text-uppercase text-light" href="{{ url_for('main.contact') }}">Contact</a>
             </div>
         </div>
     </div>

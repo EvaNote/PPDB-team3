@@ -14,15 +14,15 @@
                     {# source https://codepen.io/hesguru/pen/BaybqXv #}
                     <div class="rate">
                         <input type="radio" id="star5" name="rate" value="5"/>
-                        <label for="star5" title="text">5 stars</label>
+                        <label for="star5" title="text">{{ _('5 stars') }}</label>
                         <input type="radio" id="star4" name="rate" value="4"/>
-                        <label for="star4" title="text">4 stars</label>
+                        <label for="star4" title="text">{{ _('4 stars') }}</label>
                         <input type="radio" id="star3" name="rate" value="3"/>
-                        <label for="star3" title="text">3 stars</label>
+                        <label for="star3" title="text">{{ _('3 stars') }}</label>
                         <input type="radio" id="star2" name="rate" value="2"/>
-                        <label for="star2" title="text">2 stars</label>
+                        <label for="star2" title="text">{{ _('2 stars') }}</label>
                         <input type="radio" id="star1" name="rate" value="1"/>
-                        <label for="star1" title="text">1 star</label>
+                        <label for="star1" title="text">{{ _('1 star') }}</label>
                     </div>
                 </fieldset>
                 <fieldset class="form-group">
@@ -36,7 +36,7 @@
             <div class="col-md-9">
                 <fieldset class="form-group title-input margin-b">
                     <div class="form-control form-control-lg">
-                        Pick a title
+                        {{ _('Pick a title') }}
                     </div>
                 </fieldset>
             </div>
@@ -55,7 +55,7 @@
                                 {% endfor %}
                             </div>
                         {% else %}
-                            <textarea class="form-control" rows="7" id="comment">Write a review</textarea>
+                            <textarea> class="form-control" rows="7" id="comment">{{ _('Write a review') }}</textarea>
                         {% endif %}
                     </div>
 

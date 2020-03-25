@@ -4,7 +4,7 @@
     {% block profileContent %}{% endblock %}
 
     <div class="text-center pt-5 border-info" style="margin-top: 50px; margin-bottom: 30px; border-top: 3px solid">
-        <h1 class="text-info font-weight-normal">Reviews</h1>
+        <h1 class="text-info font-weight-normal">{{_('Reviews')}}</h1>
     </div>
 
     <form method="POST" action="">
@@ -16,7 +16,7 @@
                     <div class="col-md-auto filter-btn">
                         {#                <div class="form-group">#}
                         <button class="btn btn-outline-info btn-size">
-                            <i class="fas fa-filter"></i> Filter
+                            <i class="fas fa-filter"></i> {{_('Filter')}}
                         </button>
                         {#                </div>#}
                     </div>
@@ -24,13 +24,13 @@
                         <div class="nav-item dropdown sort-dropdown">
                             <button class="btn btn-outline-info btn-size" id="dropdownSortButton" data-toggle="dropdown"
                                     aria-haspopup="true"
-                                    aria-expanded="false"><i class="fas fa-sort-amount-up-alt"></i> Sort
+                                    aria-expanded="false"><i class="fas fa-sort-amount-up-alt"></i> {{_('Sort')}}
                             </button>
                             <div class="dropdown-menu dropdown-primary" aria-labelledby="dropdownSortButton">
                                 <a class="dropdown-item" href="#">A-Z</a>
                                 <a class="dropdown-item" href="#">Z-A</a>
-                                <a class="dropdown-item" href="#">New-Old</a>
-                                <a class="dropdown-item" href="#">Old-New</a>
+                                <a class="dropdown-item" href="#">{{ _('New-Old') }}</a>
+                                <a class="dropdown-item" href="#">{{ _('Old-New') }}</a>
                             </div>
                         </div>
                     </div>
@@ -55,12 +55,12 @@
             </div>
             <div class="content-section border-light p-4 mx-5 mb-5 display-review">
                 <div class="row">
-                    <div class="display_rate col-md-auto margin-b">
-                        <label for="star5" title="text">5 stars</label>
-                        <label for="star4" title="text">4 stars</label>
-                        <label for="star3" title="text">3 stars</label>
-                        <label for="star2" title="text">2 stars</label>
-                        <label for="star1" title="text">1 star</label>
+                    <div class="display_rate col-ms-auto margin-b">
+                        <label for="star5" title="text">{{ _('5 stars') }}</label>
+                        <label for="star4" title="text">{{ _('4 stars') }}</label>
+                        <label for="star3" title="text">{{ _('3 stars') }}</label>
+                        <label for="star2" title="text">{{ _('2 stars') }}</label>
+                        <label for="star1" title="text">{{ _('1 star') }}</label>
                     </div>
                 </div>
                 <div class="row" style="margin-left: 0">
@@ -70,7 +70,7 @@
                 </div>
                 <div class="row">
                     <div class="col display-name">
-                        <b>April 25th, 2019</b> by <b>An Kasteels</b>
+                        <b>April 25th, 2019</b> {{_('by')}} <b>An Kasteels</b>
                     </div>
                 </div>
                 <div class="row" style="margin-left: 0">
@@ -86,12 +86,12 @@
             </div>
             <div class="content-section border-light p-4 mx-5 mb-5 display-review">
                 <div class="row">
-                    <div class="display_rate col-md-auto margin-b">
-                        <label for="star5" title="text">5 stars</label>
-                        <label for="star4" title="text">4 stars</label>
-                        <label for="star3" title="text">3 stars</label>
-                        <label for="star2" title="text">2 stars</label>
-                        <label for="star1" title="text">1 star</label>
+                    <div class="display_rate col-ms-auto margin-b">
+                        <label for="star5" title="text">{{ _('5 stars') }}</label>
+                        <label for="star4" title="text">{{ _('4 stars') }}</label>
+                        <label for="star3" title="text">{{ _('3 stars') }}</label>
+                        <label for="star2" title="text">{{ _('2 stars') }}</label>
+                        <label for="star1" title="text">{{ _('1 star') }}</label>
                     </div>
                 </div>
                 <div class="row" style="margin-left: 0">
@@ -101,7 +101,7 @@
                 </div>
                 <div class="row">
                     <div class="col display-name">
-                        <b>March 22th, 2019</b> by <b>Victor Plancken</b>
+                        <b>March 22th, 2019</b> {{_('by')}} <b>Victor Plancken</b>
                     </div>
                 </div>
                 <div class="row" style="margin-left: 0">
@@ -117,12 +117,12 @@
             </div>
             <div class="content-section border-light p-4 mx-5 mb-5 display-review">
                 <div class="row">
-                    <div class="display_rate col-md-auto margin-b">
-                        <label for="star5" title="text">5 stars</label>
-                        <label for="star4" title="text">4 stars</label>
-                        <label for="star3" title="text">3 stars</label>
-                        <label for="star2" title="text">2 stars</label>
-                        <label for="star1" title="text">1 star</label>
+                    <div class="display_rate col-ms-auto margin-b">
+                        <label for="star5" title="text">{{ _('5 stars') }}</label>
+                        <label for="star4" title="text">{{ _('4 stars') }}</label>
+                        <label for="star3" title="text">{{ _('3 stars') }}</label>
+                        <label for="star2" title="text">{{ _('2 stars') }}</label>
+                        <label for="star1" title="text">{{ _('1 star') }}</label>
                     </div>
                 </div>
                 <div class="row" style="margin-left: 0">
@@ -132,7 +132,7 @@
                 </div>
                 <div class="row">
                     <div class="col display-name">
-                        <b>Februari 21th, 2019</b> by <b>Margot DeVinck</b>
+                        <b>Februari 21th, 2019</b> {{_('by')}} <b>Margot DeVinck</b>
                     </div>
                 </div>
                 <div class="row" style="margin-left: 0">

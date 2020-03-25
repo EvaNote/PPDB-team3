@@ -1,7 +1,6 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, SubmitField, BooleanField, SelectField, DateField
-from wtforms.validators import DataRequired, Length, Email, EqualTo
-from jinja2 import Markup
+from wtforms import StringField, PasswordField, SubmitField, BooleanField, DateField, SelectField
+from wtforms.validators import DataRequired, Email, Length, EqualTo
 
 
 class RegistrationForm(FlaskForm):
@@ -27,23 +26,8 @@ class VehicleForm(FlaskForm):
     seats = StringField('Seats', validators=[DataRequired()])
     manufacturingDate = DateField('Manufacturing Date', format='%d-%m-%y')
     mileage = StringField('Mileage', validators=[DataRequired()])
-    fuelType = SelectField('fuelType', choices=[('Gasoline','Gasoline'), ('Diesel','Diesel'), ('Liquified Petroleum','Liquified Petroleum')
-        ,('Compressed Natural Gas','Compressed Natural Gas'), ('Ethanol','Ethanol'), ('Bio-diesel','Bio-diesel')])
+    fuelType = SelectField('fuelType', choices=[('Gasoline', 'Gasoline'), ('Diesel', 'Diesel'),
+                                                ('Liquified Petroleum', 'Liquified Petroleum'),
+                                                ('Compressed Natural Gas', 'Compressed Natural Gas'),
+                                                ('Ethanol', 'Ethanol'), ('Bio-diesel', 'Bio-diesel')])
     submit = SubmitField('Register vehicle')
-
-
-class ReviewForm(FlaskForm):
-    msg = StringField('', validators=[DataRequired()])
-    submit = SubmitField('Submit')
-
-
-class Reviews(FlaskForm):
-    submit_value = Markup('<b>Hello</b>')
-    filter = SubmitField('<b>Hello</b>')
-    search = StringField('')
-
-
-class FindRideForm(FlaskForm):
-    fromField = StringField('From', validators=[DataRequired()])
-    toField = StringField('To', validators=[DataRequired()])
-    submit = SubmitField('Search')

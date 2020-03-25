@@ -166,6 +166,23 @@ hr {
  }
 
 .map {
-    border: 3px solid;
-    border-color: #17a2b8;
+    border: 3px solid #17a2b8;
+}
+
+@media (min-width: 40em) {
+    .home-title {
+        font-size: 50px;
+    }
+}
+
+.home-divider {
+    width: 87%;
+    height: 3px;
+    margin: 1rem auto;
+}
+
+
+.review-pic{
+    border-radius: 100%;
+    width: 100px;
 }

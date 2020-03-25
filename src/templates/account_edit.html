@@ -1,39 +1,39 @@
 {% extends "roundborder.html" %}
 {% block contentTitle %}
-    My account
+    {{ _('Edit my account') }}
 {% endblock contentTitle %}
 {% block contentContent %}
 
     <form>
   <div class="form-group">
-    <label for="FirstName">First name</label>
+    <label for="FirstName">{{ _('First name')}}</label>
     <input type="text" class="form-control" id="FirstName" value="Robbe">
   </div>
   <div class="form-group">
-    <label for="LastName">Last name</label>
+    <label for="LastName">{{ _('Last name')}}</label>
     <input type="text" class="form-control" id="LastName" value="Lauwers">
   </div>
 
   <fieldset class="form-group">
     <div class="row">
-      <legend class="col-form-label col-sm-2 pt-0">Gender</legend>
+      <legend class="col-form-label col-sm-2 pt-0">{{ _('Gender') }}</legend>
       <div class="col-sm-10">
         <div class="form-check">
           <input class="form-check-input" type="radio" name="gridRadios" id="gridRadios1" value="Male" checked>
           <label class="form-check-label" for="gridRadios1">
-            Male
+            {{  _('Male')}}
           </label>
         </div>
         <div class="form-check">
           <input class="form-check-input" type="radio" name="gridRadios" id="gridRadios2" value="Female">
           <label class="form-check-label" for="gridRadios2">
-            Female
+            {{  _('Female')}}
           </label>
         </div>
         <div class="form-check">
           <input class="form-check-input" type="radio" name="gridRadios" id="gridRadios3" value="Other">
           <label class="form-check-label" for="gridRadios3">
-            Other
+            {{ _('Other') }}
           </label>
         </div>
       </div>
@@ -41,12 +41,12 @@
   </fieldset>
 
       <div class="form-group">
-    <label for="e-mail">e-mail</label>
+    <label for="e-mail">{{ _('email') }}</label>
     <input type="text" class="form-control" id="e-mail" value="robbe.lauwers@student.uantwerpen.be">
   </div>
 
         <div class="form-group">
-  <label for="example-date-input" >Date of birth</label>
+  <label for="example-date-input" >{{ _('Date of birth') }}</label>
     <input class="form-control" type="date" value="2000-01-19" id="example-date-input">
 </div>
 
@@ -77,7 +77,7 @@
 
 </form>
 
-        <a class="btn btn-info" href="{{ url_for('add_vehicle') }}" role="button">Add car</a>
-        <a class="btn btn-info" href="{{ url_for('account') }}" role="button">Save</a>
+        <a class="btn btn-info" href="{{ url_for('users.add_vehicle') }}" role="button">Add car</a>
+        <a class="btn btn-info" href="{{ url_for('users.account') }}" role="button">Save</a>
 <br>
 {% endblock contentContent %}
