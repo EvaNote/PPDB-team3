@@ -5,7 +5,7 @@
         <div class="container h-100">
             <div class="row h-100 align-items-end">
                 <div class="col-12 text-center text-dark">
-                    <h1 class="display-4">Be cool. Carpool.</h1>
+                    <h1 class="display-3">Be cool. Carpool.</h1>
                     <p class="lead">{{ _('Make it easy for yourself to get to college or university.') }}</p>
                     <a class="btn btn-info mt-3" href={{ url_for('rides.findride') }}>{{ _('Find A Ride') }}</a>
                 </div>
@@ -17,14 +17,85 @@
     </div>
     <!-- end of landing page -->
 
-    <!-- first content section -->
-    <section class="py-5 bg-light">
-        <div class="container">
-            <h2 class="font-weight-light">{{ _('Content') }}</h2>
-            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Repellendus ab nulla dolorum autem nisi
-                officiis blanditiis voluptatem hic, assumenda aspernatur facere ipsam nemo ratione cumque magnam enim
-                fugiat reprehenderit expedita.</p>
+    <!-- content section -->
+    <section>
+        <!-- first info section -->
+        <div class="row m-0 mb-5 justify-content-md-end bg-light">
+            <div class="col-md-1 bg-info"></div>
+            <div class="col-md-11 p-5">
+                <h2 class="home-title">{{ _('How does it work?') }}</h2>
+                <p class="lead">
+                    Lorem ipsum dolor sit amet, consectetur adipisicing elit. Consectetur debitis dolorum ducimus eos
+                    exercitationem ipsum laudantium nostrum provident quo tenetur. Adipisci aspernatur esse hic in
+                    magnam necessitatibus numquam, placeat ratione veritatis. Accusamus aliquid assumenda commodi
+                    consectetur debitis deleniti dolorem, ducimus eius facilis fugiat in incidunt iusto maxime minima
+                    non odio officia pariatur possimus quasi quos repellendus rerum tenetur totam veritatis!
+                </p>
+            </div>
         </div>
+        <!-- end of first info section -->
+        <hr class="home-divider bg-info">
+        <!-- user review section -->
+        <div class="row m-0 justify-content-center">
+            <div class="col-8">
+                <h2 class="home-title font-weight-light text-center mb-5">{{ _('What our users say about us') }}</h2>
+            </div>
+            <div class="col-sm-8 col-md-5 text-center pb-5">
+                <img src="{{ url_for("static", filename="images/temp_profile_pic.png") }}"
+                     alt="User review 1" class="img-fluid review-pic">
+                <blockquote class="blockquote">
+                    <p class="mb-0 font-weight-light">
+                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer posuere erat a ante.
+                    </p>
+                    <footer class="blockquote-footer font-weight-light">John Doe</footer>
+                </blockquote>
+            </div>
+            <div class="col-sm-8 col-md-5 text-center pb-5">
+                <img src="{{ url_for("static", filename="images/temp_profile_pic.png") }}"
+                     alt="User review 1" class="img-fluid review-pic">
+                <blockquote class="blockquote">
+                    <p class="mb-0 font-weight-light">
+                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer posuere erat a ante.
+                    </p>
+                    <footer class="blockquote-footer font-weight-light">John Doe</footer>
+                </blockquote>
+            </div>
+            <div class="col-sm-8 col-md-5 text-center">
+                <img src="{{ url_for("static", filename="images/temp_profile_pic.png") }}"
+                     alt="User review 1" class="img-fluid review-pic">
+                <blockquote class="blockquote">
+                    <p class="mb-0 font-weight-light">
+                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer posuere erat a ante.
+                    </p>
+                    <footer class="blockquote-footer font-weight-light">John Doe</footer>
+                </blockquote>
+            </div>
+        </div>
+        <!-- end of user review section -->
+        <hr class="home-divider bg-info">
+        <!-- second info section -->
+        <div class="row m-0 mt-5 bg-light">
+            <div class="col-md-11 p-5">
+                <h2 class="home-title">{{ _('Transport should be the least of your worries.') }}</h2>
+                <p class="lead">
+                    Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ad adipisci amet culpa doloremque eos
+                    fugiat illo iste libero nesciunt nulla odio quibusdam reiciendis ut veritatis, voluptatum. Et
+                    eveniet id officia!
+                </p>
+            </div>
+            <div class="col-md-1 bg-info"></div>
+        </div>
+        <!-- end of second info section -->
+        <!-- signup section -->
+        <div class="row m-0 my-5 py-5 justify-content-center text-center">
+            <div class="col-7">
+                <h3 class="">{{ _('Interested? Sign up now!') }}<br></h3>
+            </div>
+            <div class="col-7">
+                <a class="btn btn-lg btn-outline-info mt-3" href={{ url_for('users.register') }}>{{ _('Sign up') }}</a>
+            </div>
+        </div>
+        <!-- end of signup section -->
     </section>
-    <!-- end of first content section -->
+    <!-- end of content section -->
 {% endblock content %}

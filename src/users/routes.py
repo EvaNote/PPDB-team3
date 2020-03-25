@@ -7,7 +7,10 @@ users = Blueprint('users', __name__, url_prefix='/<lang_code>')
 
 @users.url_defaults
 def add_language_code(endpoint, values):
-    values.setdefault('lang_code', g.lang_code)
+    if g.lang_code in current_app.config['SUPPORTED_LANGUAGES']:
+        values.setdefault('lang_code', g.lang_code)
+    else:
+        values.setdefault('lang_code', 'en')
 
 
 @users.url_value_preprocessor
