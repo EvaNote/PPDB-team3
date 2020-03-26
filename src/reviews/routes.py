@@ -4,6 +4,8 @@ from src.reviews.forms import ReviewForm
 reviews = Blueprint('reviews', __name__, url_prefix='/<lang_code>')
 
 
+########################################################################################################################
+# functions for multilingual support
 @reviews.url_defaults
 def add_language_code(endpoint, values):
     if g.lang_code in current_app.config['SUPPORTED_LANGUAGES']:
@@ -21,6 +23,9 @@ def pull_lang_code(endpoint, values):
 def before_request():
     if g.lang_code not in current_app.config['SUPPORTED_LANGUAGES']:
         abort(404)
+
+
+########################################################################################################################
 
 
 @reviews.route("/newreview", methods=['GET', 'POST'])

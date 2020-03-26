@@ -3,6 +3,8 @@ from flask import Blueprint, render_template, g, current_app, abort
 main = Blueprint('main', __name__, url_prefix='/<lang_code>')
 
 
+########################################################################################################################
+# functions for multilingual support
 @main.url_defaults
 def add_language_code(endpoint, values):
     if g.lang_code in current_app.config['SUPPORTED_LANGUAGES']:
@@ -20,6 +22,9 @@ def pull_lang_code(endpoint, values):
 def before_request():
     if g.lang_code not in current_app.config['SUPPORTED_LANGUAGES']:
         abort(404)
+
+
+########################################################################################################################
 
 
 @main.route("/")

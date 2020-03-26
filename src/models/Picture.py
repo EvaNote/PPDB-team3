@@ -6,15 +6,15 @@ class Picture:
     def get(dbconnect, id):
         cursor = dbconnect.get_cursor()
         cursor.execute("SELECT id,filename FROM picture WHERE id = %s", (id,))
-        id,filename = cursor.fetchone()
-        return Picture(id,filename)
+        id, filename = cursor.fetchone()
+        return Picture(id, filename)
 
     def get_all(dbconnect):
         cursor = dbconnect.get_cursor()
         cursor.execute("SELECT id,filename FROM picture")
         pictures = list()
         for row in cursor:
-            picture = Picture(row[0],row[1])
+            picture = Picture(row[0], row[1])
             pictures.append(picture)
         return pictures
 

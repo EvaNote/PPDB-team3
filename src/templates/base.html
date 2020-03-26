@@ -42,7 +42,7 @@
             <ul class="navbar-nav ml-auto">
                 {% if current_user.is_authenticated %}
                     <li class="nav-item">
-                        <a class="nav-link active" href={{ url_for('home') }}>Home</a> <!-- TODO change active link -->
+                        <a class="nav-link active" href={{ url_for('main.home') }}>Home</a> <!-- TODO change active link -->
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href={{ url_for('rides.findride') }}>{{ _('Find a ride') }}</a>
@@ -54,10 +54,10 @@
                     {#                        <a class="nav-link" href={{ url_for('reviews.reviews') }}>My reviews</a>#}
                     {#                    </li>#}
                     <li class="nav-item">
-                        <a class="nav-link" href={{ url_for('logout') }}>Log out</a>
+                        <a class="nav-link" href={{ url_for('users.logout') }}>Log out</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href={{ url_for('account') }}>Account</a>
+                        <a class="nav-link" href={{ url_for('users.account') }}>Account</a>
                     </li>
                 {% else %}
                     <li class="nav-item">

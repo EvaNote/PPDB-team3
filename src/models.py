@@ -1,12 +1,7 @@
 import sys
+# user_loader expects user_model to have certain attributes and methods: isAuthenticated, isActive, isAnonymous, getID
+from flask_login import UserMixin
 
-from src import connection, login_manager
-from flask_login import UserMixin #user_loader expects user_model to have certain attributes and methods: isAuthenticated, isActive,isAnonymous,getID
-
-
-@login_manager.user_loader
-def load_user(user_email):
-    return UserAccess(connection).get_user(user_email)
 
 # Class that represents the "user" table from the database
 class User:
@@ -17,7 +12,9 @@ class User:
         self.password = password
 
     def to_dct(self):
-        return {'first_name': self.first_name, 'last_name': self.last_name, 'email': self.email, 'joined_on': self.joined_on}
+        return {'first_name': self.first_name, 'last_name': self.last_name, 'email': self.email,
+                'joined_on': self.joined_on}
+
     @property
     def is_active(self):
         return True
@@ -55,6 +52,7 @@ class User:
         # We set it back to its default implementation
         __hash__ = object.__hash__
 
+
 # Class used for accessing data from the "user" table from the database
 class UserAccess:
     def __init__(self, dbconnect):
@@ -77,13 +75,11 @@ class UserAccess:
             return User(row[0], row[1], row[2], row[3])
         return None
 
-    def add_user(self, user_obj): 
+    def add_user(self, user_obj):
         cursor = self.dbconnect.get_cursor()
         try:
-            cursor.execute('INSERT INTO "user" VALUES(%s, %s, %s, %s, now())', (user_obj.first_name, user_obj.last_name, user_obj.email, user_obj.password))
+            cursor.execute('INSERT INTO "user" VALUES(%s, %s, %s, %s, now())',
+                           (user_obj.first_name, user_obj.last_name, user_obj.email, user_obj.password))
             self.dbconnect.commit()
         except:
             raise Exception('Unable to add user')
-
-
-

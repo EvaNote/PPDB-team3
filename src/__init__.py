@@ -1,31 +1,12 @@
 from flask import Flask, g, request, redirect, url_for
-from flask_babel import Babel
+from src.models import UserAccess
 from src.config import *
-from src.models import *
-# import blueprints
+from src.utils import babel, bcrypt, login_manager
+# import all blueprints
 from src.main.routes import main
 from src.reviews.routes import reviews
 from src.rides.routes import rides
 from src.users.routes import users
-from src.DBConnect import DBConnection
-import os
-from flask_bcrypt import Bcrypt
-from flask_login import LoginManager
-
-# connect to database
-connection = DBConnection(dbname=BaseConfig.DB_NAME, dbuser=BaseConfig.DB_USER)
-user_access = UserAccess(connection)
-# create Babel extension which is used for making our app multilingual
-babel = Babel()
-bcrypt = Bcrypt()
-login_manager = LoginManager()
-
-
-# source: https://flask-user.readthedocs.io/en/v0.6/internationalization.html
-@babel.localeselector
-def get_locale():
-    """ Use the browser's language preferences to select an available translation """
-    return g.get('lang_code', BaseConfig.BABEL_DEFAULT_LOCALE)
 
 
 def create_app(config_class=BaseConfig):
