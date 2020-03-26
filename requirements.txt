@@ -10,3 +10,4 @@ Werkzeug==0.16.1
 Flask-WTF==0.14.2
 pytest
 flask-bcrypt
+flask-login
