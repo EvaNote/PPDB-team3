@@ -1,5 +1,5 @@
 from flask import Flask, g, request, redirect, url_for
-from src.models import UserAccess
+from src.dbmodels.User import UserAccess
 from src.config import *
 from src.utils import babel, bcrypt, login_manager
 # import all blueprints

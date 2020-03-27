@@ -78,9 +78,12 @@
                     <a class="nav-link dropdown-toggle" id="dropdownMenuButton" data-toggle="dropdown"
                        aria-haspopup="true" aria-expanded="false">{{ _('Language') }}</a>
                     <div class="dropdown-menu dropdown-primary" aria-labelledby="dropdownMenuButton">
-                        <a class="dropdown-item" href="{{ url_for(request.endpoint, lang_code='nl') }}">NL</a>
-                        <a class="dropdown-item" href="{{ url_for(request.endpoint, lang_code='fr') }}">FR</a>
-                        <a class="dropdown-item" href="{{ url_for(request.endpoint, lang_code='en') }}">EN</a>
+                        <a class="dropdown-item"
+                           href="{{ url_for(request.endpoint, lang_code='nl', userid='') }}">NL</a>
+                        <a class="dropdown-item"
+                           href="{{ url_for(request.endpoint, lang_code='fr', userid='') }}">FR</a>
+                        <a class="dropdown-item"
+                           href="{{ url_for(request.endpoint, lang_code='en', userid='') }}">EN</a>
                     </div>
                 </li>
             </ul>

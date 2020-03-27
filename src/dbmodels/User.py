@@ -6,14 +6,17 @@ from flask_login import UserMixin
 # Class that represents the "user" table from the database
 class User:
     def __init__(self, first_name, last_name, email, password):
+        # gender is M or F, active_since is a date, address & picture are id's that reference an address & picture
+        self.id = None
+        self.email = email
         self.first_name = first_name
         self.last_name = last_name
-        self.email = email
         self.password = password
-
-    def to_dct(self):
-        return {'first_name': self.first_name, 'last_name': self.last_name, 'email': self.email,
-                'joined_on': self.joined_on}
+        self.age = 1
+        self.gender = 'M'
+        self.joined_on = None
+        self.picture = None
+        self.address = None
 
     @property
     def is_active(self):
@@ -52,6 +55,11 @@ class User:
         # We set it back to its default implementation
         __hash__ = object.__hash__
 
+    def to_dict(self):
+        return {'id': None, ' email': self.email, 'first_name': self.first_name, 'last_name': self.last_name,
+                'age': self.age, 'gender': self.gender, 'joined_on': self.joined_on, 'picture': self.picture,
+                'address': self.address}
+
 
 # Class used for accessing data from the "user" table from the database
 class UserAccess:
@@ -69,7 +77,17 @@ class UserAccess:
 
     def get_user(self, em):
         cursor = self.dbconnect.get_cursor()
-        cursor.execute('SELECT first_name, last_name, email, password FROM "user" WHERE email=%s', (em,))
+        cursor.execute('SELECT first_name, last_name, email, password, id FROM "user" WHERE email=%s', (em,))
+        row = cursor.fetchone()
+        if row:
+            result = User(row[0], row[1], row[2], row[3])
+            result.id = row[4]
+            return result
+        return None
+
+    def get_user_on_id(self, theId):
+        cursor = self.dbconnect.get_cursor()
+        cursor.execute('SELECT first_name, last_name, email, password FROM "user" WHERE id=%s', (theId,))
         row = cursor.fetchone()
         if row:
             return User(row[0], row[1], row[2], row[3])
@@ -78,8 +96,9 @@ class UserAccess:
     def add_user(self, user_obj):
         cursor = self.dbconnect.get_cursor()
         try:
-            cursor.execute('INSERT INTO "user" VALUES(%s, %s, %s, %s, now())',
-                           (user_obj.first_name, user_obj.last_name, user_obj.email, user_obj.password))
+            cursor.execute('INSERT INTO "user" VALUES(default, %s, %s, %s, %s, now(), %s, %s)',
+                           (user_obj.first_name, user_obj.last_name, user_obj.email, user_obj.password, user_obj.age,
+                            user_obj.gender))
             self.dbconnect.commit()
         except:
             raise Exception('Unable to add user')
