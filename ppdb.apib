@@ -1,0 +1,277 @@
+FORMAT: 1A
+HOST: https://ppdb.me/api
+
+# PPDB 2019-2020
+
+
+Minimal specification of the API. Optional parameters (with default values) may be added and more information may be included in the responses.
+This minimum requirement needs to be implemented to receive live data.
+
+
+## /users/register
+
+### POST [POST]
+
+
++ Request (application/json)
+
+        {
+            "username" : "MarkP",
+            "firstname": "Mark",
+            "lastname": "Peeters",
+            "password" : "MarkIsCool420"
+        }
+
++ Response 201 (application/json)
+
+        {
+            "id": 14
+        }
+
+
+## /users/auth
+
+### POST [POST]
+
+
++ Request (application/json)
+
+        {
+            "username" : "MarkP",
+            "password" : "MarkIsCool420"
+        }
+
++ Response 200 (application/json)
+
+        {
+            "token": "<token>"
+        }
+
++ Request (application/json)
+
+        {
+            "username" : "MarkP",
+            "password" : "[Invalid password]"
+        }
+
++ Response 401
+
+
+
+## /drives
+
+### POST [POST]
+
+Locations in latitude-longitude, time in ISO 8601 format in the local timezone. A user token needs to be provided in the Authorization header.
+
++ Request (application/json)
+
+    + Headers
+
+            Authorization: Bearer <token>
+
+    + Body
+
+            {
+                "from": [51.130215, 4.571509],
+                "to": [51.184170, 4.419310],
+                "passenger-places": 3,
+                "arrive-by": "2020-02-12T10:00:00.00"
+            }
+
++ Response 201 (application/json)
+
+    + Headers
+
+            Location: /drives/2
+
+    + Body
+
+            {
+                "id": 2,
+                "driver-id": 14,
+                "passenger-ids": [],
+                "passenger-places": 3,
+                "from": [51.130215, 4.571509],
+                "to": [51.184170, 4.419310],
+                "arrive-by": "2020-02-12T10:00:00.00"
+            }
+
+
++ Request (application/json)
+
+    + Body
+
+            {
+                "from": [51.130215, 4.571509],
+                "to": [51.184170, 4.419310],
+                "arrive-by": "2020-02-12T10:00:00.00"
+            }
+
++ Response 401
+
+
+## /drives/{drive_id}
+
++ Parameters
+    + drive_id (number) - ID of the Drive in the form of an integer.
+
+
+### GET [GET]
+
+The field "passenger-places" indicates the total amount of passengers that can be present on the ride. To get the amount of free places, subtract the amount of users in "passenger-ids".
+
++ Response 200 (application/json)
+
+        {
+            "id": 2,
+            "driver-id": 14,
+            "passenger-ids": [],
+            "passenger-places": 3,
+            "from": [51.130215, 4.571509],
+            "to": [51.184170, 4.419310],
+            "arrive-by": "2020-02-12T10:00:00.00"
+        }
+
+
+## /drives/{drive_id}/passengers
+
++ Parameters
+    + drive_id (number) - ID of the Drive in the form of an integer.
+
+
+### GET [GET]
+
++ Response 200 (application/json)
+
+        [
+            {
+                "id": 14,
+                "username": "MarkP"
+            }
+        ]
+
+
+
+## /drives/{drive_id}/passenger-requests
+
++ Parameters
+    + drive_id (number) - ID of the Drive in the form of an integer.
+
+
+### GET [GET]
+
+Only the driver of a ride should be able to see passenger requests.
+
++ Request (application/json)
+
+    + Headers
+    
+            Authorization: Bearer <token>
+    
++ Response 200 (application/json)
+
+        [
+            {
+                "id": 14,
+                "username": "MarkP",
+                "status": "pending",
+                "time-created": "2020-02-10T11:35:12.58"
+            }
+        ]
+
+
+### POST [POST]
+
+
+
++ Request (application/json)
+
+    + Headers
+
+            Authorization: Bearer <token>
+
+
++ Response 201 (application/json)
+
+    + Headers
+
+            Location: /drives/1/passenger-requests/14
+
+    + Body
+
+            {
+                "id": 14,
+                "username": "MarkP",
+                "status": "pending",
+                "time-created": "2020-02-10T11:35:12.58"
+            }
+
+
+## /drives/{drive_id}/passenger-requests/{user_id}
+
++ Parameters
+    + drive_id (number) - ID of the Drive in the form of an integer.
+    + user_id (number) - ID of the user requesting to join.
+
+### POST [POST]
+
+Decide on a passenger request. Action can either be "accept" or "reject". Checks whether the token belongs to the driver of the user and whether the passenger request is valid and in the pending state. 
+
++ Request (application/json)
+
+    + Headers
+
+            Authorization: Bearer <token>
+
+    + Body
+
+            {
+                "action": "accept"
+            }
+
+
++ Response 200 (application/json)
+
+    + Body
+
+            {
+                "id": 14,
+                "username": "Mark",
+                "status": "accepted",
+                "time-created": "2020-02-10T11:35:12.58",
+                "time-updated": "2020-02-10T15:09:35.03"
+            }
+
+
+
+## /drives/search{?limit}
+
+These are the basic parameters of search. Specific search queries can be supported, e.g.: max-from-distance, max-to-distance, max-time-difference (before and/or after), ... .
+
+### GET [GET]
+
++ Parameters
+
+    + limit (optional, number) - Amount of results to return. Default 5, maximum 25.
+
++ Request (application/json)
+
+        {
+            "from": [51.130215, 4.571509],
+            "to": [51.184170, 4.419310],
+            "arrive-by": "2020-02-12T10:00:00.00"
+        }
+    
++ Response 200 (application/json)
+
+        [
+            {
+                "id": 1,
+                "driver-id": 12,
+                "passenger-ids": [14],
+                "from": [51.094910, 4.610470],
+                "to": [51.184170, 4.419310],
+                "arrive-by": "2020-02-12T9:45:00.00"
+            }
+        ]

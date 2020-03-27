@@ -1,6 +1,7 @@
 from flask import Blueprint, render_template, flash, redirect, url_for, g, current_app, abort
+import flask_login
 from flask_login import current_user, login_user, logout_user
-from src.models import User
+from src.dbmodels.User import User
 from src.reviews.forms import Reviews
 from src.users.forms import LoginForm, RegistrationForm, VehicleForm
 from src.utils import user_access, bcrypt
@@ -64,6 +65,7 @@ def login():
         user = user_access.get_user(form.email.data)
         if user and bcrypt.check_password_hash(user.password, form.password.data):
             login_user(user, remember=form.remember_me.data)
+            print(current_user.is_authenticated)
             return redirect(url_for('main.home'))
         else:
             flash('Login failed. Please check your email and/or password.', 'danger')

@@ -33,7 +33,7 @@ CREATE TABLE user (
     last_name VARCHAR(256) NOT NULL,
     age INTEGER NOT NULL,
     gender gender_type NOT NULL,
-    active_since DATE,
+    joined_on DATE,
     picture REFERENCES picture(id),
     address REFERENCES address(id)
 );

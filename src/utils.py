@@ -3,7 +3,7 @@ from flask_babel import Babel
 from flask_bcrypt import Bcrypt
 from flask_login import LoginManager
 from src.DBConnect import DBConnection
-from src.models import UserAccess
+from src.dbmodels.User import UserAccess
 from src.config import BaseConfig
 
 # connect to database
