@@ -1,11 +1,21 @@
 {% extends "roundborder.html" %}
 {% block contentTitle %}
-    New review for <b>Jos Vermeulen</b>
+    New review for <b>{{ user_for.first_name }} {{ user_for.last_name }}</b>
 {% endblock contentTitle %}
 <!-- Add icon library -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
 {% block contentContent %}
+    <script type="text/javascript">
+        function changeRate(num) {
+            document.createTextNode(num);
+            if (document.getElementById("amount_of_stars").hasChildNodes()) {
+                document.getElementById("amount_of_stars").removeChild(document.getElementById("amount_of_stars").childNodes[0]);
+            }
+            document.getElementById("amount_of_stars").appendChild(document.createTextNode(num));
+            $("#amount_of_stars").attr('value', num)
+        }
+    </script>
+
     <form method="POST" action="">
         {{ form.hidden_tag() }}
         <div class="row">
@@ -13,30 +23,51 @@
                 <fieldset class="form-group margin-b">
                     {# source https://codepen.io/hesguru/pen/BaybqXv #}
                     <div class="rate">
-                        <input type="radio" id="star5" name="rate" value="5"/>
+                        <input type="radio" id="star5" name="rate" value="5" onchange="changeRate(5)"/>
                         <label for="star5" title="text">{{ _('5 stars') }}</label>
-                        <input type="radio" id="star4" name="rate" value="4"/>
+                        <input type="radio" id="star4" name="rate" value="4" onchange="changeRate(4)"/>
                         <label for="star4" title="text">{{ _('4 stars') }}</label>
-                        <input type="radio" id="star3" name="rate" value="3"/>
+                        <input type="radio" id="star3" name="rate" value="3" onchange="changeRate(3)"/>
                         <label for="star3" title="text">{{ _('3 stars') }}</label>
-                        <input type="radio" id="star2" name="rate" value="2"/>
+                        <input type="radio" id="star2" name="rate" value="2" onchange="changeRate(2)"/>
                         <label for="star2" title="text">{{ _('2 stars') }}</label>
-                        <input type="radio" id="star1" name="rate" value="1"/>
+                        <input type="radio" id="star1" name="rate" value="1" onchange="changeRate(1)"/>
                         <label for="star1" title="text">{{ _('1 star') }}</label>
+                    </div>
+                    <div class="form-group">
+                        {% if form.amount_of_stars.errors %}
+                            {{ form.amount_of_stars(class="form-control is-invalid") }}
+                            <div class="invalid-feedback">
+                                {% for error in form.amount_of_stars.errors %}
+                                    <span>{{ error }}</span>
+                                {% endfor %}
+                            </div>
+                        {% else %}
+                            {{ form.amount_of_stars(class="form-control form-control-lg", value="1", style="width: 10px; visibility: hidden") }}
+                        {% endif %}
                     </div>
                 </fieldset>
                 <fieldset class="form-group">
                     <div>
-                        <img class="display-profile-pic-review" src="../static/images/temp_profile_pic.png"
+                        <img class="display-profile-pic-review" src="../../static/images/temp_profile_pic.png"
                              alt="HTML5 Icon">
-                        <b class="display-name">Jos Vermeulen</b>
+                        <b class="display-name">{{ user_for.first_name }} {{ user_for.last_name }}</b>
                     </div>
                 </fieldset>
             </div>
             <div class="col-md-9">
                 <fieldset class="form-group title-input margin-b">
-                    <div class="form-control form-control-lg">
-                        {{ _('Pick a title') }}
+                    <div class="form-group">
+                        {% if form.title.errors %}
+                            {{ form.title(class="form-control is-invalid") }}
+                            <div class="invalid-feedback">
+                                {% for error in form.title.errors %}
+                                    <span>{{ error }}</span>
+                                {% endfor %}
+                            </div>
+                        {% else %}
+                            {{ form.title(class="form-control form-control-lg", placeholder="Pick a title") }}
+                        {% endif %}
                     </div>
                 </fieldset>
             </div>
@@ -46,16 +77,25 @@
                 <!-- display the form -->
                 <fieldset class="form-group review-input margin-b">
                     <div class="form-group">
-                        {{ form.msg.label(class="form-control-label") }}
-                        {% if form.msg.errors %}
-                            {{ form.msg(class="form-control is-invalid") }}
+                        {{ form.text.label(class="form-control-label") }}
+                        {% if form.text.errors %}
+                            {{ form.text(class="form-control is-invalid") }}
                             <div class="invalid-feedback">
-                                {% for error in form.msg.errors %}
+                                {% for error in form.text.errors %}
                                     <span>{{ error }}</span>
                                 {% endfor %}
                             </div>
                         {% else %}
-                            <textarea> class="form-control" rows="7" id="comment">{{ _('Write a review') }}</textarea>
+                            {% if form.text.errors %}
+                                {{ form.text(class="form-control is-invalid") }}
+                                <div class="invalid-feedback">
+                                    {% for error in form.text.errors %}
+                                        <span>{{ error }}</span>
+                                    {% endfor %}
+                                </div>
+                            {% else %}
+                                {{ form.text(class="form-control form-control-lg", placeholder="Share your experience...", rows=6) }}
+                            {% endif %}
                         {% endif %}
                     </div>
 

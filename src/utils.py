@@ -4,11 +4,13 @@ from flask_bcrypt import Bcrypt
 from flask_login import LoginManager
 from src.DBConnect import DBConnection
 from src.dbmodels.User import UserAccess
+from src.dbmodels.Review import Reviews
 from src.config import BaseConfig
 
 # connect to database
 connection = DBConnection(dbname=BaseConfig.DB_NAME, dbuser=BaseConfig.DB_USER)
 user_access = UserAccess(connection)
+review_access = Reviews(connection)
 
 # create extensions
 babel = Babel()

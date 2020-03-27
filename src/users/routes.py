@@ -4,7 +4,7 @@ from flask_login import current_user, login_user, logout_user
 from src.dbmodels.User import User
 from src.reviews.forms import Reviews
 from src.users.forms import LoginForm, RegistrationForm, VehicleForm
-from src.utils import user_access, bcrypt
+from src.utils import user_access, bcrypt, review_access
 
 users = Blueprint('users', __name__, url_prefix='/<lang_code>')
 
@@ -36,7 +36,9 @@ def before_request():
 @users.route("/account")
 def account():
     form = Reviews()
-    return render_template('account.html', title='Account', form=form, loggedIn=True)
+    data = review_access.get_on_user_for(current_user.id)
+    return render_template('account.html', title='Account', form=form, loggedIn=True, data=data,
+                           current_user=current_user)
 
 
 @users.route("/edit")
@@ -49,10 +51,13 @@ def myrides():
     return render_template('ride_history.html', title='My rides', loggedIn=True)
 
 
-@users.route("/user")
-def user():
+@users.route("/user=<userid>")
+def user(userid):
     form = Reviews()
-    return render_template('user.html', title='User profile', form=form, loggedIn=False)
+    target_user = user_access.get_user_on_id(userid)
+    data = review_access.get_on_user_for(userid)
+    return render_template('user.html', title='User profile', form=form, loggedIn=False, target_user=target_user,
+                           data=data)
 
 
 @users.route("/login", methods=['GET', 'POST'])
@@ -65,7 +70,6 @@ def login():
         user = user_access.get_user(form.email.data)
         if user and bcrypt.check_password_hash(user.password, form.password.data):
             login_user(user, remember=form.remember_me.data)
-            print(current_user.is_authenticated)
             return redirect(url_for('main.home'))
         else:
             flash('Login failed. Please check your email and/or password.', 'danger')

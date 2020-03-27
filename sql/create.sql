@@ -113,3 +113,6 @@ CREATE TABLE review (
     title VARCHAR(256),
     review_text VARCHAR(1000)
 );
+
+alter table review
+add column creation date default now()
