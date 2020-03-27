@@ -1,5 +1,5 @@
 /*
-address table, doesn't need a user in case the address is
+address table, doesn't need a "user" in case the address is
 a destination. all fields are required
 */
 DROP TABLE IF EXISTS address CASCADE;
@@ -22,20 +22,32 @@ CREATE TYPE gender_type AS ENUM (
 );
 
 /*
-user table, last name & age are required
+picture table for profile picture ("user") and picture of car
+(not required for either -> doesn't go in "user"/car tables)
+filename is path to file
+*/
+DROP TABLE IF EXISTS picture CASCADE;
+CREATE TABLE picture (
+    id SERIAL PRIMARY KEY,
+    filename VARCHAR(256) NOT NULL
+);
+
+/*
+"user" table, last name & age are required
 gender either M or F from gender_type
 */
-DROP TABLE IF EXISTS user CASCADE;
-CREATE TABLE user (
+DROP TABLE IF EXISTS "user" CASCADE;
+CREATE TABLE "user" (
     id SERIAL PRIMARY KEY,
-    email VARCHAR(256) NOT NULL,
     first_name VARCHAR(256),
     last_name VARCHAR(256) NOT NULL,
+    email VARCHAR(256) NOT NULL,
+    password varchar not null,
+    joined_on timestamp not null,
     age INTEGER NOT NULL,
     gender gender_type NOT NULL,
-    joined_on DATE,
-    picture REFERENCES picture(id),
-    address REFERENCES address(id)
+    picture int REFERENCES picture(id),
+    address int REFERENCES address(id)
 );
 
 /*
@@ -66,35 +78,24 @@ CREATE TABLE car (
     construction_year INTEGER,
     fuel_consumption INTEGER,
     fuel fuel_type,
-    user_id REFERENCES user(id) NOT NULL,
-    picture REFERENCES picture(id)
+    user_id int REFERENCES "user"(id) NOT NULL,
+    picture int REFERENCES picture(id)
 );
 
 /*
-ride table, belongs to a user
+ride table, belongs to a "user"
 has a departure time (date + time) that's required
 arrival time is not required
 */
 DROP TABLE IF EXISTS ride CASCADE;
 CREATE TABLE ride (
     id SERIAL PRIMARY KEY,
-    departure_time DATETIME NOT NULL,
-    arrival_time DATETIME,
-    user_id REFERENCES user(id) NOT NULL,
-    address_to REFERENCES address(id) NOT NULL,
-    address_from REFERENCES address(id) NOT NULL,
-    car_id REFERENCES car(id) NOT NULL
-);
-
-/*
-picture table for profile picture (user) and picture of car
-(not required for either -> doesn't go in user/car tables)
-filename is path to file
-*/
-DROP TABLE IF EXISTS picture CASCADE;
-CREATE TABLE picture (
-    id SERIAL PRIMARY KEY,
-    filename VARCHAR(256) NOT NULL
+    departure_time timestamp NOT NULL,
+    arrival_time timestamp,
+    user_id int REFERENCES "user"(id) NOT NULL,
+    address_to int REFERENCES address(id) NOT NULL,
+    address_from int REFERENCES address(id) NOT NULL,
+    car_id int REFERENCES car(id) NOT NULL
 );
 
 /*
@@ -106,9 +107,9 @@ title and text can be empty, it's possible to only leave the star review
 DROP TABLE IF EXISTS review CASCADE;
 CREATE TABLE review (
     id SERIAL PRIMARY KEY,
-    user_for REFERENCES user(id) NOT NULL,
-    user_from REFERENCES user(id) NOT NULL,
-    amount_of_stars INTEGER NOT NULL
-    title VARCHAR(256)
+    user_for int REFERENCES "user"(id) NOT NULL,
+    user_from int REFERENCES "user"(id) NOT NULL,
+    amount_of_stars INTEGER NOT NULL,
+    title VARCHAR(256),
     review_text VARCHAR(1000)
 );
