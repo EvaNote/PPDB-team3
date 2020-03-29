@@ -67,55 +67,58 @@
     </div>
         <br>
 
-        <div class="border-top pt-3"></div>
+        {% for i in cars %}
+          <div class="border-top pt-3"></div>
 
-                <div>
-    <b>{{_('Brand')}}</b>
-        <br>
-    Toyota
-    </div>
-        <br>
-                <div>
-    <b>{{_('Type')}}</b>
-        <br>
-    Yaris
-    </div>
-        <br>
-                <div>
-    <b>{{ _('Color') }}</b>
-        <br>
-    Red
-    </div>
-        <br>
-                <div>
-    <b>{{ _('License plate') }}</b>
-        <br>
-    1-CAR-123
-    </div>
-        <br>
-                <div>
-    <b>{{ _('nr. seats') }}</b>
-        <br>
-    4
-    </div>
-        <br>
-                <div>
-    <b>{{ _('Year') }}</b>
-        <br>
-    2015
-    </div>
-        <br>
-                <div>
-    <b>{{ _('Fuel usage') }}</b>
-        <br>
-    7,8l/100km
-    </div>
-        <br>            <div>
-    <b>{{ _('Fuel type') }}</b>
-        <br>
-    Gasoline
-    </div>
-        <br>
+                  <div>
+      <b>{{_('Brand')}}</b>
+          <br>
+      {{ i.brand }}
+      </div>
+          <br>
+                  <div>
+      <b>{{_('Type')}}</b>
+          <br>
+      {{ i.model }}
+      </div>
+          <br>
+                  <div>
+      <b>{{ _('Color') }}</b>
+          <br>
+          {{ i.color }}
+      </div>
+          <br>
+                  <div>
+      <b>{{ _('License plate') }}</b>
+          <br>
+          {{ i.number_plate }}
+      </div>
+          <br>
+                  <div>
+      <b>{{ _('nr. seats') }}</b>
+          <br>
+          {{ i.nr_seats }}
+      </div>
+          <br>
+                  <div>
+      <b>{{ _('Year') }}</b>
+          <br>
+          {{ i.construction_year }}
+      </div>
+          <br>
+                  <div>
+      <b>{{ _('Fuel usage') }}</b>
+          <br>
+          {{ i.fuel }}
+      </div>
+          <br>            <div>
+      <b>{{ _('Fuel type') }}</b>
+          <br>
+          {{ i.fuel_type }}
+      </div>
+          <br>
+
+        {% endfor %}
 
         <a class="btn btn-info" href="{{ url_for('users.add_vehicle') }}" role="button">{{ _('Add car') }}</a>
 <br>

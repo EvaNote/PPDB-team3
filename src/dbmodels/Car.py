@@ -42,9 +42,17 @@ class Cars:
             return None
 
     def get_on_user_id(self, user_id):
-        found = self.get_on('user_id', user_id)
-        if len(found) > 0:
-            return found[0]
+        #found = self.get_on('user_id', user_id)
+        cursor = self.dbconnect.get_cursor()
+        cursor.execute("SELECT id,number_plate,color,brand,model,nr_seats,construction_year,fuel_consumption,fuel,user_id,picture FROM car WHERE user_id=%s",
+                       (user_id,))
+        cars = list()
+        for row in cursor:
+            car = Car(row[0], row[1], row[2], row[3], row[4], row[5], row[6], row[7], row[8], row[9], row[10])
+            cars.append(car)
+
+        if len(cars) > 0:
+            return cars
         else:
             return None
 

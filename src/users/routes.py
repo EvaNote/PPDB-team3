@@ -2,9 +2,10 @@ from flask import Blueprint, render_template, flash, redirect, url_for, g, curre
 import flask_login
 from flask_login import current_user, login_user, logout_user
 from src.dbmodels.User import User
+from src.dbmodels.Car import Car
 from src.reviews.forms import Reviews
 from src.users.forms import LoginForm, RegistrationForm, VehicleForm
-from src.utils import user_access, bcrypt, review_access
+from src.utils import user_access, bcrypt, review_access, car_access
 
 users = Blueprint('users', __name__, url_prefix='/<lang_code>')
 
@@ -37,8 +38,9 @@ def before_request():
 def account():
     form = Reviews()
     data = review_access.get_on_user_for(current_user.id)
+    cars = car_access.get_on_user_id(current_user.id)
     return render_template('account.html', title='Account', form=form, loggedIn=True, data=data,
-                           current_user=current_user)
+                           current_user=current_user, cars=cars)
 
 
 @users.route("/edit")
@@ -108,6 +110,16 @@ def register():
 def add_vehicle():
     form = VehicleForm()
     if form.validate_on_submit():
+        brand = form.brand.data
+        model = form.model.data
+        color = form.color.data
+        plateNumber = form.plateNumber.data
+        seats = form.seats.data
+        constructionYear = form.constructionYear.data
+        consumption = form.consumption.data
+        fuelType = form.fuelType.data
+        car_obj = Car(None, plateNumber, color, brand, model, seats, constructionYear, consumption, fuelType, current_user.id, None)
+        car_access.add_car(car_obj)
         flash(f'Vehicle registered!', 'success')
-        return redirect(url_for('users.add_vehicle'))
+        return redirect(url_for('users.account'))
     return render_template("add_vehicle.html", title="Add Vehicle", form=form)

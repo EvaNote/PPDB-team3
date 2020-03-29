@@ -59,7 +59,9 @@ CREATE TYPE fuel_type AS ENUM (
     'diesel',
     'electricity',
     'CNG', /* = compressed natural gas */
-    'LPG' /* = liquefied petroleum gas */
+    'LPG', /* = liquefied petroleum gas */
+    'ethanol',
+    'bio-diesel'
 );
 
 /*
@@ -76,7 +78,7 @@ CREATE TABLE car (
     model VARCHAR(256) NOT NULL,
     nr_seats INTEGER NOT NULL,
     construction_year INTEGER,
-    fuel_consumption INTEGER,
+    fuel_consumption VARCHAR(30),
     fuel fuel_type,
     user_id int REFERENCES "user"(id) NOT NULL,
     picture int REFERENCES picture(id)
