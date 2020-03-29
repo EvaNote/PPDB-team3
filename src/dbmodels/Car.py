@@ -60,7 +60,7 @@ class Cars:
     def add_car(self, car):
         cursor = self.dbconnect.get_cursor()
         try:
-            cursor.execute('INSERT INTO "car" VALUES(%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)',
+            cursor.execute('INSERT INTO "car" VALUES(default, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)',
                            (
                            car.number_plate,car.color,car.brand,car.model,car.nr_seats,car.construction_year,car.fuel_consumption,car.fuel,car.user_id,car.picture))
             self.dbconnect.commit()

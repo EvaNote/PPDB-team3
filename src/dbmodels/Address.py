@@ -59,7 +59,7 @@ class Addresses:
     def add_address(self, address):
         cursor = self.dbconnect.get_cursor()
         try:
-            cursor.execute('INSERT INTO "address" VALUES(%s, %s, %s, %s, %s)',
+            cursor.execute('INSERT INTO "address" VALUES(default, %s, %s, %s, %s, %s)',
                            (
                            address.country,address.city,address.postal_code,address.street,address.nr))
             self.dbconnect.commit()

@@ -90,7 +90,7 @@ class Rides:
     def add_ride(self, ride):
         cursor = self.dbconnect.get_cursor()
         try:
-            cursor.execute('INSERT INTO "ride" VALUES(%s, %s, %s, %s, %s, %s)',
+            cursor.execute('INSERT INTO "ride" VALUES(default, %s, %s, %s, %s, %s, %s)',
                            (
                            ride.departure_time, ride.arrival_time, ride.user_id, ride.address_to, ride.address_from, ride.car_id))
             self.dbconnect.commit()

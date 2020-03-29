@@ -40,7 +40,7 @@ class Pictures:
     def add_picture(self, picture):
         cursor = self.dbconnect.get_cursor()
         try:
-            cursor.execute('INSERT INTO "picture" VALUES(%s)',
+            cursor.execute('INSERT INTO "picture" VALUES(default, %s)',
                            (
                            picture.filename))
             self.dbconnect.commit()
