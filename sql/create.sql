@@ -114,6 +114,3 @@ CREATE TABLE review (
     review_text VARCHAR(1000),
     creation date default now()
 );
-
-alter table review
-add column creation date default now()
