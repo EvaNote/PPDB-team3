@@ -1,5 +1,8 @@
-from flask import Blueprint, render_template, g, current_app, abort
+from flask import Blueprint, render_template, flash, redirect, url_for, g, current_app, abort
 from src.reviews.forms import ReviewForm
+from flask_login import current_user, login_user, logout_user
+from src.dbmodels.Review import Reviews, Review
+from src.utils import user_access, review_access
 
 reviews = Blueprint('reviews', __name__, url_prefix='/<lang_code>')
 
@@ -28,18 +31,23 @@ def before_request():
 ########################################################################################################################
 
 
-@reviews.route("/newreview", methods=['GET', 'POST'])
-def newreview():
+@reviews.route("/user=<userid>/new_review", methods=['GET', 'POST'])
+def new_review(userid):
+    if not current_user.is_authenticated:  # makes sure user won`t be able to go to login/register page
+        return redirect(url_for('users.login'))
     form = ReviewForm()
-    return render_template('new_review.html', title='New review', form=form, loggedIn=True)
-
-# @reviews.route("/reviews", methods=['GET', 'POST'])
-# def reviews():
-#     form = Reviews()
-#     return render_template("my_reviews.html", title='My Reviews', form=form, loggedIn=True)
-#
-#
-# @reviews.route("/exampleuser/reviews", methods=['GET', 'POST'])
-# def exampleuser_reviews():
-#     form = Reviews()
-#     return render_template("my_reviews.html", title='Reviews of example user', form=form, loggedIn=True)
+    userfor = user_access.get_user_on_id(userid)
+    if form.validate_on_submit():
+        user_from = current_user.id
+        user_for = userid
+        amount_of_stars = form.amount_of_stars.data
+        title = form.title.data
+        text = form.text.data
+        review_obj = Review(None, user_for, user_from, amount_of_stars, title, text)
+        review_access.add_review(review_obj)
+        flash('Your review has been posted successfully!', 'success')
+        return redirect(url_for('main.home'))
+    else:
+        flash('Writing review failed.', 'danger')
+    return render_template('new_review.html', title='New review', form=form, loggedIn=True, user_from=current_user,
+                           user_for=userfor)

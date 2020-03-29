@@ -88,6 +88,7 @@
 
 /* other styles (for both desktop and mobile) */
 .display-review {
+    margin-top: 1%;
     margin-left: 0 !important;
     margin-right: 0 !important;
 }
@@ -173,6 +174,7 @@
     .display-name {
         font-size: 110%;
         margin-left: 0 !important;
+        margin-bottom: 1%;
     }
 
     .title-input {

@@ -53,24 +53,30 @@
                     </div>
                 </div>
             </div>
+
+            {% for review in data %}
+
             <div class="content-section border-light p-4 mx-5 mb-5 display-review">
                 <div class="row">
                     <div class="display_rate col-ms-auto margin-b">
-                        <label for="star5" title="text">{{ _('5 stars') }}</label>
-                        <label for="star4" title="text">{{ _('4 stars') }}</label>
-                        <label for="star3" title="text">{{ _('3 stars') }}</label>
-                        <label for="star2" title="text">{{ _('2 stars') }}</label>
-                        <label for="star1" title="text">{{ _('1 star') }}</label>
+                        {% for i in range(1,6) %}
+                            {% if review.amount_of_stars <= 5-i %}
+                                <label>{{ _('stars') }}</label>
+                            {% else %}
+                                <label style="color: #deb217">{{ _('stars') }}</label>
+                            {% endif %}
+                        {% endfor %}
                     </div>
                 </div>
                 <div class="row" style="margin-left: 0">
                     <div class="col display-title">
-                        <b>Het was zeer gezellig</b>
+                        <b>{{ review.title }}</b>
                     </div>
                 </div>
                 <div class="row">
                     <div class="col display-name">
-                        <b>April 25th, 2019</b> {{_('by')}} <b>An Kasteels</b>
+                        <b>{{ review.get_creation_date_as_string() }}</b> {{ _('by') }}
+                        <b>{{ review.get_user_from_as_object().first_name }} {{ review.get_user_from_as_object().last_name }}</b>
                     </div>
                 </div>
                 <div class="row" style="margin-left: 0">
@@ -78,74 +84,12 @@
                          src="{{ url_for('static', filename="images/temp_profile_pic.png") }}" alt="HTML5 Icon">
                 </div>
                 <div class="row display-review">
-                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Repellendus ab nulla dolorum autem nisi
-                        officiis blanditiis voluptatem hic, assumenda aspernatur facere ipsam nemo ratione cumque magnam
-                        enim
-                        fugiat reprehenderit expedita.</p>
+                    <p>{{ review.review_text }}</p>
                 </div>
             </div>
-            <div class="content-section border-light p-4 mx-5 mb-5 display-review">
-                <div class="row">
-                    <div class="display_rate col-ms-auto margin-b">
-                        <label for="star5" title="text">{{ _('5 stars') }}</label>
-                        <label for="star4" title="text">{{ _('4 stars') }}</label>
-                        <label for="star3" title="text">{{ _('3 stars') }}</label>
-                        <label for="star2" title="text">{{ _('2 stars') }}</label>
-                        <label for="star1" title="text">{{ _('1 star') }}</label>
-                    </div>
-                </div>
-                <div class="row" style="margin-left: 0">
-                    <div class="col display-title">
-                        <b>Voor herhaling vatbaar</b>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col display-name">
-                        <b>March 22th, 2019</b> {{_('by')}} <b>Victor Plancken</b>
-                    </div>
-                </div>
-                <div class="row" style="margin-left: 0">
-                    <img class="display-profile-pic-review"
-                         src="{{ url_for('static', filename="images/temp_profile_pic.png") }}" alt="HTML5 Icon">
-                </div>
-                <div class="row display-review">
-                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Repellendus ab nulla dolorum autem nisi
-                        officiis blanditiis voluptatem hic, assumenda aspernatur facere ipsam nemo ratione cumque magnam
-                        enim
-                        fugiat reprehenderit expedita.</p>
-                </div>
-            </div>
-            <div class="content-section border-light p-4 mx-5 mb-5 display-review">
-                <div class="row">
-                    <div class="display_rate col-ms-auto margin-b">
-                        <label for="star5" title="text">{{ _('5 stars') }}</label>
-                        <label for="star4" title="text">{{ _('4 stars') }}</label>
-                        <label for="star3" title="text">{{ _('3 stars') }}</label>
-                        <label for="star2" title="text">{{ _('2 stars') }}</label>
-                        <label for="star1" title="text">{{ _('1 star') }}</label>
-                    </div>
-                </div>
-                <div class="row" style="margin-left: 0">
-                    <div class="col display-title">
-                        <b>Stipte chauffeur</b>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col display-name">
-                        <b>Februari 21th, 2019</b> {{_('by')}} <b>Margot DeVinck</b>
-                    </div>
-                </div>
-                <div class="row" style="margin-left: 0">
-                    <img class="display-profile-pic-review"
-                         src="{{ url_for('static', filename="images/temp_profile_pic.png") }}" alt="HTML5 Icon">
-                </div>
-                <div class="row display-review">
-                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Repellendus ab nulla dolorum autem nisi
-                        officiis blanditiis voluptatem hic, assumenda aspernatur facere ipsam nemo ratione cumque magnam
-                        enim
-                        fugiat reprehenderit expedita.</p>
-                </div>
-            </div>
+
+            {% endfor %}
+
         </fieldset>
     </form>
 {% endblock contentContent %}
