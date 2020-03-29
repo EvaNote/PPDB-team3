@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, SubmitField, BooleanField, SelectField, DateField, IntegerField
+from wtforms import StringField, PasswordField, SubmitField, BooleanField, SelectField, DateField, IntegerField, validators
 from wtforms.validators import DataRequired, Length, Email, EqualTo, ValidationError, InputRequired
 from src.utils import user_access
 
@@ -30,7 +30,7 @@ class VehicleForm(FlaskForm):
     color = StringField('Color')
     plateNumber = StringField('Plate number', validators=[DataRequired()])
     seats = IntegerField('Seats', validators=[InputRequired()])
-    constructionYear = IntegerField('Construction Year')
+    constructionYear = IntegerField('Construction Year',[validators.optional()])
     consumption = StringField('Fuel Consumption')
     fuelType = SelectField('fuelType', choices=[('benzine', 'Gasoline/Petrol/Benzine'), ('diesel', 'Diesel'),
                                                 ('LPG', 'Liquified Petroleum'), ('electricity', 'Electricity'),

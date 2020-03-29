@@ -3,6 +3,7 @@ import flask_login
 from flask_login import current_user, login_user, logout_user
 from src.dbmodels.User import User
 from src.dbmodels.Car import Car
+from src.dbmodels.Address import Address
 from src.reviews.forms import Reviews
 from src.users.forms import LoginForm, RegistrationForm, VehicleForm
 from src.utils import user_access, bcrypt, review_access, car_access
@@ -40,7 +41,7 @@ def account():
     data = review_access.get_on_user_for(current_user.id)
     cars = car_access.get_on_user_id(current_user.id)
     return render_template('account.html', title='Account', form=form, loggedIn=True, data=data,
-                           current_user=current_user, cars=cars)
+                           current_user=current_user, cars=cars, address=current_user.address)
 
 
 @users.route("/edit")
