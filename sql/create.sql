@@ -111,5 +111,6 @@ CREATE TABLE review (
     user_from int REFERENCES "user"(id) NOT NULL,
     amount_of_stars INTEGER NOT NULL,
     title VARCHAR(256),
-    review_text VARCHAR(1000)
+    review_text VARCHAR(1000),
+    creation date default now()
 );
