@@ -5,9 +5,9 @@ from flask_login import UserMixin
 
 # Class that represents the "user" table from the database
 class User:
-    def __init__(self, first_name, last_name, email, password, id):
+    def __init__(self, first_name, last_name, email, password):
         # gender is M or F, active_since is a date, address & picture are id's that reference an address & picture
-        self.id = id
+        self.id = None
         self.email = email
         self.first_name = first_name
         self.last_name = last_name
@@ -72,6 +72,7 @@ class UserAccess:
         users = list()
         for row in cursor:
             user_obj = User(row[0], row[1], row[2], row[3], row[4])
+            user_obj.id = row[4]
             users.append(user_obj)
         return users
 
@@ -81,7 +82,7 @@ class UserAccess:
         cursor.execute('SELECT first_name, last_name, email, password, id FROM "user" WHERE email=%s', (em,))
         row = cursor.fetchone()
         if row:
-            result = User(row[0], row[1], row[2], row[3], row[4])
+            result = User(row[0], row[1], row[2], row[3])
             result.id = row[4]
             return result
         return None
