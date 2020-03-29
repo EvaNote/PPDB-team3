@@ -46,6 +46,7 @@ CREATE TABLE "user" (
     joined_on timestamp not null,
     age INTEGER NOT NULL,
     gender gender_type NOT NULL,
+    phone_number VARCHAR(20),
     picture int REFERENCES picture(id),
     address int REFERENCES address(id)
 );

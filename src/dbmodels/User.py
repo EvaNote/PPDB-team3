@@ -14,6 +14,7 @@ class User:
         self.password = password
         self.age = 1
         self.gender = 'M'
+        self.phone_number = None
         self.joined_on = None
         self.picture = None
         self.address = None
@@ -57,7 +58,8 @@ class User:
 
     def to_dict(self):
         return {'id': None, ' email': self.email, 'first_name': self.first_name, 'last_name': self.last_name,
-                'age': self.age, 'gender': self.gender, 'joined_on': self.joined_on, 'picture': self.picture,
+                'age': self.age, 'gender': self.gender, 'phone_number': self.phone_number,
+                'joined_on': self.joined_on, 'picture': self.picture,
                 'address': self.address}
 
 
@@ -98,9 +100,9 @@ class UserAccess:
     def add_user(self, user_obj):
         cursor = self.dbconnect.get_cursor()
         try:
-            cursor.execute('INSERT INTO "user" VALUES(default, %s, %s, %s, %s, now(), %s, %s)',
+            cursor.execute('INSERT INTO "user" VALUES(default, %s, %s, %s, %s, now(), %s, %s, %s)',
                            (user_obj.first_name, user_obj.last_name, user_obj.email, user_obj.password, user_obj.age,
-                            user_obj.gender))
+                            user_obj.gender, user_obj.phone_number))
             self.dbconnect.commit()
         except:
             raise Exception('Unable to add user')
