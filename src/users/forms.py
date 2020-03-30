@@ -37,3 +37,19 @@ class VehicleForm(FlaskForm):
                                                 ('CNG', 'Compressed Natural Gas'),
                                                 ('ethanol', 'Ethanol'), ('bio-diesel', 'Bio-diesel')])
     submit = SubmitField('Register vehicle')
+
+class EditAccountForm(FlaskForm):
+    first_name = StringField('First name', validators=[DataRequired()])
+    last_name = StringField('Last name', validators=[DataRequired()])
+    email = StringField('Email', validators=[DataRequired(), Email()])
+    gender = SelectField('Gender', choices=[('Male', 'Female', 'Other')])
+    age = IntegerField('Age',[validators.optional()])
+    phone_number = StringField('Phone number')
+
+    street = StringField('Street')
+    nr = IntegerField('Number',[validators.optional()])
+    city = StringField('City')
+    postal_code = IntegerField('Postal code',[validators.optional()])
+    country = StringField('Country')
+
+    submit = SubmitField('Save')

@@ -47,6 +47,12 @@ class Addresses:
         else:
             return None
 
+    def get_id(self, country, city, postal_code, street, nr):
+        cursor = dbconnect.get_cursor()
+        cursor.execute("SELECT id FROM address WHERE street='%s' , nr='%s', city='%s', postal_code='%s', country='%s'",(street,nr,city,postal_code,country))
+        id = cursor.fetchone()
+        return id
+
     def get_all(self, dbconnect):
         cursor = dbconnect.get_cursor()
         cursor.execute("SELECT id,country,city,postal_code,street,nr FROM address")
@@ -65,3 +71,12 @@ class Addresses:
             self.dbconnect.commit()
         except:
             raise Exception('Unable to add address')
+
+    def edit_address(self, address_id, street, nr, city, postal_code, country):
+        cursor = self.dbconnect.get_cursor()
+        address = self.get_on_id(address_id)
+        try:
+            cursor.execute("UPDATE address SET street='%s' , nr='%s', city='%s', postal_code='%s', country='%s' WHERE id='%s'", (street,nr,city,postal_code,country,address_id))
+            self.dbconnect.commit()
+        except:
+            raise Exception('Unable to edit address')

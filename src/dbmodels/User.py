@@ -106,3 +106,12 @@ class UserAccess:
             self.dbconnect.commit()
         except:
             raise Exception('Unable to add user')
+
+    def edit_user(self, user_id, first_name, last_name, email, gender, age, phone_number, address_id):
+        cursor = self.dbconnect.get_cursor()
+        try:
+            cursor.execute("UPDATE user SET first_name='%s',last_name='%s',email='%s',gender='%s',gender='%s',age='%s',phone_number='%s',address='%s' WHERE id='%s'",
+            (first_name,last_name,email,gender,age,phone_number,address_id))
+            self.dbconnect.commit()
+        except:
+            raise Exception('Unable to edit user')
