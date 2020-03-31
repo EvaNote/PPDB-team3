@@ -86,8 +86,9 @@
         {{ address.country }}
         </div>
     <br>
-        {% endif %}
+    {% endif %}
 
+        {% if cars != None %}
         {% for i in cars %}
           <div class="border-top pt-3"></div>
 
@@ -140,6 +141,8 @@
           <br>
 
         {% endfor %}
+        {% endif %}
+
 
         <a class="btn btn-info" href="{{ url_for('users.add_vehicle') }}" role="button">{{ _('Add car') }}</a>
 <br>
