@@ -2,83 +2,79 @@
 <!-- https://www.youtube.com/watch?v=I2dJuNwlIH0  -->
 {% extends "roundborder.html" %}
 {% block contentTitle %}
-    {{ _('Edit my account') }}
+    {{ _('Edit my address') }}
 {% endblock contentTitle %}
 {% block contentContent %}
     <form method="POST" action="">
         {{ form.hidden_tag() }}
         <!-- display the form -->
         <fieldset class="form-group">
+
             <div class="form-group">
-                {{ form.first_name.label(class="form-control-label") }}
-                {% if form.first_name.errors %}
-                    {{ form.first_name(class="form-control is-invalid") }}
+                {{ form.street.label(class="form-control-label") }}
+                {% if form.street.errors %}
+                    {{ form.street(class="form-control is-invalid") }}
                     <div class="invalid-feedback">
-                        {% for error in form.first_name.errors %}
+                        {% for error in form.street.errors %}
                             <span>{{ error }}</span>
                         {% endfor %}
                     </div>
                 {% else %}
-                    {{ form.first_name(class="form-control form-control-lg") }}
+                    {{ form.street(class="form-control form-control-lg") }}
                 {% endif %}
             </div>
             <div class="form-group">
-                {{ form.last_name.label(class="form-control-label") }}
-                {% if form.last_name.errors %}
-                    {{ form.last_name(class="form-control is-invalid") }}
+                {{ form.nr.label(class="form-control-label") }}
+                {% if form.nr.errors %}
+                    {{ form.nr(class="form-control is-invalid") }}
                     <div class="invalid-feedback">
-                        {% for error in form.last_name.errors %}
+                        {% for error in form.nr.errors %}
                             <span>{{ error }}</span>
                         {% endfor %}
                     </div>
                 {% else %}
-                    {{ form.last_name(class="form-control form-control-lg") }}
+                    {{ form.nr(class="form-control form-control-lg") }}
                 {% endif %}
             </div>
             <div class="form-group">
-                {{ _('Gender') }}:
-                {{ form.gender}}
-            </div>
-            <div class="form-group">
-                {{ form.email.label(class="form-control-label") }}
-                {% if form.email.errors %}
-                    {{ form.email(class="form-control is-invalid") }}
+                {{ form.city.label(class="form-control-label") }}
+                {% if form.city.errors %}
+                    {{ form.city(class="form-control is-invalid") }}
                     <div class="invalid-feedback">
-                        {% for error in form.email.errors %}
+                        {% for error in form.city.errors %}
                             <span>{{ error }}</span>
                         {% endfor %}
                     </div>
                 {% else %}
-                    {{ form.email(class="form-control form-control-lg") }}
+                    {{ form.city(class="form-control form-control-lg") }}
                 {% endif %}
             </div>
             <div class="form-group">
-                {{ form.age.label(class="form-control-label") }}
-                {% if form.age.errors %}
-                    {{ form.age(class="form-control is-invalid") }}
+                {{ form.postal_code.label(class="form-control-label") }}
+                {% if form.postal_code.errors %}
+                    {{ form.postal_code(class="form-control is-invalid") }}
                     <div class="invalid-feedback">
-                        {% for error in form.age.errors %}
+                        {% for error in form.postal_code.errors %}
                             <span>{{ error }}</span>
                         {% endfor %}
                     </div>
                 {% else %}
-                    {{ form.age(class="form-control form-control-lg") }}
+                    {{ form.postal_code(class="form-control form-control-lg") }}
                 {% endif %}
             </div>
             <div class="form-group">
-                {{ form.phone_number.label(class="form-control-label") }}
-                {% if form.phone_number.errors %}
-                    {{ form.phone_number(class="form-control is-invalid") }}
+                {{ form.country.label(class="form-control-label") }}
+                {% if form.country.errors %}
+                    {{ form.country(class="form-control is-invalid") }}
                     <div class="invalid-feedback">
-                        {% for error in form.phone_number.errors %}
+                        {% for error in form.country.errors %}
                             <span>{{ error }}</span>
                         {% endfor %}
                     </div>
                 {% else %}
-                    {{ form.phone_number(class="form-control form-control-lg") }}
+                    {{ form.country(class="form-control form-control-lg") }}
                 {% endif %}
             </div>
-          
 
 
         </fieldset>
@@ -86,8 +82,5 @@
             {{ form.submit(class="btn btn-outline-info") }}
         </div>
       </form>
-
-      <a class="btn btn-info" href="{{ url_for('users.address_edit') }}" role="button">{{ _('Edit address') }}</a>
-
 
 {% endblock contentContent %}

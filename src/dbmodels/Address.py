@@ -41,20 +41,24 @@ class Addresses:
         return addresses
 
     def get_on_id(self, id):
-        found = self.get_on('id', id)
-        if len(found) > 0:
-            return found[0]
-        else:
+        cursor = self.dbconnect.get_cursor()
+        cursor.execute('SELECT id,country,city,postal_code,street,nr FROM address WHERE id=%s',
+                       (id,))
+        address = cursor.fetchone()
+        if address == None:
             return None
+        address_obj = Address(address[0], address[1], address[2], address[3], address[4], address[5])
+        return address_obj
+
 
     def get_id(self, country, city, postal_code, street, nr):
-        cursor = dbconnect.get_cursor()
-        cursor.execute("SELECT id FROM address WHERE street='%s' , nr='%s', city='%s', postal_code='%s', country='%s'",(street,nr,city,postal_code,country))
+        cursor = self.dbconnect.get_cursor()
+        cursor.execute('SELECT id FROM address WHERE street=%s AND nr=%s AND city=%s AND postal_code=%s AND country=%s;',(street,nr,city,postal_code,country))
         id = cursor.fetchone()
         return id
 
     def get_all(self, dbconnect):
-        cursor = dbconnect.get_cursor()
+        cursor = self.dbconnect.get_cursor()
         cursor.execute("SELECT id,country,city,postal_code,street,nr FROM address")
         addresses = list()
         for row in cursor:
@@ -75,8 +79,13 @@ class Addresses:
     def edit_address(self, address_id, street, nr, city, postal_code, country):
         cursor = self.dbconnect.get_cursor()
         address = self.get_on_id(address_id)
+        address.street = street
+        address.nr = nr
+        address.city = city
+        address.postal_code = postal_code
+        address.country = country
         try:
-            cursor.execute("UPDATE address SET street='%s' , nr='%s', city='%s', postal_code='%s', country='%s' WHERE id='%s'", (street,nr,city,postal_code,country,address_id))
+            cursor.execute('UPDATE "address" SET street=%s, nr=%s, city=%s, postal_code=%s, country=%s WHERE id=%s', (street,nr,city,postal_code,country,address_id))
             self.dbconnect.commit()
         except:
             raise Exception('Unable to edit address')
