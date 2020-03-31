@@ -44,8 +44,8 @@ CREATE TABLE "user" (
     email VARCHAR(256) NOT NULL,
     password varchar not null,
     joined_on timestamp not null,
-    age INTEGER NOT NULL,
-    gender gender_type NOT NULL,
+    age INTEGER,
+    gender gender_type,
     phone_number VARCHAR(20),
     picture int REFERENCES picture(id),
     address int REFERENCES address(id)
