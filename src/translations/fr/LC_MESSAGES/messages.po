@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2020-03-25 15:36+0100\n"
+"POT-Creation-Date: 2020-03-30 18:38+0200\n"
 "PO-Revision-Date: 2020-03-23 16:50+0100\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -56,7 +56,7 @@ msgstr ""
 msgid "Edit account"
 msgstr ""
 
-#: src/templates/account.html:10 src/templates/base.html:52
+#: src/templates/account.html:10 src/templates/base.html:51
 msgid "My rides"
 msgstr "Mes trajets"
 
@@ -135,6 +135,10 @@ msgstr ""
 msgid "Add car"
 msgstr ""
 
+#: src/templates/account_edit.html:3
+msgid "Edit my account"
+msgstr ""
+
 #: src/templates/account_edit.html:24
 msgid "Male"
 msgstr ""
@@ -151,31 +155,27 @@ msgstr ""
 msgid "Add vehicle"
 msgstr ""
 
-#: src/templates/base.html:45 src/templates/base.html:62
-msgid "Home"
-msgstr "Accueil"
-
-#: src/templates/base.html:49 src/templates/base.html:66
+#: src/templates/base.html:48 src/templates/base.html:68
 msgid "Find a ride"
 msgstr "Trouvez un trajet"
 
-#: src/templates/base.html:58
-msgid "Log out"
-msgstr "Se déconnecter"
+#: src/templates/base.html:64
+msgid "Home"
+msgstr "Accueil"
 
-#: src/templates/base.html:69
+#: src/templates/base.html:71 src/templates/register.html:83
 msgid "Log in"
 msgstr "Se connecter"
 
-#: src/templates/base.html:72
+#: src/templates/base.html:74 src/templates/home.html:95
 msgid "Sign up"
 msgstr "S'inscrire"
 
-#: src/templates/base.html:77
+#: src/templates/base.html:79
 msgid "Language"
 msgstr "Langue"
 
-#: src/templates/base.html:114
+#: src/templates/base.html:119
 msgid "About us"
 msgstr "À propos"
 
@@ -202,32 +202,132 @@ msgstr "Facilitez-vous la route vers votre collège ou université."
 msgid "Find A Ride"
 msgstr "Trouvez un trajet"
 
-#: src/templates/home.html:23
-msgid "Content"
-msgstr "Contenu"
+#: src/templates/home.html:26
+msgid "How does it work?"
+msgstr ""
 
-#: src/templates/new_review.html:17
+#: src/templates/home.html:41
+msgid "What our users say about us"
+msgstr ""
+
+#: src/templates/home.html:79
+msgid "Transport should be the least of your worries."
+msgstr ""
+
+#: src/templates/home.html:92
+msgid "Interested? Sign up now!"
+msgstr ""
+
+#: src/templates/login.html:46
+msgid "Forgot your password?"
+msgstr ""
+
+#: src/templates/new_review.html:27
 msgid "5 stars"
 msgstr ""
 
-#: src/templates/new_review.html:19
+#: src/templates/new_review.html:29
 msgid "4 stars"
 msgstr ""
 
-#: src/templates/new_review.html:21
+#: src/templates/new_review.html:31
 msgid "3 stars"
 msgstr ""
 
-#: src/templates/new_review.html:23
+#: src/templates/new_review.html:33
 msgid "2 stars"
 msgstr ""
 
-#: src/templates/new_review.html:25
+#: src/templates/new_review.html:35
 msgid "1 star"
 msgstr ""
 
-#: src/templates/new_review.html:39
-msgid "Pick a title"
+#: src/templates/register.html:83
+msgid "Already have an account?"
+msgstr ""
+
+#: src/templates/reviews.html:7
+msgid "Reviews"
+msgstr ""
+
+#: src/templates/reviews.html:19
+msgid "Filter"
+msgstr ""
+
+#: src/templates/reviews.html:27
+msgid "Sort"
+msgstr ""
+
+#: src/templates/reviews.html:32
+msgid "New-Old"
+msgstr ""
+
+#: src/templates/reviews.html:33
+msgid "Old-New"
+msgstr ""
+
+#: src/templates/reviews.html:64 src/templates/reviews.html:66
+msgid "stars"
+msgstr ""
+
+#: src/templates/reviews.html:78
+msgid "by"
+msgstr ""
+
+#: src/templates/ride_history.html:3
+msgid "Ride History"
+msgstr ""
+
+#: src/templates/ride_history.html:13
+msgid "Type to search"
+msgstr ""
+
+#: src/templates/ride_history.html:23
+msgid "sort by"
+msgstr ""
+
+#: src/templates/ride_history.html:25 src/templates/ride_history.html:38
+#: src/templates/ride_history.html:44 src/templates/ride_history.html:50
+#: src/templates/ride_information.html:15
+msgid "Date"
+msgstr ""
+
+#: src/templates/ride_history.html:39 src/templates/ride_history.html:45
+#: src/templates/ride_history.html:51
+msgid "From-To"
+msgstr ""
+
+#: src/templates/ride_information.html:2
+msgid "Ride Information"
+msgstr ""
+
+#: src/templates/ride_information.html:18
+msgid "Departure"
+msgstr ""
+
+#: src/templates/ride_information.html:21
+msgid "Arrival"
+msgstr ""
+
+#: src/templates/ride_information.html:28
+msgid "From"
+msgstr ""
+
+#: src/templates/ride_information.html:34
+msgid "Destination"
+msgstr ""
+
+#: src/templates/ride_information.html:39
+msgid "Driver"
+msgstr ""
+
+#: src/templates/ride_information.html:42
+#: src/templates/ride_information.html:45
+msgid "Passenger"
+msgstr ""
+
+#: src/templates/ride_information.html:50
+msgid "Cancel"
 msgstr ""
 
 #: src/templates/user.html:3
@@ -246,5 +346,17 @@ msgstr ""
 #~ msgstr ""
 
 #~ msgid "Birth date"
+#~ msgstr ""
+
+#~ msgid "Log out"
+#~ msgstr "Se déconnecter"
+
+#~ msgid "Content"
+#~ msgstr "Contenu"
+
+#~ msgid "Pick a title"
+#~ msgstr ""
+
+#~ msgid "Write a review"
 #~ msgstr ""
 
