@@ -208,3 +208,8 @@ def add_vehicle():
         flash(f'Vehicle registered!', 'success')
         return redirect(url_for('users.account'))
     return render_template("add_vehicle.html", title="Add Vehicle", form=form)
+
+@users.route("/delete_vehicle<car_id>")
+def delete_vehicle(car_id):
+    if not current_user.is_authenticated:  # makes sure user won`t be able to go to page without logging in
+        return redirect(url_for('users.login'))
