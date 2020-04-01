@@ -5,7 +5,7 @@
     {{ _('Add vehicle') }}
 {% endblock contentTitle %}
 {% block contentContent %}
-    <!-- form method="POST" action=""-->
+    <form method="POST" action="">
         {{ form.hidden_tag() }}
         <!-- display the form -->
         <fieldset class="form-group">
@@ -20,6 +20,19 @@
                     </div>
                 {% else %}
                     {{ form.brand(class="form-control form-control-lg") }}
+                {% endif %}
+            </div>
+            <div class="form-group">
+                {{ form.model.label(class="form-control-label") }}
+                {% if form.model.errors %}
+                    {{ form.model(class="form-control is-invalid") }}
+                    <div class="invalid-feedback">
+                        {% for error in form.model.errors %}
+                            <span>{{ error }}</span>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    {{ form.model(class="form-control form-control-lg") }}
                 {% endif %}
             </div>
             <div class="form-group">
@@ -62,29 +75,29 @@
                 {% endif %}
             </div>
             <div class="form-group">
-                {{ form.manufacturingDate.label(class="form-control-label") }}
-                {% if form.manufacturingDate.errors %}
-                    {{ form.manufacturingDate(class="form-control is-invalid") }}
+                {{ form.constructionYear.label(class="form-control-label") }}
+                {% if form.constructionYear.errors %}
+                    {{ form.constructionYear(class="form-control is-invalid") }}
                     <div class="invalid-feedback">
-                        {% for error in form.manufacturingDate.errors %}
+                        {% for error in form.constructionYear.errors %}
                             <span>{{ error }}</span>
                         {% endfor %}
                     </div>
                 {% else %}
-                    {{ form.manufacturingDate(class="form-control form-control-lg") }}
+                    {{ form.constructionYear(class="form-control form-control-lg") }}
                 {% endif %}
             </div>
             <div class="form-group">
-                {{ form.mileage.label(class="form-control-label") }}
-                {% if form.mileage.errors %}
-                    {{ form.mileage(class="form-control is-invalid") }}
+                {{ form.consumption.label(class="form-control-label") }}
+                {% if form.consumption.errors %}
+                    {{ form.consumption(class="form-control is-invalid") }}
                     <div class="invalid-feedback">
-                        {% for error in form.mileage.errors %}
+                        {% for error in form.consumption.errors %}
                             <span>{{ error }}</span>
                         {% endfor %}
                     </div>
                 {% else %}
-                    {{ form.mileage(class="form-control form-control-lg") }}
+                    {{ form.consumption(class="form-control form-control-lg") }}
                 {% endif %}
             </div>
             <div class="form-group">
@@ -96,4 +109,6 @@
         <div class="form-group">
             {{ form.submit(class="btn btn-outline-info") }}
         </div>
+      </form>
+
 {% endblock contentContent %}

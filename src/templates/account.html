@@ -24,7 +24,11 @@
         <div>
     <b>{{ _('Gender')}}</b>
         <br>
-    M
+        {% if current_user.gender == None %}
+        /
+        {% else %}
+        {{ current_user.gender }}
+        {% endif %}
     </div>
     <br>
         <div>
@@ -34,88 +38,111 @@
     </div>
         <br>
         <div>
-    <b>{{ _('Date of birth') }}</b>
+    <b>{{ _('Age') }}</b>
         <br>
-    01/01/2000
+        {% if current_user.age == None %}
+        /
+        {% else %}
+        {{ current_user.age }}
+        {% endif %}
     </div>
         <br>
     <div>
     <b>{{ _('Phone number') }}</b>
         <br>
-    + 32 123 12 12 12
+        {% if current_user.phone_number == None %}
+        /
+        {% else %}
+        {{ current_user.phone_number }}
+        {% endif %}
     </div>
-        <br>
+    <br>
 
-    <div class="border-top pt-3"></div>
+
+      {% if address != None %}
+      <div class="border-top pt-3"></div>
 
         <div>
-    <b>{{ _('street + number') }}</b>
+    <b>{{ _('Address') }}</b>
         <br>
-    J. Doestreet 42
+        {{ address.street }} {{ address.nr }}
     </div>
         <br>
             <div>
     <b>{{ _('Zip code') }}</b>
         <br>
-    1234
+        {{ address.postal_code }}
     </div>
         <br>
             <div>
     <b>{{_('City')}}</b>
         <br>
-    Rumst
+        {{ address.city }}
     </div>
         <br>
+        <div>
+      <b>{{_('Country')}}</b>
+          <br>
+        {{ address.country }}
+        </div>
+    <br>
+    {% endif %}
 
-        <div class="border-top pt-3"></div>
+        {% if cars != None %}
+        {% for i in cars %}
+          <div class="border-top pt-3"></div>
 
-                <div>
-    <b>{{_('Brand')}}</b>
-        <br>
-    Toyota
-    </div>
-        <br>
-                <div>
-    <b>{{_('Type')}}</b>
-        <br>
-    Yaris
-    </div>
-        <br>
-                <div>
-    <b>{{ _('Color') }}</b>
-        <br>
-    Red
-    </div>
-        <br>
-                <div>
-    <b>{{ _('License plate') }}</b>
-        <br>
-    1-CAR-123
-    </div>
-        <br>
-                <div>
-    <b>{{ _('nr. seats') }}</b>
-        <br>
-    4
-    </div>
-        <br>
-                <div>
-    <b>{{ _('Year') }}</b>
-        <br>
-    2015
-    </div>
-        <br>
-                <div>
-    <b>{{ _('Fuel usage') }}</b>
-        <br>
-    7,8l/100km
-    </div>
-        <br>            <div>
-    <b>{{ _('Fuel type') }}</b>
-        <br>
-    Gasoline
-    </div>
-        <br>
+                  <div>
+      <b>{{_('Brand')}}</b>
+          <br>
+      {{ i.brand }}
+      </div>
+          <br>
+                  <div>
+      <b>{{_('Type')}}</b>
+          <br>
+      {{ i.model }}
+      </div>
+          <br>
+                  <div>
+      <b>{{ _('Color') }}</b>
+          <br>
+          {{ i.color }}
+      </div>
+          <br>
+                  <div>
+      <b>{{ _('License plate') }}</b>
+          <br>
+          {{ i.number_plate }}
+      </div>
+          <br>
+                  <div>
+      <b>{{ _('nr. seats') }}</b>
+          <br>
+          {{ i.nr_seats }}
+      </div>
+          <br>
+                  <div>
+      <b>{{ _('Year') }}</b>
+          <br>
+          {{ i.construction_year }}
+      </div>
+          <br>
+                  <div>
+      <b>{{ _('Fuel usage') }}</b>
+          <br>
+          {{ i.fuel }}
+      </div>
+          <br>            <div>
+      <b>{{ _('Fuel type') }}</b>
+          <br>
+          {{ i.fuel_type }}
+      </div>
+          <br>
+
+        {% endfor %}
+        {% endif %}
+
 
         <a class="btn btn-info" href="{{ url_for('users.add_vehicle') }}" role="button">{{ _('Add car') }}</a>
 <br>

@@ -1,6 +1,6 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, SubmitField, BooleanField, SelectField, DateField
-from wtforms.validators import DataRequired, Length, Email, EqualTo, ValidationError
+from wtforms import StringField, PasswordField, SubmitField, BooleanField, SelectField, DateField, IntegerField, validators
+from wtforms.validators import DataRequired, Length, Email, EqualTo, ValidationError, InputRequired
 from src.utils import user_access
 
 
@@ -26,13 +26,30 @@ class LoginForm(FlaskForm):
 
 class VehicleForm(FlaskForm):
     brand = StringField('Brand', validators=[DataRequired()])
-    color = StringField('Color', validators=[DataRequired()])
+    model = StringField('Model', validators=[DataRequired()])
+    color = StringField('Color')
     plateNumber = StringField('Plate number', validators=[DataRequired()])
-    seats = StringField('Seats', validators=[DataRequired()])
-    manufacturingDate = DateField('Manufacturing Date', format='%d-%m-%y')
-    mileage = StringField('Mileage', validators=[DataRequired()])
-    fuelType = SelectField('fuelType', choices=[('Gasoline', 'Gasoline'), ('Diesel', 'Diesel'),
-                                                ('Liquified Petroleum', 'Liquified Petroleum'),
-                                                ('Compressed Natural Gas', 'Compressed Natural Gas'),
-                                                ('Ethanol', 'Ethanol'), ('Bio-diesel', 'Bio-diesel')])
+    seats = IntegerField('Seats', validators=[InputRequired()])
+    constructionYear = IntegerField('Construction Year',[validators.optional()])
+    consumption = StringField('Fuel Consumption')
+    fuelType = SelectField('fuelType', choices=[('benzine', 'Gasoline/Petrol/Benzine'), ('diesel', 'Diesel'),
+                                                ('LPG', 'Liquified Petroleum'), ('electricity', 'Electricity'),
+                                                ('CNG', 'Compressed Natural Gas'),
+                                                ('ethanol', 'Ethanol'), ('bio-diesel', 'Bio-diesel')])
     submit = SubmitField('Register vehicle')
+
+class EditAccountForm(FlaskForm):
+    first_name = StringField('First name', validators=[DataRequired()])
+    last_name = StringField('Last name', validators=[DataRequired()])
+    email = StringField('Email', validators=[DataRequired(), Email()])
+    gender = SelectField('Gender', choices=[('Male', 'Female', 'Other')])
+    age = IntegerField('Age',[validators.optional()])
+    phone_number = StringField('Phone number')
+
+    street = StringField('Street')
+    nr = IntegerField('Number',[validators.optional()])
+    city = StringField('City')
+    postal_code = IntegerField('Postal code',[validators.optional()])
+    country = StringField('Country')
+
+    submit = SubmitField('Save')

@@ -13,28 +13,64 @@ class Car:
         self.user_id = user_id
         self.picture = picture
 
-    def get(dbconnect, id):
-        cursor = dbconnect.get_cursor()
-        cursor.execute(
-            "SELECT id,number_plate,color,brand,model,nr_seats,construction_year,fuel_consumption,fuel,user_id,picture FROM car WHERE id = %s",
-            (id,))
-        id, number_plate, color, brand, model, nr_seats, construction_year, fuel_consumption, fuel, user_id, picture = cursor.fetchone()
-        return Car(id, number_plate, color, brand, model, nr_seats, construction_year, fuel_consumption, fuel, user_id,
-                   picture)
-
-    def get_all(dbconnect):
-        cursor = dbconnect.get_cursor()
-        cursor.execute(
-            "SELECT id,number_plate,color,brand,model,nr_seats,construction_year,fuel_consumption,fuel,user_id,picture FROM car")
-        cars = list()
-        for row in cursor:
-            car = Car(row[0], row[1], row[2], row[3], row[4], row[5], row[6], row[7], row[8], row[9], row[9])
-            cars.append(car)
-        return cars
-
     def to_dict(self):
         return {'id': self.id, 'number_plate': self.number_plate, 'color': self.color, 'brand': self.brand,
                 'model': self.model,
                 'nr_seats': self.nr_seats, 'construction_year': self.construction_year,
                 'fuel_consumption': self.fuel_consumption, 'fuel': self.fuel,
                 'user_id': self.user_id, 'picture': self.picture}
+
+class Cars:
+    def __init__(self, dbconnect):
+        self.dbconnect = dbconnect
+
+    def get_on(self, on, val):
+        cursor = self.dbconnect.get_cursor()
+        cursor.execute("SELECT id,number_plate,color,brand,model,nr_seats,construction_year,fuel_consumption,fuel,user_id,picture FROM car WHERE %s=%s",
+                       (on, val))
+        cars = list()
+        for row in cursor:
+            car = Car(row[0], row[1], row[2], row[3], row[4], row[5], row[6], row[7], row[8], row[9], row[10])
+            cars.append(car)
+        return cars
+
+    def get_on_id(self, id):
+        found = self.get_on('id', id)
+        if len(found) > 0:
+            return found[0]
+        else:
+            return None
+
+    def get_on_user_id(self, user_id):
+        #found = self.get_on('user_id', user_id)
+        cursor = self.dbconnect.get_cursor()
+        cursor.execute("SELECT id,number_plate,color,brand,model,nr_seats,construction_year,fuel_consumption,fuel,user_id,picture FROM car WHERE user_id=%s",
+                       (user_id,))
+        cars = list()
+        for row in cursor:
+            car = Car(row[0], row[1], row[2], row[3], row[4], row[5], row[6], row[7], row[8], row[9], row[10])
+            cars.append(car)
+
+        if len(cars) > 0:
+            return cars
+        else:
+            return None
+
+    def get_all(self, dbconnect):
+        cursor = dbconnect.get_cursor()
+        cursor.execute("SELECT id,number_plate,color,brand,model,nr_seats,construction_year,fuel_consumption,fuel,user_id,picture FROM car")
+        cars = list()
+        for row in cursor:
+            car = Car(row[0], row[1], row[2], row[3], row[4], row[5], row[6], row[7], row[8], row[9], row[10])
+            cars.append(car)
+        return cars
+
+    def add_car(self, car):
+        cursor = self.dbconnect.get_cursor()
+        try:
+            cursor.execute('INSERT INTO "car" VALUES(default, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)',
+                           (
+                           car.number_plate,car.color,car.brand,car.model,car.nr_seats,car.construction_year,car.fuel_consumption,car.fuel,car.user_id,car.picture))
+            self.dbconnect.commit()
+        except:
+            raise Exception('Unable to add car')
