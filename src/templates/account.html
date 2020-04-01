@@ -95,6 +95,7 @@
 
           <div>
           <font size="5" color="#17a2b8"> {{_ ('Car:')}} </font>
+          <a class="btn btn-info" href="{{ url_for('users.edit_vehicle',car_id=i.id) }}" role="button">{{ _('Edit car') }}</a>
 
           <br> <br>
         </div>
@@ -137,12 +138,12 @@
                   <div>
       <b>{{ _('Fuel usage') }}</b>
           <br>
-          {{ i.fuel }}
+          {{ i.fuel_consumption }}
       </div>
           <br>            <div>
       <b>{{ _('Fuel type') }}</b>
           <br>
-          {{ i.fuel_type }}
+          {{ i.fuel }}
       </div>
           <br>
 

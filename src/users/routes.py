@@ -150,7 +150,7 @@ def login():
     form = LoginForm()
     # check if input is valid
     if form.validate_on_submit():
-        user = user_access.get_user(form.email.data)
+        user = user_access.get_user_on_email(form.email.data)
         if user and bcrypt.check_password_hash(user.password, form.password.data):
             login_user(user, remember=form.remember_me.data)
             return redirect(url_for('main.home'))
@@ -209,7 +209,44 @@ def add_vehicle():
         return redirect(url_for('users.account'))
     return render_template("add_vehicle.html", title="Add Vehicle", form=form)
 
-@users.route("/delete_vehicle<car_id>")
+@users.route("/edit_vehicle=<car_id>", methods=['GET', 'POST'])
+def edit_vehicle(car_id):
+    if not current_user.is_authenticated:  # makes sure user won`t be able to go to page without logging in
+        return redirect(url_for('users.login'))
+    form = VehicleForm()
+    if request.method != 'POST':
+        car = car_access.get_on_id(car_id)
+        form.brand.data = car.brand
+        form.model.data = car.model
+        form.color.data = car.color
+        form.plateNumber.data = car.number_plate
+        form.seats.data = car.nr_seats
+        form.constructionYear.data = car.construction_year
+        form.consumption.data = car.fuel_consumption
+        form.fuelType.data = car.fuel
+
+        return render_template('car_edit.html', title='Edit car', loggedIn=True, form=form, car_id=car_id)
+
+    if form.validate_on_submit():
+        brand = form.brand.data
+        model = form.model.data
+        color = form.color.data
+        plateNumber = form.plateNumber.data
+        seats = form.seats.data
+        constructionYear = form.constructionYear.data
+        consumption = form.consumption.data
+        fuelType = form.fuelType.data
+
+        car_access.edit_car(car_id, brand, model, color, plateNumber, seats, constructionYear, consumption, fuelType)
+        flash(f'Car edited!', 'success')
+        return redirect(url_for('users.account'))
+    return render_template('car_edit.html', title='Edit car', loggedIn=True, form=form, car_id=car_id)
+
+@users.route("/delete_vehicle=<car_id>", methods=['GET', 'POST'])
 def delete_vehicle(car_id):
     if not current_user.is_authenticated:  # makes sure user won`t be able to go to page without logging in
         return redirect(url_for('users.login'))
+
+    car_access.delete_car(car_id)
+    flash(f'Vehicle deleted!', 'success')
+    return redirect(url_for('users.account'))
