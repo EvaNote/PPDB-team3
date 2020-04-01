@@ -91,10 +91,16 @@ class UserAccess:
 
     def get_user_on_id(self, theId):
         cursor = self.dbconnect.get_cursor()
-        cursor.execute('SELECT first_name, last_name, email, password FROM "user" WHERE id=%s', (theId,))
+        cursor.execute('SELECT first_name, last_name, email, password, age, gender, phone_number, address FROM "user" WHERE id=%s', (theId,))
         row = cursor.fetchone()
         if row:
-            return User(row[0], row[1], row[2], row[3])
+            user = User(row[0], row[1], row[2], row[3])
+            user.age = row[4]
+            user.gender = row[5]
+            user.phone_number = row[6]
+            user.address = row[7]
+            user.id = theId
+            return user
         return None
 
     def add_user(self, user_obj):
@@ -109,9 +115,12 @@ class UserAccess:
 
     def edit_user(self, user_id, first_name, last_name, email, gender, age, phone_number, address_id):
         cursor = self.dbconnect.get_cursor()
+        user = self.get_user_on_id(user_id)
+        #user_id = user.id
+
         try:
-            cursor.execute("UPDATE user SET first_name='%s',last_name='%s',email='%s',gender='%s',gender='%s',age='%s',phone_number='%s',address='%s' WHERE id='%s'",
-            (first_name,last_name,email,gender,age,phone_number,address_id))
+            cursor.execute('UPDATE "user" SET first_name=%s,last_name=%s,email=%s,gender=%s,age=%s,phone_number=%s,address=%s WHERE id=%s',
+            (first_name,last_name,email,gender,age,phone_number,address_id,user_id))
             self.dbconnect.commit()
         except:
             raise Exception('Unable to edit user')

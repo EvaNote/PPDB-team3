@@ -5,7 +5,7 @@ from src.dbmodels.User import User
 from src.dbmodels.Car import Car
 from src.dbmodels.Address import Address
 from src.reviews.forms import Reviews
-from src.users.forms import LoginForm, RegistrationForm, VehicleForm, EditAccountForm
+from src.users.forms import LoginForm, RegistrationForm, VehicleForm, EditAccountForm, EditAddressForm
 from src.utils import user_access, bcrypt, review_access, car_access, address_access
 
 users = Blueprint('users', __name__, url_prefix='/<lang_code>')
@@ -43,8 +43,10 @@ def account():
     form = Reviews()
     data = review_access.get_on_user_for(current_user.id)
     cars = car_access.get_on_user_id(current_user.id)
+    user = user_access.get_user_on_id(current_user.id)
+    address = address_access.get_on_id(user.address)
     return render_template('account.html', title='Account', form=form, loggedIn=True, data=data,
-                           current_user=current_user, cars=cars, address=current_user.address)
+                           current_user=user, cars=cars, address=address)
 
 
 @users.route("/edit", methods=['GET', 'POST'])
@@ -53,26 +55,15 @@ def account_edit():
         return redirect(url_for('users.login'))
     form = EditAccountForm()
     if request.method != 'POST':
-        form.first_name.data = current_user.first_name
-        form.last_name.data = current_user.last_name
-        form.email.data = current_user.email
-        form.gender.data = current_user.gender
-        form.age.data = current_user.age
-        form.phone_number.data = current_user.phone_number
-        address = address_access.get_on_id(current_user.address)
-        if address is None:
-            form.street.data = " "
-            form.nr.data = " "
-            form.city.data = " "
-            form.postal_code.data = " "
-            form.country.data = " "
-        else:
-            form.street.data = address.street
-            form.nr.data = address.nr
-            form.city.data = address.city
-            form.postal_code.data = address.postal_code
-            form.country.data = address.country
-        return render_template('account_edit.html', title='Edit account info', loggedIn=True)
+        user = user_access.get_user_on_id(current_user.id)
+        form.first_name.data = user.first_name
+        form.last_name.data = user.last_name
+        form.email.data = user.email
+        form.gender.data = user.gender
+        form.age.data = user.age
+        form.phone_number.data = user.phone_number
+
+        return render_template('account_edit.html', title='Edit account info', loggedIn=True, form=form)
 
     if form.validate_on_submit():
         first_name = form.first_name.data
@@ -81,6 +72,36 @@ def account_edit():
         gender = form.gender.data
         age = form.age.data
         phone_number = form.phone_number.data
+        user = user_access.get_user_on_id(current_user.id)
+
+        user_access.edit_user(current_user.id, first_name, last_name, email, gender, age, phone_number, user.address)
+        flash(f'Account edited!', 'success')
+        return redirect(url_for('users.account'))
+    return render_template('account_edit.html', title='Edit account info', loggedIn=True, form=form)
+
+@users.route("/edit_address", methods=['GET', 'POST'])
+def address_edit():
+    if not current_user.is_authenticated:  # makes sure user won`t be able to go to page without logging in
+        return redirect(url_for('users.login'))
+    form = EditAddressForm()
+    if request.method != 'POST':
+        user = user_access.get_user_on_id(current_user.id)
+        if user.address is None:
+            form.street.data = " "
+            form.nr.data = " "
+            form.city.data = " "
+            form.postal_code.data = " "
+            form.country.data = " "
+        else:
+            address = address_access.get_on_id(user.address)
+            form.street.data = address.street
+            form.nr.data = address.nr
+            form.city.data = address.city
+            form.postal_code.data = address.postal_code
+            form.country.data = address.country
+        return render_template('address_edit.html', title='Edit address', loggedIn=True, form=form)
+
+    if form.validate_on_submit():
         street = form.street.data
         nr = form.nr.data
         city = form.city.data
@@ -88,19 +109,22 @@ def account_edit():
         country = form.country.data
 
         address_id = None
-        if current_user.address is None:
+        user = user_access.get_user_on_id(current_user.id)
+        if user.address is None:
             address_obj = Address(None, country, city, postal_code, street, nr)
             address_access.add_address(address_obj)
             address_id = address_access.get_id(country, city, postal_code, street, nr)
         else:
-            address = address_access.get_on_id(current_user.address)
+            address = address_access.get_on_id(user.address)
             address_access.edit_address(address.id,street,nr,city,postal_code,country)
             address_id = address.id
 
-        user_access.edit_user(current_user.id,first_name,last_name,email,gender,age,phone_number,address_id)
-        flash(f'Account edited!', 'success')
+        user = user_access.get_user_on_id(current_user.id)
+        user_access.edit_user(user.id,user.first_name,user.last_name,user.email,user.gender,user.age,user.phone_number,address_id)
+        flash(f'Address edited!', 'success')
         return redirect(url_for('users.account'))
-    return render_template('account_edit.html', title='Edit account info', loggedIn=True)
+    return render_template('address_edit.html', title='Edit address', loggedIn=True, form=form)
+
 
 
 @users.route("/myrides")
@@ -184,3 +208,8 @@ def add_vehicle():
         flash(f'Vehicle registered!', 'success')
         return redirect(url_for('users.account'))
     return render_template("add_vehicle.html", title="Add Vehicle", form=form)
+
+@users.route("/delete_vehicle<car_id>")
+def delete_vehicle(car_id):
+    if not current_user.is_authenticated:  # makes sure user won`t be able to go to page without logging in
+        return redirect(url_for('users.login'))

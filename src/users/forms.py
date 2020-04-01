@@ -42,14 +42,17 @@ class EditAccountForm(FlaskForm):
     first_name = StringField('First name', validators=[DataRequired()])
     last_name = StringField('Last name', validators=[DataRequired()])
     email = StringField('Email', validators=[DataRequired(), Email()])
-    gender = SelectField('Gender', choices=[('Male', 'Female', 'Other')])
+    gender = SelectField('Gender', choices=[('M','Male'),('F', 'Female'), (None, 'Other')])
     age = IntegerField('Age',[validators.optional()])
     phone_number = StringField('Phone number')
 
-    street = StringField('Street')
-    nr = IntegerField('Number',[validators.optional()])
-    city = StringField('City')
-    postal_code = IntegerField('Postal code',[validators.optional()])
-    country = StringField('Country')
+    submit = SubmitField('Save')
+
+class EditAddressForm(FlaskForm):
+    street = StringField('Street', validators=[DataRequired()])
+    nr = StringField('Number', validators=[DataRequired()])
+    city = StringField('City', validators=[DataRequired()])
+    postal_code = IntegerField('Postal code')
+    country = StringField('Country', validators=[DataRequired()])
 
     submit = SubmitField('Save')
