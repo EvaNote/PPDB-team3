@@ -1,5 +1,4 @@
 from flask import Flask, g, request, redirect, url_for
-from src.dbmodels.User import UserAccess
 from src.config import *
 from src.utils import babel, bcrypt, login_manager
 # import all blueprints
@@ -7,6 +6,7 @@ from src.main.routes import main
 from src.reviews.routes import reviews
 from src.rides.routes import rides
 from src.users.routes import users
+from src.api.routes import api
 
 
 def create_app(config_class=BaseConfig):
@@ -34,6 +34,7 @@ def create_app(config_class=BaseConfig):
     app.register_blueprint(reviews)
     app.register_blueprint(rides)
     app.register_blueprint(users)
+    app.register_blueprint(api)
     app.add_url_rule('/', 'home', redirect_root_to_home)
     # initialize extensions with the app
     babel.init_app(app)

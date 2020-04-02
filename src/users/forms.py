@@ -14,7 +14,7 @@ class RegistrationForm(FlaskForm):
 
     def validate_email(self, email):  # j
         if user_access.get_user(email.data):
-            raise ValidationError('The email is already registered.')
+            raise ValidationError('email is already registered.')
 
 
 class LoginForm(FlaskForm):

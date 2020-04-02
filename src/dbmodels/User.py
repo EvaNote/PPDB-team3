@@ -79,7 +79,6 @@ class UserAccess:
         return users
 
     def get_user(self, em):
-        print(em)
         cursor = self.dbconnect.get_cursor()
         cursor.execute('SELECT first_name, last_name, email, password, id FROM "user" WHERE email=%s', (em,))
         row = cursor.fetchone()
