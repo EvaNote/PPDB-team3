@@ -28,8 +28,8 @@ class Pictures:
         else:
             return None
 
-    def get_all(self, dbconnect):
-        cursor = dbconnect.get_cursor()
+    def get_all(self):
+        cursor = self.dbconnect.get_cursor()
         cursor.execute("SELECT id,filename FROM picture")
         pictures = list()
         for row in cursor:
@@ -41,8 +41,7 @@ class Pictures:
         cursor = self.dbconnect.get_cursor()
         try:
             cursor.execute('INSERT INTO "picture" VALUES(default, %s)',
-                           (
-                           picture.filename))
+                           (picture.filename,))
             self.dbconnect.commit()
         except:
             raise Exception('Unable to add picture')
