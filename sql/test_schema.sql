@@ -44,8 +44,9 @@ CREATE TABLE "user" (
     email VARCHAR(256) NOT NULL,
     password varchar not null,
     joined_on timestamp not null,
-    age INTEGER NOT NULL,
-    gender gender_type NOT NULL,
+    age INTEGER,
+    gender gender_type,
+    phone_number VARCHAR(20),
     picture int REFERENCES picture(id),
     address int REFERENCES address(id)
 );
@@ -59,7 +60,9 @@ CREATE TYPE fuel_type AS ENUM (
     'diesel',
     'electricity',
     'CNG', /* = compressed natural gas */
-    'LPG' /* = liquefied petroleum gas */
+    'LPG', /* = liquefied petroleum gas */
+    'ethanol',
+    'bio-diesel'
 );
 
 /*
@@ -72,11 +75,11 @@ CREATE TABLE car (
     id SERIAL PRIMARY KEY,
     number_plate VARCHAR(10) NOT NULL,
     color VARCHAR(30),
-    brand VARCHAR(30),
-    model VARCHAR(256),
+    brand VARCHAR(30) NOT NULL,
+    model VARCHAR(256) NOT NULL,
     nr_seats INTEGER NOT NULL,
     construction_year INTEGER,
-    fuel_consumption INTEGER,
+    fuel_consumption VARCHAR(30),
     fuel fuel_type,
     user_id int REFERENCES "user"(id) NOT NULL,
     picture int REFERENCES picture(id)
@@ -111,8 +114,6 @@ CREATE TABLE review (
     user_from int REFERENCES "user"(id) NOT NULL,
     amount_of_stars INTEGER NOT NULL,
     title VARCHAR(256),
-    review_text VARCHAR(1000)
+    review_text VARCHAR(1000),
+    creation date default now()
 );
-
-alter table review
-add column creation date default now()
