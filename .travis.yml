@@ -15,4 +15,4 @@ before_script:
   - sudo systemctl restart postgresql
   - psql dbcarpool -U app -f sql/test_schema.sql
 script:
-  - python tests/app_test.py
+  - python -m unittest discover

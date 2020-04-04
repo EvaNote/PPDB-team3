@@ -6,22 +6,22 @@ from src.dbmodels.User import User
 app = create_app(TestConfig)
 
 
-def create_test_user():
-    """ create a user in the database used for running tests """
-    user_password = bcrypt.generate_password_hash('test').decode('utf-8')
-    user_obj = User('test', 'test', 'test@blog.com', user_password)
-    user_access.add_user(user_obj)
-
-
-def remove_test_user():
-    """ delete the test user from the database """
-    user_access.delete_user('test@blog.com')
-
-
 # source: https://github.com/pallets/flask/blob/master/examples/tutorial/tests/conftest.py
 class FlaskTestCase(unittest.TestCase):
     def setUp(self):
         self.client = app.test_client()
+
+    @classmethod
+    def setUpClass(cls):
+        """ create a user in the database used for running tests """
+        user_password = bcrypt.generate_password_hash('test').decode('utf-8')
+        user_obj = User('test', 'test', 'test@blog.com', user_password)
+        user_access.add_user(user_obj)
+
+    @classmethod
+    def tearDownClass(cls):
+        """ delete the test user from the database """
+        user_access.delete_user('test@blog.com')
 
 
 class ProperlyLoaded(FlaskTestCase):
@@ -105,6 +105,4 @@ class ProperlyLoaded(FlaskTestCase):
 
 
 if __name__ == '__main__':
-    create_test_user()
     unittest.main()
-    remove_test_user()

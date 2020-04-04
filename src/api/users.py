@@ -39,5 +39,5 @@ class AuthApi(Resource):
         if user and bcrypt.check_password_hash(user.password, request.json.get("password")):
             # if user in database and password is correct, generate authentication token
             token = user.generate_auth_token()
-            return {"token": token.decode("ascii")}
-        return abort(401)
+            return {"token": token.decode("ascii")}, 200
+        abort(401)
