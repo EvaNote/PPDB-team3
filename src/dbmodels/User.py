@@ -1,4 +1,6 @@
 import sys
+from itsdangerous import TimedJSONWebSignatureSerializer as Serializer, BadSignature, SignatureExpired
+from src import BaseConfig
 # user_loader expects user_model to have certain attributes and methods: isAuthenticated, isActive, isAnonymous, getID
 from flask_login import UserMixin
 
@@ -62,6 +64,33 @@ class User:
                 'joined_on': self.joined_on, 'picture': self.picture,
                 'address': self.address}
 
+    def generate_auth_token(self, expiration=600):
+        """
+        generate an authentication token which is used in the API to check if a user is
+        authenticated and has access to certain pages that require login.
+        :param expiration: time before token expires. Default is 600s (10 minutes)
+        :return: generated token
+        """
+        if self.id is not None:
+            s = Serializer(BaseConfig.SECRET_KEY, expires_in=expiration)
+            return s.dumps({'id': self.id})
+
+    @staticmethod
+    def verify_auth_token(token):
+        """
+        check if authentication token is valid. If it is, return the user id it belongs to.
+        :param token: token to check
+        :return: user id linked to token if token is valid, else None
+        """
+        s = Serializer(BaseConfig.SECRET_KEY)
+        try:
+            data = s.loads(token)
+        except SignatureExpired:
+            return None  # valid token, but expired
+        except BadSignature:
+            return None  # invalid token
+        return data['id']
+
 
 # Class used for accessing data from the "user" table from the database
 class UserAccess:
@@ -90,7 +119,9 @@ class UserAccess:
 
     def get_user_on_id(self, theId):
         cursor = self.dbconnect.get_cursor()
-        cursor.execute('SELECT first_name, last_name, email, password, age, gender, phone_number, address FROM "user" WHERE id=%s', (theId,))
+        cursor.execute(
+            'SELECT first_name, last_name, email, password, age, gender, phone_number, address FROM "user" WHERE id=%s',
+            (theId,))
         row = cursor.fetchone()
         if row:
             user = User(row[0], row[1], row[2], row[3])
@@ -115,11 +146,28 @@ class UserAccess:
     def edit_user(self, user_id, first_name, last_name, email, gender, age, phone_number, address_id):
         cursor = self.dbconnect.get_cursor()
         user = self.get_user_on_id(user_id)
-        #user_id = user.id
+        # user_id = user.id
 
         try:
-            cursor.execute('UPDATE "user" SET first_name=%s,last_name=%s,email=%s,gender=%s,age=%s,phone_number=%s,address=%s WHERE id=%s',
-            (first_name,last_name,email,gender,age,phone_number,address_id,user_id))
+            cursor.execute(
+                'UPDATE "user" SET first_name=%s,last_name=%s,email=%s,gender=%s,age=%s,phone_number=%s,address=%s WHERE id=%s',
+                (first_name, last_name, email, gender, age, phone_number, address_id, user_id))
             self.dbconnect.commit()
         except:
             raise Exception('Unable to edit user')
+
+    def delete_user(self, user_email):
+        cursor = self.dbconnect.get_cursor()
+        try:
+            cursor.execute('DELETE FROM "user" WHERE email=%s', (user_email,))
+            self.dbconnect.commit()
+        except:
+            raise Exception('Unable to delete user')
+
+    def delete_user_on_id(self, user_id):
+        cursor = self.dbconnect.get_cursor()
+        try:
+            cursor.execute('DELETE FROM "user" WHERE id=%s', (user_id,))
+            self.dbconnect.commit()
+        except:
+            raise Exception('Unable to delete user')
