@@ -18,9 +18,13 @@ class APITestCase(unittest.TestCase):
 
     def test_users_register_status_code(self):
         r = self.client.post("/api/users/register", json=self.test_user)
-        self.assertEqual(r.status_code, 201)
+        assert r.status_code == 201
+        assert r.headers["Content-Type"] == "application/json"
+        assert "id" in r.json
         r = self.client.post("/api/users/register", json=self.test_user)
-        self.assertEqual(r.status_code, 400)
+        assert r.status_code == 400
+        assert r.headers["Content-Type"] == "application/json"
+        assert "message" in r.json  # there is an error message in the body
 
     def test_users_auth_status_code(self):
         user_access.add_user(User(self.test_user.get("firstname"), self.test_user.get("lastname"),
@@ -28,10 +32,14 @@ class APITestCase(unittest.TestCase):
                                   bcrypt.generate_password_hash(self.test_user.get("password")).decode("utf-8")))
         r = self.client.post("/api/users/auth", json={"username": self.test_user.get("username"),
                                                       "password": self.test_user.get("password")})
-        self.assertEqual(r.status_code, 200)
+        assert r.status_code == 200
+        assert r.headers["Content-Type"] == "application/json"
+        assert "token" in r.json
         r = self.client.post("/api/users/auth", json={"username": self.test_user["username"],
                                                       "password": "invalid_password"})
-        self.assertEqual(r.status_code, 401)
+        assert r.status_code == 401
+        assert r.headers["Content-Type"] == "application/json"
+        assert "message" in r.json
 
 
 if __name__ == '__main__':
