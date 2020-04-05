@@ -5,13 +5,8 @@ from src.dbmodels.User import User
 from src.dbmodels.Car import Car
 from src.dbmodels.Address import Address
 from src.reviews.forms import Reviews
-<<<<<<< HEAD
-from src.users.forms import LoginForm, RegistrationForm, VehicleForm, EditAccountForm, EditAddressForm, DeleteUserForm
-from src.utils import user_access, bcrypt, review_access, car_access, address_access
-=======
 from src.users.forms import LoginForm, RegistrationForm, VehicleForm, EditAccountForm, EditAddressForm, SelectSubject, DeleteUserForm
 from src.utils import user_access, bcrypt, review_access, car_access, address_access, current_app
->>>>>>> master
 
 users = Blueprint('users', __name__, url_prefix='/<lang_code>')
 
@@ -75,20 +70,6 @@ def account_edit():
         form.phone_number.data = user.phone_number
 
         return render_template('account_edit.html', title='Edit account info', loggedIn=True, form=form, delete_form=delete_form)
-
-    if delete_form.validate_on_submit():
-        user = user_access.get_user_on_id(current_user.id)
-        user_access.delete_user(user.id)
-        address_id = user.address
-        if address_id != None:
-            address = address_access.get_on_id(address_id)
-            address_access.delete_address(address.id)
-        cars = car_access.get_on_user_id(user.id)
-        if cars != None:
-            for car in cars:
-                car_access.delete_car(car.id)
-        flash(f'Account deleted!', 'success')
-        return redirect(url_for('main.home'))
     if form.validate_on_submit():
         first_name = form.first_name.data
         last_name = form.last_name.data
@@ -101,8 +82,6 @@ def account_edit():
         user_access.edit_user(current_user.id, first_name, last_name, email, gender, age, phone_number, user.address)
         flash(f'Account edited!', 'success')
         return redirect(url_for('users.account'))
-<<<<<<< HEAD
-=======
     if delete_form.validate_on_submit():
         user = user_access.get_user_on_id(current_user.id)
         user_access.delete_user(user.id)
@@ -116,7 +95,6 @@ def account_edit():
                 car_access.delete_car(car.id)
         flash(f'Account deleted!', 'success')
         return redirect(url_for('main.home'))
->>>>>>> master
     return render_template('account_edit.html', title='Edit account info', loggedIn=True, form=form, delete_form=delete_form)
 
 @users.route("/edit_address", methods=['GET', 'POST'])
