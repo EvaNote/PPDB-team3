@@ -50,6 +50,7 @@ class EditAccountForm(FlaskForm):
     phone_number = StringField('Phone number')
 
     submit = SubmitField('Save')
+    delete = SubmitField('Delete account')
 
 class EditAddressForm(FlaskForm):
     street = StringField('Street', validators=[DataRequired()])

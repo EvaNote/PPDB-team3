@@ -59,7 +59,6 @@ def account_edit():
         'TESTING']:  # makes sure user won`t be able to go to page without logging in
         return redirect(url_for('users.login'))
     form = EditAccountForm()
-    delete_form = DeleteUserForm()
     if request.method != 'POST':
         user = user_access.get_user_on_id(current_user.id)
         form.first_name.data = user.first_name
@@ -69,33 +68,43 @@ def account_edit():
         form.age.data = user.age
         form.phone_number.data = user.phone_number
 
-        return render_template('account_edit.html', title='Edit account info', loggedIn=True, form=form, delete_form=delete_form)
+        return render_template('account_edit.html', title='Edit account info', loggedIn=True, form=form)
     if form.validate_on_submit():
-        first_name = form.first_name.data
-        last_name = form.last_name.data
-        email = form.email.data
-        gender = form.gender.data
-        age = form.age.data
-        phone_number = form.phone_number.data
-        user = user_access.get_user_on_id(current_user.id)
+        if form.submit.data:
+            first_name = form.first_name.data
+            last_name = form.last_name.data
+            email = form.email.data
+            gender = form.gender.data
+            age = form.age.data
+            phone_number = form.phone_number.data
+            user = user_access.get_user_on_id(current_user.id)
 
-        user_access.edit_user(current_user.id, first_name, last_name, email, gender, age, phone_number, user.address)
-        flash(f'Account edited!', 'success')
-        return redirect(url_for('users.account'))
-    if delete_form.validate_on_submit():
-        user = user_access.get_user_on_id(current_user.id)
-        user_access.delete_user(user.id)
-        address_id = user.address
-        if address_id != None:
-            address = address_access.get_on_id(address_id)
-            address_access.delete_address(address.id)
-        cars = car_access.get_on_user_id(user.id)
-        if cars != None:
-            for car in cars:
-                car_access.delete_car(car.id)
-        flash(f'Account deleted!', 'success')
-        return redirect(url_for('main.home'))
-    return render_template('account_edit.html', title='Edit account info', loggedIn=True, form=form, delete_form=delete_form)
+            user_access.edit_user(current_user.id, first_name, last_name, email, gender, age, phone_number, user.address)
+            flash(f'Account edited!', 'success')
+            return redirect(url_for('users.account'))
+        elif form.delete.data:
+            user = user_access.get_user_on_id(current_user.id)
+            address_id = user.address
+
+            # first delete cars bc car has foreign key to user (error if user gets deleted first)
+            cars = car_access.get_on_user_id(user.id)
+            if cars != None:
+                for car in cars:
+                    car_access.delete_car(car.id)
+
+            # then delete user bc user has foreign key to address (error if address gets deleted first)
+            user_access.delete_user(user.id)
+
+            # finally delete address, which doesn't have ties to other entries
+            if address_id != None:
+                address = address_access.get_on_id(address_id)
+                address_access.delete_address(address.id)
+
+            flash(f'Account deleted!', 'success')
+            return redirect(url_for('main.home'))
+
+    return render_template('account_edit.html', title='Edit account info', loggedIn=True, form=form)
+
 
 @users.route("/edit_address", methods=['GET', 'POST'])
 def address_edit():
@@ -221,7 +230,7 @@ def register():
         user_password = bcrypt.generate_password_hash(form.password.data).decode('utf-8')
         user_obj = User(first_name=user_first_name, last_name=user_last_name, email=user_email, password=user_password)
         user_access.add_user(user_obj)
-        flash(f'Account created for {form.email.data}! You can now log in', 'success')  # success is for bootstrap class
+        flash(f'Account created for {form.email.data}! You can now log in.', 'success')  # success is for bootstrap class
 
         return redirect(url_for('users.login'))
     return render_template("register.html", title="Register", form=form)
