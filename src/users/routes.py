@@ -5,7 +5,7 @@ from src.dbmodels.User import User
 from src.dbmodels.Car import Car
 from src.dbmodels.Address import Address
 from src.reviews.forms import Reviews
-from src.users.forms import LoginForm, RegistrationForm, VehicleForm, EditAccountForm, EditAddressForm, SelectSubject
+from src.users.forms import LoginForm, RegistrationForm, VehicleForm, EditAccountForm, EditAddressForm, SelectSubject, DeleteUserForm
 from src.utils import user_access, bcrypt, review_access, car_access, address_access, current_app
 
 users = Blueprint('users', __name__, url_prefix='/<lang_code>')
@@ -59,11 +59,9 @@ def account_edit():
         'TESTING']:  # makes sure user won`t be able to go to page without logging in
         return redirect(url_for('users.login'))
     form = EditAccountForm()
+    delete_form = DeleteUserForm()
     if request.method != 'POST':
-        if current_app.config['TESTING']:
-            user = user_access.get_user_on_id(1)
-        else:
-            user = user_access.get_user_on_id(current_user.id)
+        user = user_access.get_user_on_id(current_user.id)
         form.first_name.data = user.first_name
         form.last_name.data = user.last_name
         form.email.data = user.email
@@ -71,7 +69,7 @@ def account_edit():
         form.age.data = user.age
         form.phone_number.data = user.phone_number
 
-        return render_template('account_edit.html', title='Edit account info', loggedIn=True, form=form)
+        return render_template('account_edit.html', title='Edit account info', loggedIn=True, form=form, delete_form=delete_form)
 
     if form.validate_on_submit():
         first_name = form.first_name.data
@@ -85,7 +83,20 @@ def account_edit():
         user_access.edit_user(current_user.id, first_name, last_name, email, gender, age, phone_number, user.address)
         flash(f'Account edited!', 'success')
         return redirect(url_for('users.account'))
-    return render_template('account_edit.html', title='Edit account info', loggedIn=True, form=form)
+    if delete_form.validate_on_submit():
+        user = user_access.get_user_on_id(current_user.id)
+        user_access.delete_user(user.id)
+        address_id = user.address
+        if address_id != None:
+            address = address_access.get_on_id(address_id)
+            address_access.delete_address(address.id)
+        cars = car_access.get_on_user_id(user.id)
+        if cars != None:
+            for car in cars:
+                car_access.delete_car(car.id)
+        flash(f'Account deleted!', 'success')
+        return redirect(url_for('main.home'))
+    return render_template('account_edit.html', title='Edit account info', loggedIn=True, form=form, delete_form=delete_form)
 
 @users.route("/edit_address", methods=['GET', 'POST'])
 def address_edit():

@@ -23,6 +23,9 @@ class LoginForm(FlaskForm):
     remember_me = BooleanField('Remember me')
     submit = SubmitField('Log in')
 
+class DeleteUserForm(FlaskForm):
+    delete = SubmitField('Delete account')
+
 
 class VehicleForm(FlaskForm):
     brand = StringField('Brand', validators=[DataRequired()])

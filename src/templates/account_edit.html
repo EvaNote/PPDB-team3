@@ -78,7 +78,7 @@
                     {{ form.phone_number(class="form-control form-control-lg") }}
                 {% endif %}
             </div>
-          
+
 
 
         </fieldset>
@@ -86,8 +86,14 @@
             {{ form.submit(class="btn btn-outline-info") }}
         </div>
       </form>
+      <delete_form method="POST" action="">
+        <div class="form-group">
+            {{ delete_form.delete(class="btn btn-outline-info") }}
+        </div>
+      </form>
 
       <a class="btn btn-info" href="{{ url_for('users.address_edit') }}" role="button">{{ _('Edit address') }}</a>
+
 
 
 {% endblock contentContent %}

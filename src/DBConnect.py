@@ -21,5 +21,8 @@ class DBConnection:
     def commit(self):
         return self.conn.commit()
 
+    def delete(self):
+        return self.conn.delete()
+
     def rollback(self):
         return self.conn.rollback()

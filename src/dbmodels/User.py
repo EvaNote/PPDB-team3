@@ -124,3 +124,11 @@ class UserAccess:
             self.dbconnect.commit()
         except:
             raise Exception('Unable to edit user')
+
+    def delete_user(self, user_id):
+        cursor = self.dbconnect.get_cursor()
+        try:
+            cursor.execute('DELETE FROM "user" WHERE id=%s',(user_id,))
+            self.dbconnect.commit()
+        except:
+            raise Exception('Unable to delete user')
