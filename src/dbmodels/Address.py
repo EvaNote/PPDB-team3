@@ -89,3 +89,11 @@ class Addresses:
             self.dbconnect.commit()
         except:
             raise Exception('Unable to edit address')
+
+    def delete_address(self, address_id):
+        cursor = self.dbconnect.get_cursor()
+        try:
+            cursor.execute('DELETE FROM "address" WHERE id=%s',(address_id,))
+            self.dbconnect.commit()
+        except:
+            raise Exception('Unable to delete address')

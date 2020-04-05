@@ -5,8 +5,13 @@ from src.dbmodels.User import User
 from src.dbmodels.Car import Car
 from src.dbmodels.Address import Address
 from src.reviews.forms import Reviews
+<<<<<<< HEAD
 from src.users.forms import LoginForm, RegistrationForm, VehicleForm, EditAccountForm, EditAddressForm, DeleteUserForm
 from src.utils import user_access, bcrypt, review_access, car_access, address_access
+=======
+from src.users.forms import LoginForm, RegistrationForm, VehicleForm, EditAccountForm, EditAddressForm, SelectSubject, DeleteUserForm
+from src.utils import user_access, bcrypt, review_access, car_access, address_access, current_app
+>>>>>>> master
 
 users = Blueprint('users', __name__, url_prefix='/<lang_code>')
 
@@ -37,13 +42,17 @@ def before_request():
 
 @users.route("/account")
 def account():
-    if not current_user.is_authenticated:  # makes sure user won`t be able to go to page without logging in
+    if not current_user.is_authenticated and not current_app.config[
+        'TESTING']:  # makes sure user won`t be able to go to page without logging in
         return redirect(url_for('users.login'))
 
     form = Reviews()
-    data = review_access.get_on_user_for(current_user.id)
-    cars = car_access.get_on_user_id(current_user.id)
-    user = user_access.get_user_on_id(current_user.id)
+    user = current_user
+    if current_app.config['TESTING']:
+        user = user_access.get_user_on_id(1)
+    data = review_access.get_on_user_for(user.id)
+    cars = car_access.get_on_user_id(user.id)
+    user = user_access.get_user_on_id(user.id)
     address = address_access.get_on_id(user.address)
     return render_template('account.html', title='Account', form=form, loggedIn=True, data=data,
                            current_user=user, cars=cars, address=address)
@@ -51,7 +60,8 @@ def account():
 
 @users.route("/edit", methods=['GET', 'POST'])
 def account_edit():
-    if not current_user.is_authenticated:  # makes sure user won`t be able to go to page without logging in
+    if not current_user.is_authenticated and not current_app.config[
+        'TESTING']:  # makes sure user won`t be able to go to page without logging in
         return redirect(url_for('users.login'))
     form = EditAccountForm()
     delete_form = DeleteUserForm()
@@ -91,11 +101,28 @@ def account_edit():
         user_access.edit_user(current_user.id, first_name, last_name, email, gender, age, phone_number, user.address)
         flash(f'Account edited!', 'success')
         return redirect(url_for('users.account'))
+<<<<<<< HEAD
+=======
+    if delete_form.validate_on_submit():
+        user = user_access.get_user_on_id(current_user.id)
+        user_access.delete_user(user.id)
+        address_id = user.address
+        if address_id != None:
+            address = address_access.get_on_id(address_id)
+            address_access.delete_address(address.id)
+        cars = car_access.get_on_user_id(user.id)
+        if cars != None:
+            for car in cars:
+                car_access.delete_car(car.id)
+        flash(f'Account deleted!', 'success')
+        return redirect(url_for('main.home'))
+>>>>>>> master
     return render_template('account_edit.html', title='Edit account info', loggedIn=True, form=form, delete_form=delete_form)
 
 @users.route("/edit_address", methods=['GET', 'POST'])
 def address_edit():
-    if not current_user.is_authenticated:  # makes sure user won`t be able to go to page without logging in
+    if not current_user.is_authenticated and not current_app.config[
+        'TESTING']:  # makes sure user won`t be able to go to page without logging in
         return redirect(url_for('users.login'))
     form = EditAddressForm()
     if request.method != 'POST':
@@ -143,23 +170,40 @@ def address_edit():
 
 @users.route("/myrides")
 def myrides():
-    if not current_user.is_authenticated:  # makes sure user won`t be able to go to page without logging in
+    if not current_user.is_authenticated and not current_app.config[
+        'TESTING']:  # makes sure user won`t be able to go to page without logging in
         return redirect(url_for('users.login'))
     return render_template('ride_history.html', title='My rides', loggedIn=True)
 
 
-@users.route("/user=<userid>")
+@users.route("/user=<userid>", methods=['GET', 'POST'])
 def user(userid):
     form = Reviews()
     target_user = user_access.get_user_on_id(userid)
+    form2 = SelectSubject()
+
+
+    if form2.validate_on_submit() and current_user.is_authenticated:
+        user = user_access.get_user_on_id(current_user.id)
+        subject = 'Campus Carpool: user message'
+        message = 'Dear ' + target_user.first_name + ' ' + target_user.last_name + '\n'
+        if form2.subject.data == 'Empty':
+            pass
+        elif form2.subject.data == 'Lost item':
+            subject += ": Lost item"
+            message += "While carpooling with you recently, I forgot my [ITEM] in your car. Can you let me know if you found it and when you can return it?"
+        message += '\nKind regards\n' + user.first_name + ' ' + user.last_name
+        return redirect('mailto:' + target_user.email + '?SUBJECT=' + subject + '&BODY=' + message)
+    cars = car_access.get_on_user_id(userid)
     data = review_access.get_on_user_for(userid)
     return render_template('user.html', title='User profile', form=form, loggedIn=False, target_user=target_user,
-                           data=data)
+                           data=data, cars=cars, form2=form2)
 
 
 @users.route("/login", methods=['GET', 'POST'])
 def login():
-    if current_user.is_authenticated:  # makes sure user won`t be able to go to login/register page
+    if current_user.is_authenticated and not current_app.config[
+        'TESTING']:  # makes sure user won`t be able to go to login/register page
         return redirect(url_for('main.home'))
     form = LoginForm()
     # check if input is valid
@@ -175,7 +219,8 @@ def login():
 
 @users.route("/logout")
 def logout():
-    if not current_user.is_authenticated:  # makes sure user won`t be able to go to page without logging in
+    if not current_user.is_authenticated and not current_app.config[
+        'TESTING']:  # makes sure user won`t be able to go to page without logging in
         return redirect(url_for('users.login'))
     logout_user()
     flash(f'Succesfully logged out.', 'success')  # success is for bootstrap class
@@ -184,7 +229,8 @@ def logout():
 
 @users.route("/register", methods=['GET', 'POST'])
 def register():
-    if current_user.is_authenticated:  # makes sure user won`t be able to go to login/register page
+    if current_user.is_authenticated and not current_app.config[
+        'TESTING']:  # makes sure user won`t be able to go to login/register page
         return redirect(url_for('main.home'))
     form = RegistrationForm()
     # check if input is valid
@@ -205,7 +251,8 @@ def register():
 
 @users.route("/add_vehicle", methods=['GET', 'POST'])
 def add_vehicle():
-    if not current_user.is_authenticated:  # makes sure user won`t be able to go to page without logging in
+    if not current_user.is_authenticated and not current_app.config[
+        'TESTING']:  # makes sure user won`t be able to go to page without logging in
         return redirect(url_for('users.login'))
     form = VehicleForm()
     if form.validate_on_submit():
@@ -258,7 +305,8 @@ def edit_vehicle(car_id):
 
 @users.route("/delete_vehicle=<car_id>", methods=['GET', 'POST'])
 def delete_vehicle(car_id):
-    if not current_user.is_authenticated:  # makes sure user won`t be able to go to page without logging in
+    if not current_user.is_authenticated and not current_app.config[
+        'TESTING']:  # makes sure user won`t be able to go to page without logging in
         return redirect(url_for('users.login'))
 
     car_access.delete_car(car_id)
