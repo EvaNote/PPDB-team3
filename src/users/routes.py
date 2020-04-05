@@ -5,7 +5,7 @@ from src.dbmodels.User import User
 from src.dbmodels.Car import Car
 from src.dbmodels.Address import Address
 from src.reviews.forms import Reviews
-from src.users.forms import LoginForm, RegistrationForm, VehicleForm, EditAccountForm, EditAddressForm
+from src.users.forms import LoginForm, RegistrationForm, VehicleForm, EditAccountForm, EditAddressForm, SelectSubject
 from src.utils import user_access, bcrypt, review_access, car_access, address_access, current_app
 
 users = Blueprint('users', __name__, url_prefix='/<lang_code>')
@@ -144,13 +144,27 @@ def myrides():
     return render_template('ride_history.html', title='My rides', loggedIn=True)
 
 
-@users.route("/user=<userid>")
+@users.route("/user=<userid>", methods=['GET', 'POST'])
 def user(userid):
     form = Reviews()
     target_user = user_access.get_user_on_id(userid)
+    form2 = SelectSubject()
+    user = user_access.get_user_on_id(current_user.id)
+
+    if form2.validate_on_submit():
+        subject = 'Campus Carpool: user message'
+        message = 'Dear ' + target_user.first_name + ' ' + target_user.last_name + '\n'
+        if form2.subject.data == 'Empty':
+            pass
+        elif form2.subject.data == 'Lost item':
+            subject += ": Lost item"
+            message += "While carpooling with you recently, I forgot my [ITEM] in your car. Can you let me know if you found it and when you can return it?"
+        message += '\nKind regards\n' + user.first_name + ' ' + user.last_name
+        return redirect('mailto:' + target_user.email + '?SUBJECT=' + subject + '&BODY=' + message)
+    cars = car_access.get_on_user_id(userid)
     data = review_access.get_on_user_for(userid)
     return render_template('user.html', title='User profile', form=form, loggedIn=False, target_user=target_user,
-                           data=data)
+                           data=data, cars=cars, form2=form2)
 
 
 @users.route("/login", methods=['GET', 'POST'])
