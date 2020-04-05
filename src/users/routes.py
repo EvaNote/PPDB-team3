@@ -149,9 +149,10 @@ def user(userid):
     form = Reviews()
     target_user = user_access.get_user_on_id(userid)
     form2 = SelectSubject()
-    user = user_access.get_user_on_id(current_user.id)
 
-    if form2.validate_on_submit():
+
+    if form2.validate_on_submit() and current_user.is_authenticated:
+        user = user_access.get_user_on_id(current_user.id)
         subject = 'Campus Carpool: user message'
         message = 'Dear ' + target_user.first_name + ' ' + target_user.last_name + '\n'
         if form2.subject.data == 'Empty':
