@@ -90,7 +90,7 @@ class Cars:
     def delete_car(self, car_id):
         cursor = self.dbconnect.get_cursor()
         try:
-            cursor.execute('DELETE FROM "car" WHERE id=%s',(car_id))
+            cursor.execute('DELETE FROM "car" WHERE id=%s',(car_id,))
             self.dbconnect.commit()
         except:
             raise Exception('Unable to delete car')
