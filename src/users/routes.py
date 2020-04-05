@@ -1,12 +1,16 @@
 from flask import Blueprint, render_template, flash, redirect, url_for, g, current_app, abort, request
 import flask_login
+from pathlib import Path
+import secrets
+import os
 from flask_login import current_user, login_user, logout_user
 from src.dbmodels.User import User
 from src.dbmodels.Car import Car
 from src.dbmodels.Address import Address
+from src.dbmodels.Picture import Picture
 from src.reviews.forms import Reviews
 from src.users.forms import LoginForm, RegistrationForm, VehicleForm, EditAccountForm, EditAddressForm, SelectSubject, DeleteUserForm
-from src.utils import user_access, bcrypt, review_access, car_access, address_access, current_app
+from src.utils import user_access, bcrypt, review_access, car_access, address_access, current_app, picture_access
 
 users = Blueprint('users', __name__, url_prefix='/<lang_code>')
 
@@ -53,6 +57,18 @@ def account():
                            current_user=user, cars=cars, address=address)
 
 
+#van https://www.youtube.com/watch?v=803Ei2Sq-Zs
+def save_picture(form_picture):
+    random_hex = secrets.token_hex(8)
+    #van https://stackoverflow.com/questions/2860153/how-do-i-get-the-parent-directory-in-python
+    _, f_ext = os.path.splitext(form_picture.filename)
+    picture_fn = random_hex + f_ext
+    path = Path(users.root_path)
+    path = path.parent
+    picture_path = os.path.join(path, 'static/images', picture_fn)
+    form_picture.save(picture_path)
+    return picture_fn
+
 @users.route("/edit", methods=['GET', 'POST'])
 def account_edit():
     if not current_user.is_authenticated and not current_app.config[
@@ -71,6 +87,8 @@ def account_edit():
         return render_template('account_edit.html', title='Edit account info', loggedIn=True, form=form)
     if form.validate_on_submit():
         if form.submit.data:
+
+
             first_name = form.first_name.data
             last_name = form.last_name.data
             email = form.email.data
@@ -78,8 +96,15 @@ def account_edit():
             age = form.age.data
             phone_number = form.phone_number.data
             user = user_access.get_user_on_id(current_user.id)
+            picture_id = user.picture
 
-            user_access.edit_user(current_user.id, first_name, last_name, email, gender, age, phone_number, user.address)
+            if form.picture.data:
+                picture_file = save_picture(form.picture.data)
+                picture_obj = Picture(filename=picture_file)
+                picture_access.add_picture(picture_obj)
+                picture_id = picture_obj.id
+
+            user_access.edit_user(current_user.id, first_name, last_name, email, gender, age, phone_number, user.address, picture_id)
             flash(f'Account edited!', 'success')
             return redirect(url_for('users.account'))
         elif form.delete.data:
@@ -148,7 +173,7 @@ def address_edit():
             address_id = address.id
 
         user = user_access.get_user_on_id(current_user.id)
-        user_access.edit_user(user.id,user.first_name,user.last_name,user.email,user.gender,user.age,user.phone_number,address_id)
+        user_access.edit_user(user.id,user.first_name,user.last_name,user.email,user.gender,user.age,user.phone_number,address_id,user.picture)
         flash(f'Address edited!', 'success')
         return redirect(url_for('users.account'))
     return render_template('address_edit.html', title='Edit address', loggedIn=True, form=form)

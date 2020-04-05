@@ -122,14 +122,14 @@ class UserAccess:
         except:
             raise Exception('Unable to add user')
 
-    def edit_user(self, user_id, first_name, last_name, email, gender, age, phone_number, address_id):
+    def edit_user(self, user_id, first_name, last_name, email, gender, age, phone_number, address_id, picture_id):
         cursor = self.dbconnect.get_cursor()
         user = self.get_user_on_id(user_id)
         #user_id = user.id
 
         try:
-            cursor.execute('UPDATE "user" SET first_name=%s,last_name=%s,email=%s,gender=%s,age=%s,phone_number=%s,address=%s WHERE id=%s',
-            (first_name,last_name,email,gender,age,phone_number,address_id,user_id))
+            cursor.execute('UPDATE "user" SET first_name=%s,last_name=%s,email=%s,gender=%s,age=%s,phone_number=%s,address=%s, picture=%s WHERE id=%s',
+            (first_name,last_name,email,gender,age,phone_number,address_id,picture_id,user_id))
             self.dbconnect.commit()
         except:
             raise Exception('Unable to edit user')

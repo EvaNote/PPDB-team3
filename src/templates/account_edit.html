@@ -5,7 +5,7 @@
     {{ _('Edit my account') }}
 {% endblock contentTitle %}
 {% block contentContent %}
-    <form method="POST" action="">
+    <form method="POST" action="" enctype="multipart/form-data">
         {{ form.hidden_tag() }}
         <!-- display the form -->
         <fieldset class="form-group">
@@ -76,6 +76,16 @@
                     </div>
                 {% else %}
                     {{ form.phone_number(class="form-control form-control-lg") }}
+                {% endif %}
+            </div>
+
+            <div class="form-group">
+                {{ form.picture.label() }}
+                {{ form.picture(class="form-control-file") }}
+                {% if form.picture.errors %}
+                    {% for error in form.picture.errors %}
+                        <span class = "text-danger">{{ error }}</span><br>
+                    {% endfor %}
                 {% endif %}
             </div>
 

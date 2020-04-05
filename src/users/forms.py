@@ -1,4 +1,5 @@
 from flask_wtf import FlaskForm
+from flask_wtf.file import FileField, FileAllowed
 from wtforms import StringField, PasswordField, SubmitField, BooleanField, SelectField, DateField, IntegerField, validators
 from wtforms.validators import DataRequired, Length, Email, EqualTo, ValidationError, InputRequired
 from src.utils import user_access
@@ -48,6 +49,7 @@ class EditAccountForm(FlaskForm):
     gender = SelectField('Gender', choices=[('M','Male'),('F', 'Female'), (None, 'Other')])
     age = IntegerField('Age',[validators.optional()])
     phone_number = StringField('Phone number')
+    picture = FileField('Upload profile picture', validators=[FileAllowed(['jpg','png'])])
 
     submit = SubmitField('Save')
     delete = SubmitField('Delete account')

@@ -1,6 +1,6 @@
 class Picture:
-    def __init__(self, id, filename):
-        self.id = id
+    def __init__(self, filename):
+        self.id = None
         self.filename = filename
 
     def to_dict(self):
