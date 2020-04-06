@@ -3,6 +3,7 @@ import flask_login
 from pathlib import Path
 import secrets
 import os
+from PIL import Image
 from flask_login import current_user, login_user, logout_user
 from src.dbmodels.User import User
 from src.dbmodels.Car import Car
@@ -66,7 +67,10 @@ def save_picture(form_picture):
     path = Path(users.root_path)
     path = path.parent
     picture_path = os.path.join(path, 'static/images', picture_fn)
-    form_picture.save(picture_path)
+    output_size = (127,127)
+    i = Image.open(form_picture)
+    i.thumbnail(output_size)
+    i.save(picture_path)
     return picture_fn
 
 @users.route("/edit", methods=['GET', 'POST'])
@@ -87,8 +91,6 @@ def account_edit():
         return render_template('account_edit.html', title='Edit account info', loggedIn=True, form=form)
     if form.validate_on_submit():
         if form.submit.data:
-
-
             first_name = form.first_name.data
             last_name = form.last_name.data
             email = form.email.data
@@ -100,10 +102,9 @@ def account_edit():
 
             if form.picture.data:
                 picture_file = save_picture(form.picture.data)
-                picture_obj = Picture(filename=picture_file)
+                picture_obj = Picture(None, filename=picture_file)
                 picture_access.add_picture(picture_obj)
-                picture_id = picture_obj.id
-
+                picture_id = picture_access.get_picture_on_filename(picture_file).id
             user_access.edit_user(current_user.id, first_name, last_name, email, gender, age, phone_number, user.address, picture_id)
             flash(f'Account edited!', 'success')
             return redirect(url_for('users.account'))
@@ -194,6 +195,11 @@ def user(userid):
     target_user = user_access.get_user_on_id(userid)
     form2 = SelectSubject()
 
+    pfp_path = "images/"
+    if target_user.picture is not None:
+        pfp_path += picture_access.get_picture_on_id(target_user.picture).filename
+    else:
+        pfp_path += "temp_profile_pic.png"
 
     if form2.validate_on_submit() and current_user.is_authenticated:
         user = user_access.get_user_on_id(current_user.id)
@@ -209,7 +215,7 @@ def user(userid):
     cars = car_access.get_on_user_id(userid)
     data = review_access.get_on_user_for(userid)
     return render_template('user.html', title='User profile', form=form, loggedIn=False, target_user=target_user,
-                           data=data, cars=cars, form2=form2)
+                           data=data, cars=cars, form2=form2, pfp_path=pfp_path)
 
 
 @users.route("/login", methods=['GET', 'POST'])
@@ -256,7 +262,6 @@ def register():
         user_obj = User(first_name=user_first_name, last_name=user_last_name, email=user_email, password=user_password)
         user_access.add_user(user_obj)
         flash(f'Account created for {form.email.data}! You can now log in.', 'success')  # success is for bootstrap class
-
         return redirect(url_for('users.login'))
     return render_template("register.html", title="Register", form=form)
 

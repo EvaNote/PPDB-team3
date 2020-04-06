@@ -3,8 +3,9 @@
     {{ _('User profile') }}: {{target_user.first_name}} {{ target_user.last_name }}
 {% endblock contentTitle %}
 {% block profileContent %}
-    <img src="{{ url_for('static', filename="images/temp_profile_pic.png") }}" class="float-left mr-2" width="127px"
+    <img src="{{ url_for('static', filename=pfp_path) }}" class="float-left mr-2" width="127px"
          alt="profile pic" style="border-radius: 50%"><br>
+
 
       <button class="btn btn-info" type="button" data-toggle="collapse" data-target="#contact_form" aria-expanded="false" aria-controls="contact_form">
     {{ _('contact') }}
