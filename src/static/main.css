@@ -186,3 +186,7 @@ hr {
     border-radius: 100%;
     width: 100px;
 }
+
+#findride_map {
+    height: 80vh;
+}
