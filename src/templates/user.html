@@ -68,6 +68,9 @@
 
           <br> <br>
         </div>
+            {% set car_pic = car_picpaths[loop.index0] %}
+                <img src="{{ url_for('static', filename=car_pic) }}" class="float-left mr-2" width="127px"
+         alt="car pic" style="border-radius: 50%"><br>
                   <div>
       <b>{{_('Brand')}}</b>
           <br>

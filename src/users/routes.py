@@ -54,8 +54,20 @@ def account():
     cars = car_access.get_on_user_id(user.id)
     user = user_access.get_user_on_id(user.id)
     address = address_access.get_on_id(user.address)
+    car_picpaths = []
+    for car in cars:
+        if car.picture is None:
+            car_picpaths.append("images/temp_car_pic.jpg")
+        else:
+            car_picpaths.append("images/" + picture_access.get_picture_on_id(car.picture))
+
+    pfp_path = "images/"
+    if user.picture is not None:
+        pfp_path += picture_access.get_picture_on_id(user.picture).filename
+    else:
+        pfp_path += "temp_profile_pic.png"
     return render_template('account.html', title='Account', form=form, loggedIn=True, data=data,
-                           current_user=user, cars=cars, address=address)
+                           current_user=user, cars=cars, address=address, carPicpaths=car_picpaths, pfp_path=pfp_path, car_picpaths=car_picpaths)
 
 
 #van https://www.youtube.com/watch?v=803Ei2Sq-Zs
@@ -214,8 +226,14 @@ def user(userid):
         return redirect('mailto:' + target_user.email + '?SUBJECT=' + subject + '&BODY=' + message)
     cars = car_access.get_on_user_id(userid)
     data = review_access.get_on_user_for(userid)
+    car_picpaths = []
+    for car in cars:
+        if car.picture is None:
+            car_picpaths.append("images/temp_car_pic.jpg")
+        else:
+            car_picpaths.append("images/" + picture_access.get_picture_on_id(car.picture))
     return render_template('user.html', title='User profile', form=form, loggedIn=False, target_user=target_user,
-                           data=data, cars=cars, form2=form2, pfp_path=pfp_path)
+                           data=data, cars=cars, form2=form2, pfp_path=pfp_path, car_picpaths=car_picpaths)
 
 
 @users.route("/login", methods=['GET', 'POST'])
@@ -314,8 +332,15 @@ def edit_vehicle(car_id):
         constructionYear = form.constructionYear.data
         consumption = form.consumption.data
         fuelType = form.fuelType.data
+        picture_id = car_access.get_on_id(car_id).picture
 
-        car_access.edit_car(car_id, brand, model, color, plateNumber, seats, constructionYear, consumption, fuelType)
+        if form.picture.data:
+            picture_file = save_picture(form.picture.data)
+            picture_obj = Picture(None, filename=picture_file)
+            picture_access.add_picture(picture_obj)
+            picture_id = picture_access.get_picture_on_filename(picture_file).id
+
+        car_access.edit_car(car_id, brand, model, color, plateNumber, seats, constructionYear, consumption, fuelType, picture_id)
         flash(f'Car edited!', 'success')
         return redirect(url_for('users.account'))
     return render_template('car_edit.html', title='Edit car', loggedIn=True, form=form, car_id=car_id)

@@ -40,6 +40,7 @@ class VehicleForm(FlaskForm):
                                                 ('LPG', 'Liquified Petroleum'), ('electricity', 'Electricity'),
                                                 ('CNG', 'Compressed Natural Gas'),
                                                 ('ethanol', 'Ethanol'), ('bio-diesel', 'Bio-diesel')])
+    picture = FileField('Upload profile picture', validators=[FileAllowed(['jpg','png'])])
     submit = SubmitField('Register vehicle')
 
 class EditAccountForm(FlaskForm):

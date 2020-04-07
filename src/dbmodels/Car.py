@@ -78,11 +78,11 @@ class Cars:
         except:
             raise Exception('Unable to add car')
 
-    def edit_car(self, car_id, brand, model, color, plateNumber, seats, constructionYear, consumption, fuelType):
+    def edit_car(self, car_id, brand, model, color, plateNumber, seats, constructionYear, consumption, fuelType, picture):
         cursor = self.dbconnect.get_cursor()
         try:
-            cursor.execute('UPDATE "car" SET brand=%s, model=%s, color=%s, number_plate=%s, nr_seats=%s, construction_year=%s, fuel_consumption=%s, fuel=%s WHERE id=%s',
-            (brand, model, color, plateNumber, seats, constructionYear, consumption, fuelType, car_id))
+            cursor.execute('UPDATE "car" SET brand=%s, model=%s, color=%s, number_plate=%s, nr_seats=%s, construction_year=%s, fuel_consumption=%s, fuel=%s, picture=%s WHERE id=%s',
+            (brand, model, color, plateNumber, seats, constructionYear, consumption, fuelType, picture, car_id))
             self.dbconnect.commit()
         except:
             raise Exception('Unable to edit car')
