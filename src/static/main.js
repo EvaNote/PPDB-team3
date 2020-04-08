@@ -1,5 +1,7 @@
+// make a map that will be placed on the 'Find my ride' page
 let map = L.map('findride_map').setView([51, 4.4], 10);
 
+// add a tile layer to the (empty) map
 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
     attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
 }).addTo(map);
@@ -29,28 +31,23 @@ map.on('click', function(e){
             map.closePopup();
         });
     });
-
-
-// map.locate({setView: true, maxZoom: 16});
-//
-// map.on('locationfound', function onLocationFound(e) {
-//     let radius = e.accuracy;
-//     L.marker(e.latlng).addTo(map).bindPopup("You are within " + radius + " meters from this point").openPopup();
-//     L.circle(e.latlng, radius).addTo(map);
-// });
-//
-// map.on('locationerror', function onLocationError(e) {
-//     alert(e.message);
-// });
-
-
+// add OSRM support using Leaflet Routing Machine
 let control = L.Routing.control({
     serviceUrl: 'http://127.0.0.1:5001/route/v1',
-    waypoints: [
-        L.latLng(51.125533, 4.389110),
-        L.latLng(51.086153, 4.336953)
-    ],
     routeWhileDragging: true,
     geocoder: L.Control.Geocoder.nominatim()
-}).addTo(map);
-
+})
+    // when route is found, send coordinates of start and end to /en/receiver
+    .on('routesfound', function (e) {
+        let from = e.waypoints[0].latLng;
+        let to = e.waypoints[1].latLng;
+        $.post({
+            contentType: "application/json",
+            url: "/en/receiver",
+            data: JSON.stringify({from: from, to: to})
+        })
+            // when post request is done, get the returned data and do something with it
+            .done(function (data) { // response function
+                alert("Result: " + data);
+            });
+    }).addTo(map);
