@@ -36,7 +36,7 @@ class VehicleForm(FlaskForm):
     seats = IntegerField(lazy_gettext('Seats'), validators=[InputRequired()])
     constructionYear = IntegerField(lazy_gettext('Construction Year'),[validators.optional()])
     consumption = StringField(lazy_gettext('Fuel Consumption'))
-    fuelType = SelectField(lazy_gettext('fuelType'), choices=[('benzine', lazy_gettext('Gasoline/Petrol/Benzine')), ('diesel', lazy_gettext('Diesel')),
+    fuelType = SelectField(lazy_gettext('Fuel type'), choices=[('benzine', lazy_gettext('Gasoline/Petrol/Benzine')), ('diesel', lazy_gettext('Diesel')),
                                                 ('LPG', lazy_gettext('Liquified Petroleum')), ('electricity', lazy_gettext('Electricity')),
                                                 ('CNG', lazy_gettext('Compressed Natural Gas')),
                                                 ('ethanol', lazy_gettext('Ethanol')), ('bio-diesel', lazy_gettext('Bio-diesel'))])

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2020-04-08 14:18+0200\n"
+"POT-Creation-Date: 2020-04-08 14:42+0200\n"
 "PO-Revision-Date: 2020-03-23 16:50+0100\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -462,7 +462,7 @@ msgid "Fuel Consumption"
 msgstr ""
 
 #: src/users/forms.py:39
-msgid "fuelType"
+msgid "fuel Type"
 msgstr ""
 
 #: src/users/forms.py:39
@@ -656,5 +656,8 @@ msgstr ""
 #~ msgstr ""
 
 #~ msgid "Other"
+#~ msgstr ""
+
+#~ msgid "fuelType"
 #~ msgstr ""
 

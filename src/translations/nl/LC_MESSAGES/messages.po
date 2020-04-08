@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2020-04-08 14:18+0200\n"
+"POT-Creation-Date: 2020-04-08 14:42+0200\n"
 "PO-Revision-Date: 2020-03-23 16:24+0100\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: nl\n"
@@ -20,23 +20,23 @@ msgstr ""
 
 #: src/DBConnect.py:10
 msgid "ERROR: Unable to connect to database"
-msgstr ""
+msgstr "ERROR: Unable to connect to database"
 
 #: src/main/routes.py:41
 msgid "About"
-msgstr ""
+msgstr "Over"
 
 #: src/main/routes.py:46
 msgid "FAQ"
-msgstr ""
+msgstr "FAQ"
 
 #: src/main/routes.py:51 src/templates/user.html:11
 msgid "contact"
-msgstr ""
+msgstr "contact"
 
 #: src/reviews/forms.py:8
 msgid "For"
-msgstr ""
+msgstr "Voor"
 
 #: src/reviews/forms.py:9 src/rides/forms.py:8
 #: src/templates/ride_information.html:28
@@ -45,31 +45,31 @@ msgstr "Van"
 
 #: src/reviews/forms.py:10
 msgid "Rating"
-msgstr ""
+msgstr "Beoordeling"
 
 #: src/reviews/forms.py:13
 msgid "Submit"
-msgstr ""
+msgstr "Indienen"
 
 #: src/reviews/routes.py:50
 msgid "Your review has been posted successfully!"
-msgstr ""
+msgstr "Jouw recensie is succesvol geplaatst!"
 
 #: src/reviews/routes.py:53
 msgid "Writing review failed."
-msgstr ""
+msgstr "Recensie schrijven mislukt"
 
 #: src/reviews/routes.py:54
 msgid "New review"
-msgstr ""
+msgstr "Nieuwe recensie"
 
 #: src/rides/forms.py:9
 msgid "To"
-msgstr ""
+msgstr "Naar"
 
 #: src/rides/forms.py:10
 msgid "Search"
-msgstr ""
+msgstr "Zoeken"
 
 #: src/rides/routes.py:37 src/templates/base.html:48 src/templates/base.html:68
 msgid "Find a ride"
@@ -77,15 +77,15 @@ msgstr "Vind een rit"
 
 #: src/rides/routes.py:42
 msgid "Ride information"
-msgstr ""
+msgstr "Info over de rit"
 
 #: src/rides/routes.py:47
 msgid "Ride history"
-msgstr ""
+msgstr "Rittengeschiedenis"
 
 #: src/templates/about.html:3
 msgid "About Campus Carpool"
-msgstr ""
+msgstr "Over Campus Carpool"
 
 #: src/templates/about.html:7
 msgid ""
@@ -124,7 +124,7 @@ msgstr "Bewerk account"
 #: src/templates/account.html:9 src/templates/account_edit.html:92
 #: src/users/routes.py:169 src/users/routes.py:193
 msgid "Edit address"
-msgstr ""
+msgstr "Adres bewerken"
 
 #: src/templates/account.html:11 src/templates/base.html:51
 #: src/users/routes.py:202
@@ -151,7 +151,7 @@ msgstr "email"
 
 #: src/templates/account.html:42 src/users/forms.py:51
 msgid "Age"
-msgstr ""
+msgstr "Leeftijd"
 
 #: src/templates/account.html:52 src/users/forms.py:52
 msgid "Phone number"
@@ -159,7 +159,7 @@ msgstr "Telefoonnummer"
 
 #: src/templates/account.html:67
 msgid "Address"
-msgstr ""
+msgstr "Adres"
 
 #: src/templates/account.html:73
 msgid "Zip code"
@@ -171,16 +171,16 @@ msgstr "Stad"
 
 #: src/templates/account.html:85 src/users/forms.py:63
 msgid "Country"
-msgstr ""
+msgstr "Land"
 
 #: src/templates/account.html:97 src/templates/user.html:67
 msgid "Car:"
-msgstr ""
+msgstr "Auto:"
 
 #: src/templates/account.html:98 src/templates/car_edit.html:5
 #: src/users/routes.py:328 src/users/routes.py:350
 msgid "Edit car"
-msgstr ""
+msgstr "Bewerk auto"
 
 #: src/templates/account.html:108 src/templates/user.html:75
 #: src/users/forms.py:32
@@ -231,7 +231,7 @@ msgstr "Voeg voertuig toe"
 
 #: src/templates/address_edit.html:5
 msgid "Edit my address"
-msgstr ""
+msgstr "Bewerk mijn adres"
 
 #: src/templates/base.html:64
 msgid "Home"
@@ -411,7 +411,7 @@ msgstr "Gebruikersprofiel"
 
 #: src/templates/user.html:25 src/users/forms.py:68
 msgid "Subject"
-msgstr ""
+msgstr "Onderwerp"
 
 #: src/templates/user.html:42
 msgid "First Name"
@@ -419,179 +419,184 @@ msgstr "Voornaam"
 
 #: src/users/forms.py:11 src/users/forms.py:22 src/users/forms.py:49
 msgid "Email"
-msgstr ""
+msgstr "Email"
 
 #: src/users/forms.py:12 src/users/forms.py:23
 msgid "Password"
-msgstr ""
+msgstr "Wachtwoord"
 
 #: src/users/forms.py:13
 msgid "Confirm password"
-msgstr ""
+msgstr "Wachtwoord bevestigen"
 
 #: src/users/forms.py:18
 msgid "The email is already registered."
-msgstr ""
+msgstr "Deze email is al geregistreerd"
 
 #: src/users/forms.py:24
 msgid "Remember me"
-msgstr ""
+msgstr "Onthoud mij"
 
 #: src/users/forms.py:28 src/users/forms.py:56
 msgid "Delete account"
-msgstr ""
+msgstr "Account verwijderen"
 
 #: src/users/forms.py:33
 msgid "Model"
-msgstr ""
+msgstr "Model"
 
 #: src/users/forms.py:35
 msgid "Plate number"
-msgstr ""
+msgstr "Nummerplaat"
 
 #: src/users/forms.py:36
 msgid "Seats"
-msgstr ""
+msgstr "Zitplaatsen"
 
 #: src/users/forms.py:37
 msgid "Construction Year"
-msgstr ""
+msgstr "Bouwjaar"
 
 #: src/users/forms.py:38
 msgid "Fuel Consumption"
-msgstr ""
+msgstr "Brandstofverbruik"
 
 #: src/users/forms.py:39
-msgid "fuelType"
-msgstr ""
+msgid "Fuel type"
+msgstr "Brandstoftype"
 
 #: src/users/forms.py:39
 msgid "Gasoline/Petrol/Benzine"
-msgstr ""
+msgstr "Diesel/Petroleum/Benzine"
 
 #: src/users/forms.py:39
 msgid "Diesel"
-msgstr ""
+msgstr "Dieselolie"
 
 #: src/users/forms.py:40
 msgid "Liquified Petroleum"
-msgstr ""
+msgstr "lpg"
 
 #: src/users/forms.py:40
 msgid "Electricity"
-msgstr ""
+msgstr "Elektriciteit"
 
 #: src/users/forms.py:41
 msgid "Compressed Natural Gas"
-msgstr ""
+msgstr "Gecomprimeerd aardgas"
 
 #: src/users/forms.py:42
 msgid "Ethanol"
-msgstr ""
+msgstr "Ethanol"
 
 #: src/users/forms.py:42
 msgid "Bio-diesel"
-msgstr ""
+msgstr "Bio-diesel"
 
 #: src/users/forms.py:43 src/users/forms.py:53
 msgid "Upload profile picture"
-msgstr ""
+msgstr "Profielfoto uploaden"
 
 #: src/users/forms.py:44
 msgid "Register vehicle"
-msgstr ""
+msgstr "Voertuig registreren"
 
 #: src/users/forms.py:50
 msgid "Male"
-msgstr ""
+msgstr "Man"
 
 #: src/users/forms.py:50
 msgid "Female"
-msgstr ""
+msgstr "Vrouw"
 
 #: src/users/forms.py:50
 msgid "Other"
-msgstr ""
+msgstr "Andere"
 
 #: src/users/forms.py:55 src/users/forms.py:65
 msgid "Save"
-msgstr ""
+msgstr "Opslaan"
 
 #: src/users/forms.py:59
 msgid "Street"
-msgstr ""
+msgstr "Straat"
 
 #: src/users/forms.py:60
 msgid "Number"
-msgstr ""
+msgstr "Huisnummer"
 
 #: src/users/forms.py:62
 msgid "Postal code"
-msgstr ""
+msgstr "Postcode"
 
 #: src/users/forms.py:68
 msgid "Lost item"
-msgstr ""
+msgstr "Verloren voorwerp"
 
 #: src/users/forms.py:68
 msgid "Empty"
-msgstr ""
+msgstr "Leeg"
 
 #: src/users/forms.py:69
 msgid "Make Form"
-msgstr ""
+msgstr "Formulier maken"
 
 #: src/users/routes.py:70
 msgid "Account"
-msgstr ""
+msgstr "Account"
 
 #: src/users/routes.py:122
 msgid "Account edited!"
-msgstr ""
+msgstr "Account bewerkt!"
 
 #: src/users/routes.py:142
 msgid "Account deleted!"
-msgstr ""
+msgstr "Account verwijderd!"
 
 #: src/users/routes.py:145
 msgid "Edit account info"
-msgstr ""
+msgstr "Account info bewerken"
 
 #: src/users/routes.py:191
 msgid "Address edited!"
-msgstr ""
+msgstr "Adres bewerkt!"
 
 #: src/users/routes.py:219
 msgid "Campus Carpool: user message"
-msgstr ""
+msgstr "Capus Carpool: Gebruikersbericht"
 
 #: src/users/routes.py:220
 msgid "Dear "
-msgstr ""
+msgstr "Beste "
 
 #: src/users/routes.py:224
 msgid ": Lost item"
-msgstr ""
+msgstr ": Verloren voorwerp"
 
 #: src/users/routes.py:225
 msgid ""
 "While carpooling with you recently, I forgot my [ITEM] in your car. Can "
 "you let me know if you found it and when you can return it?"
 msgstr ""
+"Terwijl ik recent met je carpoolde, ben ik mijn [VOORWERP] vergeten in je"
+" auto. Kanje me het laten weten als je het terugvindt en kan je het dan "
+"teruggeven?"
 
 #: src/users/routes.py:226
 msgid ""
 "\n"
 "Kind regards\n"
 msgstr ""
+"\n"
+"Met vriendelijke groeten\n"
 
 #: src/users/routes.py:253
 msgid "Login failed. Please check your email and/or password."
-msgstr ""
+msgstr "Inloggen mislukt. Kijk alsjeblieft je email en/of wachtwoord na."
 
 #: src/users/routes.py:254
 msgid "Login"
-msgstr ""
+msgstr "Inloggen"
 
 #: src/users/routes.py:263
 msgid "Succesfully logged out."
@@ -607,23 +612,23 @@ msgstr "! Je kan nu inloggen."
 
 #: src/users/routes.py:288
 msgid "Register"
-msgstr ""
+msgstr "Registreer"
 
 #: src/users/routes.py:308
 msgid "Vehicle registered!"
-msgstr ""
+msgstr "Voertuig geregistreerd!"
 
 #: src/users/routes.py:310
 msgid "Add Vehicle"
-msgstr ""
+msgstr "Voertuig toevoegen"
 
 #: src/users/routes.py:348
 msgid "Car edited!"
-msgstr ""
+msgstr "Auto bewerkt!"
 
 #: src/users/routes.py:359
 msgid "Vehicle deleted!"
-msgstr ""
+msgstr "Voertuig verwijderd!"
 
 #~ msgid "Contact"
 #~ msgstr "Contact"
@@ -657,4 +662,7 @@ msgstr ""
 
 #~ msgid "Other"
 #~ msgstr "Ander"
+
+#~ msgid "fuelType"
+#~ msgstr ""
 
