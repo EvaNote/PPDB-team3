@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2020-04-08 14:42+0200\n"
+"POT-Creation-Date: 2020-04-08 16:25+0200\n"
 "PO-Revision-Date: 2020-03-23 16:50+0100\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -122,12 +122,12 @@ msgid "Edit account"
 msgstr ""
 
 #: src/templates/account.html:9 src/templates/account_edit.html:92
-#: src/users/routes.py:169 src/users/routes.py:193
+#: src/users/routes.py:171 src/users/routes.py:195
 msgid "Edit address"
 msgstr ""
 
 #: src/templates/account.html:11 src/templates/base.html:51
-#: src/users/routes.py:202
+#: src/users/routes.py:204
 msgid "My rides"
 msgstr "Mes trajets"
 
@@ -178,7 +178,7 @@ msgid "Car:"
 msgstr ""
 
 #: src/templates/account.html:98 src/templates/car_edit.html:5
-#: src/users/routes.py:328 src/users/routes.py:350
+#: src/users/routes.py:332 src/users/routes.py:354
 msgid "Edit car"
 msgstr ""
 
@@ -214,6 +214,7 @@ msgstr ""
 
 #: src/templates/account.html:149 src/templates/add_vehicle.html:104
 #: src/templates/car_edit.html:105 src/templates/user.html:104
+#: src/users/forms.py:39
 msgid "Fuel type"
 msgstr ""
 
@@ -405,7 +406,7 @@ msgstr ""
 msgid "Cancel"
 msgstr ""
 
-#: src/templates/user.html:3 src/users/routes.py:236
+#: src/templates/user.html:3 src/users/routes.py:240
 msgid "User profile"
 msgstr ""
 
@@ -462,10 +463,6 @@ msgid "Fuel Consumption"
 msgstr ""
 
 #: src/users/forms.py:39
-msgid "fuel Type"
-msgstr ""
-
-#: src/users/forms.py:39
 msgid "Gasoline/Petrol/Benzine"
 msgstr ""
 
@@ -493,8 +490,8 @@ msgstr ""
 msgid "Bio-diesel"
 msgstr ""
 
-#: src/users/forms.py:43 src/users/forms.py:53
-msgid "Upload profile picture"
+#: src/users/forms.py:43
+msgid "Upload car picture"
 msgstr ""
 
 #: src/users/forms.py:44
@@ -511,6 +508,10 @@ msgstr ""
 
 #: src/users/forms.py:50
 msgid "Other"
+msgstr ""
+
+#: src/users/forms.py:53
+msgid "Upload profile picture"
 msgstr ""
 
 #: src/users/forms.py:55 src/users/forms.py:65
@@ -541,87 +542,87 @@ msgstr ""
 msgid "Make Form"
 msgstr ""
 
-#: src/users/routes.py:70
+#: src/users/routes.py:72
 msgid "Account"
 msgstr ""
 
-#: src/users/routes.py:122
+#: src/users/routes.py:124
 msgid "Account edited!"
 msgstr ""
 
-#: src/users/routes.py:142
+#: src/users/routes.py:144
 msgid "Account deleted!"
 msgstr ""
 
-#: src/users/routes.py:145
+#: src/users/routes.py:147
 msgid "Edit account info"
 msgstr ""
 
-#: src/users/routes.py:191
+#: src/users/routes.py:193
 msgid "Address edited!"
 msgstr ""
 
-#: src/users/routes.py:219
+#: src/users/routes.py:221
 msgid "Campus Carpool: user message"
 msgstr ""
 
-#: src/users/routes.py:220
+#: src/users/routes.py:222
 msgid "Dear "
 msgstr ""
 
-#: src/users/routes.py:224
+#: src/users/routes.py:226
 msgid ": Lost item"
 msgstr ""
 
-#: src/users/routes.py:225
+#: src/users/routes.py:227
 msgid ""
 "While carpooling with you recently, I forgot my [ITEM] in your car. Can "
 "you let me know if you found it and when you can return it?"
 msgstr ""
 
-#: src/users/routes.py:226
+#: src/users/routes.py:228
 msgid ""
 "\n"
 "Kind regards\n"
 msgstr ""
 
-#: src/users/routes.py:253
+#: src/users/routes.py:257
 msgid "Login failed. Please check your email and/or password."
 msgstr ""
 
-#: src/users/routes.py:254
+#: src/users/routes.py:258
 msgid "Login"
 msgstr ""
 
-#: src/users/routes.py:263
+#: src/users/routes.py:267
 msgid "Succesfully logged out."
 msgstr ""
 
-#: src/users/routes.py:284
+#: src/users/routes.py:288
 msgid "Account created for"
 msgstr ""
 
-#: src/users/routes.py:285
+#: src/users/routes.py:289
 msgid "! You can now log in."
 msgstr ""
 
-#: src/users/routes.py:288
+#: src/users/routes.py:292
 msgid "Register"
 msgstr ""
 
-#: src/users/routes.py:308
+#: src/users/routes.py:312
 msgid "Vehicle registered!"
 msgstr ""
 
-#: src/users/routes.py:310
+#: src/users/routes.py:314
 msgid "Add Vehicle"
 msgstr ""
 
-#: src/users/routes.py:348
+#: src/users/routes.py:352
 msgid "Car edited!"
 msgstr ""
 
-#: src/users/routes.py:359
+#: src/users/routes.py:363
 msgid "Vehicle deleted!"
 msgstr ""
 
@@ -659,5 +660,8 @@ msgstr ""
 #~ msgstr ""
 
 #~ msgid "fuelType"
+#~ msgstr ""
+
+#~ msgid "fuel Type"
 #~ msgstr ""
 

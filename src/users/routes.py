@@ -62,7 +62,7 @@ def account():
         if car.picture is None:
             car_picpaths.append("images/temp_car_pic.jpg")
         else:
-            car_picpaths.append("images/" + picture_access.get_picture_on_id(car.picture))
+            car_picpaths.append("images/" + picture_access.get_picture_on_id(car.picture).filename)
 
     pfp_path = "images/"
     if user.picture is not None:
@@ -236,7 +236,7 @@ def user(userid):
         if car.picture is None:
             car_picpaths.append("images/temp_car_pic.jpg")
         else:
-            car_picpaths.append("images/" + picture_access.get_picture_on_id(car.picture))
+            car_picpaths.append("images/" + picture_access.get_picture_on_id(car.picture).filename)
     return render_template('user.html', title=lazy_gettext('User profile'), form=form, loggedIn=False, target_user=target_user,
                            data=data, cars=cars, form2=form2, pfp_path=pfp_path, car_picpaths=car_picpaths)
 

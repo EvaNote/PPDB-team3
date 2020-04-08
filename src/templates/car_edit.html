@@ -5,7 +5,7 @@ consumption<!-- https://stackoverflow.com/questions/51756351/how-to-get-user-sel
     {{ _('Edit car') }}
 {% endblock contentTitle %}
 {% block contentContent %}
-    <form method="POST" action="">
+    <form method="POST" action="" enctype="multipart/form-data">
         {{ form.hidden_tag() }}
         <!-- display the form -->
         <fieldset class="form-group">

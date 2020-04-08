@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2020-04-08 14:42+0200\n"
+"POT-Creation-Date: 2020-04-08 16:25+0200\n"
 "PO-Revision-Date: 2020-03-23 16:24+0100\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: nl\n"
@@ -122,12 +122,12 @@ msgid "Edit account"
 msgstr "Bewerk account"
 
 #: src/templates/account.html:9 src/templates/account_edit.html:92
-#: src/users/routes.py:169 src/users/routes.py:193
+#: src/users/routes.py:171 src/users/routes.py:195
 msgid "Edit address"
 msgstr "Adres bewerken"
 
 #: src/templates/account.html:11 src/templates/base.html:51
-#: src/users/routes.py:202
+#: src/users/routes.py:204
 msgid "My rides"
 msgstr "Mijn ritten"
 
@@ -178,7 +178,7 @@ msgid "Car:"
 msgstr "Auto:"
 
 #: src/templates/account.html:98 src/templates/car_edit.html:5
-#: src/users/routes.py:328 src/users/routes.py:350
+#: src/users/routes.py:332 src/users/routes.py:354
 msgid "Edit car"
 msgstr "Bewerk auto"
 
@@ -214,6 +214,7 @@ msgstr "Brandstofverbruik"
 
 #: src/templates/account.html:149 src/templates/add_vehicle.html:104
 #: src/templates/car_edit.html:105 src/templates/user.html:104
+#: src/users/forms.py:39
 msgid "Fuel type"
 msgstr "Brandstoftype"
 
@@ -405,7 +406,7 @@ msgstr "Passagier"
 msgid "Cancel"
 msgstr "Annuleren"
 
-#: src/templates/user.html:3 src/users/routes.py:236
+#: src/templates/user.html:3 src/users/routes.py:240
 msgid "User profile"
 msgstr "Gebruikersprofiel"
 
@@ -462,10 +463,6 @@ msgid "Fuel Consumption"
 msgstr "Brandstofverbruik"
 
 #: src/users/forms.py:39
-msgid "Fuel type"
-msgstr "Brandstoftype"
-
-#: src/users/forms.py:39
 msgid "Gasoline/Petrol/Benzine"
 msgstr "Diesel/Petroleum/Benzine"
 
@@ -493,9 +490,9 @@ msgstr "Ethanol"
 msgid "Bio-diesel"
 msgstr "Bio-diesel"
 
-#: src/users/forms.py:43 src/users/forms.py:53
-msgid "Upload profile picture"
-msgstr "Profielfoto uploaden"
+#: src/users/forms.py:43
+msgid "Upload car picture"
+msgstr ""
 
 #: src/users/forms.py:44
 msgid "Register vehicle"
@@ -512,6 +509,10 @@ msgstr "Vrouw"
 #: src/users/forms.py:50
 msgid "Other"
 msgstr "Andere"
+
+#: src/users/forms.py:53
+msgid "Upload profile picture"
+msgstr "Profielfoto uploaden"
 
 #: src/users/forms.py:55 src/users/forms.py:65
 msgid "Save"
@@ -541,39 +542,39 @@ msgstr "Leeg"
 msgid "Make Form"
 msgstr "Formulier maken"
 
-#: src/users/routes.py:70
+#: src/users/routes.py:72
 msgid "Account"
 msgstr "Account"
 
-#: src/users/routes.py:122
+#: src/users/routes.py:124
 msgid "Account edited!"
 msgstr "Account bewerkt!"
 
-#: src/users/routes.py:142
+#: src/users/routes.py:144
 msgid "Account deleted!"
 msgstr "Account verwijderd!"
 
-#: src/users/routes.py:145
+#: src/users/routes.py:147
 msgid "Edit account info"
 msgstr "Account info bewerken"
 
-#: src/users/routes.py:191
+#: src/users/routes.py:193
 msgid "Address edited!"
 msgstr "Adres bewerkt!"
 
-#: src/users/routes.py:219
+#: src/users/routes.py:221
 msgid "Campus Carpool: user message"
 msgstr "Capus Carpool: Gebruikersbericht"
 
-#: src/users/routes.py:220
+#: src/users/routes.py:222
 msgid "Dear "
 msgstr "Beste "
 
-#: src/users/routes.py:224
+#: src/users/routes.py:226
 msgid ": Lost item"
 msgstr ": Verloren voorwerp"
 
-#: src/users/routes.py:225
+#: src/users/routes.py:227
 msgid ""
 "While carpooling with you recently, I forgot my [ITEM] in your car. Can "
 "you let me know if you found it and when you can return it?"
@@ -582,7 +583,7 @@ msgstr ""
 " auto. Kanje me het laten weten als je het terugvindt en kan je het dan "
 "teruggeven?"
 
-#: src/users/routes.py:226
+#: src/users/routes.py:228
 msgid ""
 "\n"
 "Kind regards\n"
@@ -590,43 +591,43 @@ msgstr ""
 "\n"
 "Met vriendelijke groeten\n"
 
-#: src/users/routes.py:253
+#: src/users/routes.py:257
 msgid "Login failed. Please check your email and/or password."
 msgstr "Inloggen mislukt. Kijk alsjeblieft je email en/of wachtwoord na."
 
-#: src/users/routes.py:254
+#: src/users/routes.py:258
 msgid "Login"
 msgstr "Inloggen"
 
-#: src/users/routes.py:263
+#: src/users/routes.py:267
 msgid "Succesfully logged out."
 msgstr "Succesvol uitgelogd"
 
-#: src/users/routes.py:284
+#: src/users/routes.py:288
 msgid "Account created for"
 msgstr "Account gemaakt voor"
 
-#: src/users/routes.py:285
+#: src/users/routes.py:289
 msgid "! You can now log in."
 msgstr "! Je kan nu inloggen."
 
-#: src/users/routes.py:288
+#: src/users/routes.py:292
 msgid "Register"
 msgstr "Registreer"
 
-#: src/users/routes.py:308
+#: src/users/routes.py:312
 msgid "Vehicle registered!"
 msgstr "Voertuig geregistreerd!"
 
-#: src/users/routes.py:310
+#: src/users/routes.py:314
 msgid "Add Vehicle"
 msgstr "Voertuig toevoegen"
 
-#: src/users/routes.py:348
+#: src/users/routes.py:352
 msgid "Car edited!"
 msgstr "Auto bewerkt!"
 
-#: src/users/routes.py:359
+#: src/users/routes.py:363
 msgid "Vehicle deleted!"
 msgstr "Voertuig verwijderd!"
 

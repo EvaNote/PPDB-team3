@@ -40,7 +40,7 @@ class VehicleForm(FlaskForm):
                                                 ('LPG', lazy_gettext('Liquified Petroleum')), ('electricity', lazy_gettext('Electricity')),
                                                 ('CNG', lazy_gettext('Compressed Natural Gas')),
                                                 ('ethanol', lazy_gettext('Ethanol')), ('bio-diesel', lazy_gettext('Bio-diesel'))])
-    picture = FileField(lazy_gettext('Upload profile picture'), validators=[FileAllowed(['jpg','png'])])
+    picture = FileField(lazy_gettext('Upload car picture'), validators=[FileAllowed(['jpg','png'])])
     submit = SubmitField(lazy_gettext('Register vehicle'))
 
 class EditAccountForm(FlaskForm):
