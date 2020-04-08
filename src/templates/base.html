@@ -21,6 +21,9 @@
     <!-- Leaflet Routing Machine -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.css">
 
+    <!-- Geocoder leaflet -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.css" />
+
     {% if title %}
         <title>Campus Carpool - {{ title }}</title>
     {% else %}
@@ -160,6 +163,9 @@
 
 <!-- Leaflet Routing Machine -->
 <script src="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.js"></script>
+
+<!-- Leaflet geocoder -->
+<script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js"></script>
 
 <!-- Custom JavaScript file -->
 <script type="text/javascript" src="{{ url_for('static', filename='main.js') }}"></script>
