@@ -56,6 +56,8 @@ def account():
     user = user_access.get_user_on_id(user.id)
     address = address_access.get_on_id(user.address)
     car_picpaths = []
+    if cars == None:
+        cars = []
     for car in cars:
         if car.picture is None:
             car_picpaths.append("images/temp_car_pic.jpg")
@@ -228,6 +230,8 @@ def user(userid):
     cars = car_access.get_on_user_id(userid)
     data = review_access.get_on_user_for(userid)
     car_picpaths = []
+    if cars == None:
+        cars = []
     for car in cars:
         if car.picture is None:
             car_picpaths.append("images/temp_car_pic.jpg")
