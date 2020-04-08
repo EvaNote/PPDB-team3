@@ -47,3 +47,12 @@ def faq():
 @main.route("/contact")
 def contact():
     return render_template('contact.html', title='contact', loggedIn=False)
+
+
+@main.route('/receiver', methods=['POST'])
+def receiver():
+    # read json + reply
+    data = request.json
+    result = "start: {}, {} — end: {}, {}".format(data['from']['lat'], data['from']['lng'],
+                                                  data['to']['lat'], data['to']['lng'])
+    return result

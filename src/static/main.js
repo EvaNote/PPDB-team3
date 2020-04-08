@@ -1,29 +1,3 @@
-/*****  How to send data from JavaScript to Python  *****
- *
- * make an AJAX post request with jQuery with some data and a response function. This post request will
- * post to a new Flask route, which will do some stuff with that data and then return something.
- * The returned data from the Flask route can be retrieved by the response function we put after the
- * post request.
- */
-// document.getElementById("theButton").onclick = function doWork() {
-//     // ajax the JSON to the server
-//     $.post("/en/receiver", {lat: 4.3, lon: 51}) // data to post
-//         .done(function (data) { // response function
-//             alert("Data Loaded: " + data);
-//         });
-// };
-//
-// // in a certain routes.py file:
-// @main.route('/receiver', methods=['POST'])
-// def receiver():
-//     # read json + reply
-//     lat = float(request.form['lat'])
-//     lon = float(request.form['lon'])
-//     result = "latitude = {} and longitude = {}".format(lat, lon)
-//     return result
-/** END **/
-
-
 // make a map that will be placed on the 'Find my ride' page
 let map = L.map('findride_map').setView([51, 4.4], 10);
 
@@ -38,25 +12,24 @@ map.on('click', function onMapClick(e) {
     popup.setLatLng(e.latlng).setContent("You clicked the map at " + e.latlng.toString()).openOn(map);
 });
 
-// // try to locate the user using his location service
-// map.locate({setView: true, maxZoom: 16});
-
-// // if user location was found, show a radius around the user with a popup,
-// // which shows the accuracy of the localization
-// map.on('locationfound', function onLocationFound(e) {
-//     let radius = e.accuracy;
-//     L.marker(e.latlng).addTo(map).bindPopup("You are within " + radius + " meters from this point").openPopup();
-//     L.circle(e.latlng, radius).addTo(map);
-// });
-
-// // if user localization failed, show an error alert
-// map.on('locationerror', function onLocationError(e) {
-//     alert(e.message);
-// });
-
 // add OSRM support using Leaflet Routing Machine
 L.Routing.control({
     serviceUrl: 'http://127.0.0.1:5001/route/v1',
     routeWhileDragging: true,
     geocoder: L.Control.Geocoder.nominatim()
-}).addTo(map);
+})
+    // when route is found, send coordinates of start and end to /en/receiver
+    .on('routesfound', function (e) {
+        let from = e.waypoints[0].latLng;
+        let to = e.waypoints[1].latLng;
+        $.post({
+            contentType: "application/json",
+            url: "/en/receiver",
+            data: JSON.stringify({from: from, to: to})
+        })
+            // when post request is done, get the returned data and do something with it
+            .done(function (data) { // response function
+                alert("Result: " + data);
+            });
+    }).addTo(map);
+
