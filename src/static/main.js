@@ -59,6 +59,4 @@ L.Routing.control({
     serviceUrl: 'http://127.0.0.1:5001/route/v1',
     routeWhileDragging: true,
     geocoder: L.Control.Geocoder.nominatim()
-}).on('routesfound', function (e) {
-
 }).addTo(map);
