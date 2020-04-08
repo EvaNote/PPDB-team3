@@ -1,5 +1,4 @@
-from flask import Blueprint, render_template, g, current_app, abort
-from flask_login import current_user
+from flask import Blueprint, render_template, g, current_app, abort, request
 
 main = Blueprint('main', __name__, url_prefix='/<lang_code>')
 
