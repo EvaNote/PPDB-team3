@@ -91,7 +91,9 @@ class UserAccess:
         cursor.execute('SELECT first_name, last_name, email, password FROM "user" WHERE id=%s', (theId,))
         row = cursor.fetchone()
         if row:
-            return User(row[0], row[1], row[2], row[3])
+            u = User(row[0], row[1], row[2], row[3])
+            u.id = theId
+            return u
         return None
 
     def add_user(self, user_obj):

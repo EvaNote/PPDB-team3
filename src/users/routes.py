@@ -51,12 +51,17 @@ def myrides():
     return render_template('ride_history.html', title='My rides', loggedIn=True)
 
 
-@users.route("/user=<userid>")
+@users.route("/user=<userid>", methods=['GET', 'POST'])
 def user(userid):
     form = Reviews()
     target_user = user_access.get_user_on_id(userid)
     data = review_access.get_on_user_for(userid)
-    return render_template('user.html', title='User profile', form=form, loggedIn=False, target_user=target_user,
+    try:
+        the_id = current_user.id
+        logged_in = True
+    except:
+        logged_in = False
+    return render_template('user.html', title='User profile', form=form, loggedIn=logged_in, target_user=target_user,
                            data=data)
 
 
