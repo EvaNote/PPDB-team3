@@ -1,5 +1,6 @@
 from flask import Blueprint, render_template, g, current_app, abort
 from flask_login import current_user
+from flask_babel import lazy_gettext
 
 main = Blueprint('main', __name__, url_prefix='/<lang_code>')
 
@@ -37,14 +38,14 @@ def home():
 
 @main.route("/about")
 def about():
-    return render_template('about.html', title='About', loggedIn=False)
+    return render_template('about.html', title=lazy_gettext('About'), loggedIn=False)
 
 
 @main.route("/faq")
 def faq():
-    return render_template('faq.html', title='FAQ', loggedIn=False)
+    return render_template('faq.html', title=lazy_gettext('FAQ'), loggedIn=False)
 
 
 @main.route("/contact")
 def contact():
-    return render_template('contact.html', title='contact', loggedIn=False)
+    return render_template('contact.html', title=lazy_gettext('contact'), loggedIn=False)

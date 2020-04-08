@@ -12,6 +12,7 @@ from src.dbmodels.Picture import Picture
 from src.reviews.forms import Reviews
 from src.users.forms import LoginForm, RegistrationForm, VehicleForm, EditAccountForm, EditAddressForm, SelectSubject, DeleteUserForm
 from src.utils import user_access, bcrypt, review_access, car_access, address_access, current_app, picture_access
+from flask_babel import lazy_gettext
 
 users = Blueprint('users', __name__, url_prefix='/<lang_code>')
 
@@ -66,7 +67,7 @@ def account():
         pfp_path += picture_access.get_picture_on_id(user.picture).filename
     else:
         pfp_path += "temp_profile_pic.png"
-    return render_template('account.html', title='Account', form=form, loggedIn=True, data=data,
+    return render_template('account.html', title=lazy_gettext('Account'), form=form, loggedIn=True, data=data,
                            current_user=user, cars=cars, address=address, carPicpaths=car_picpaths, pfp_path=pfp_path, car_picpaths=car_picpaths)
 
 
@@ -118,7 +119,7 @@ def account_edit():
                 picture_access.add_picture(picture_obj)
                 picture_id = picture_access.get_picture_on_filename(picture_file).id
             user_access.edit_user(current_user.id, first_name, last_name, email, gender, age, phone_number, user.address, picture_id)
-            flash(f'Account edited!', 'success')
+            flash(lazy_gettext(f'Account edited!'), 'success')
             return redirect(url_for('users.account'))
         elif form.delete.data:
             user = user_access.get_user_on_id(current_user.id)
@@ -138,10 +139,10 @@ def account_edit():
                 address = address_access.get_on_id(address_id)
                 address_access.delete_address(address.id)
 
-            flash(f'Account deleted!', 'success')
+            flash(lazy_gettext(f'Account deleted!'), 'success')
             return redirect(url_for('main.home'))
 
-    return render_template('account_edit.html', title='Edit account info', loggedIn=True, form=form)
+    return render_template('account_edit.html', title=lazy_gettext('Edit account info'), loggedIn=True, form=form)
 
 
 @users.route("/edit_address", methods=['GET', 'POST'])
@@ -165,7 +166,7 @@ def address_edit():
             form.city.data = address.city
             form.postal_code.data = address.postal_code
             form.country.data = address.country
-        return render_template('address_edit.html', title='Edit address', loggedIn=True, form=form)
+        return render_template('address_edit.html', title=lazy_gettext('Edit address'), loggedIn=True, form=form)
 
     if form.validate_on_submit():
         street = form.street.data
@@ -187,9 +188,9 @@ def address_edit():
 
         user = user_access.get_user_on_id(current_user.id)
         user_access.edit_user(user.id,user.first_name,user.last_name,user.email,user.gender,user.age,user.phone_number,address_id,user.picture)
-        flash(f'Address edited!', 'success')
+        flash(lazy_gettext(f'Address edited!'), 'success')
         return redirect(url_for('users.account'))
-    return render_template('address_edit.html', title='Edit address', loggedIn=True, form=form)
+    return render_template('address_edit.html', title=lazy_gettext('Edit address'), loggedIn=True, form=form)
 
 
 
@@ -198,7 +199,7 @@ def myrides():
     if not current_user.is_authenticated and not current_app.config[
         'TESTING']:  # makes sure user won`t be able to go to page without logging in
         return redirect(url_for('users.login'))
-    return render_template('ride_history.html', title='My rides', loggedIn=True)
+    return render_template('ride_history.html', title=lazy_gettext('My rides'), loggedIn=True)
 
 
 @users.route("/user=<userid>", methods=['GET', 'POST'])
@@ -215,14 +216,14 @@ def user(userid):
 
     if form2.validate_on_submit() and current_user.is_authenticated:
         user = user_access.get_user_on_id(current_user.id)
-        subject = 'Campus Carpool: user message'
-        message = 'Dear ' + target_user.first_name + ' ' + target_user.last_name + '\n'
+        subject = lazy_gettext('Campus Carpool: user message')
+        message = lazy_gettext('Dear ') + target_user.first_name + ' ' + target_user.last_name + '\n'
         if form2.subject.data == 'Empty':
             pass
         elif form2.subject.data == 'Lost item':
-            subject += ": Lost item"
-            message += "While carpooling with you recently, I forgot my [ITEM] in your car. Can you let me know if you found it and when you can return it?"
-        message += '\nKind regards\n' + user.first_name + ' ' + user.last_name
+            subject += lazy_gettext(": Lost item")
+            message += lazy_gettext("While carpooling with you recently, I forgot my [ITEM] in your car. Can you let me know if you found it and when you can return it?")
+        message += lazy_gettext('\nKind regards\n') + user.first_name + ' ' + user.last_name
         return redirect('mailto:' + target_user.email + '?SUBJECT=' + subject + '&BODY=' + message)
     cars = car_access.get_on_user_id(userid)
     data = review_access.get_on_user_for(userid)
@@ -232,7 +233,7 @@ def user(userid):
             car_picpaths.append("images/temp_car_pic.jpg")
         else:
             car_picpaths.append("images/" + picture_access.get_picture_on_id(car.picture))
-    return render_template('user.html', title='User profile', form=form, loggedIn=False, target_user=target_user,
+    return render_template('user.html', title=lazy_gettext('User profile'), form=form, loggedIn=False, target_user=target_user,
                            data=data, cars=cars, form2=form2, pfp_path=pfp_path, car_picpaths=car_picpaths)
 
 
@@ -249,8 +250,8 @@ def login():
             login_user(user, remember=form.remember_me.data)
             return redirect(url_for('main.home'))
         else:
-            flash('Login failed. Please check your email and/or password.', 'danger')
-    return render_template("login.html", title="Login", form=form)
+            flash(lazy_gettext('Login failed. Please check your email and/or password.'), 'danger')
+    return render_template("login.html", title=lazy_gettext("Login"), form=form)
 
 
 @users.route("/logout")
@@ -259,7 +260,7 @@ def logout():
         'TESTING']:  # makes sure user won`t be able to go to page without logging in
         return redirect(url_for('users.login'))
     logout_user()
-    flash(f'Succesfully logged out.', 'success')  # success is for bootstrap class
+    flash(lazy_gettext(f'Succesfully logged out.'), 'success')  # success is for bootstrap class
     return redirect(url_for('main.home'))
 
 
@@ -279,9 +280,12 @@ def register():
         user_password = bcrypt.generate_password_hash(form.password.data).decode('utf-8')
         user_obj = User(first_name=user_first_name, last_name=user_last_name, email=user_email, password=user_password)
         user_access.add_user(user_obj)
-        flash(f'Account created for {form.email.data}! You can now log in.', 'success')  # success is for bootstrap class
+
+        fStr1 = lazy_gettext('Account created for')
+        fStr2 = lazy_gettext('! You can now log in.')
+        flash(f'{fStr1} {form.email.data} {fStr2}', 'success')  # success is for bootstrap class
         return redirect(url_for('users.login'))
-    return render_template("register.html", title="Register", form=form)
+    return render_template("register.html", title=lazy_gettext("Register"), form=form)
 
 
 @users.route("/add_vehicle", methods=['GET', 'POST'])
@@ -301,9 +305,9 @@ def add_vehicle():
         fuelType = form.fuelType.data
         car_obj = Car(None, plateNumber, color, brand, model, seats, constructionYear, consumption, fuelType, current_user.id, None)
         car_access.add_car(car_obj)
-        flash(f'Vehicle registered!', 'success')
+        flash(lazy_gettext(f'Vehicle registered!'), 'success')
         return redirect(url_for('users.account'))
-    return render_template("add_vehicle.html", title="Add Vehicle", form=form)
+    return render_template("add_vehicle.html", title=lazy_gettext("Add Vehicle"), form=form)
 
 @users.route("/edit_vehicle=<car_id>", methods=['GET', 'POST'])
 def edit_vehicle(car_id):
@@ -321,7 +325,7 @@ def edit_vehicle(car_id):
         form.consumption.data = car.fuel_consumption
         form.fuelType.data = car.fuel
 
-        return render_template('car_edit.html', title='Edit car', loggedIn=True, form=form, car_id=car_id)
+        return render_template('car_edit.html', title=lazy_gettext('Edit car'), loggedIn=True, form=form, car_id=car_id)
 
     if form.validate_on_submit():
         brand = form.brand.data
@@ -341,9 +345,9 @@ def edit_vehicle(car_id):
             picture_id = picture_access.get_picture_on_filename(picture_file).id
 
         car_access.edit_car(car_id, brand, model, color, plateNumber, seats, constructionYear, consumption, fuelType, picture_id)
-        flash(f'Car edited!', 'success')
+        flash(lazy_gettext(f'Car edited!'), 'success')
         return redirect(url_for('users.account'))
-    return render_template('car_edit.html', title='Edit car', loggedIn=True, form=form, car_id=car_id)
+    return render_template('car_edit.html', title=lazy_gettext('Edit car'), loggedIn=True, form=form, car_id=car_id)
 
 @users.route("/delete_vehicle=<car_id>", methods=['GET', 'POST'])
 def delete_vehicle(car_id):
@@ -352,5 +356,5 @@ def delete_vehicle(car_id):
         return redirect(url_for('users.login'))
 
     car_access.delete_car(car_id)
-    flash(f'Vehicle deleted!', 'success')
+    flash(lazy_gettext(f'Vehicle deleted!'), 'success')
     return redirect(url_for('users.account'))

@@ -1,4 +1,5 @@
 import psycopg2
+from flask_babel import lazy_gettext
 
 
 class DBConnection:
@@ -6,7 +7,7 @@ class DBConnection:
         try:
             self.conn = psycopg2.connect("dbname='{}' user='{}'".format(dbname, dbuser))
         except:
-            print('ERROR: Unable to connect to database')
+            print(lazy_gettext('ERROR: Unable to connect to database'))
             raise Exception('Unable to connect to database')
 
     def close(self):

@@ -1,5 +1,6 @@
 from flask import Blueprint, flash, render_template, g, current_app, abort
 from src.rides.forms import FindRideForm
+from flask_babel import lazy_gettext
 
 rides = Blueprint('rides', __name__, url_prefix='/<lang_code>')
 
@@ -33,14 +34,14 @@ def findride():
     form = FindRideForm()
     if form.validate_on_submit():
         flash('You have been logged in successfully.', 'success')
-    return render_template("findride.html", title="Find a ride", form=form)
+    return render_template("findride.html", title=lazy_gettext("Find a ride"), form=form)
 
 
 @rides.route("/ride_info")
 def ride_details():
-    return render_template("ride_information.html", title="Ride information")
+    return render_template("ride_information.html", title=lazy_gettext("Ride information"))
 
 
 @rides.route("/ride_history")
 def ride_history():
-    return render_template("ride_history.html", title="Ride history")
+    return render_template("ride_history.html", title=lazy_gettext("Ride history"))
