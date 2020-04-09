@@ -1,3 +1,4 @@
+from geopy.geocoders import Nominatim
 from flask import Blueprint, render_template, g, current_app, abort, request
 
 main = Blueprint('main', __name__, url_prefix='/<lang_code>')
@@ -56,3 +57,20 @@ def receiver():
     result = "start: {}, {} — end: {}, {}".format(data['from']['lat'], data['from']['lng'],
                                                   data['to']['lat'], data['to']['lng'])
     return result
+
+
+@main.route('/fillschools', methods=['POST'])
+def get_schools():
+    schools = dict()
+    geolocator = Nominatim(user_agent="specify_your_app_name_here")
+    locations = geolocator.geocode('Universiteit België', False, limit=100000, timeout=30)
+    for location in locations:
+        location.raw['soort'] = 'u'
+        schools[location.raw['osm_id']] = location.raw
+        print(location.raw)
+    locations = geolocator.geocode('Hogeschool België', False, limit=100000, timeout=30)
+    for location in locations:
+        schools[location.raw['osm_id']] = location.raw
+        location.raw['soort'] = 'h'
+        print(location.raw)
+    return schools
