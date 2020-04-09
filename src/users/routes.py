@@ -126,7 +126,7 @@ def login():
     form = LoginForm()
     # check if input is valid
     if form.validate_on_submit():
-        user = user_access.get_user(form.email.data)
+        user = user_access.get_user_on_email(form.email.data)
         if user and bcrypt.check_password_hash(user.password, form.password.data):
             login_user(user, remember=form.remember_me.data)
             return redirect(url_for('main.home'))

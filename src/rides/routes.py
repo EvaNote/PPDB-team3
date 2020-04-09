@@ -1,5 +1,7 @@
-from flask import Blueprint, flash, render_template, g, current_app, abort
-from src.rides.forms import FindRideForm
+from flask import Blueprint, flash, render_template, g, current_app, abort, redirect, url_for, request
+from flask_login import current_user
+from src.rides.forms import FindRideForm, CreateRideForm
+import src.users.routes
 
 rides = Blueprint('rides', __name__, url_prefix='/<lang_code>')
 
@@ -35,6 +37,20 @@ def findride():
         flash('You have been logged in successfully.', 'success')
     return render_template("findride.html", title="Find a ride", form=form)
 
+@rides.route("/createride", methods=['GET', 'POST'])
+def createride():
+    if not current_user.is_authenticated:
+        return redirect(url_for('users.login'))
+    form = CreateRideForm()
+    if form.validate_on_submit():
+        fromField = form.fromField.data
+        toField = form.toField.data
+        date = form.Date.data
+        time = form.Time.data
+
+        flash('Created a ride.', 'success')
+        return redirect(url_for('users.myrides'))
+    return render_template("createride.html", title="Create a ride", form=form)
 
 @rides.route("/ride_info")
 def ride_details():

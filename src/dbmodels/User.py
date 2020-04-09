@@ -27,7 +27,6 @@ class User:
     def is_authenticated(self):
         return True
 
-    @property
     def get_id(self):
         try:
             return self.id
@@ -79,10 +78,19 @@ class UserAccess:
             users.append(user_obj)
         return users
 
-    def get_user(self, em):
-        print(em)
+    def get_user(self, id):
         cursor = self.dbconnect.get_cursor()
-        cursor.execute('SELECT first_name, last_name, email, password, id FROM "user" WHERE email=%s', (em,))
+        cursor.execute('SELECT first_name, last_name, email, password, id FROM "user" WHERE id=%s', (id,))
+        row = cursor.fetchone()
+        if row:
+            result = User(row[0], row[1], row[2], row[3])
+            result.id = row[4]
+            return result
+        return None
+
+    def get_user_on_email(self, email):
+        cursor = self.dbconnect.get_cursor()
+        cursor.execute('SELECT first_name, last_name, email, password, id FROM "user" WHERE email=%s', (email,))
         row = cursor.fetchone()
         if row:
             result = User(row[0], row[1], row[2], row[3])

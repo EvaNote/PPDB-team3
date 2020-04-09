@@ -37,5 +37,5 @@ def get_timezone():
 
 
 @login_manager.user_loader
-def load_user(user_email):
-    return UserAccess(connection).get_user(user_email)
+def load_user(user_id):
+    return UserAccess(connection).get_user_on_id(user_id)
