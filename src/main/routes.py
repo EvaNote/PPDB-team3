@@ -1,4 +1,6 @@
 from flask import Blueprint, render_template, g, current_app, abort, request
+from src.dbmodels.Campus import Campus
+from src.utils import campus_access
 from flask_login import current_user
 from flask_babel import lazy_gettext
 from geopy.geocoders import Nominatim
@@ -65,15 +67,20 @@ def receiver():
 @main.route('/fillschools', methods=['POST'])
 def get_schools():
     schools = dict()
-    geolocator = Nominatim(user_agent="specify_your_app_name_here")
-    locations = geolocator.geocode('Universiteit België', False, limit=100000, timeout=30)
-    for location in locations:
-        location.raw['soort'] = 'u'
-        schools[location.raw['osm_id']] = location.raw
-        print(location.raw)
-    locations = geolocator.geocode('Hogeschool België', False, limit=100000, timeout=30)
-    for location in locations:
-        schools[location.raw['osm_id']] = location.raw
-        location.raw['soort'] = 'h'
-        print(location.raw)
+
+    campus_objects = campus_access.get_all()
+    for campus in campus_objects:
+        schools[campus.id] = campus.to_dict()
+
+    # geolocator = Nominatim(user_agent="specify_your_app_name_here")
+    # locations = geolocator.geocode('Universiteit België', False, limit=100000, timeout=30)
+    # for location in locations:
+    #     location.raw['soort'] = 'u'
+    #     schools[location.raw['osm_id']] = location.raw
+    #     print(location.raw)
+    # locations = geolocator.geocode('Hogeschool België', False, limit=100000, timeout=30)
+    # for location in locations:
+    #     schools[location.raw['osm_id']] = location.raw
+    #     location.raw['soort'] = 'h'
+    #     print(location.raw)
     return schools

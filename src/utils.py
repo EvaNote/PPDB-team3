@@ -7,6 +7,7 @@ from src.dbmodels.User import UserAccess
 from src.dbmodels.Review import Reviews
 from src.dbmodels.Car import Cars
 from src.dbmodels.Address import Addresses
+from src.dbmodels.Campus import Campusses
 from src.dbmodels.Picture import Pictures
 from src.config import BaseConfig
 
@@ -16,6 +17,7 @@ user_access = UserAccess(connection)
 review_access = Reviews(connection)
 car_access = Cars(connection)
 address_access = Addresses(connection)
+campus_access = Campusses(connection)
 picture_access = Pictures(connection)
 
 # create extensions

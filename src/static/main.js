@@ -47,6 +47,7 @@ map.on('click', function (e) {
     var container = L.DomUtil.create('div'),
         startBtn = createButton('Start from this location', container),
         destBtn = createButton('Go to this location', container);
+
     L.popup()
         .setContent(container)
         .setLatLng(e.latlng)
@@ -55,6 +56,7 @@ map.on('click', function (e) {
         control.spliceWaypoints(0, 1, e.latlng);
         map.closePopup();
     });
+
     L.DomEvent.on(destBtn, 'click', function () {
         control.spliceWaypoints(control.getWaypoints().length - 1, 1, e.latlng);
         map.closePopup();
@@ -82,26 +84,24 @@ $(document).ready(function () {
         "  </form>";
     child = child.firstChild;
     document.getElementsByClassName('leaflet-routing-geocoders')[0].appendChild(child);
-    let temp = document.getElementsByClassName('leaflet-routing-geocoders')[0];
-    console.log(temp)
 
     //src: https://github.com/pointhi/leaflet-color-markers
     var universityIcon = new L.Icon({
-        iconUrl: 'https://cdn.rawgit.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-green.png',
+        iconUrl: 'https://cdn.rawgit.com/pointhi/leaflet-color-markers/master/img/marker-icon-green.png',
         shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
-        iconSize: [25, 41],
-        iconAnchor: [12, 41],
-        popupAnchor: [1, -34],
-        shadowSize: [41, 41]
+        iconSize: [20, 32],
+        iconAnchor: [7, 32],
+        popupAnchor: [1, -20],
+        shadowSize: [32, 32]
     });
 
     var collegeIcon = new L.Icon({
-        iconUrl: 'https://cdn.rawgit.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-violet.png',
+        iconUrl: 'https://cdn.rawgit.com/pointhi/leaflet-color-markers/master/img/marker-icon-violet.png',
         shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
-        iconSize: [25, 41],
-        iconAnchor: [12, 41],
-        popupAnchor: [1, -34],
-        shadowSize: [41, 41]
+        iconSize: [20, 32],
+        iconAnchor: [7, 32],
+        popupAnchor: [1, -20],
+        shadowSize: [32, 32]
     });
 
     $.post({
@@ -111,16 +111,20 @@ $(document).ready(function () {
         // when post request is done, get the returned data and do something with it
         .done(function (markers) { // response function
             for (var i in markers) {
-                let hover_display = markers[i].display_name;
-                hover_display = hover_display.substr(0, hover_display.length - 29);
+                let hover_display = markers[i].name;
+                //hover_display = hover_display.substr(0, hover_display.length - 29);
                 let icon = null;
-                if (markers[i].soort === 'u') {
+                if (markers[i].category === 'university') {
                     icon = universityIcon
                 } else {
                     icon = collegeIcon
                 }
 
-                (L.marker([markers[i].lat, markers[i].lon], {icon: icon, name: hover_display})
+                (L.marker([markers[i].latitude, markers[i].longitude], {
+                    icon: icon,
+                    name: hover_display,
+                    id: markers[i].id
+                })
                     .bindPopup('<a href="' + markers[i].url + '" target="_blank">' + markers[i].name + '</a>')
                     .addTo(map))
                     .on({
