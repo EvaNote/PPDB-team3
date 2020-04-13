@@ -1,3 +1,11 @@
+/** loop and retrieve all waypoints:
+ const values = Object.values(e.waypoints)
+ for (const value of values) {
+            console.log(value.latLng.lat)
+        }
+ */
+
+
 // make a map that will be placed on the 'Find my ride' page
 let map = L.map('findride_map').setView([51, 4.4], 10);
 
@@ -59,7 +67,7 @@ $(document).ready(function () {
         contentType: "application/json",
         url: "/en/fillschools"
     })
-    // when post request is done, get the returned data and do something with it
+        // when post request is done, get the returned data and do something with it
         .done(function (markers) { // response function
             for (var i in markers) {
                 let hover_display = markers[i].display_name;
@@ -90,10 +98,10 @@ $(document).ready(function () {
                                 map.closePopup();
                             }, 2500)
                         },
-                        'click': function (e){
+                        'click': function (e) {
                             var container = L.DomUtil.create('div'),
-                            startBtn = createButton('Start from this location', container),
-                            destBtn = createButton('Go to this location', container);
+                                startBtn = createButton('Start from this location', container),
+                                destBtn = createButton('Go to this location', container);
 
                             L.popup()
                                 .setContent(container)
@@ -115,7 +123,6 @@ $(document).ready(function () {
 });
 
 
-
 // add a tile layer to the (empty) map
 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
     attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
@@ -126,43 +133,19 @@ let control = L.Routing.control({
     routeWhileDragging: true,
     geocoder: L.Control.Geocoder.nominatim(),
 })
-// when route is found, send coordinates of start and end to /en/receiver
-/*   .on('routesfound', function (e) {
-        let from = e.waypoints[0].latLng;
-        let to = e.waypoints[1].latLng;
-        alert('Found ' + e.waypoints.length + ' route(s).');
-
-        $.post({
-            contentType: "application/json",
-            url: "/en/receiver",
-            data: JSON.stringify({from: from, to: to})
-        })
-        // when post request is done, get the returned data and do something with it
-            .done(function (data) { // response function
-                alert("Result: " + data);
-            });
-    }).addTo(map);
-*/
+    // when route is found, send coordinates of start and end to /en/calculateCompatibleRides
     .on('routesfound', function (e) {
         let from = e.waypoints[0].latLng;
         let to = e.waypoints[1].latLng;
         alert('Found ' + e.waypoints.length + ' route(s).');
-        //for(let waypoint in e.waypoints){console.log(waypoint + "->" + e.waypoints[0].LatLng.lat)}
-        //for(let waypoint=0; waypoint<e.waypoints.length;waypoint++){console.log(waypoint + "->" + e.waypoints[0].LatLng)}
-        const values = Object.values(e.waypoints)
-        for (const value of values) {
-            console.log(value.latLng.lat)
-        }
-
-        // your code here...
-
         $.post({
             contentType: "application/json",
             url: "/en/calculateCompatibleRides",
             data: JSON.stringify({from: from, to: to})
         })
-        // when post request is done, get the returned data and do something with it
+            // when post request is done, get the returned data and do something with it
             .done(function (data) { // response function
-                //alert("Result: " + data);
+                alert("Result: " + data);
             });
     }).addTo(map);
+
