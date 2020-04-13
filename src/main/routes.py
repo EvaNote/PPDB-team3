@@ -52,7 +52,7 @@ def contact():
     return render_template('contact.html', title=lazy_gettext('contact'), loggedIn=False)
 
 
-@main.route('/receiver', methods=['POST'])
+@main.route('/calculateCompatibleRides', methods=['POST'])
 def receiver():
     # read json + reply
     data = request.json

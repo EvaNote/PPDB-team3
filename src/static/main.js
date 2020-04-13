@@ -149,16 +149,16 @@ let control = L.Routing.control({
         alert('Found ' + e.waypoints.length + ' route(s).');
         //for(let waypoint in e.waypoints){console.log(waypoint + "->" + e.waypoints[0].LatLng.lat)}
         //for(let waypoint=0; waypoint<e.waypoints.length;waypoint++){console.log(waypoint + "->" + e.waypoints[0].LatLng)}
-        const keys = Object.keys(e.waypoints)
-        for (const key of keys) {
-            console.log(key.latLng)
+        const values = Object.values(e.waypoints)
+        for (const value of values) {
+            console.log(value.latLng.lat)
         }
 
         // your code here...
 
         $.post({
             contentType: "application/json",
-            url: "/en/receiver",
+            url: "/en/calculateCompatibleRides",
             data: JSON.stringify({from: from, to: to})
         })
         // when post request is done, get the returned data and do something with it
