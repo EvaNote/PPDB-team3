@@ -9,6 +9,32 @@
 // make a map that will be placed on the 'Find my ride' page
 let map = L.map('findride_map').setView([51, 4.4], 10);
 
+// add a tile layer to the (empty) map
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+}).addTo(map);
+
+// add OSRM support using Leaflet Routing Machine
+let control = L.Routing.control({
+    serviceUrl: 'http://127.0.0.1:5001/route/v1',
+    routeWhileDragging: true,
+    geocoder: L.Control.Geocoder.nominatim(),
+})
+    // when route is found, send coordinates of start and end to /en/calculateCompatibleRides
+    .on('routesfound', function (e) {
+        let from = e.waypoints[0].latLng;
+        let to = e.waypoints[1].latLng;
+        alert('Found ' + e.waypoints.length + ' route(s).');
+        $.post({
+            contentType: "application/json",
+            url: "/en/calculateCompatibleRides",
+            data: JSON.stringify({from: from, to: to})
+        })
+            // when post request is done, get the returned data and do something with it
+            .done(function (data) { // response function
+                alert("Result: " + data);
+            });
+    }).addTo(map);
 
 function createButton(label, container) {
     var btn = L.DomUtil.create('button', '', container);
@@ -21,7 +47,6 @@ map.on('click', function (e) {
     var container = L.DomUtil.create('div'),
         startBtn = createButton('Start from this location', container),
         destBtn = createButton('Go to this location', container);
-
     L.popup()
         .setContent(container)
         .setLatLng(e.latlng)
@@ -30,19 +55,35 @@ map.on('click', function (e) {
         control.spliceWaypoints(0, 1, e.latlng);
         map.closePopup();
     });
-
     L.DomEvent.on(destBtn, 'click', function () {
         control.spliceWaypoints(control.getWaypoints().length - 1, 1, e.latlng);
         map.closePopup();
     });
 });
 
+/**************
+ * jQuery functions
+ * ************/
+
 $(document).ready(function () {
     //TODO: dropdown? Lijst? Niks?
     document.getElementsByClassName('leaflet-routing-geocoder')[1].remove();
     document.getElementsByClassName('leaflet-routing-add-waypoint')[0].remove();
-    let el = document.createTextNode('Kies een campus op de kaart (geen campus gekozen)');
-    document.getElementsByClassName('leaflet-routing-geocoders')[0].appendChild(el)
+    let child = document.createElement('div');
+    child.innerHTML = "<p>Kies een campus op de kaart (geen campus gekozen)</p>";
+    child = child.firstChild;
+    document.getElementsByClassName('leaflet-routing-geocoders')[0].appendChild(child);
+    child = document.createElement('div');
+    child.innerHTML = "<form action=\"#\" id=\"form\">\n" +
+        "    <label for=\"from\">\nArrive by\n" +
+        "      <input id=\"from_input\" type=\"datetime-local\" name=\"from\">\n" +
+        "    </label>\n" +
+        "    <input type=\"submit\" value=\"Update\">\n" +
+        "  </form>";
+    child = child.firstChild;
+    document.getElementsByClassName('leaflet-routing-geocoders')[0].appendChild(child);
+    let temp = document.getElementsByClassName('leaflet-routing-geocoders')[0];
+    console.log(temp)
 
     //src: https://github.com/pointhi/leaflet-color-markers
     var universityIcon = new L.Icon({
@@ -122,30 +163,51 @@ $(document).ready(function () {
         });
 });
 
+$.fn.setNow = function (onlyBlank) {
+    /**
+     * get current date and time and format it
+     * source: https://stackoverflow.com/questions/24468518/html5-input-datetime-local-default-value-of-today-and-current-time
+     */
+    let now = new Date($.now()), year, month, date, hours, minutes, formattedDateTime;
+    year = now.getFullYear();
+    month = now.getMonth().toString().length === 1 ? '0' + (now.getMonth() + 1).toString() : now.getMonth() + 1;
+    date = now.getDate().toString().length === 1 ? '0' + (now.getDate()).toString() : now.getDate();
+    hours = now.getHours().toString().length === 1 ? '0' + now.getHours().toString() : now.getHours();
+    minutes = now.getMinutes().toString().length === 1 ? '0' + now.getMinutes().toString() : now.getMinutes();
+    formattedDateTime = year + '-' + month + '-' + date + 'T' + hours + ':' + minutes;
+    if (onlyBlank === true && $(this).val()) {
+        return this;
+    }
+    $(this).val(formattedDateTime);
+    return this;
+}
 
-// add a tile layer to the (empty) map
-L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-}).addTo(map);
-// add OSRM support using Leaflet Routing Machine
-let control = L.Routing.control({
-    serviceUrl: 'http://127.0.0.1:5001/route/v1',
-    routeWhileDragging: true,
-    geocoder: L.Control.Geocoder.nominatim(),
-})
-    // when route is found, send coordinates of start and end to /en/calculateCompatibleRides
-    .on('routesfound', function (e) {
-        let from = e.waypoints[0].latLng;
-        let to = e.waypoints[1].latLng;
-        alert('Found ' + e.waypoints.length + ' route(s).');
-        $.post({
-            contentType: "application/json",
-            url: "/en/calculateCompatibleRides",
-            data: JSON.stringify({from: from, to: to})
-        })
-            // when post request is done, get the returned data and do something with it
-            .done(function (data) { // response function
-                alert("Result: " + data);
-            });
-    }).addTo(map);
+$.fn.serializeObject = function () {
+    /**
+     * make sure that pressing the 'update' button doesn't refresh the entire page
+     */
+    let o = {};
+    let a = this.serializeArray();
+    $.each(a, function () {
+        if (o[this.name] !== undefined) {
+            if (!o[this.name].push) {
+                o[this.name] = [o[this.name]];
+            }
+            o[this.name].push(this.value || '');
+        } else {
+            o[this.name] = this.value || '';
+        }
+    });
+    return o;
+};
 
+$(function () {
+    // make sure pressing the 'update' button doesn't refresh the entire page
+    $('form').submit(function () {
+        $('#result').text(JSON.stringify($('form').serializeObject()));
+        return false;
+    });
+
+    // insert the current date and time in the correct input field
+    $('input[type="datetime-local"]').setNow();
+});

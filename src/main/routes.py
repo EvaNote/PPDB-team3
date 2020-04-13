@@ -56,6 +56,7 @@ def contact():
 def receiver():
     # read json + reply
     data = request.json
+
     result = "start: {}, {} — end: {}, {}".format(data['from']['lat'], data['from']['lng'],
                                                   data['to']['lat'], data['to']['lng'])
     return result
