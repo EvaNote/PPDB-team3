@@ -79,7 +79,11 @@ $(document).ready(function () {
                     icon = collegeIcon
                 }
 
-                (L.marker([markers[i].latitude, markers[i].longitude], {icon: icon, name: hover_display})
+                (L.marker([markers[i].latitude, markers[i].longitude], {
+                    icon: icon,
+                    name: hover_display,
+                    id: markers[i].id
+                })
                     .bindPopup('<a href="' + markers[i].url + '" target="_blank">' + markers[i].name + '</a>')
                     .addTo(map))
                     .on({
