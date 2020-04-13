@@ -27,11 +27,12 @@ class User:
     def is_authenticated(self):
         return True
 
+    @property
     def get_id(self):
         try:
-            return self.email
+            return self.id
         except AttributeError:
-            raise NotImplementedError('No "email" attribute - override "get_id"')
+            raise NotImplementedError('No "id" attribute - override "get_id"')
 
     def __eq__(self, other):
         """

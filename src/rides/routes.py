@@ -45,3 +45,7 @@ def ride_details():
 @rides.route("/ride_history")
 def ride_history():
     return render_template("ride_history.html", title=lazy_gettext("Ride history"))
+
+@rides.route("/maps")
+def maps():
+    return render_template("maps.html", title="maps")
