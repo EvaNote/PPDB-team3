@@ -19,22 +19,7 @@ let control = L.Routing.control({
     serviceUrl: 'http://127.0.0.1:5001/route/v1',
     routeWhileDragging: true,
     geocoder: L.Control.Geocoder.nominatim(),
-})
-    // when route is found, send coordinates of start and end to /en/calculateCompatibleRides
-    .on('routesfound', function (e) {
-        let from = e.waypoints[0].latLng;
-        let to = e.waypoints[1].latLng;
-        alert('Found ' + e.waypoints.length + ' route(s).');
-        $.post({
-            contentType: "application/json",
-            url: "/en/calculateCompatibleRides",
-            data: JSON.stringify({from: from, to: to})
-        })
-            // when post request is done, get the returned data and do something with it
-            .done(function (data) { // response function
-                alert("Result: " + data);
-            });
-    }).addTo(map);
+}).addTo(map);
 
 function createButton(label, container) {
     var btn = L.DomUtil.create('button', '', container);
@@ -76,9 +61,9 @@ $(document).ready(function () {
     child = child.firstChild;
     document.getElementsByClassName('leaflet-routing-geocoders')[0].appendChild(child);
     child = document.createElement('div');
-    child.innerHTML = "<form action=\"#\" id=\"form\">\n" +
-        "    <label for=\"from\">\nArrive by\n" +
-        "      <input id=\"from_input\" type=\"datetime-local\" name=\"from\">\n" +
+    child.innerHTML = "<form action=\"#\" id=\"ride-time\">\n" +
+        "    <label for=\"arrive\">\nArrive by\n" +
+        "      <input id=\"time_input\" type=\"datetime-local\" name=\"arrive\">\n" +
         "    </label>\n" +
         "    <input type=\"submit\" value=\"Update\">\n" +
         "  </form>";
@@ -208,7 +193,18 @@ $.fn.serializeObject = function () {
 $(function () {
     // make sure pressing the 'update' button doesn't refresh the entire page
     $('form').submit(function () {
-        $('#result').text(JSON.stringify($('form').serializeObject()));
+        let from = control.getWaypoints()[0].latLng;
+        let to = control.getWaypoints()[1].latLng;
+        let arrive = $('form').serializeObject().arrive;
+        $.post({
+            contentType: "application/json",
+            url: "/en/calculateCompatibleRides",
+            data: JSON.stringify({from: from, to: to, arrive: arrive})
+        })
+            // when post request is done, get the returned data and do something with it
+            .done(function (data) { // response function
+                alert("Result: " + data);
+            });
         return false;
     });
 

@@ -58,10 +58,10 @@ def contact():
 def receiver():
     # read json + reply
     data = request.json
+    from_coord = data['from']
+    to_coord = data['to']
+    arrive = data.get('arrive')
 
-    result = "start: {}, {} — end: {}, {}".format(data['from']['lat'], data['from']['lng'],
-                                                  data['to']['lat'], data['to']['lng'])
-    return result
 
 
 @main.route('/fillschools', methods=['POST'])

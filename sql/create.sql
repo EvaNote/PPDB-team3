@@ -7,9 +7,11 @@ CREATE TABLE address (
     id SERIAL PRIMARY KEY,
     country VARCHAR(256) NOT NULL,
     city VARCHAR(256) NOT NULL,
-    postal_code INTEGER NOT NULL,
+    postal_code VARCHAR(256) NOT NULL,
     street VARCHAR(256) NOT NULL,
-    nr VARCHAR(256) NOT NULL
+    nr VARCHAR(256) NOT NULL,
+    latitude float8 NOT NULL,
+    longitude float8 NOT NULL
 );
 
 /*
@@ -99,6 +101,28 @@ CREATE TABLE ride (
     address_to int REFERENCES address(id) NOT NULL,
     address_from int REFERENCES address(id) NOT NULL,
     car_id int REFERENCES car(id) NOT NULL
+);
+
+/*
+pickup point table keeps track of all the pickup points used in a ride.
+*/
+DROP TABLE IF EXISTS pickup_point CASCADE;
+CREATE TABLE pickup_point (
+    id SERIAL PRIMARY KEY,
+    latitude float8 NOT NULL,
+    longitude float8 NOT NULL
+);
+
+/*
+pickup point-ride table contains the relation between the ride and pickup point
+tables. a ride can have 0 or more pickup points and a pickup point can belong to
+one or more rides.
+*/
+DROP TABLE IF EXISTS pickup_point_ride CASCADE;
+CREATE TABLE pickup_point_ride (
+    id SERIAL PRIMARY KEY,
+    pickup_point_id int REFERENCES pickup_point(id) NOT NULL,
+    ride_id int REFERENCES ride(id) NOT NULL,
 );
 
 /*

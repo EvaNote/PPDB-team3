@@ -43,8 +43,8 @@ def before_request():
 
 @users.route("/account")
 def account():
-    if not current_user.is_authenticated and not current_app.config[
-        'TESTING']:  # makes sure user won`t be able to go to page without logging in
+    # makes sure user won`t be able to go to page without logging in
+    if not current_user.is_authenticated and not current_app.config['TESTING']:
         return redirect(url_for('users.login'))
 
     form = Reviews()
