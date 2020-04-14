@@ -2,6 +2,7 @@ from flask import g, current_app
 from flask_babel import Babel
 from flask_bcrypt import Bcrypt
 from flask_login import LoginManager
+from geopy.geocoders import Nominatim
 from src.DBConnect import DBConnection
 from src.dbmodels.User import UserAccess
 from src.dbmodels.Review import Reviews
@@ -24,6 +25,7 @@ picture_access = Pictures(connection)
 babel = Babel()
 bcrypt = Bcrypt()
 login_manager = LoginManager()
+geolocator = Nominatim(user_agent="dbcarpool")
 
 
 # source: https://flask-user.readthedocs.io/en/v0.6/internationalization.html

@@ -9,8 +9,10 @@ from src.dbmodels.Car import Car
 from src.dbmodels.Address import Address
 from src.dbmodels.Picture import Picture
 from src.reviews.forms import Reviews
-from src.users.forms import LoginForm, RegistrationForm, VehicleForm, EditAccountForm, EditAddressForm, SelectSubject, DeleteUserForm
-from src.utils import user_access, bcrypt, review_access, car_access, address_access, current_app, picture_access
+from src.users.forms import LoginForm, RegistrationForm, VehicleForm, EditAccountForm, EditAddressForm, SelectSubject, \
+    DeleteUserForm
+from src.utils import user_access, bcrypt, review_access, car_access, address_access, current_app, picture_access, \
+    geolocator
 from flask_babel import lazy_gettext
 
 users = Blueprint('users', __name__, url_prefix='/<lang_code>')
@@ -69,23 +71,25 @@ def account():
     else:
         pfp_path += "temp_profile_pic.png"
     return render_template('account.html', title=lazy_gettext('Account'), form=form, loggedIn=True, data=data,
-                           current_user=user, cars=cars, address=address, carPicpaths=car_picpaths, pfp_path=pfp_path, car_picpaths=car_picpaths)
+                           current_user=user, cars=cars, address=address, carPicpaths=car_picpaths, pfp_path=pfp_path,
+                           car_picpaths=car_picpaths)
 
 
-#van https://www.youtube.com/watch?v=803Ei2Sq-Zs
+# van https://www.youtube.com/watch?v=803Ei2Sq-Zs
 def save_picture(form_picture):
     random_hex = secrets.token_hex(8)
-    #van https://stackoverflow.com/questions/2860153/how-do-i-get-the-parent-directory-in-python
+    # van https://stackoverflow.com/questions/2860153/how-do-i-get-the-parent-directory-in-python
     _, f_ext = os.path.splitext(form_picture.filename)
     picture_fn = random_hex + f_ext
     path = Path(users.root_path)
     path = path.parent
     picture_path = os.path.join(path, 'static/images', picture_fn)
-    output_size = (127,127)
+    output_size = (127, 127)
     i = Image.open(form_picture)
     i.thumbnail(output_size)
     i.save(picture_path)
     return picture_fn
+
 
 @users.route("/edit", methods=['GET', 'POST'])
 def account_edit():
@@ -119,7 +123,8 @@ def account_edit():
                 picture_obj = Picture(None, filename=picture_file)
                 picture_access.add_picture(picture_obj)
                 picture_id = picture_access.get_picture_on_filename(picture_file).id
-            user_access.edit_user(current_user.id, first_name, last_name, email, gender, age, phone_number, user.address, picture_id)
+            user_access.edit_user(current_user.id, first_name, last_name, email, gender, age, phone_number,
+                                  user.address, picture_id)
             flash(lazy_gettext(f'Account edited!'), 'success')
             return redirect(url_for('users.account'))
         elif form.delete.data:
@@ -178,21 +183,22 @@ def address_edit():
 
         address_id = None
         user = user_access.get_user_on_id(current_user.id)
+        loc = geolocator.geocode(street + " " + nr + " " + postal_code + " " + city)
         if user.address is None:
-            address_obj = Address(None, country, city, postal_code, street, nr)
+            address_obj = Address(None, country, city, postal_code, street, nr, loc.latitude, loc.longitude)
             address_access.add_address(address_obj)
             address_id = address_access.get_id(country, city, postal_code, street, nr)
         else:
             address = address_access.get_on_id(user.address)
-            address_access.edit_address(address.id,street,nr,city,postal_code,country)
+            address_access.edit_address(address.id, street, nr, city, postal_code, country, loc.latitude, loc.longitude)
             address_id = address.id
 
         user = user_access.get_user_on_id(current_user.id)
-        user_access.edit_user(user.id,user.first_name,user.last_name,user.email,user.gender,user.age,user.phone_number,address_id,user.picture)
+        user_access.edit_user(user.id, user.first_name, user.last_name, user.email, user.gender, user.age,
+                              user.phone_number, address_id, user.picture)
         flash(lazy_gettext(f'Address edited!'), 'success')
         return redirect(url_for('users.account'))
     return render_template('address_edit.html', title=lazy_gettext('Edit address'), loggedIn=True, form=form)
-
 
 
 @users.route("/myrides")
@@ -223,7 +229,8 @@ def user(userid):
             pass
         elif form2.subject.data == 'Lost item':
             subject += lazy_gettext(": Lost item")
-            message += lazy_gettext("While carpooling with you recently, I forgot my [ITEM] in your car. Can you let me know if you found it and when you can return it?")
+            message += lazy_gettext(
+                "While carpooling with you recently, I forgot my [ITEM] in your car. Can you let me know if you found it and when you can return it?")
         message += lazy_gettext('\nKind regards\n') + user.first_name + ' ' + user.last_name
         return redirect('mailto:' + target_user.email + '?SUBJECT=' + subject + '&BODY=' + message)
     cars = car_access.get_on_user_id(userid)
@@ -236,7 +243,8 @@ def user(userid):
             car_picpaths.append("images/temp_car_pic.jpg")
         else:
             car_picpaths.append("images/" + picture_access.get_picture_on_id(car.picture).filename)
-    return render_template('user.html', title=lazy_gettext('User profile'), form=form, loggedIn=False, target_user=target_user,
+    return render_template('user.html', title=lazy_gettext('User profile'), form=form, loggedIn=False,
+                           target_user=target_user,
                            data=data, cars=cars, form2=form2, pfp_path=pfp_path, car_picpaths=car_picpaths)
 
 
@@ -306,11 +314,13 @@ def add_vehicle():
         constructionYear = form.constructionYear.data
         consumption = form.consumption.data
         fuelType = form.fuelType.data
-        car_obj = Car(None, plateNumber, color, brand, model, seats, constructionYear, consumption, fuelType, current_user.id, None)
+        car_obj = Car(None, plateNumber, color, brand, model, seats, constructionYear, consumption, fuelType,
+                      current_user.id, None)
         car_access.add_car(car_obj)
         flash(lazy_gettext(f'Vehicle registered!'), 'success')
         return redirect(url_for('users.account'))
     return render_template("add_vehicle.html", title=lazy_gettext("Add Vehicle"), form=form)
+
 
 @users.route("/edit_vehicle=<car_id>", methods=['GET', 'POST'])
 def edit_vehicle(car_id):
@@ -347,10 +357,12 @@ def edit_vehicle(car_id):
             picture_access.add_picture(picture_obj)
             picture_id = picture_access.get_picture_on_filename(picture_file).id
 
-        car_access.edit_car(car_id, brand, model, color, plateNumber, seats, constructionYear, consumption, fuelType, picture_id)
+        car_access.edit_car(car_id, brand, model, color, plateNumber, seats, constructionYear, consumption, fuelType,
+                            picture_id)
         flash(lazy_gettext(f'Car edited!'), 'success')
         return redirect(url_for('users.account'))
     return render_template('car_edit.html', title=lazy_gettext('Edit car'), loggedIn=True, form=form, car_id=car_id)
+
 
 @users.route("/delete_vehicle=<car_id>", methods=['GET', 'POST'])
 def delete_vehicle(car_id):
