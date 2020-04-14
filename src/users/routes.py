@@ -1,5 +1,4 @@
 from flask import Blueprint, render_template, flash, redirect, url_for, g, current_app, abort, request
-import flask_login
 from pathlib import Path
 import secrets
 import os
