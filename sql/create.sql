@@ -122,7 +122,7 @@ DROP TABLE IF EXISTS pickup_point_ride CASCADE;
 CREATE TABLE pickup_point_ride (
     id SERIAL PRIMARY KEY,
     pickup_point_id int REFERENCES pickup_point(id) NOT NULL,
-    ride_id int REFERENCES ride(id) NOT NULL,
+    ride_id int REFERENCES ride(id) NOT NULL
 );
 
 /*
