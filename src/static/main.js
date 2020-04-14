@@ -60,13 +60,17 @@ $(document).ready(function () {
     child.innerHTML = "<p>Kies een campus op de kaart (geen campus gekozen)</p>";
     child = child.firstChild;
     document.getElementsByClassName('leaflet-routing-geocoders')[0].appendChild(child);
+    // add time form
     child = document.createElement('div');
     child.innerHTML = "<form action=\"#\" id=\"ride-time\">\n" +
-        "    <label for=\"arrive\">\nArrive by\n" +
-        "      <input id=\"time_input\" type=\"datetime-local\" name=\"arrive\">\n" +
+        "    <label for=\"arrive\">\n<select>\n" +
+        "        <option>Arrive by</option>\n" +
+        "        <option>Depart at</option>\n" +
+        "    </select>\n" +
+        "        <input id=\"time_input\" type=\"datetime-local\" name=\"arrive\">\n" +
         "    </label>\n" +
         "    <input type=\"submit\" value=\"Update\">\n" +
-        "  </form>";
+        "</form>";
     child = child.firstChild;
     document.getElementsByClassName('leaflet-routing-geocoders')[0].appendChild(child);
 
@@ -196,15 +200,18 @@ $(function () {
         let from = control.getWaypoints()[0].latLng;
         let to = control.getWaypoints()[1].latLng;
         let arrive = $('form').serializeObject().arrive;
-        $.post({
-            contentType: "application/json",
-            url: "/en/calculateCompatibleRides",
-            data: JSON.stringify({from: from, to: to, arrive: arrive})
-        })
-            // when post request is done, get the returned data and do something with it
-            .done(function (data) { // response function
-                alert("Result: " + data);
-            });
+        // check if from-to are defined. If they aren't, nothing should happen
+        if (typeof from !== 'undefined' && typeof to !== 'undefined') {
+            $.post({
+                contentType: "application/json",
+                url: "/en/calculateCompatibleRides",
+                data: JSON.stringify({from: from, to: to, arrive: arrive})
+            })
+                // when post request is done, get the returned data and do something with it
+                .done(function (data) { // response function
+                    alert("Result: " + data);
+                });
+        }
         return false;
     });
 

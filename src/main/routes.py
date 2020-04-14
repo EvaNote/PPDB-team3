@@ -61,7 +61,7 @@ def receiver():
     from_coord = data['from']
     to_coord = data['to']
     arrive = data.get('arrive')
-
+    return "Joepie!"
 
 
 @main.route('/fillschools', methods=['POST'])
