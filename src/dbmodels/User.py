@@ -27,7 +27,7 @@ class User:
     def is_authenticated(self):
         return True
 
-    @property
+    # @property BUG FIX
     def get_id(self):
         try:
             return self.id
@@ -74,7 +74,7 @@ class UserAccess:
         cursor.execute('SELECT first_name, last_name, email, password, id FROM "user"')
         users = list()
         for row in cursor:
-            user_obj = User(row[0], row[1], row[2], row[3], row[4])
+            user_obj = User(row[0], row[1], row[2], row[3])
             user_obj.id = row[4]
             users.append(user_obj)
         return users

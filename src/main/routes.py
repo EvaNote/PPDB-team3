@@ -1,6 +1,6 @@
 from flask import Blueprint, render_template, g, current_app, abort, request
 from src.dbmodels.Campus import Campus
-from src.utils import campus_access
+from src.utils import campus_access, user_access
 from flask_login import current_user
 from flask_babel import lazy_gettext
 from geopy.geocoders import Nominatim
@@ -35,7 +35,7 @@ def before_request():
 @main.route("/")
 @main.route("/home")
 def home():
-    users = None  # user_access.get_users()
+    users = user_access.get_users()
     return render_template('home.html', users=users, loggedIn=False)
 
 
