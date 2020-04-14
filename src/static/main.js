@@ -63,11 +63,11 @@ $(document).ready(function () {
     // add time form
     child = document.createElement('div');
     child.innerHTML = "<form action=\"#\" id=\"ride-time\">\n" +
-        "    <label for=\"arrive\">\n<select>\n" +
+        "    <label for=\"time_option\">\n<select name=\"time_option\">\n" +
         "        <option>Arrive by</option>\n" +
         "        <option>Depart at</option>\n" +
         "    </select>\n" +
-        "        <input id=\"time_input\" type=\"datetime-local\" name=\"arrive\">\n" +
+        "        <input id=\"time_input\" type=\"datetime-local\" name=\"datetime\">\n" +
         "    </label>\n" +
         "    <input type=\"submit\" value=\"Update\">\n" +
         "</form>";
@@ -199,13 +199,13 @@ $(function () {
     $('form').submit(function () {
         let from = control.getWaypoints()[0].latLng;
         let to = control.getWaypoints()[1].latLng;
-        let arrive = $('form').serializeObject().arrive;
+        let form = $('form').serializeObject();
         // check if from-to are defined. If they aren't, nothing should happen
         if (typeof from !== 'undefined' && typeof to !== 'undefined') {
             $.post({
                 contentType: "application/json",
                 url: "/en/calculateCompatibleRides",
-                data: JSON.stringify({from: from, to: to, arrive: arrive})
+                data: JSON.stringify({from: from, to: to, time_option: form.time_option, datetime: form.datetime})
             })
                 // when post request is done, get the returned data and do something with it
                 .done(function (data) { // response function
