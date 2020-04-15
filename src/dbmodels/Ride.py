@@ -97,5 +97,6 @@ class Rides:
         except:
             raise Exception('Unable to add ride')
 
-    def match_rides_with_passenger(self, p_from, p_to, p_departure, p_arrive):
-        pass
+    def match_rides_with_passenger(self, p_from, p_to, p_, p_arrive):
+        cursor = self.dbconnect.get_cursor()
+        cursor.execute("SELECT * FROM ride")
