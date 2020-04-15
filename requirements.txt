@@ -12,3 +12,4 @@ pytest
 Flask-Babel==1.0
 Flask-Login==0.4.1
 Flask-Bcrypt==0.7.1
+WTForms-Components==0.10.4

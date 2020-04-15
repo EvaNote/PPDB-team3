@@ -1,16 +1,11 @@
 // make a map that will be placed on the 'Find my ride' page
 let map = L.map('findride_map').setView([51, 4.4], 10);
 
-// make a map that will be placed on the 'Create a ride' page
-let map2 = L.map('createride_map').setView([80, 20], 6);
-
 // add a tile layer to the (empty) map
 let layer = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
     attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-});
+}).addTo(map);
 
-layer.addTo(map);
-layer.addTo(map2);
 
 function createButton(label, container) {
     var btn = L.DomUtil.create('button', '', container);
@@ -38,26 +33,6 @@ map.on('click', function(e){
         });
     });
 
-map2.on('click', function(e){
-        var container = L.DomUtil.create('div'),
-        startBtn = createButton('Start from this location', container),
-        destBtn = createButton('Go to this location', container);
-
-        L.popup()
-            .setContent(container)
-            .setLatLng(e.latlng)
-            .openOn(map2);
-        L.DomEvent.on(startBtn, 'click', function() {
-            control.spliceWaypoints(0, 1, e.latlng);
-            map2.closePopup();
-        });
-
-        L.DomEvent.on(destBtn, 'click', function() {
-            control.spliceWaypoints(control.getWaypoints().length - 1, 1, e.latlng);
-            map2.closePopup();
-        });
-    });
-
 // add OSRM support using Leaflet Routing Machine
 let control = L.Routing.control({
     serviceUrl: 'http://127.0.0.1:5001/route/v1',
@@ -80,4 +55,3 @@ let control = L.Routing.control({
     });
 
 control.addTo(map);
-control.addTo(map2);
