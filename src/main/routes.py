@@ -62,7 +62,9 @@ def receiver():
     to_coord = data['to']
     time_option = data.get('time_option')
     datetime = data.get('datetime')
-    return "Joepie!"
+    result = "start: {}, {} — end: {}, {}".format(data['from']['lat'], data['from']['lng'],
+                                                  data['to']['lat'], data['to']['lng'])
+    return result
 
 
 @main.route('/fillschools', methods=['POST'])
