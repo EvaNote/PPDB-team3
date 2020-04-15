@@ -1,4 +1,36 @@
 /*
+Function for calculating distance difference (in metres) between two coordinates
+ */
+DROP FUNCTION IF EXISTS distance_difference;
+CREATE FUNCTION distance_difference(lat1 float8, lng1 float8, lat2 float8, lng2 float8) RETURNS float8 AS
+$$
+BEGIN
+    RETURN 6371000 * (2 * atan2(sqrt(sin(radians(lat2 - lat1) / 2) * sin(radians(lat2 - lat1) / 2) +
+                                     cos(radians(lat1)) * cos(radians(lat2)) * sin(radians(lng2 - lng1) / 2) *
+                                     sin(radians(lng2 - lng1) / 2)), sqrt(1 -
+                                                                          (sin(radians(lat2 - lat1) / 2) * sin(radians(lat2 - lat1) / 2) +
+                                                                           cos(radians(lat1)) * cos(radians(lat2)) *
+                                                                           sin(radians(lng2 - lng1) / 2) *
+                                                                           sin(radians(lng2 - lng1) / 2)))));
+END;
+$$
+    LANGUAGE PLPGSQL;
+
+
+/*
+Function for calculating time difference (in seconds) between two timestamps
+ */
+DROP FUNCTION IF EXISTS time_difference;
+CREATE FUNCTION time_difference(time1 timestamp, time2 timestamp) RETURNS integer AS
+$$
+BEGIN
+    RETURN EXTRACT(EPOCH FROM time1-time2);
+END;
+$$
+    LANGUAGE PLPGSQL;
+
+
+/*
 address table, doesn't need a "user" in case the address is
 a destination. all fields are required
 */
@@ -141,3 +173,23 @@ CREATE TABLE review (
     review_text VARCHAR(1000),
     creation date default now()
 );
+
+insert into address                                                     /*LAT LONG*/
+values (1, 'Belgium', 'Antwerp', '2600', 'KwebbelStraat', '69', 51.207361873867185, 4.403413551019897 ); /*startpunt*/
+insert into address
+values (2, 'Belgium', 'Antwerp', '2600', 'KlusStraat', '0', 51.18482, 4.41985);  /*eindpunt*/
+
+insert into "user"
+values (1, 'John', 'Castle', 'admin@blog.com', 'password', '1999-04-04 01:12:11', 5, 'M', NULL, NULL, 1);
+
+insert into car
+values (1, '9999', 'Red', 'Toyota', 'asdf', 4, 1996, '4', 'ethanol', 1, NULL);
+
+insert into ride
+values (1, '2020-04-14 00:00', '2020-04-15 02:00', 1, 1, 2, 1);
+
+insert into pickup_point
+values(1, 51.20456381034281, 4.412945542109577);
+
+insert into pickup_point_ride
+values(1, 1);

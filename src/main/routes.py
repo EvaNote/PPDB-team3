@@ -1,8 +1,8 @@
-from flask import Blueprint, render_template, g, current_app, abort, request
-from src.dbmodels.Campus import Campus
-from src.utils import campus_access, user_access
-from flask_login import current_user
+from flask import Blueprint, render_template, g, current_app, abort, request, jsonify
+from src.utils import campus_access, user_access, ride_access
 from flask_babel import lazy_gettext
+from src.dbmodels.Campus import Campus
+from flask_login import current_user
 from geopy.geocoders import Nominatim
 
 main = Blueprint('main', __name__, url_prefix='/<lang_code>')
@@ -58,11 +58,15 @@ def contact():
 def receiver():
     # read json + reply
     data = request.json
-    from_coord = data['from']
-    to_coord = data['to']
+    from_coord = data.get('from')
+    to_coord = data.get('to')
     time_option = data.get('time_option')
-    datetime = data.get('datetime')
-    return "Joepie!"
+    datetime = data.get('datetime').replace('T', ' ') + ':00'
+    rides = ride_access.match_rides_with_passenger(from_coord, to_coord, time_option, datetime)
+    results = []
+    for ride in rides:
+        results.append(ride.to_dict())
+    return jsonify({"results": results})
 
 
 @main.route('/fillschools', methods=['POST'])
