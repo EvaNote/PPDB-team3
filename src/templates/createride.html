@@ -3,6 +3,8 @@
     {{ title }}
 {% endblock contentTitle %}
 {% block contentContent %}
+<div id="createride_map"></div>
+
             <form method="POST" action="">
                {{ form.hidden_tag() }}
              <!-- display the form -->
@@ -65,5 +67,4 @@
              </div>
              <hr class="bg-info my-4 w-100">
          </form>
-    <div id="createride_map"></div>
 {% endblock contentContent %}
