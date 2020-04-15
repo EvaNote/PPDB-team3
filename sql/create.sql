@@ -45,6 +45,12 @@ CREATE TABLE address (
     latitude float8 NOT NULL,
     longitude float8 NOT NULL
 );
+/* userAddress */
+insert into address
+values (1, 'Belgium', 'Antwerp', '2600', 'KwebbelStraat', '69', 51.21888227486132, 4.400383145226075 );
+insert into address
+values (2, 'Belgium', 'Antwerp', '2600', 'KlusStraat', '0', 51.211402761488316, 4.400297295677885);
+
 
 /*
 type for gender, 2 options
@@ -85,6 +91,8 @@ CREATE TABLE "user" (
     address int REFERENCES address(id)
 );
 
+insert into "user"
+values (1, 'John', 'Castle', 'admin@blog.com', 'password', '1999-04-04 01:12:11', 5, 'M', NULL, NULL, 1);
 /*
 type for fuel, 5 options (for now?)
 */
@@ -118,6 +126,8 @@ CREATE TABLE car (
     user_id int REFERENCES "user"(id) NOT NULL,
     picture int REFERENCES picture(id)
 );
+insert into car
+values (1, '9999', 'Red', 'Toyota', 'asdf', 4, 1996, '4', 'ethanol', 1, NULL);
 
 /*
 ride table, belongs to a "user"
@@ -128,12 +138,14 @@ DROP TABLE IF EXISTS ride CASCADE;
 CREATE TABLE ride (
     id SERIAL PRIMARY KEY,
     departure_time timestamp NOT NULL,
-    arrival_time timestamp,
+    arrival_time timestamp NOT NULL,
     user_id int REFERENCES "user"(id) NOT NULL,
-    address_to int REFERENCES address(id) NOT NULL,
     address_from int REFERENCES address(id) NOT NULL,
+    address_to int REFERENCES address(id) NOT NULL,
     car_id int REFERENCES car(id) NOT NULL
 );
+insert into ride
+values (1, '2020-04-14 00:00', '2020-04-15 02:00', 1, 1, 1, 1);
 
 /*
 pickup point table keeps track of all the pickup points used in a ride.

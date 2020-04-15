@@ -5,7 +5,6 @@
         }
  */
 
-
 // make a map that will be placed on the 'Find my ride' page
 let map = L.map('findride_map').setView([51, 4.4], 10);
 
