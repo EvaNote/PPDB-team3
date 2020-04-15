@@ -60,8 +60,9 @@ def receiver():
     data = request.json
     from_coord = data['from']
     to_coord = data['to']
-    arrive = data.get('arrive')
-
+    time_option = data.get('time_option')
+    datetime = data.get('datetime')
+    return "Joepie!"
 
 
 @main.route('/fillschools', methods=['POST'])

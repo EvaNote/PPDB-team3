@@ -96,3 +96,6 @@ class Rides:
             self.dbconnect.commit()
         except:
             raise Exception('Unable to add ride')
+
+    def match_rides_with_passenger(self, p_from, p_to, p_departure, p_arrive):
+        pass
