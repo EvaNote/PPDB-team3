@@ -208,9 +208,8 @@ $(function () {
             })
                 // when post request is done, get the returned data and do something with it
                 .done(function (data) { // response function
-                    alert("Result: " + data);
-                    console.log(data);
-                    $('#result').text(data.results);
+                    alert("Result: " + JSON.stringify(data));
+                    $('#result').append(JSON.stringify(data));
                 });
         }
         return false;
