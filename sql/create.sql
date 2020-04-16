@@ -142,7 +142,10 @@ CREATE TABLE ride (
     user_id int REFERENCES "user"(id) NOT NULL,
     address_from int REFERENCES address(id) NOT NULL,
     address_to int REFERENCES address(id) NOT NULL,
-    car_id int REFERENCES car(id) NOT NULL
+    car_id int REFERENCES car(id) NOT NULL,
+    pickup_point_1 int REFERENCES pickup_point(id),
+    pickup_point_2 int REFERENCES pickup_point(id),
+    pickup_point_3 int REFERENCES pickup_point(id)
 );
 insert into ride
 values (1, '2020-04-14 00:00', '2020-04-15 02:00', 1, 1, 1, 1);
@@ -155,18 +158,6 @@ CREATE TABLE pickup_point (
     id SERIAL PRIMARY KEY,
     latitude float8 NOT NULL,
     longitude float8 NOT NULL
-);
-
-/*
-pickup point-ride table contains the relation between the ride and pickup point
-tables. a ride can have 0 or more pickup points and a pickup point can belong to
-one or more rides.
-*/
-DROP TABLE IF EXISTS pickup_point_ride CASCADE;
-CREATE TABLE pickup_point_ride (
-    ride_id int REFERENCES ride(id),
-    pickup_point_id int REFERENCES pickup_point(id),
-    PRIMARY KEY (ride_id, pickup_point_id)
 );
 
 /*
