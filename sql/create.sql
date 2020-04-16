@@ -210,7 +210,7 @@ values (default , '9999', 'Red', 'Toyota', 'asdf', 4, 1996, '4', 'ethanol', 2, N
 
 --
 -- insert into pickup_point
-values(1, 51.20456381034281, 4.412945542109577, '2020-04-14 00:10');
+values(1, 51.20456381034281, 4.412945542109577, '2020-04-14 00:11');
 -- p_from, p_to, p_time_option, p_datetime
 
 
@@ -226,7 +226,7 @@ SELECT r.id, r.departure_time, r.arrival_time, r.user_id, r.address_to, r.addres
                   r.address_from = dep.id AND
                   -- r.id = pr.ride_id AND
                   distance_difference(dest.latitude, dest.longitude, 51.207361873867185, 4.403413551019897) <= 3000 AND -- 1)
-                  (time_difference(cast('2020-04-15 02:00' as timestamp ), r.arrival_time) BETWEEN 0 AND 6000) AND -- 2)
+                  (time_difference('2020-04-15 02:11', r.arrival_time) BETWEEN 0 AND 600) AND -- 2)
                   (
                               distance_difference(dep.latitude, dep.longitude, 51.207361873867185, 4.403413551019897) <= 3000 OR -- 3)
                               (pickup_point_distance_difference(r.pickup_point_1, 51.207361873867185, 4.403413551019897) AND
@@ -244,4 +244,6 @@ SELECT r.id, r.departure_time, r.arrival_time, r.user_id, r.address_to, r.addres
 --                                           ENDIF
 --                                       END LOOP
 --                                   )
-                      )
+                      );
+
+select time_difference('2020-04-15 02:00', '2020-04-15 02:20');
