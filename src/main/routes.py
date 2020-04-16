@@ -62,10 +62,10 @@ def receiver():
     to_coord = data.get('to')
     time_option = data.get('time_option')
     datetime = data.get('datetime').replace('T', ' ') + ':00'
-    rides = ride_access.match_rides_with_passenger(from_coord, to_coord, time_option, datetime)
+    #rides = ride_access.match_rides_with_passenger(from_coord, to_coord, time_option, datetime)
     results = []
-    for ride in rides:
-        results.append(ride.to_dict())
+    #for ride in rides:
+    #    results.append(ride.to_dict())
     return jsonify({"results": results})
 
 

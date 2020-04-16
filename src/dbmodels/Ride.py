@@ -133,8 +133,8 @@ class Rides:
                                               SELECT *
                                               FROM p2
                                               WHERE distance_difference(p2.latitude, p2.longitude, %s, %s) <= 3000 -- 4)
-                                          ENDIF
-                                      END LOOP
+                                          ENDIF;
+                                      END LOOP;
                                   )
                       )""", (
             p_from['lat'], p_from['lng'], p_datetime, p_to['lat'], p_to['lng'], p_from['lat'], p_from['lng']))

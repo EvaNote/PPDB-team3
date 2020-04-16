@@ -18,7 +18,9 @@ let control = L.Routing.control({
     serviceUrl: 'http://127.0.0.1:5001/route/v1',
     routeWhileDragging: true,
     geocoder: L.Control.Geocoder.nominatim(),
-}).addTo(map);
+}).on('routesfound', function (e) {
+        console.log(e);
+    }).addTo(map);
 
 function createButton(label, container) {
     var btn = L.DomUtil.create('button', '', container);
@@ -26,7 +28,6 @@ function createButton(label, container) {
     btn.innerHTML = label;
     return btn;
 }
-
 map.on('click', function (e) {
     var container = L.DomUtil.create('div'),
         startBtn = createButton('Start from this location', container),
@@ -53,14 +54,14 @@ map.on('click', function (e) {
 
 $(document).ready(function () {
     //TODO: dropdown? Lijst? Niks?
-    document.getElementsByClassName('leaflet-routing-geocoder')[1].remove();
-    document.getElementsByClassName('leaflet-routing-add-waypoint')[0].remove();
-    let child = document.createElement('div');
-    child.innerHTML = "<p>Kies een campus op de kaart (geen campus gekozen)</p>";
-    child = child.firstChild;
-    document.getElementsByClassName('leaflet-routing-geocoders')[0].appendChild(child);
+    //document.getElementsByClassName('leaflet-routing-geocoder')[1].remove();
+    //document.getElementsByClassName('leaflet-routing-add-waypoint')[0].remove();
+    //let child = document.createElement('div');
+    //child.innerHTML = "<p>Kies een campus op de kaart (geen campus gekozen)</p>";
+    //child = child.firstChild;
+    //document.getElementsByClassName('leaflet-routing-geocoders')[0].appendChild(child);
     // add time form
-    child = document.createElement('div');
+    let child = document.createElement('div');
     child.innerHTML = "<form action=\"#\" id=\"ride-time\">\n" +
         "    <label for=\"time_option\">\n<select name=\"time_option\">\n" +
         "        <option>Arrive by</option>\n" +
@@ -135,7 +136,7 @@ $(document).ready(function () {
                             var container = L.DomUtil.create('div');
                             container.appendChild(document.createTextNode(this.options['name']));
                             L.popup({
-                                offset: [0, -30]
+                                offset: [0, -20]
                             })
                                 .setContent(container)
                                 .setLatLng(e.latlng)
@@ -147,11 +148,14 @@ $(document).ready(function () {
                             }, 2500)
                         },
                         'click': function (e) {
-                            var container = L.DomUtil.create('div'),
+                            let container = L.DomUtil.create('div'),
                                 startBtn = createButton('Start from this location', container),
                                 destBtn = createButton('Go to this location', container);
+                            container.appendChild(document.createElement("br"));
+                            container.appendChild(document.createTextNode(this.options['name']));
 
-                            L.popup()
+
+                            L.popup({offset: [0, -20]})
                                 .setContent(container)
                                 .setLatLng(e.latlng)
                                 .openOn(map);
@@ -219,6 +223,8 @@ $(function () {
     // make sure pressing the 'update' button doesn't refresh the entire page
     $('form').submit(function () {
         let from = control.getWaypoints()[0].latLng;
+        console.log(control._line._route.instructions);
+
         let to = control.getWaypoints()[1].latLng;
         let form = $('form').serializeObject();
         // check if from-to are defined. If they aren't, nothing should happen
@@ -232,6 +238,16 @@ $(function () {
                 .done(function (data) { // response function
                     alert("Result: " + JSON.stringify(data));
                     $('#result').append(JSON.stringify(data));
+                    let bttn = document.createElement("button");
+                    bttn.setAttribute("id", "asd")
+                    bttn.innerHTML = "hi there";
+                    $('#result').append(bttn);
+                    let bttn2 = document.createElement("button");
+                    bttn2.setAttribute("class","btn btn-outline-info");
+
+                    bttn2.innerHTML = "Arno6969696969";
+                    $('#result').append(bttn2);
+
                 });
         }
         return false;
@@ -240,3 +256,37 @@ $(function () {
     // insert the current date and time in the correct input field
     $('input[type="datetime-local"]').setNow();
 });
+
+
+var rbutton = document.createElement("button");
+rbutton.innerHTML = "Do Something";
+
+// 2. Append somewhere
+var rbody = document.getElementsByTagName("rbody")[0];
+rbody.appendChild(rbutton);
+
+// 3. Add event handler
+rbutton.addEventListener ("click", function() {
+  alert("did something");
+});
+/*
+
+function Geeks() {
+                var myDiv = document.getElementById("GFG");
+
+                // creating button element
+                var button = document.createElement('BUTTON');
+
+                // creating text to be
+                //displayed on button
+                var text = document.createTextNode("Button");
+
+                // appending text to button
+                button.appendChild(text);
+
+                // appending button to div
+                myDiv.appendChild(button);
+            }
+function showcompatibleRide(){
+
+};*/

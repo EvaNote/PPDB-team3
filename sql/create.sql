@@ -16,6 +16,7 @@ END;
 $$
     LANGUAGE PLPGSQL;
 
+
 /*
 Function for calculating time difference (in seconds) between two timestamps
  */
