@@ -24,7 +24,12 @@ DROP FUNCTION IF EXISTS time_difference;
 CREATE FUNCTION time_difference(time1 timestamp, time2 timestamp) RETURNS integer AS
 $$
 BEGIN
-    RETURN EXTRACT(EPOCH FROM time1-time2);
+    IF time2
+    THEN
+        RETURN EXTRACT(EPOCH FROM time1-time2);
+    ELSE
+        RETURN -1
+    END IF;
 END;
 $$
     LANGUAGE PLPGSQL;
@@ -157,7 +162,8 @@ DROP TABLE IF EXISTS pickup_point CASCADE;
 CREATE TABLE pickup_point (
     id SERIAL PRIMARY KEY,
     latitude float8 NOT NULL,
-    longitude float8 NOT NULL
+    longitude float8 NOT NULL,
+    estimated_time timestamp NOT NULL
 );
 
 /*
