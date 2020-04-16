@@ -128,9 +128,13 @@ class Rides:
                   (
                               distance_difference(dep.latitude, dep.longitude, %s, %s) <= 3000 OR -- 3)
                               EXISTS(
-                                      SELECT *
-                                      FROM pickup_point as p2
-                                      WHERE distance_difference(p2.latitude, p2.longitude, %s, %s) <= 3000 -- 4)
+                                      FOR p2 IN (SELECT r.pickup_point_1 r.pickup_point_2 r.pickup_point_3  FROM r) LOOP
+                                          IF p2 is not null
+                                              SELECT *
+                                              FROM p2
+                                              WHERE distance_difference(p2.latitude, p2.longitude, %s, %s) <= 3000 -- 4)
+                                          ENDIF
+                                      END LOOP
                                   )
                       )""", (
             p_from['lat'], p_from['lng'], p_datetime, p_to['lat'], p_to['lng'], p_from['lat'], p_from['lng']))
@@ -160,3 +164,4 @@ class Rides:
             ride = Ride(row[0], row[1], row[2], row[3], row[4], row[5], row[6])
             rides.append(ride)
         return rides
+

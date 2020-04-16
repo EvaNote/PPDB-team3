@@ -16,7 +16,6 @@ END;
 $$
     LANGUAGE PLPGSQL;
 
-
 /*
 Function for calculating time difference (in seconds) between two timestamps
  */
@@ -24,11 +23,26 @@ DROP FUNCTION IF EXISTS time_difference;
 CREATE FUNCTION time_difference(time1 timestamp, time2 timestamp) RETURNS integer AS
 $$
 BEGIN
-    IF time2
-    THEN
+     IF time2 is not null
+     THEN
         RETURN EXTRACT(EPOCH FROM time1-time2);
+     ELSE
+        RETURN -1;
+     END IF;
+END;
+$$
+    LANGUAGE PLPGSQL;
+
+DROP FUNCTION IF EXISTS pickup_point_distance_difference;
+CREATE FUNCTION pickup_point_distance_difference(pickup_id integer, lat float8, lng float8) RETURNS boolean AS
+$$
+BEGIN
+    IF pickup_id is not null
+    THEN
+        select p.latitude as pLat, p.longitude as pLong from pickup_point p where id = pickup_id;
+        return distance_difference(pLat, pLong, lat, long) <= 3000;
     ELSE
-        RETURN -1
+        return false;
     END IF;
 END;
 $$
@@ -52,9 +66,9 @@ CREATE TABLE address (
 );
 /* userAddress */
 insert into address
-values (1, 'Belgium', 'Antwerp', '2600', 'KwebbelStraat', '69', 51.21888227486132, 4.400383145226075 );
+values (default , 'Belgium', 'Antwerp', '2600', 'KwebbelStraat', '69', 51.21888227486132, 4.400383145226075 );
 insert into address
-values (2, 'Belgium', 'Antwerp', '2600', 'KlusStraat', '0', 51.211402761488316, 4.400297295677885);
+values (default , 'Belgium', 'Antwerp', '2600', 'KlusStraat', '0', 51.211402761488316, 4.400297295677885);
 
 
 /*
@@ -97,7 +111,7 @@ CREATE TABLE "user" (
 );
 
 insert into "user"
-values (1, 'John', 'Castle', 'admin@blog.com', 'password', '1999-04-04 01:12:11', 5, 'M', NULL, NULL, 1);
+values (default , 'John', 'Castle', 'admin@blog.com', 'password', '1999-04-04 01:12:11', 5, 'M', NULL, NULL, 1);
 /*
 type for fuel, 5 options (for now?)
 */
@@ -131,8 +145,8 @@ CREATE TABLE car (
     user_id int REFERENCES "user"(id) NOT NULL,
     picture int REFERENCES picture(id)
 );
-insert into car
-values (1, '9999', 'Red', 'Toyota', 'asdf', 4, 1996, '4', 'ethanol', 1, NULL);
+-- insert into car
+-- values (1, '9999', 'Red', 'Toyota', 'asdf', 4, 1996, '4', 'ethanol', 1, NULL);
 
 /*
 ride table, belongs to a "user"
@@ -152,8 +166,8 @@ CREATE TABLE ride (
     pickup_point_2 int REFERENCES pickup_point(id),
     pickup_point_3 int REFERENCES pickup_point(id)
 );
-insert into ride
-values (1, '2020-04-14 00:00', '2020-04-15 02:00', 1, 1, 1, 1);
+-- insert into ride
+-- values (1, '2020-04-14 00:00', '2020-04-15 02:00', 1, 1, 1, 1);
 
 /*
 pickup point table keeps track of all the pickup points used in a ride.
@@ -184,21 +198,50 @@ CREATE TABLE review (
 );
 
 insert into address                                                     /*LAT LONG*/
-values (1, 'Belgium', 'Antwerp', '2600', 'KwebbelStraat', '69', 51.207361873867185, 4.403413551019897 ); /*startpunt*/
+values (default, 'Belgium', 'Antwerp', '2600', 'KwebbelStraat', '69', 51.207361873867185, 4.403413551019897 ); /*startpunt*/
 insert into address
-values (2, 'Belgium', 'Antwerp', '2600', 'KlusStraat', '0', 51.18482, 4.41985);  /*eindpunt*/
+values (default, 'Belgium', 'Antwerp', '2600', 'KlusStraat', '0', 51.18482, 4.41985);  /*eindpunt*/
 
 insert into "user"
-values (1, 'John', 'Castle', 'admin@blog.com', 'password', '1999-04-04 01:12:11', 5, 'M', NULL, NULL, 1);
+values (default , 'John', 'Castle', 'admin@blog.com', 'password', '1999-04-04 01:12:11', 5, 'M', NULL, NULL, 3);
 
 insert into car
-values (1, '9999', 'Red', 'Toyota', 'asdf', 4, 1996, '4', 'ethanol', 1, NULL);
+values (default , '9999', 'Red', 'Toyota', 'asdf', 4, 1996, '4', 'ethanol', 2, NULL);
+
+--
+-- insert into pickup_point
+values(1, 51.20456381034281, 4.412945542109577, '2020-04-14 00:10');
+-- p_from, p_to, p_time_option, p_datetime
+
 
 insert into ride
-values (1, '2020-04-14 00:00', '2020-04-15 02:00', 1, 1, 2, 1);
+values (1, '2020-04-14 00:00', '2020-04-15 02:00', 1, 1, 2, 1, 1, null, null);
 
-insert into pickup_point
-values(1, 51.20456381034281, 4.412945542109577);
-
-insert into pickup_point_ride
-values(1, 1);
+SELECT r.id, r.departure_time, r.arrival_time, r.user_id, r.address_to, r.address_from, r.car_id
+            FROM ride as r,
+                 -- pickup_point_ride as pr,
+                 address as dep, -- departure address
+                 address as dest -- destination address
+            WHERE r.address_to = dest.id AND
+                  r.address_from = dep.id AND
+                  -- r.id = pr.ride_id AND
+                  distance_difference(dest.latitude, dest.longitude, 51.207361873867185, 4.403413551019897) <= 3000 AND -- 1)
+                  (time_difference(cast('2020-04-15 02:00' as timestamp ), r.arrival_time) BETWEEN 0 AND 6000) AND -- 2)
+                  (
+                              distance_difference(dep.latitude, dep.longitude, 51.207361873867185, 4.403413551019897) <= 3000 OR -- 3)
+                              (pickup_point_distance_difference(r.pickup_point_1, 51.207361873867185, 4.403413551019897) AND
+                              pickup_point_distance_difference(r.pickup_point_2, 51.207361873867185, 4.403413551019897) AND
+                              pickup_point_distance_difference(r.pickup_point_3, 51.207361873867185, 4.403413551019897))
+--
+--
+--
+--                               EXISTS(
+--                                       FOR p2 IN (SELECT r.pickup_point_1 r.pickup_point_2 r.pickup_point_3  FROM r) LOOP
+--                                           IF p2 is not null
+--                                               SELECT *
+--                                               FROM p2
+--                                               WHERE distance_difference(p2.latitude, p2.longitude, 51.207361873867185, 4.403413551019897) <= 3000 -- 4)
+--                                           ENDIF
+--                                       END LOOP
+--                                   )
+                      )
