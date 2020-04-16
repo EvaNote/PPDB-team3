@@ -1,7 +1,5 @@
-
-
 // make a map that will be placed on the 'Create a ride' page
-let map2 = L.map('createride_map').setView([80, 20], 6);
+let map2 = L.map('createride_map').setView([51, 4.4], 10);
 
 // add a tile layer to the (empty) map
 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -47,4 +45,3 @@ L.Routing.control({
                 alert("Result: " + data);
             });
     }).addTo(map2);
-
