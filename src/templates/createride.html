@@ -9,6 +9,11 @@
                {{ form.hidden_tag() }}
              <!-- display the form -->
               <fieldset class="form-group">
+                <select class="form-control" name="cars">
+                    {% for car in cars %}
+                        <option value="{{ car }}">{{ car }}</option>
+                    {% endfor %}
+                </select>
                   <div class="form-group">
                       {{ form.fromField.label(class="form-control-label") }}
                       {% if form.fromField.errors %} }
