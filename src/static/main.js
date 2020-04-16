@@ -3,6 +3,19 @@
  for (const value of values) {
             console.log(value.latLng.lat)
         }
+
+
+
+ // get time between waypoints
+ let instr = control._line._route.instructions;
+        let time = 0;
+        for (let i in instr) {
+            time += instr[i].time;
+            if (instr[i].type === "WaypointReached") {
+                console.log("Time to waypoint: " + time);
+                time = 0;
+            }
+        }
  */
 
 // make a map that will be placed on the 'Find my ride' page
@@ -18,9 +31,7 @@ let control = L.Routing.control({
     serviceUrl: 'http://127.0.0.1:5001/route/v1',
     routeWhileDragging: true,
     geocoder: L.Control.Geocoder.nominatim(),
-}).on('routesfound', function (e) {
-        console.log(e);
-    }).addTo(map);
+}).addTo(map);
 
 function createButton(label, container) {
     var btn = L.DomUtil.create('button', '', container);
@@ -28,6 +39,7 @@ function createButton(label, container) {
     btn.innerHTML = label;
     return btn;
 }
+
 map.on('click', function (e) {
     var container = L.DomUtil.create('div'),
         startBtn = createButton('Start from this location', container),
@@ -54,25 +66,13 @@ map.on('click', function (e) {
 
 $(document).ready(function () {
     //TODO: dropdown? Lijst? Niks?
-    //document.getElementsByClassName('leaflet-routing-geocoder')[1].remove();
-    //document.getElementsByClassName('leaflet-routing-add-waypoint')[0].remove();
-    //let child = document.createElement('div');
-    //child.innerHTML = "<p>Kies een campus op de kaart (geen campus gekozen)</p>";
-    //child = child.firstChild;
-    //document.getElementsByClassName('leaflet-routing-geocoders')[0].appendChild(child);
+    document.getElementsByClassName('leaflet-routing-geocoder')[1].remove();
+    document.getElementsByClassName('leaflet-routing-add-waypoint')[0].remove();
+    // let child = document.createElement('div');
+    // child.innerHTML = "<p>Kies een campus op de kaart (geen campus gekozen)</p>";
+    // child = child.firstChild;
+    // document.getElementsByClassName('leaflet-routing-geocoders')[0].appendChild(child);
     // add time form
-    let child = document.createElement('div');
-    child.innerHTML = "<form action=\"#\" id=\"ride-time\">\n" +
-        "    <label for=\"time_option\">\n<select name=\"time_option\">\n" +
-        "        <option>Arrive by</option>\n" +
-        "        <option>Depart at</option>\n" +
-        "    </select>\n" +
-        "        <input id=\"time_input\" type=\"datetime-local\" name=\"datetime\">\n" +
-        "    </label>\n" +
-        "    <input type=\"submit\" value=\"Update\">\n" +
-        "</form>";
-    child = child.firstChild;
-    document.getElementsByClassName('leaflet-routing-geocoders')[0].appendChild(child);
 
     //src: https://github.com/pointhi/leaflet-color-markers
     var universityIcon = new L.Icon({
@@ -99,6 +99,7 @@ $(document).ready(function () {
     let labelChild = document.createElement('label');
     labelChild.setAttribute('for', 'campus_option');
     let selectChild = document.createElement('select');
+    selectChild.setAttribute('id', 'campus_option');
     selectChild.setAttribute('name', 'campus_option');
 
 
@@ -179,6 +180,19 @@ $(document).ready(function () {
     formChild.appendChild(labelChild);
 
     document.getElementsByClassName('leaflet-routing-geocoders')[0].appendChild(formChild);
+
+    let child = document.createElement('div');
+    child.innerHTML = "<form action=\"#\" id=\"ride-time\">\n" +
+        "    <label for=\"time_option\">\n<select name=\"time_option\">\n" +
+        "        <option>Arrive by</option>\n" +
+        "        <option>Depart at</option>\n" +
+        "    </select>\n" +
+        "        <input id=\"time_input\" type=\"datetime-local\" name=\"datetime\">\n" +
+        "    </label>\n" +
+        "    <input type=\"submit\" value=\"Update\">\n" +
+        "</form>";
+    child = child.firstChild;
+    document.getElementsByClassName('leaflet-routing-geocoders')[0].appendChild(child);
 });
 
 $.fn.setNow = function (onlyBlank) {
@@ -223,8 +237,6 @@ $(function () {
     // make sure pressing the 'update' button doesn't refresh the entire page
     $('form').submit(function () {
         let from = control.getWaypoints()[0].latLng;
-        console.log(control._line._route.instructions);
-
         let to = control.getWaypoints()[1].latLng;
         let form = $('form').serializeObject();
         // check if from-to are defined. If they aren't, nothing should happen
