@@ -1,5 +1,5 @@
 FORMAT: 1A
-HOST: https://ppdb.me/api
+HOST: http://team3.ppdb.me/api
 
 # PPDB 2019-2020
 
@@ -12,8 +12,10 @@ This minimum requirement needs to be implemented to receive live data.
 
 ### POST [POST]
 
+Registers the user to the database and returns the user ID. "username" will be stored in the database as an email address (e.g. "MarkP" will be stored in the database as "MarkP@campuscarpool.com").
 
 + Request (application/json)
+
 
         {
             "username" : "MarkP",
@@ -25,14 +27,36 @@ This minimum requirement needs to be implemented to receive live data.
 + Response 201 (application/json)
 
         {
-            "id": 14
+            "username" : "MarkP",
+            "firstname": "Mark",
+            "lastname": "Peeters",
+            "password" : "MarkIsCool420"
         }
 
++ Request (application/json)
+
+        {
+            "username" : "MarkP",
+            "firstname": "Mark",
+            "lastname": "Peeters",
+            "password" : "MP420"
+        }
+
++ Response 400
+
+        {
+            "message": {
+                "password": [
+                    "Field must be at least 8 characters long."
+                    ]
+                }
+        }
 
 ## /users/auth
 
 ### POST [POST]
 
+Returns an authentication token if login credentials are correct. This token expires after 10 minutes, which means you'll have to log in again.
 
 + Request (application/json)
 
@@ -54,9 +78,11 @@ This minimum requirement needs to be implemented to receive live data.
             "password" : "[Invalid password]"
         }
 
-+ Response 401
++ Response 401 (application/json)
 
-
+        {
+            "message" : "The server could not verify that you are authorized to access the URL requested. You either supplied the wrong credentials (e.g. a bad password), or your browser doesn't understand how to supply the credentials required."
+        }
 
 ## /drives
 

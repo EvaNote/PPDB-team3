@@ -1,0 +1,128 @@
+consumption<!-- https://stackoverflow.com/questions/51756351/how-to-get-user-selected-value-from-selectfield-in-python-flask-wtf  -->
+<!-- https://www.youtube.com/watch?v=I2dJuNwlIH0  -->
+{% extends "roundborder.html" %}
+{% block contentTitle %}
+    {{ _('Edit car') }}
+{% endblock contentTitle %}
+{% block contentContent %}
+    <form method="POST" action="" enctype="multipart/form-data">
+        {{ form.hidden_tag() }}
+        <!-- display the form -->
+        <fieldset class="form-group">
+
+            <div class="form-group">
+                {{ form.brand.label(class="form-control-label") }}
+                {% if form.brand.errors %}
+                    {{ form.brand(class="form-control is-invalid") }}
+                    <div class="invalid-feedback">
+                        {% for error in form.brand.errors %}
+                            <span>{{ error }}</span>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    {{ form.brand(class="form-control form-control-lg") }}
+                {% endif %}
+            </div>
+            <div class="form-group">
+                {{ form.model.label(class="form-control-label") }}
+                {% if form.model.errors %}
+                    {{ form.model(class="form-control is-invalid") }}
+                    <div class="invalid-feedback">
+                        {% for error in form.model.errors %}
+                            <span>{{ error }}</span>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    {{ form.model(class="form-control form-control-lg") }}
+                {% endif %}
+            </div>
+            <div class="form-group">
+                {{ form.color.label(class="form-control-label") }}
+                {% if form.color.errors %}
+                    {{ form.color(class="form-control is-invalid") }}
+                    <div class="invalid-feedback">
+                        {% for error in form.color.errors %}
+                            <span>{{ error }}</span>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    {{ form.color(class="form-control form-control-lg") }}
+                {% endif %}
+            </div>
+            <div class="form-group">
+                {{ form.plateNumber.label(class="form-control-label") }}
+                {% if form.plateNumber.errors %}
+                    {{ form.plateNumber(class="form-control is-invalid") }}
+                    <div class="invalid-feedback">
+                        {% for error in form.plateNumber.errors %}
+                            <span>{{ error }}</span>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    {{ form.plateNumber(class="form-control form-control-lg") }}
+                {% endif %}
+            </div>
+            <div class="form-group">
+                {{ form.seats.label(class="form-control-label") }}
+                {% if form.seats.errors %}
+                    {{ form.seats(class="form-control is-invalid") }}
+                    <div class="invalid-feedback">
+                        {% for error in form.seats.errors %}
+                            <span>{{ error }}</span>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    {{ form.seats(class="form-control form-control-lg") }}
+                {% endif %}
+            </div>
+            <div class="form-group">
+                {{ form.constructionYear.label(class="form-control-label") }}
+                {% if form.constructionYear.errors %}
+                    {{ form.constructionYear(class="form-control is-invalid") }}
+                    <div class="invalid-feedback">
+                        {% for error in form.constructionYear.errors %}
+                            <span>{{ error }}</span>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    {{ form.constructionYear(class="form-control form-control-lg") }}
+                {% endif %}
+            </div>
+            <div class="form-group">
+                {{ form.consumption.label(class="form-control-label") }}
+                {% if form.consumption.errors %}
+                    {{ form.consumption(class="form-control is-invalid") }}
+                    <div class="invalid-feedback">
+                        {% for error in form.consumption.errors %}
+                            <span>{{ error }}</span>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    {{ form.consumption(class="form-control form-control-lg") }}
+                {% endif %}
+            </div>
+            <div class="form-group">
+                {{ _('Fuel type') }}:
+                {{ form.fuelType}}
+            </div>
+                    <div class="form-group">
+                {{ form.picture.label() }}
+                {{ form.picture(class="form-control-file") }}
+                {% if form.picture.errors %}
+                    {% for error in form.picture.errors %}
+                        <span class = "text-danger">{{ error }}</span><br>
+                    {% endfor %}
+                {% endif %}
+            </div>
+
+
+        </fieldset>
+        <div class="form-group">
+            {{ form.submit(class="btn btn-outline-info") }}
+        </div>
+      </form>
+
+      <a class="btn btn-info" href="{{ url_for('users.delete_vehicle', car_id=car_id) }}" role="button">{{ _('Delete car') }}</a>
+
+
+{% endblock contentContent %}

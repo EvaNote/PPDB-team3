@@ -1,83 +1,110 @@
+<!-- https://stackoverflow.com/questions/51756351/how-to-get-user-selected-value-from-selectfield-in-python-flask-wtf  -->
+<!-- https://www.youtube.com/watch?v=I2dJuNwlIH0  -->
 {% extends "roundborder.html" %}
 {% block contentTitle %}
     {{ _('Edit my account') }}
 {% endblock contentTitle %}
 {% block contentContent %}
+    <form method="POST" action="" enctype="multipart/form-data">
+        {{ form.hidden_tag() }}
+        <!-- display the form -->
+        <fieldset class="form-group">
+            <div class="form-group">
+                {{ form.first_name.label(class="form-control-label") }}
+                {% if form.first_name.errors %}
+                    {{ form.first_name(class="form-control is-invalid") }}
+                    <div class="invalid-feedback">
+                        {% for error in form.first_name.errors %}
+                            <span>{{ error }}</span>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    {{ form.first_name(class="form-control form-control-lg") }}
+                {% endif %}
+            </div>
+            <div class="form-group">
+                {{ form.last_name.label(class="form-control-label") }}
+                {% if form.last_name.errors %}
+                    {{ form.last_name(class="form-control is-invalid") }}
+                    <div class="invalid-feedback">
+                        {% for error in form.last_name.errors %}
+                            <span>{{ error }}</span>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    {{ form.last_name(class="form-control form-control-lg") }}
+                {% endif %}
+            </div>
+            <div class="form-group">
+                {{ _('Gender') }}:
+                {{ form.gender}}
+            </div>
+            <div class="form-group">
+                {{ form.email.label(class="form-control-label") }}
+                {% if form.email.errors %}
+                    {{ form.email(class="form-control is-invalid") }}
+                    <div class="invalid-feedback">
+                        {% for error in form.email.errors %}
+                            <span>{{ error }}</span>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    {{ form.email(class="form-control form-control-lg") }}
+                {% endif %}
+            </div>
+            <div class="form-group">
+                {{ form.age.label(class="form-control-label") }}
+                {% if form.age.errors %}
+                    {{ form.age(class="form-control is-invalid") }}
+                    <div class="invalid-feedback">
+                        {% for error in form.age.errors %}
+                            <span>{{ error }}</span>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    {{ form.age(class="form-control form-control-lg") }}
+                {% endif %}
+            </div>
+            <div class="form-group">
+                {{ form.phone_number.label(class="form-control-label") }}
+                {% if form.phone_number.errors %}
+                    {{ form.phone_number(class="form-control is-invalid") }}
+                    <div class="invalid-feedback">
+                        {% for error in form.phone_number.errors %}
+                            <span>{{ error }}</span>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    {{ form.phone_number(class="form-control form-control-lg") }}
+                {% endif %}
+            </div>
 
-    <form>
-  <div class="form-group">
-    <label for="FirstName">{{ _('First name')}}</label>
-    <input type="text" class="form-control" id="FirstName" value="Robbe">
-  </div>
-  <div class="form-group">
-    <label for="LastName">{{ _('Last name')}}</label>
-    <input type="text" class="form-control" id="LastName" value="Lauwers">
-  </div>
+            <div class="form-group">
+                {{ form.picture.label() }}
+                {{ form.picture(class="form-control-file") }}
+                {% if form.picture.errors %}
+                    {% for error in form.picture.errors %}
+                        <span class = "text-danger">{{ error }}</span><br>
+                    {% endfor %}
+                {% endif %}
+            </div>
 
-  <fieldset class="form-group">
-    <div class="row">
-      <legend class="col-form-label col-sm-2 pt-0">{{ _('Gender') }}</legend>
-      <div class="col-sm-10">
-        <div class="form-check">
-          <input class="form-check-input" type="radio" name="gridRadios" id="gridRadios1" value="Male" checked>
-          <label class="form-check-label" for="gridRadios1">
-            {{  _('Male')}}
-          </label>
-        </div>
-        <div class="form-check">
-          <input class="form-check-input" type="radio" name="gridRadios" id="gridRadios2" value="Female">
-          <label class="form-check-label" for="gridRadios2">
-            {{  _('Female')}}
-          </label>
-        </div>
-        <div class="form-check">
-          <input class="form-check-input" type="radio" name="gridRadios" id="gridRadios3" value="Other">
-          <label class="form-check-label" for="gridRadios3">
-            {{ _('Other') }}
-          </label>
-        </div>
-      </div>
-    </div>
-  </fieldset>
+            <a class="btn btn-info" href="{{ url_for('users.address_edit') }}" role="button">{{ _('Edit address') }}</a>
 
-      <div class="form-group">
-    <label for="e-mail">{{ _('email') }}</label>
-    <input type="text" class="form-control" id="e-mail" value="robbe.lauwers@student.uantwerpen.be">
-  </div>
 
+        </fieldset>
         <div class="form-group">
-  <label for="example-date-input" >{{ _('Date of birth') }}</label>
-    <input class="form-control" type="date" value="2000-01-19" id="example-date-input">
-</div>
-
-      <div class="form-group">
-    <label for="phone">Phone number</label>
-    <input type="text" class="form-control" id="phone" value="+32 123 12 12 12">
-  </div>
-
-        <div class="border-top pt-3"></div>
+            {{ form.submit(class="btn btn-outline-info") }}
+        </div>
+        <div class="form-group">
+            {{ form.delete(class="btn btn-outline-info") }}
+        </div>
+      </form>
 
 
 
-          <div class="form-group">
-    <label for="street">street + nr</label>
-    <input type="text" class="form-control" id="street" value="J. Doestreet 42">
-  </div>
-
-             <div class="form-group">
-    <label for="street">zip code</label>
-    <input type="text" class="form-control" id="street" value="1234">
-  </div>
-
-                 <div class="form-group">
-    <label for="city">City</label>
-    <input type="text" class="form-control" id="city" value="Rumst">
-  </div>
 
 
-</form>
 
-        <a class="btn btn-info" href="{{ url_for('users.add_vehicle') }}" role="button">Add car</a>
-        <a class="btn btn-info" href="{{ url_for('users.account') }}" role="button">Save</a>
-<br>
+
 {% endblock contentContent %}

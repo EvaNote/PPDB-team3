@@ -3,6 +3,7 @@ from src.reviews.forms import ReviewForm
 from flask_login import current_user, login_user, logout_user
 from src.dbmodels.Review import Reviews, Review
 from src.utils import user_access, review_access
+from flask_babel import lazy_gettext
 
 reviews = Blueprint('reviews', __name__, url_prefix='/<lang_code>')
 
@@ -33,7 +34,8 @@ def before_request():
 
 @reviews.route("/user=<userid>/new_review", methods=['GET', 'POST'])
 def new_review(userid):
-    if not current_user.is_authenticated:  # makes sure user won`t be able to go to login/register page
+    if not current_user.is_authenticated and not current_app.config[
+        'TESTING']:  # makes sure user won`t be able to go to login/register page
         return redirect(url_for('users.login'))
     form = ReviewForm()
     userfor = user_access.get_user_on_id(userid)
@@ -45,9 +47,9 @@ def new_review(userid):
         text = form.text.data
         review_obj = Review(None, user_for, user_from, amount_of_stars, title, text)
         review_access.add_review(review_obj)
-        flash('Your review has been posted successfully!', 'success')
+        flash(lazy_gettext('Your review has been posted successfully!'), 'success')
         return redirect(url_for('main.home'))
     else:
-        flash('Writing review failed.', 'danger')
-    return render_template('new_review.html', title='New review', form=form, loggedIn=True, user_from=current_user,
+        flash(lazy_gettext('Writing review failed.'), 'danger')
+    return render_template('new_review.html', title=lazy_gettext('New review'), form=form, loggedIn=True, user_from=current_user,
                            user_for=userfor)

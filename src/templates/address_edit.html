@@ -1,0 +1,86 @@
+<!-- https://stackoverflow.com/questions/51756351/how-to-get-user-selected-value-from-selectfield-in-python-flask-wtf  -->
+<!-- https://www.youtube.com/watch?v=I2dJuNwlIH0  -->
+{% extends "roundborder.html" %}
+{% block contentTitle %}
+    {{ _('Edit my address') }}
+{% endblock contentTitle %}
+{% block contentContent %}
+    <form method="POST" action="">
+        {{ form.hidden_tag() }}
+        <!-- display the form -->
+        <fieldset class="form-group">
+
+            <div class="form-group">
+                {{ form.street.label(class="form-control-label") }}
+                {% if form.street.errors %}
+                    {{ form.street(class="form-control is-invalid") }}
+                    <div class="invalid-feedback">
+                        {% for error in form.street.errors %}
+                            <span>{{ error }}</span>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    {{ form.street(class="form-control form-control-lg") }}
+                {% endif %}
+            </div>
+            <div class="form-group">
+                {{ form.nr.label(class="form-control-label") }}
+                {% if form.nr.errors %}
+                    {{ form.nr(class="form-control is-invalid") }}
+                    <div class="invalid-feedback">
+                        {% for error in form.nr.errors %}
+                            <span>{{ error }}</span>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    {{ form.nr(class="form-control form-control-lg") }}
+                {% endif %}
+            </div>
+            <div class="form-group">
+                {{ form.city.label(class="form-control-label") }}
+                {% if form.city.errors %}
+                    {{ form.city(class="form-control is-invalid") }}
+                    <div class="invalid-feedback">
+                        {% for error in form.city.errors %}
+                            <span>{{ error }}</span>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    {{ form.city(class="form-control form-control-lg") }}
+                {% endif %}
+            </div>
+            <div class="form-group">
+                {{ form.postal_code.label(class="form-control-label") }}
+                {% if form.postal_code.errors %}
+                    {{ form.postal_code(class="form-control is-invalid") }}
+                    <div class="invalid-feedback">
+                        {% for error in form.postal_code.errors %}
+                            <span>{{ error }}</span>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    {{ form.postal_code(class="form-control form-control-lg") }}
+                {% endif %}
+            </div>
+            <div class="form-group">
+                {{ form.country.label(class="form-control-label") }}
+                {% if form.country.errors %}
+                    {{ form.country(class="form-control is-invalid") }}
+                    <div class="invalid-feedback">
+                        {% for error in form.country.errors %}
+                            <span>{{ error }}</span>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    {{ form.country(class="form-control form-control-lg") }}
+                {% endif %}
+            </div>
+
+
+        </fieldset>
+        <div class="form-group">
+            {{ form.submit(class="btn btn-outline-info") }}
+        </div>
+      </form>
+
+{% endblock contentContent %}
