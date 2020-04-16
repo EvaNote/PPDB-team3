@@ -92,6 +92,15 @@ $(document).ready(function () {
         shadowSize: [32, 32]
     });
 
+    let formChild = document.createElement('form');
+    formChild.setAttribute('action', '#');
+    formChild.setAttribute('id', 'campus');
+    let labelChild = document.createElement('label');
+    labelChild.setAttribute('for', 'campus_option');
+    let selectChild = document.createElement('select');
+    selectChild.setAttribute('name', 'campus_option');
+
+
     $.post({
         contentType: "application/json",
         url: "/en/fillschools"
@@ -100,6 +109,12 @@ $(document).ready(function () {
         .done(function (markers) { // response function
             for (var i in markers) {
                 let hover_display = markers[i].name;
+
+                let optionChild = document.createElement('option');
+                let textOption = document.createTextNode(hover_display);
+                optionChild.appendChild(textOption);
+                selectChild.appendChild(optionChild);
+
                 //hover_display = hover_display.substr(0, hover_display.length - 29);
                 let icon = null;
                 if (markers[i].category === 'university') {
@@ -151,8 +166,15 @@ $(document).ready(function () {
                             });
                         }
                     })
+
             }
+
         });
+
+    formChild.appendChild(selectChild);
+    formChild.appendChild(labelChild);
+
+    document.getElementsByClassName('leaflet-routing-geocoders')[0].appendChild(formChild);
 });
 
 $.fn.setNow = function (onlyBlank) {
