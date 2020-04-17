@@ -203,3 +203,7 @@ hr {
 #asd:hover {
   background: lightsalmon;
 }
+
+.button[disabled] {
+    pointer-events: none;
+}

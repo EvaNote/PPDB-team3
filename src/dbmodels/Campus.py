@@ -7,8 +7,8 @@ class Campus:
         self.longitude = longitude
 
     def to_dict(self):
-        return {'id': self.id, 'name': self.name, 'category': self.category, 'latitude': self.latitude,
-                'longitude': self.longitude}
+        return {'id': self.id, 'name': self.name, 'category': self.category, 'lat': self.latitude,
+                'lng': self.longitude}
 
 
 class Campusses:

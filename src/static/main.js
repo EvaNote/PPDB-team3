@@ -40,31 +40,64 @@ function createButton(label, container) {
     return btn;
 }
 
+let state = {campusClicked: false, campusId: null, startFromThisLocationClicked: false, goToThisLocationClicked: false};
+
+function resetState() {
+    state = {campusClicked: false, campusId: null, startFromThisLocationClicked: false, goToThisLocationClicked: false};
+}
+
+
 map.on('click', function (e) {
-    var container = L.DomUtil.create('div'),
-        startBtn = createButton('Start from this location', container),
+    var startBtn, destBtn;
+    var container = L.DomUtil.create('div');
+    if ((state.startFromThisLocationClicked || state.goToThisLocationClicked) && !state.campusClicked) {
+        container.appendChild(document.createElement("br"));
+        let b = document.createElement("b");
+        b.setAttribute('style', 'color: #cc0000');
+        b.appendChild(document.createTextNode('Hi there! This is campus carpool, one of your endpoints needs to be a campus.'));
+        container.appendChild(b);
+        container.setAttribute('style', 'text-align: center')
+    } else {
+        startBtn = createButton('Start from this location', container);
         destBtn = createButton('Go to this location', container);
+    }
 
     L.popup()
         .setContent(container)
         .setLatLng(e.latlng)
         .openOn(map);
     L.DomEvent.on(startBtn, 'click', function () {
+        if (state.goToThisLocationClicked && !state.campusClicked) {
+            alert('Kies een campus!')
+        }
+        if (state.startFromThisLocationClicked === true) { //in case a campus was clicked before
+            resetState()
+        }
+        state.startFromThisLocationClicked = true;
         control.spliceWaypoints(0, 1, e.latlng);
         map.closePopup();
     });
 
     L.DomEvent.on(destBtn, 'click', function () {
+        if (state.startFromThisLocationClicked && !state.campusClicked) {
+            alert('Kies een campus!')
+        }
+        if (state.goToThisLocationClicked === true) { //in case a campus was clicked before
+            resetState()
+        }
+        state.goToThisLocationClicked = true;
         control.spliceWaypoints(control.getWaypoints().length - 1, 1, e.latlng);
         map.closePopup();
     });
 });
+
 
 /**************
  * jQuery functions
  * ************/
 
 $(document).ready(function () {
+
     //TODO: dropdown? Lijst? Niks?
     document.getElementsByClassName('leaflet-routing-geocoder')[1].remove();
     document.getElementsByClassName('leaflet-routing-add-waypoint')[0].remove();
@@ -125,7 +158,7 @@ $(document).ready(function () {
                     icon = collegeIcon
                 }
 
-                (L.marker([markers[i].latitude, markers[i].longitude], {
+                (L.marker([markers[i].lat, markers[i].lng], {
                     icon: icon,
                     name: hover_display,
                     id: markers[i].id
@@ -142,16 +175,21 @@ $(document).ready(function () {
                                 .setContent(container)
                                 .setLatLng(e.latlng)
                                 .openOn(map);
-                        },
-                        'mouseout': function (e) {
                             setTimeout(function () {
                                 map.closePopup();
-                            }, 2500)
+                            }, 7000)
                         },
+                        // 'mouseout': function (e) {
+                        //     setTimeout(function () {
+                        //         map.closePopup();
+                        //     }, 2500)
+                        // },
                         'click': function (e) {
                             let container = L.DomUtil.create('div'),
                                 startBtn = createButton('Start from this location', container),
                                 destBtn = createButton('Go to this location', container);
+                            startBtn.setAttribute('id', this.options['id']);
+                            destBtn.setAttribute('id', this.options['id']);
                             container.appendChild(document.createElement("br"));
                             container.appendChild(document.createTextNode(this.options['name']));
 
@@ -161,11 +199,17 @@ $(document).ready(function () {
                                 .setLatLng(e.latlng)
                                 .openOn(map);
                             L.DomEvent.on(startBtn, 'click', function () {
+                                state.campusClicked = true;
+                                state.campusId = e.target.id;
+                                state.startFromThisLocationClicked = true;
                                 control.spliceWaypoints(0, 1, e.latlng);
                                 map.closePopup();
                             });
 
                             L.DomEvent.on(destBtn, 'click', function () {
+                                state.campusClicked = true;
+                                state.campusId = e.target.id;
+                                state.goToThisLocationClicked = true;
                                 control.spliceWaypoints(control.getWaypoints().length - 1, 1, e.latlng);
                                 map.closePopup();
                             });
@@ -193,6 +237,18 @@ $(document).ready(function () {
         "</form>";
     child = child.firstChild;
     document.getElementsByClassName('leaflet-routing-geocoders')[0].appendChild(child);
+
+    // let rbutton = document.createElement("button");
+    // rbutton.innerHTML = "Do Something";
+    //
+    // // 2. Append somewhere
+    // let rbody = document.getElementsByTagName("rbody")[0];
+    // rbody.appendChild(rbutton);
+    //
+    // // 3. Add event handler
+    // rbutton.addEventListener ("click", function() {
+    //   alert("did something");
+    // });
 });
 
 $.fn.setNow = function (onlyBlank) {
@@ -270,17 +326,7 @@ $(function () {
 });
 
 
-var rbutton = document.createElement("button");
-rbutton.innerHTML = "Do Something";
 
-// 2. Append somewhere
-var rbody = document.getElementsByTagName("rbody")[0];
-rbody.appendChild(rbutton);
-
-// 3. Add event handler
-rbutton.addEventListener ("click", function() {
-  alert("did something");
-});
 /*
 
 function Geeks() {
