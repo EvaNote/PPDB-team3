@@ -2,26 +2,32 @@ from flask import g, current_app
 from flask_babel import Babel
 from flask_bcrypt import Bcrypt
 from flask_login import LoginManager
+from geopy.geocoders import Nominatim
 from src.DBConnect import DBConnection
-from src.dbmodels.User import UserAccess
-from src.dbmodels.Review import Reviews
-from src.dbmodels.Car import Cars
 from src.dbmodels.Address import Addresses
+from src.dbmodels.Campus import Campusses
+from src.dbmodels.Car import Cars
 from src.dbmodels.Picture import Pictures
+from src.dbmodels.Review import Reviews
+from src.dbmodels.Ride import Rides
+from src.dbmodels.User import UserAccess
 from src.config import BaseConfig
 
 # connect to database
 connection = DBConnection(dbname=BaseConfig.DB_NAME, dbuser=BaseConfig.DB_USER)
-user_access = UserAccess(connection)
-review_access = Reviews(connection)
-car_access = Cars(connection)
 address_access = Addresses(connection)
+campus_access = Campusses(connection)
+car_access = Cars(connection)
 picture_access = Pictures(connection)
+review_access = Reviews(connection)
+ride_access = Rides(connection)
+user_access = UserAccess(connection)
 
 # create extensions
 babel = Babel()
 bcrypt = Bcrypt()
 login_manager = LoginManager()
+geolocator = Nominatim(user_agent="dbcarpool")
 
 
 # source: https://flask-user.readthedocs.io/en/v0.6/internationalization.html
@@ -40,4 +46,4 @@ def get_timezone():
 
 @login_manager.user_loader
 def load_user(user_email):
-    return UserAccess(connection).get_user_on_email(user_email)
+    return UserAccess(connection).get_user(user_email)

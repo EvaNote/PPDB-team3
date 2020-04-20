@@ -1,6 +1,8 @@
-from flask import Blueprint, render_template, g, current_app, abort, request
-from flask_login import current_user
+from flask import Blueprint, render_template, g, current_app, abort, request, jsonify
+from src.utils import campus_access, user_access, ride_access
 from flask_babel import lazy_gettext
+from src.dbmodels.Campus import Campus
+from flask_login import current_user
 from geopy.geocoders import Nominatim
 
 main = Blueprint('main', __name__, url_prefix='/<lang_code>')
@@ -33,7 +35,7 @@ def before_request():
 @main.route("/")
 @main.route("/home")
 def home():
-    users = None  # user_access.get_users()
+    users = user_access.get_users()
     return render_template('home.html', users=users, loggedIn=False)
 
 
@@ -52,27 +54,38 @@ def contact():
     return render_template('contact.html', title=lazy_gettext('contact'), loggedIn=False)
 
 
-@main.route('/receiver', methods=['POST'])
+@main.route('/calculateCompatibleRides', methods=['POST'])
 def receiver():
     # read json + reply
     data = request.json
-    result = "start: {}, {} — end: {}, {}".format(data['from']['lat'], data['from']['lng'],
-                                                  data['to']['lat'], data['to']['lng'])
-    return result
+    from_coord = data.get('from')
+    to_coord = data.get('to')
+    time_option = data.get('time_option')
+    datetime = data.get('datetime').replace('T', ' ') + ':00'
+    #rides = ride_access.match_rides_with_passenger(from_coord, to_coord, time_option, datetime)
+    results = []
+    #for ride in rides:
+    #    results.append(ride.to_dict())
+    return jsonify({"results": results})
 
 
 @main.route('/fillschools', methods=['POST'])
 def get_schools():
     schools = dict()
-    geolocator = Nominatim(user_agent="specify_your_app_name_here")
-    locations = geolocator.geocode('Universiteit België', False, limit=100000, timeout=30)
-    for location in locations:
-        location.raw['soort'] = 'u'
-        schools[location.raw['osm_id']] = location.raw
-        print(location.raw)
-    locations = geolocator.geocode('Hogeschool België', False, limit=100000, timeout=30)
-    for location in locations:
-        schools[location.raw['osm_id']] = location.raw
-        location.raw['soort'] = 'h'
-        print(location.raw)
+
+    campus_objects = campus_access.get_all()
+    for campus in campus_objects:
+        schools[campus.id] = campus.to_dict()
+
+    # geolocator = Nominatim(user_agent="specify_your_app_name_here")
+    # locations = geolocator.geocode('Universiteit België', False, limit=100000, timeout=30)
+    # for location in locations:
+    #     location.raw['soort'] = 'u'
+    #     schools[location.raw['osm_id']] = location.raw
+    #     print(location.raw)
+    # locations = geolocator.geocode('Hogeschool België', False, limit=100000, timeout=30)
+    # for location in locations:
+    #     schools[location.raw['osm_id']] = location.raw
+    #     location.raw['soort'] = 'h'
+    #     print(location.raw)
     return schools
