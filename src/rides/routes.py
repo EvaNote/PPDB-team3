@@ -36,10 +36,13 @@ def before_request():
 
 @rides.route("/findride", methods=['GET', 'POST'])
 def findride():
+    if not current_user.is_authenticated and not current_app.config['TESTING']:
+        return redirect(url_for('users.login'))
     form = FindRideForm()
     if form.validate_on_submit():
         flash('You have been logged in successfully.', 'success')
     return render_template("findride.html", title=lazy_gettext("Find a ride"), form=form)
+
 
 @rides.route("/createride", methods=['GET', 'POST'])
 def createride():

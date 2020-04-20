@@ -237,7 +237,6 @@ class Rides:
                             ride.car_id, ride.passengers, ride.pickup_1, ride.pickup_2, ride.pickup_3))
         self.dbconnect.commit()
 
-
     def match_rides_with_passenger(self, p_from, p_to, p_time_option, p_datetime):
         """
         Check if:
