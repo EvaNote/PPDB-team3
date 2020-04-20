@@ -14,6 +14,9 @@ class Ride:
         self.pickup_2 = p2
         self.pickup_3 = p3
 
+    def get_id(self):
+        return self.id
+
     def to_dict(self):
         return {'id': self.id, 'departure_time': self.departure_time, 'arrival_time': self.arrival_time,
                 'user_id': self.user_id, 'address_1': self.address_1, 'campus': self.campus,
@@ -35,6 +38,15 @@ class Rides:
             ride = Ride(row[0], row[1], row[2], row[3], row[4], row[5], row[6], row[7], row[8], row[9], row[10], row[11])
             rides.append(ride)
         return rides
+
+    def get_id_on_all(self, departure_time, arrival_time, user_id, address_1, campus):
+        cursor = self.dbconnect.get_cursor()
+        cursor.execute(
+            "SELECT id FROM ride WHERE departure_time=%s AND arrival_time=%s AND user_id=%s AND address_1=%s AND campus=%s",
+            (departure_time, arrival_time, user_id, address_1, campus))
+        row = cursor.fetchone()
+        ride_id = row[0]
+        return ride_id
 
     def get_on_id(self, id):
         found = self.get_on('id', id)
