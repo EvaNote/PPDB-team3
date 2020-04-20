@@ -3,56 +3,8 @@
     {{ title }}
 {% endblock contentTitle %}
 {% block contentContent %}
-    {#    <form method="POST" action="">#}
-    {#        {{ form.hidden_tag() }}#}
-    {#        <!-- display the form -->#}
-    {#        <fieldset class="form-group">#}
-    {#            <div class="form-group">#}
-    {#                {{ form.fromField.label(class="form-control-label") }}#}
-    {#                {% if form.fromField.errors %}#}
-    {#                    {{ form.fromField(class="form-control is-invalid") }}#}
-    {#                    <div class="invalid-feedback">#}
-    {#                        {% for error in form.fromField.errors %}#}
-    {#                            <span>{{ error }}</span>#}
-    {#                        {% endfor %}#}
-    {#                    </div>#}
-    {#                {% else %}#}
-    {#                    {{ form.fromField(class="form-control form-control-lg") }}#}
-    {#                {% endif %}#}
-    {#            </div>#}
-    {#            <div class="form-group">#}
-    {#                {{ form.toField.label(class="form-control-label") }}#}
-    {#                {% if form.toField.errors %}#}
-    {#                    {{ form.toField(class="form-control is-invalid") }}#}
-    {#                    <div class="invalid-feedback">#}
-    {#                        {% for error in form.toField.errors %}#}
-    {#                            <span>{{ error }}</span>#}
-    {#                        {% endfor %}#}
-    {#                    </div>#}
-    {#                {% else %}#}
-    {#                    {{ form.toField(class="form-control form-control-lg") }}#}
-    {#                {% endif %}#}
-    {#            </div>#}
-    {#        </fieldset>#}
-    {#        <div class="form-group">#}
-    {#            {{ form.submit(class="btn btn-outline-info") }}#}
-    {#        </div>#}
-    {#        <hr class="bg-info my-4 w-100">#}
-    {#    </form>#}
+
     <div id="findride_map"></div>
     <div id="result"></div>
-<!--
-    for(i; showcompatibleride().size())
 
-
-        <button onclick = "Geeks()" id="asd">
-            showcompatibleride()[i].straatnaam
-            showcompatibleride()[i].bestemming
-            showcompatibleride()[i].afstand
-        </button>
-
-        <br><br>
-
-        <div id = "GFG"></div>
--->
 {% endblock contentContent %}
