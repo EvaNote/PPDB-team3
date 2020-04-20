@@ -49,12 +49,6 @@ CREATE TABLE address (
     latitude float8 NOT NULL,
     longitude float8 NOT NULL
 );
-/* userAddress */
-insert into address
-values (default , 'Belgium', 'Antwerp', '2600', 'KwebbelStraat', '69', 51.21888227486132, 4.400383145226075 );
-insert into address
-values (default , 'Belgium', 'Antwerp', '2600', 'KlusStraat', '0', 51.211402761488316, 4.400297295677885);
-
 
 /*
 type for gender, 2 options
@@ -95,8 +89,6 @@ CREATE TABLE "user" (
     address int REFERENCES address(id)
 );
 
-insert into "user"
-values (default , 'John', 'Castle', 'admin@blog.com', 'password', '1999-04-04 01:12:11', 5, 'M', NULL, NULL, 1);
 /*
 type for fuel, 5 options (for now?)
 */
@@ -130,8 +122,6 @@ CREATE TABLE car (
     user_id int REFERENCES "user"(id) NOT NULL,
     picture int REFERENCES picture(id)
 );
--- insert into car
--- values (1, '9999', 'Red', 'Toyota', 'asdf', 4, 1996, '4', 'ethanol', 1, NULL);
 
 /*
 ride table, belongs to a "user"
@@ -182,27 +172,3 @@ CREATE TABLE review (
     review_text VARCHAR(1000),
     creation date default now()
 );
-
-insert into "user"
-values (default , 'John', 'Castle', 'admin@blog.com', 'password', '1999-04-04 01:12:11', 5, 'M', NULL, NULL, 3);
-
-insert into car
-values (default , '9999', 'Red', 'Toyota', 'asdf', 4, 1996, '4', 'ethanol', 2, NULL);
-
-insert into address
-values (default, 'Belgium', 'Antwerp', '2600', 'KwebbelStraat', '69', 51.0953, 4.49607); /*startpunt*/
-
-insert into ride
-values (default , '2020-04-14 13:00', '2020-04-14 14:00', 1, 5, 301, true, 1, null, null, null);
-
-insert into ride
-values (default, '2020-04-14 13:00', '2020-04-14 14:00', 1, 5, 300, true, 1, null, null, null);
-
-insert into ride
-values (default, '2020-04-14 13:00', '2020-04-14 14:00', 1, 5, 148, true, 1, null, null, null);
-
-insert into ride
-values (default, '2020-04-14 13:00', '2020-04-14 14:00', 1, 5, 14, true, 1, null, null, null);
-
-insert into ride
-values (default, '2020-04-14 13:00', '2020-04-14 14:00', 1, 5, 248, true, 1, null, null, null);
