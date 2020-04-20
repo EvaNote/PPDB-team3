@@ -12,12 +12,18 @@ class Ride:
         self.pickup_1 = p1
         self.pickup_2 = p2
         self.pickup_3 = p3
+        self.from_lat = None
+        self.from_lng = None
+        self.to_lat = None
+        self.to_lng = None
 
     def to_dict(self):
         return {'id': self.id, 'departure_time': self.departure_time, 'arrival_time': self.arrival_time,
                 'user_id': self.user_id, 'address_1': self.address_1, 'campus': self.campus,
-                'to_campus': self.to_campus,
-                'car_id': self.car_id, 'pickup_1': self.pickup_1, 'pickup_2': self.pickup_2, 'pickup_3': self.pickup_3}
+                'to_campus': self.to_campus, 'car_id': self.car_id, 'pickup_1': self.pickup_1,
+                'pickup_2': self.pickup_2,
+                'pickup_3': self.pickup_3, 'from_lat': self.from_lat, 'from_lng': self.from_lng, 'to_lat': self.to_lat,
+                'to_lng': self.to_lng}
 
 
 class Rides:
@@ -151,7 +157,9 @@ class Rides:
             p_time_option = 'r.departure_time'
         if campus == 1:  # riding FROM campus
             cursor.execute("""
-                                    SELECT r.id, r.departure_time, r.arrival_time, r.user_id, r.address_1, r.campus, r.to_campus, r.car_id, r.pickup_point_1, r.pickup_point_2, r.pickup_point_3
+                                    SELECT r.id, r.departure_time, r.arrival_time, r.user_id, r.address_1, r.campus, 
+                                    r.to_campus, r.car_id, r.pickup_point_1, r.pickup_point_2, r.pickup_point_3,
+                                    c.latitude, c.longitude, a.latitude, a.longitude
                                     FROM ride r join campus c on r.campus = c.id join address a on r.address_1 = a.id
                                     WHERE ((distance_difference(a.latitude, a.longitude, %s, %s) <= 3000) AND -- 1)
                                           (time_difference(%s, """ + p_time_option + """) between 0 and 600) AND -- 2)
@@ -166,7 +174,9 @@ class Rides:
                 lat_to, lng_to, p_datetime, lat_from, lng_from, lat_from, lng_from))
         else:  # riding TO campus
             cursor.execute("""
-                                    SELECT r.id, r.departure_time, r.arrival_time, r.user_id, r.address_1, r.campus, r.to_campus, r.car_id, r.pickup_point_1, r.pickup_point_2, r.pickup_point_3
+                                    SELECT r.id, r.departure_time, r.arrival_time, r.user_id, r.address_1, r.campus, 
+                                    r.to_campus, r.car_id, r.pickup_point_1, r.pickup_point_2, r.pickup_point_3,
+                                    a.latitude, a.longitude, c.latitude, c.longitude
                                     FROM ride r join campus c on r.campus = c.id join address a on r.address_1 = a.id
                                     WHERE ((distance_difference(c.latitude, c.longitude, %s, %s) <= 3000) AND -- 1)
                                           (time_difference(%s, """ + p_time_option + """) BETWEEN 0 AND 600) AND -- 2)
@@ -183,5 +193,9 @@ class Rides:
         for row in cursor:
             print(row)
             ride = Ride(row[0], row[1], row[2], row[3], row[4], row[5], row[6], row[7], row[8], row[9], row[10])
+            ride.from_lat = row[11]
+            ride.from_lng = row[12]
+            ride.to_lat = row[13]
+            ride.to_lng = row[14]
             rides.append(ride)
         return rides
