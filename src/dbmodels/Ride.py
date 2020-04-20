@@ -171,7 +171,7 @@ class Rides:
         if campus == 1:  # riding FROM campus
             cursor.execute("""
                                     SELECT r.id, r.departure_time, r.arrival_time, r.user_id, r.address_1, r.campus, 
-                                    r.to_campus, r.car_id, r.pickup_point_1, r.pickup_point_2, r.pickup_point_3,
+                                    r.to_campus, r.car_id, r.passengers, r.pickup_point_1, r.pickup_point_2, r.pickup_point_3,
                                     c.latitude, c.longitude, a.latitude, a.longitude
                                     FROM ride r join campus c on r.campus = c.id join address a on r.address_1 = a.id
                                     WHERE ((distance_difference(a.latitude, a.longitude, %s, %s) <= 3000) AND -- 1)
@@ -188,7 +188,7 @@ class Rides:
         else:  # riding TO campus
             cursor.execute("""
                                     SELECT r.id, r.departure_time, r.arrival_time, r.user_id, r.address_1, r.campus, 
-                                    r.to_campus, r.car_id, r.pickup_point_1, r.pickup_point_2, r.pickup_point_3,
+                                    r.to_campus, r.car_id, r.passengers, r.pickup_point_1, r.pickup_point_2, r.pickup_point_3,
                                     a.latitude, a.longitude, c.latitude, c.longitude
                                     FROM ride r join campus c on r.campus = c.id join address a on r.address_1 = a.id
                                     WHERE ((distance_difference(c.latitude, c.longitude, %s, %s) <= 3000) AND -- 1)
@@ -205,10 +205,10 @@ class Rides:
         rides = list()
         for row in cursor:
             print(row)
-            ride = Ride(row[0], row[1], row[2], row[3], row[4], row[5], row[6], row[7], row[8], row[9], row[10])
-            ride.from_lat = row[11]
-            ride.from_lng = row[12]
-            ride.to_lat = row[13]
-            ride.to_lng = row[14]
+            ride = Ride(row[0], row[1], row[2], row[3], row[4], row[5], row[6], row[7], row[8], row[9], row[10], row[11])
+            ride.from_lat = row[12]
+            ride.from_lng = row[13]
+            ride.to_lat = row[14]
+            ride.to_lng = row[15]
             rides.append(ride)
         return rides

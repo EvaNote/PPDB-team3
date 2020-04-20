@@ -114,12 +114,8 @@ $(document).ready(function () {
 
     //TODO: dropdown? Lijst? Niks?
     document.getElementsByClassName('leaflet-routing-geocoder')[1].remove();
+    document.getElementsByClassName('leaflet-routing-geocoder')[0].remove();
     document.getElementsByClassName('leaflet-routing-add-waypoint')[0].remove();
-    // let child = document.createElement('div');
-    // child.innerHTML = "<p>Kies een campus op de kaart (geen campus gekozen)</p>";
-    // child = child.firstChild;
-    // document.getElementsByClassName('leaflet-routing-geocoders')[0].appendChild(child);
-    // add time form
 
     //src: https://github.com/pointhi/leaflet-color-markers
     var universityIcon = new L.Icon({
@@ -140,16 +136,6 @@ $(document).ready(function () {
         shadowSize: [32, 32]
     });
 
-    let formChild = document.createElement('form');
-    formChild.setAttribute('action', '#');
-    formChild.setAttribute('id', 'campus');
-    let labelChild = document.createElement('label');
-    labelChild.setAttribute('for', 'campus_option');
-    let selectChild = document.createElement('select');
-    selectChild.setAttribute('id', 'campus_option');
-    selectChild.setAttribute('name', 'campus_option');
-
-
     $.post({
         contentType: "application/json",
         url: "/en/fillschools"
@@ -162,7 +148,6 @@ $(document).ready(function () {
                 let optionChild = document.createElement('option');
                 let textOption = document.createTextNode(hover_display);
                 optionChild.appendChild(textOption);
-                selectChild.appendChild(optionChild);
 
                 //hover_display = hover_display.substr(0, hover_display.length - 29);
                 let icon = null;
@@ -233,11 +218,6 @@ $(document).ready(function () {
             }
 
         });
-
-    formChild.appendChild(selectChild);
-    formChild.appendChild(labelChild);
-
-    document.getElementsByClassName('leaflet-routing-geocoders')[0].appendChild(formChild);
 
     let child = document.createElement('div');
     child.innerHTML = "<form action=\"#\" id=\"ride-time\">\n" +
@@ -320,17 +300,78 @@ $(function () {
                 // when post request is done, get the returned data and do something with it
                 .done(function (data) { // response function
                     alert("Result: " + JSON.stringify(data));
-                    $('#result').append(JSON.stringify(data));
-                    let bttn = document.createElement("button");
-                    bttn.setAttribute("id", "asd")
-                    bttn.innerHTML = "hi there";
-                    $('#result').append(bttn);
-                    let bttn2 = document.createElement("button");
-                    bttn2.setAttribute("class","btn btn-outline-info");
+                    if (data === null) {
+                        return
+                    }
+                    let result_div = $('#result');
+                    result_div.empty();
+                    result_div.attr("class", "row justify-content-center");
+                    for (let d = 0; d < data["results"].length; d++) {
+                        let result = data.results[d];
+                        let choice = document.createElement("div");
+                        choice.setAttribute("class", "border border-info rounded col-md-5 m-3 text-left");
+                        let from, to;
+                        if (result["to_campus"] === true) {
+                            from = result["address_1"];
+                            to = result["campus"];
+                        } else {
+                            from = result["campus"];
+                            to = result["address_1"];
+                        }
+                        let innerRow = document.createElement("div");
+                        innerRow.setAttribute("class", "row");
 
-                    bttn2.innerHTML = "Arno6969696969";
-                    $('#result').append(bttn2);
+                        let leftColumn = document.createElement("div");
+                        leftColumn.setAttribute("class", "col-md-5");
 
+                        let rightColumn = document.createElement("div");
+                        rightColumn.setAttribute("class", "col-md-5");
+
+                        leftColumn.innerHTML = "<br><p>From: " + from.toString() + "</p>\n" +
+                            "<p>To: " + to.toString() + "</p>\n" +
+                            "<p>Departure: " + result["departure_time"] + "</p>\n" +
+                            "<p>Arrival: " + result["arrival_time"] + "</p>";
+
+                        let mapButton = document.createElement("button");
+                        mapButton.setAttribute("class","btn btn-success m-2");
+                        mapButton.innerHTML = "Show on map";
+
+                        let addButton = document.createElement("button");
+                        addButton.setAttribute("class","btn btn-success m-2");
+                        addButton.innerHTML = "Add this ride";
+
+                        rightColumn.appendChild(mapButton);
+                        rightColumn.appendChild(addButton);
+
+                        innerRow.appendChild(leftColumn);
+                        innerRow.appendChild(rightColumn);
+
+                        choice.appendChild(innerRow);
+
+                        result_div.append(choice);
+                    }
+
+
+                    // $('#result').attr("class", "row justify-content-center");
+                    // for (let d = 0; d < data["results"].length; d++) {
+                    //     let result = data.results[d];
+                    //     let btn = document.createElement("button");
+                    //     btn.setAttribute("id", "result" + d.toString())
+                    //     btn.setAttribute("class","btn btn-info col-md-5 m-3 text-left");
+                    //     let from, to;
+                    //     if (result["to_campus"] === true) {
+                    //         from = result["address_1"];
+                    //         to = result["campus"];
+                    //     } else {
+                    //         from = result["campus"];
+                    //         to = result["address_1"];
+                    //     }
+                    //     btn.innerHTML = "From: " + from.toString() + "<br>\n" +
+                    //                     "To: " + to.toString() + "<br>\n" +
+                    //                     "Departure: " + result["departure_time"] + "<br>\n" +
+                    //                     "Arrival: " + result["arrival_time"] + "<br>";
+                    //     $('#result').append(btn);
+                    // }
                 });
         }
         return false;

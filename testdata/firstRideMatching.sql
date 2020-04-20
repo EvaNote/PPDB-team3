@@ -49,7 +49,8 @@ CREATE TABLE ride (
     address_1 int REFERENCES address(id) NOT NULL,
     campus int REFERENCES campus(id) NOT NULL,
     to_campus bool default true,
-    car_id int REFERENCES car(id) NOT NULL,
+    car_id int REFERENCES car(id),
+    passengers int NOT NULL,
     pickup_point_1 int REFERENCES pickup_point(id),
     pickup_point_2 int REFERENCES pickup_point(id),
     pickup_point_3 int REFERENCES pickup_point(id)
@@ -70,35 +71,35 @@ values (default , '9999', 'Red', 'Toyota', 'asdf', 4, 1996, '4', 'ethanol', 1, N
         eindpunt: UAntwerpen - Campus Middelheim (301)
  */
 insert into ride
-values (default , '2020-04-14 13:00', '2020-04-14 14:00', 1, 1, 301, true, 1, null, null, null);
+values (default , '2020-04-14 13:00', '2020-04-14 14:00', 1, 1, 301, true, 1, 3, null, null, null);
 
 /* route 2:
         start punt: address 1
         eindpunt: UAntwerpen - Campus Groenenborger (300)
  */
 insert into ride
-values (default, '2020-04-14 13:00', '2020-04-14 14:00', 1, 1, 300, true, 1, null, null, null);
+values (default, '2020-04-14 13:00', '2020-04-14 14:00', 1, 1, 300, true, 1, 3, null, null, null);
 
 /* route 3:
         start punt: address 1
         eindpunt: Hoger Instituut voor Godsdienstwetenschappen (148)
  */
 insert into ride
-values (default, '2020-04-14 13:00', '2020-04-14 14:00', 1, 1, 148, true, 1, null, null, null);
+values (default, '2020-04-14 13:00', '2020-04-14 14:00', 1, 1, 148, true, 1, 3, null, null, null);
 
 /* route 4:
         start punt: address 1
         eindpunt: KdG Hogeschool - Campus Hoboken (248)
  */
 insert into ride
-values (default, '2020-04-14 13:00', '2020-04-14 14:00', 1, 1, 248, true, 1, null, null, null);
+values (default, '2020-04-14 13:00', '2020-04-14 14:00', 1, 1, 248, true, 1, 3, null, null, null);
 
 /* route 5:
         start punt: address 1
         eindpunt: APB - Campus Vesta (14)
  */
 insert into ride
-values (default, '2020-04-14 13:00', '2020-04-14 14:00', 1, 1, 14, true, 1, null, null, null);
+values (default, '2020-04-14 13:00', '2020-04-14 14:00', 1, 1, 14, true, 1, 3, null, null, null);
 
 /*
 USAGE:
