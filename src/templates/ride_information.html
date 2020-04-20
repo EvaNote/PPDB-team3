@@ -4,9 +4,86 @@
 {% endblock contentTitle %}
 
 {% block contentContent %}
+    <div>
+<strong>Start: </strong>
+<select id="start" onchange="calcRoute();">
+  <option value="chicago, il">Chicago</option>
+  <option value="st louis, mo">St Louis</option>
+  <option value="joplin, mo">Joplin, MO</option>
+  <option value="oklahoma city, ok">Oklahoma City</option>
+  <option value="amarillo, tx">Amarillo</option>
+  <option value="gallup, nm">Gallup, NM</option>
+  <option value="flagstaff, az">Flagstaff, AZ</option>
+  <option value="winona, az">Winona</option>
+  <option value="kingman, az">Kingman</option>
+  <option value="barstow, ca">Barstow</option>
+  <option value="san bernardino, ca">San Bernardino</option>
+  <option value="los angeles, ca">Los Angeles</option>
+</select>
+<strong>End: </strong>
+<select id="end" onchange="calcRoute();">
+  <option value="chicago, il">Chicago</option>
+  <option value="st louis, mo">St Louis</option>
+  <option value="joplin, mo">Joplin, MO</option>
+  <option value="oklahoma city, ok">Oklahoma City</option>
+  <option value="amarillo, tx">Amarillo</option>
+  <option value="gallup, nm">Gallup, NM</option>
+  <option value="flagstaff, az">Flagstaff, AZ</option>
+  <option value="winona, az">Winona</option>
+  <option value="kingman, az">Kingman</option>
+  <option value="barstow, ca">Barstow</option>
+  <option value="san bernardino, ca">San Bernardino</option>
+  <option value="los angeles, ca">Los Angeles</option>
+</select>
+</div>
+    <style>
+      #map {
+        width: 100%;
+        height: 400px;
+        background-color: grey;
+      }
+    </style>
 
     <div class="d-flex justify-content-center">
-        <img src="{{ url_for('static', filename="images/maps.jpg") }}"class="img-fluid" alt="mapExample">
+        <div id="map"></div>
+        <script>
+            var directionsService;
+
+            function initMap() {
+                directionsService = new google.maps.DirectionsService();
+                var directionsRenderer = new google.maps.DirectionsRenderer();
+                var chicago = new google.maps.LatLng(41.850033, -87.6500523);
+                var mapOptions = {
+                    zoom:7,
+                    center: chicago
+                };
+                var map = new google.maps.Map(document.getElementById('map'), mapOptions);
+                directionsRenderer.setMap(map);
+            }
+
+            function calcRoute() {
+                var start = document.getElementById('start').value;
+                var end = document.getElementById('end').value;
+                var request = {
+                    origin: start,
+                    destination: end,
+                    travelMode: 'DRIVING'
+                };
+                directionsService.route(request, function(result, status) {
+                    if (status == 'OK') {
+                        directionsRenderer.setDirections(result);
+                    }
+                });
+            }
+        </script>
+                <!--Load the API from the specified URL
+                * The async attribute allows the browser to render the page while the API loads
+                * The key parameter will contain your own API key (which is not needed for this tutorial)
+                * The callback parameter executes the initMap() function
+                -->
+                <script async defer
+                src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAOT0WWsvnpJipTr1k8EkPaal-IVT828Gc&callback=initMap">
+                </script>
     </div>
 
     <div class="row">

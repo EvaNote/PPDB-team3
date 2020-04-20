@@ -13,8 +13,16 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='main.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='reviews.css') }}">
 
-    <!-- Font Awesome -->
-    <script src="https://kit.fontawesome.com/60565be3bc.js" crossorigin="anonymous"></script>
+    <!-- Leaflet -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.6.0/dist/leaflet.css"
+          integrity="sha512-xwE/Az9zrjBIphAcBb3F6JVqxf46+CDLwfLMHloNu6KEQCAWi6HcDUbeOfBIptF7tcCzusKFjFw2yuvEpDL9wQ=="
+          crossorigin="">
+
+    <!-- Leaflet Routing Machine -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.css">
+
+    <!-- Geocoder leaflet -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.css" />
 
     {% if title %}
         <title>Campus Carpool - {{ title }}</title>
@@ -79,11 +87,11 @@
                        aria-haspopup="true" aria-expanded="false">{{ _('Language') }}</a>
                     <div class="dropdown-menu dropdown-primary" aria-labelledby="dropdownMenuButton">
                         <a class="dropdown-item"
-                           href="{{ url_for(request.endpoint, lang_code='nl', userid='') }}">NL</a>
+                           href="{{ url_for(request.endpoint, lang_code='nl', userid='', car_id='') }}">NL</a>
                         <a class="dropdown-item"
-                           href="{{ url_for(request.endpoint, lang_code='fr', userid='') }}">FR</a>
+                           href="{{ url_for(request.endpoint, lang_code='fr', userid='', car_id='') }}">FR</a>
                         <a class="dropdown-item"
-                           href="{{ url_for(request.endpoint, lang_code='en', userid='') }}">EN</a>
+                           href="{{ url_for(request.endpoint, lang_code='en', userid='', car_id='') }}">EN</a>
                     </div>
                 </li>
             </ul>
@@ -134,8 +142,8 @@
 
 <!-- Optional JavaScript -->
 <!-- jQuery first, then Popper.js, then Bootstrap JS -->
-<script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
-        integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
+<script src="https://code.jquery.com/jquery-3.4.1.min.js"
+        integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
         crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
         integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
@@ -143,5 +151,24 @@
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
         integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
         crossorigin="anonymous"></script>
+
+<!-- Font Awesome -->
+<script src="https://kit.fontawesome.com/60565be3bc.js" crossorigin="anonymous"></script>
+
+<!-- Leaflet -->
+<script src="https://unpkg.com/leaflet@1.6.0/dist/leaflet.js"
+        integrity="sha512-gZwIG9x3wUXg2hdXF6+rVkLF/0Vi9U8D2Ntg4Ga5I5BZpVkVxlJWbSQtXPSiUTtC0TjtGOmxa1AJPuV0CPthew=="
+        crossorigin=""></script>
+
+<!-- Leaflet Routing Machine -->
+<script src="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.js"></script>
+
+<!-- Nominatim Geocoder -->
+<script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js"></script>
+
+<!-- Custom JavaScript file -->
+<script type="text/javascript" src="{{ url_for('static', filename='main.js') }}"></script>
+
+<script type="text/javascript" src="{{ url_for('static', filename="reviews.js") }}"></script>
 </body>
 </html>

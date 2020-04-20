@@ -17,6 +17,6 @@ catalog with a `messages.po` file, where you can manually translate text.
 `messages.po` file that wasn't compiled yet.
 
 - If you added text to translate (by adding `_()`'s) without overwriting what you've already translated, run 
-`pybabel extract -F babel.cfg -k _l -o messages.pot .` to update the template file, then run `pybabel update -i messages.pot -d src/translations`
+`pybabel extract -F babel.cfg -k _l -o messages.pot .` or `pybabel extract -F babel.cfg -k lazy_gettext -o messages.pot .` to update the template file, then run `pybabel update -i messages.pot -d src/translations`
 to update the `messages.po` file(s). This last command will merge the already existing file with the newly generated one.
  

@@ -93,13 +93,15 @@ arrival time is not required
 DROP TABLE IF EXISTS ride CASCADE;
 CREATE TABLE ride (
     id SERIAL PRIMARY KEY,
-    departure_time timestamp NOT NULL,
-    arrival_time timestamp,
+    departure_time timestamp,
+    arrival_time timestamp ,
+    CHECK (departure_time IS NOT NULL OR arrival_time IS NOT NULL)
     user_id int REFERENCES "user"(id) NOT NULL,
-    address_to int REFERENCES address(id) NOT NULL,
     address_from int REFERENCES address(id) NOT NULL,
+    address_to int REFERENCES campus(id) NOT NULL,
     car_id int REFERENCES car(id) NOT NULL
 );
+
 
 /*
 review table for a review, is connected to 2 people: the writer and the reviewed person

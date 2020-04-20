@@ -1,6 +1,12 @@
 {% extends "roundborder.html" %}
 {% block contentTitle %}{% endblock %}
 {% block contentContent %}
+    {#    <script type="text/javascript">#}
+    {#        #}
+    {#    </script>#}
+
+
+
     {% block profileContent %}{% endblock %}
 
     <div class="text-center pt-5 border-info" style="margin-top: 50px; margin-bottom: 30px; border-top: 3px solid">
@@ -9,16 +15,20 @@
 
     <form method="POST" action="">
         {{ form.hidden_tag() }}
+        <div id="hidden-user-id" style="visibility: hidden">
+            {{ target_user.id }}
+        </div>
 
         <fieldset class="form-group" id="ribbon">
             <div class="row">
                 <div class="col">
                     <div class="col-md-auto filter-btn">
-                        {#                <div class="form-group">#}
-                        <button class="btn btn-outline-info btn-size">
-                            <i class="fas fa-filter"></i> {{_('Filter')}}
-                        </button>
-                        {#                </div>#}
+                        <div class="nav-item dropdown sort-dropdown" style="width: fit-content">
+                            <button type="button" class="btn btn-outline-info btn-size" data-toggle="modal"
+                                    data-target="#exampleModal">
+                                <i class="fas fa-filter"></i> {{ _('Filter') }}
+                            </button>
+                        </div>
                     </div>
                     <div class="col-md-auto sort-btn">
                         <div class="nav-item dropdown sort-dropdown">
@@ -27,10 +37,10 @@
                                     aria-expanded="false"><i class="fas fa-sort-amount-up-alt"></i> {{_('Sort')}}
                             </button>
                             <div class="dropdown-menu dropdown-primary" aria-labelledby="dropdownSortButton">
-                                <a class="dropdown-item" href="#">A-Z</a>
-                                <a class="dropdown-item" href="#">Z-A</a>
-                                <a class="dropdown-item" href="#">{{ _('New-Old') }}</a>
-                                <a class="dropdown-item" href="#">{{ _('Old-New') }}</a>
+                                <a href="#" class="dropdown-item sort-review">Rate Low-High</a>
+                                <a href="#" class="dropdown-item sort-review">Rate High-Low</a>
+                                <a href="#" class="dropdown-item sort-review">Date Old-New</a>
+                                <a href="#" class="dropdown-item sort-review">Date New-Old</a>
                             </div>
                         </div>
                     </div>
@@ -48,48 +58,110 @@
                                 {% endfor %}
                             </div>
                         {% else %}
-                            {{ form.search(class="form-control form-control-lg search-size", style="width: 100%", value="Search...") }}
+                            <input class="form-control form-control-lg search-size" style="width: 100%"
+                                   placeholder="Search..." id="review-search">
                         {% endif %}
                     </div>
                 </div>
             </div>
 
-            {% for review in data %}
+            <div id="reviews">
 
-            <div class="content-section border-light p-4 mx-5 mb-5 display-review">
-                <div class="row">
-                    <div class="display_rate col-ms-auto margin-b">
-                        {% for i in range(1,6) %}
-                            {% if review.amount_of_stars <= 5-i %}
-                                <label>{{ _('stars') }}</label>
-                            {% else %}
-                                <label style="color: #deb217">{{ _('stars') }}</label>
-                            {% endif %}
-                        {% endfor %}
+                {% for review in data %}
+                    <div class="content-section border-light p-4 mx-5 mb-5 display-review">
+                        <div class="row">
+                            <div class="display_rate col-ms-auto margin-b">
+                                {% for i in range(1,6) %}
+                                    {% if review.amount_of_stars <= 5-i %}
+                                        <label>{{ _('stars') }}</label>
+                                    {% else %}
+                                        <label style="color: #deb217">{{ _('stars') }}</label>
+                                    {% endif %}
+                                {% endfor %}
+                            </div>
+                        </div>
+                        <div class="row" style="margin-left: 0">
+                            <div class="col display-title">
+                                <b>{{ review.title }}</b>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col display-name">
+                                <b>{{ review.get_creation_date_as_string() }}</b> {{ _('by') }}
+                                <b>{{ review.get_user_from_as_object().first_name }} {{ review.get_user_from_as_object().last_name }}</b>
+                            </div>
+                        </div>
+                        <div class="row" style="margin-left: 0">
+                            <img class="display-profile-pic-review"
+                                 src="{{ url_for('static', filename="images/temp_profile_pic.png") }}" alt="HTML5 Icon">
+                        </div>
+                        <div class="row display-review">
+                            <p>{{ review.review_text }}</p>
+                        </div>
                     </div>
-                </div>
-                <div class="row" style="margin-left: 0">
-                    <div class="col display-title">
-                        <b>{{ review.title }}</b>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col display-name">
-                        <b>{{ review.get_creation_date_as_string() }}</b> {{ _('by') }}
-                        <b>{{ review.get_user_from_as_object().first_name }} {{ review.get_user_from_as_object().last_name }}</b>
-                    </div>
-                </div>
-                <div class="row" style="margin-left: 0">
-                    <img class="display-profile-pic-review"
-                         src="{{ url_for('static', filename="images/temp_profile_pic.png") }}" alt="HTML5 Icon">
-                </div>
-                <div class="row display-review">
-                    <p>{{ review.review_text }}</p>
-                </div>
-            </div>
 
             {% endfor %}
+            </div>
 
         </fieldset>
     </form>
+
+
+    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+         aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Filter reviews</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <b>{{ _('Rating') }}</b>
+                    {% for j in range(1,6) %}
+                        <div class="checkbox-container" style="display: flex">
+                            <input class="checkbox" type="checkbox" style="margin-right: 5px;" value={{ j }}>
+                            <label class="display_rate" style="margin-bottom: 0;">
+                                {% for i in range(1,6) %}
+                                    {% if j <= 5-i %}
+                                        <label style="font-size: 150%">{{ _('stars') }}</label>
+                                    {% else %}
+                                        <label style="color: #deb217; font-size: 150%">{{ _('stars') }}</label>
+                                    {% endif %}
+                                {% endfor %}
+                            </label>
+                        </div>
+                    {% endfor %}
+
+                    <b>{{ _('Other properties') }}</b>
+                    <div class="checkbox-container" style="display: flex">
+                        {% if logged_in %}
+                            <input class="checkbox" type="checkbox" style="margin-right: 5px" value="me">
+                            <label>
+                                {{ _('Written by me') }}
+                            </label>
+                        {% else %}
+                            <input class="checkbox" type="checkbox" style="margin-right: 5px; value=" me" disabled>
+                            <label style="color: gray">
+                                {{ _('Written by me (requires login)') }}
+                            </label>
+                        {% endif %}
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <div id="num-results" style="color: #444444">
+                        {% if data.length == 1 %}
+                            ({{ data|length }} result)
+                        {% else %}
+                            ({{ data|length }} results)
+                        {% endif %}
+                    </div>
+                    <button type="button" class="btn btn-outline-info" data-toggle="modal" data-target="#exampleModal">
+                        Show results
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
 {% endblock contentContent %}

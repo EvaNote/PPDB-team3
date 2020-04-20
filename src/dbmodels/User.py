@@ -31,9 +31,9 @@ class User:
 
     def get_id(self):
         try:
-            return self.email
+            return self.id
         except AttributeError:
-            raise NotImplementedError('No "email" attribute - override "get_id"')
+            raise NotImplementedError('No "id" attribute - override "get_id"')
 
     def __eq__(self, other):
         """
@@ -102,14 +102,24 @@ class UserAccess:
         cursor.execute('SELECT first_name, last_name, email, password, id FROM "user"')
         users = list()
         for row in cursor:
-            user_obj = User(row[0], row[1], row[2], row[3], row[4])
+            user_obj = User(row[0], row[1], row[2], row[3])
             user_obj.id = row[4]
             users.append(user_obj)
         return users
 
-    def get_user(self, em):
+    def get_user(self, id):
         cursor = self.dbconnect.get_cursor()
-        cursor.execute('SELECT first_name, last_name, email, password, id FROM "user" WHERE email=%s', (em,))
+        cursor.execute('SELECT first_name, last_name, email, password, id FROM "user" WHERE id=%s', (id,))
+        row = cursor.fetchone()
+        if row:
+            result = User(row[0], row[1], row[2], row[3])
+            result.id = row[4]
+            return result
+        return None
+
+    def get_user_on_email(self, email):
+        cursor = self.dbconnect.get_cursor()
+        cursor.execute('SELECT first_name, last_name, email, password, id FROM "user" WHERE email=%s', (email,))
         row = cursor.fetchone()
         if row:
             result = User(row[0], row[1], row[2], row[3])
@@ -119,9 +129,7 @@ class UserAccess:
 
     def get_user_on_id(self, theId):
         cursor = self.dbconnect.get_cursor()
-        cursor.execute(
-            'SELECT first_name, last_name, email, password, age, gender, phone_number, address FROM "user" WHERE id=%s',
-            (theId,))
+        cursor.execute('SELECT first_name, last_name, email, password, age, gender, phone_number, address, picture FROM "user" WHERE id=%s', (theId,))
         row = cursor.fetchone()
         if row:
             user = User(row[0], row[1], row[2], row[3])
@@ -129,6 +137,7 @@ class UserAccess:
             user.gender = row[5]
             user.phone_number = row[6]
             user.address = row[7]
+            user.picture = row[8]
             user.id = theId
             return user
         return None
@@ -143,31 +152,22 @@ class UserAccess:
         except:
             raise Exception('Unable to add user')
 
-    def edit_user(self, user_id, first_name, last_name, email, gender, age, phone_number, address_id):
+    def edit_user(self, user_id, first_name, last_name, email, gender, age, phone_number, address_id, picture_id):
         cursor = self.dbconnect.get_cursor()
         user = self.get_user_on_id(user_id)
         # user_id = user.id
 
         try:
-            cursor.execute(
-                'UPDATE "user" SET first_name=%s,last_name=%s,email=%s,gender=%s,age=%s,phone_number=%s,address=%s WHERE id=%s',
-                (first_name, last_name, email, gender, age, phone_number, address_id, user_id))
+            cursor.execute('UPDATE "user" SET first_name=%s,last_name=%s,email=%s,gender=%s,age=%s,phone_number=%s,address=%s,picture=%s WHERE id=%s',
+            (first_name,last_name,email,gender,age,phone_number,address_id,picture_id,user_id))
             self.dbconnect.commit()
         except:
             raise Exception('Unable to edit user')
 
-    def delete_user(self, user_email):
+    def delete_user(self, user_id):
         cursor = self.dbconnect.get_cursor()
         try:
-            cursor.execute('DELETE FROM "user" WHERE email=%s', (user_email,))
-            self.dbconnect.commit()
-        except:
-            raise Exception('Unable to delete user')
-
-    def delete_user_on_id(self, user_id):
-        cursor = self.dbconnect.get_cursor()
-        try:
-            cursor.execute('DELETE FROM "user" WHERE id=%s', (user_id,))
+            cursor.execute('DELETE FROM "user" WHERE id=%s',(user_id,))
             self.dbconnect.commit()
         except:
             raise Exception('Unable to delete user')

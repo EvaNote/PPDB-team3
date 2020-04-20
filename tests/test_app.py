@@ -1,7 +1,11 @@
+import os
+import tempfile
 import unittest
 from src import create_app, TestConfig
+from flask_login import current_user, login_user, logout_user
 from src.utils import user_access, bcrypt
 from src.dbmodels.User import User
+import base64
 
 app = create_app(TestConfig)
 
@@ -9,19 +13,24 @@ app = create_app(TestConfig)
 # source: https://github.com/pallets/flask/blob/master/examples/tutorial/tests/conftest.py
 class FlaskTestCase(unittest.TestCase):
     def setUp(self):
+        self.db_fd, app.config['DATABASE'] = tempfile.mkstemp()
+        app.config['TESTING'] = True
         self.client = app.test_client()
-
-    @classmethod
-    def setUpClass(cls):
-        """ create a user in the database used for running tests """
+        self.app_context = app.app_context()
+        self.app_context.push()
+        # need at least one user for some of the tests below, so make sure there is at least one
+        user_email = 'test@blog.com'
+        user_first_name = 'test'
+        user_last_name = 'test'
         user_password = bcrypt.generate_password_hash('test').decode('utf-8')
-        user_obj = User('test', 'test', 'test@blog.com', user_password)
-        user_access.add_user(user_obj)
+        self.user_obj = User(first_name=user_first_name, last_name=user_last_name, email=user_email,
+                             password=user_password)
+        user_access.add_user(self.user_obj)
 
-    @classmethod
-    def tearDownClass(cls):
-        """ delete the test user from the database """
-        user_access.delete_user('test@blog.com')
+    def tearDown(self):
+        self.app_context.pop()
+        os.close(self.db_fd)
+        os.unlink(app.config['DATABASE'])
 
 
 class ProperlyLoaded(FlaskTestCase):

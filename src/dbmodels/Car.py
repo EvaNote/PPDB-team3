@@ -35,11 +35,14 @@ class Cars:
         return cars
 
     def get_on_id(self, id):
-        found = self.get_on('id', id)
-        if len(found) > 0:
-            return found[0]
-        else:
+        cursor = self.dbconnect.get_cursor()
+        cursor.execute('SELECT id,number_plate,color,brand,model,nr_seats,construction_year,fuel_consumption,fuel,user_id,picture FROM car WHERE id=%s',
+                       (id,))
+        car = cursor.fetchone()
+        if car == None:
             return None
+        car_obj = Car(car[0], car[1], car[2], car[3], car[4], car[5], car[6], car[7], car[8], car[9], car[10])
+        return car_obj
 
     def get_on_user_id(self, user_id):
         #found = self.get_on('user_id', user_id)
@@ -74,3 +77,20 @@ class Cars:
             self.dbconnect.commit()
         except:
             raise Exception('Unable to add car')
+
+    def edit_car(self, car_id, brand, model, color, plateNumber, seats, constructionYear, consumption, fuelType, picture):
+        cursor = self.dbconnect.get_cursor()
+        try:
+            cursor.execute('UPDATE "car" SET brand=%s, model=%s, color=%s, number_plate=%s, nr_seats=%s, construction_year=%s, fuel_consumption=%s, fuel=%s, picture=%s WHERE id=%s',
+            (brand, model, color, plateNumber, seats, constructionYear, consumption, fuelType, picture, car_id))
+            self.dbconnect.commit()
+        except:
+            raise Exception('Unable to edit car')
+
+    def delete_car(self, car_id):
+        cursor = self.dbconnect.get_cursor()
+        try:
+            cursor.execute('DELETE FROM "car" WHERE id=%s',(car_id,))
+            self.dbconnect.commit()
+        except:
+            raise Exception('Unable to delete car')
