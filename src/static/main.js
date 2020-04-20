@@ -40,10 +40,22 @@ function createButton(label, container) {
     return btn;
 }
 
-let state = {campusClicked: false, campusId: null, startFromThisLocationClicked: false, goToThisLocationClicked: false};
+let state = {
+    campusClicked: false,
+    campusFromId: null,
+    campusToId: null,
+    startFromThisLocationClicked: false,
+    goToThisLocationClicked: false
+};
 
 function resetState() {
-    state = {campusClicked: false, campusId: null, startFromThisLocationClicked: false, goToThisLocationClicked: false};
+    state = {
+        campusClicked: false,
+        campusFromId: null,
+        campusToId: null,
+        startFromThisLocationClicked: false,
+        goToThisLocationClicked: false
+    };
 }
 
 
@@ -200,7 +212,7 @@ $(document).ready(function () {
                                 .openOn(map);
                             L.DomEvent.on(startBtn, 'click', function () {
                                 state.campusClicked = true;
-                                state.campusId = e.target.id;
+                                state.campusFromId = e.target['options'].id;
                                 state.startFromThisLocationClicked = true;
                                 control.spliceWaypoints(0, 1, e.latlng);
                                 map.closePopup();
@@ -208,7 +220,7 @@ $(document).ready(function () {
 
                             L.DomEvent.on(destBtn, 'click', function () {
                                 state.campusClicked = true;
-                                state.campusId = e.target.id;
+                                state.campusToId = e.target['options'].id;
                                 state.goToThisLocationClicked = true;
                                 control.spliceWaypoints(control.getWaypoints().length - 1, 1, e.latlng);
                                 map.closePopup();
@@ -292,8 +304,9 @@ $.fn.serializeObject = function () {
 $(function () {
     // make sure pressing the 'update' button doesn't refresh the entire page
     $('form').submit(function () {
-        let from = control.getWaypoints()[0].latLng;
-        let to = control.getWaypoints()[1].latLng;
+        var from, to;
+        state.campusFromId ? from = state.campusFromId : from = control.getWaypoints()[0].latLng;
+        state.campusToId ? to = state.campusToId : to = control.getWaypoints()[1].latLng;
         let form = $('form').serializeObject();
         // check if from-to are defined. If they aren't, nothing should happen
         if (typeof from !== 'undefined' && typeof to !== 'undefined') {

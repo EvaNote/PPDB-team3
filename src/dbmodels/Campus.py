@@ -28,6 +28,6 @@ class Campusses:
         cursor = self.dbconnect.get_cursor()
         cursor.execute("SELECT id,name,category,latitude,longitude FROM campus WHERE id=%s", (school_id,))
         # 1 result
-        row = cursor[0]
+        row = cursor.fetchone()
         school = Campus(row[0], row[1], row[2], row[3], row[4])
         return school

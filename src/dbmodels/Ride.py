@@ -173,8 +173,6 @@ class Rides:
     #     return rides
 
     def match_rides_with_passenger(self, p_from, p_to, p_time_option, p_datetime):
-        print(p_from)
-        print(p_to)
         """
         Check if:
             1) driver destination is close enough to passenger destination
@@ -189,23 +187,26 @@ class Rides:
         :return:
         """
 
-        lat_from, lat_to, lng_from, lng_to = None
-
         from src.utils import campus_access
         if isinstance(p_from, int):  # p_from is campus
-            campus = campus_access.get_on_id(p_from)
+            campus = campus_access.get_on_id(p_from).to_dict()
             lat_from = campus['lat']
             lng_from = campus['lng']
         else:
             lat_from = p_from['lat']
             lng_from = p_from['lng']
         if isinstance(p_to, int):  # p_to is campus
-            campus = campus_access.get_on_id(p_to)
+            campus = campus_access.get_on_id(p_to).to_dict()
             lat_to = campus['lat']
             lng_to = campus['lng']
         else:
             lat_to = p_to['lat']
             lng_to = p_to['lng']
+
+        print('--' + str(lat_from))
+        print('--' + str(lat_to))
+        print('--' + str(lng_from))
+        print('--' + str(lng_to))
 
         cursor = self.dbconnect.get_cursor()
         if p_time_option == "Arrive by":
