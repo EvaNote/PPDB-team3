@@ -49,7 +49,7 @@ def new_review(userid):
         review_obj = Review(None, user_for, user_from, amount_of_stars, title, text, None)
         review_access.add_review(review_obj)
         flash(lazy_gettext('Your review has been posted successfully!'), 'success')
-        return redirect(url_for('main.home'))
+        return redirect(url_for('users.user',userid=userid))
     else:
         flash(lazy_gettext('Writing review failed.'), 'danger')
     return render_template('new_review.html', title=lazy_gettext('New review'), form=form, loggedIn=True, user_from=current_user,
