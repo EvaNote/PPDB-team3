@@ -315,7 +315,6 @@ class Rides:
                 lat_to, lng_to, p_datetime, lat_from, lng_from, lat_from, lng_from))
         rides = list()
         for row in cursor:
-            print(row)
             ride = Ride(row[0], row[1], row[2], row[3], row[4], row[5], row[6], row[7], row[8], row[9], row[10], row[11])
             ride.from_lat = row[12]
             ride.from_lng = row[13]
@@ -332,14 +331,11 @@ class Rides:
             lng2 = ride.from_lng
             dist = self.__helper_function_dist(lat1, lng1, lat2, lng2)
             ride.shortest_dist = dist
-            print(dist)
 
-            for i in range(8, 11):
-                print(row[i])
+            for i in range(9, 12):
                 if not row[i]:
                     break
                 pp = pickup_point_access.get_on_id(row[i])
-                print(pp.to_dict())
                 lat1 = lat_from
                 lng1 = lng_from
                 lat2 = pp.latitude
