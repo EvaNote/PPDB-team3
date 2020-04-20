@@ -3,73 +3,73 @@
     {{ title }}
 {% endblock contentTitle %}
 {% block contentContent %}
-<div id="createride_map"></div>
+<div id="findride_map"></div>
 
-            <form method="POST" action="">
-               {{ form.hidden_tag() }}
-             <!-- display the form -->
-              <fieldset class="form-group">
-                <select class="form-control" name="cars">
-                    {% for car in cars %}
-                        <option value="{{ car }}">{{ car }}</option>
-                    {% endfor %}
-                </select>
-                  <div class="form-group">
-                      {{ form.fromField.label(class="form-control-label") }}
-                      {% if form.fromField.errors %} }
-                         {{ form.fromField(class="form-control is-invalid") }}
-                         <div class="invalid-feedback">
-                             {% for error in form.fromField.errors %}
-                                 <span>{{ error }}</span>
-                             {% endfor %}
-                         </div>
-                     {% else %}
-                         {{ form.fromField(class="form-control form-control-lg") }}
-                     {% endif %}
-                 </div>
-                 <div class="form-group">
-                     {{ form.toField.label(class="form-control-label") }}
-                     {% if form.toField.errors %}
-                         {{ form.toField(class="form-control is-invalid") }}
-                         <div class="invalid-feedback">
-                             {% for error in form.toField.errors %}
-                                 <span>{{ error }}</span>
-                             {% endfor %}
-                         </div>
-                     {% else %}
-                         {{ form.toField(class="form-control form-control-lg") }}
-                     {% endif %}
-                 </div>
-                 <div class="form-group">
-                     {{ form.Date.label(class="form-control-label") }}
-                     {% if form.Date.errors %}
-                         {{ form.Date(class="form-control is-invalid") }}
-                         <div class="invalid-feedback">
-                             {% for error in form.Date.errors %}
-                                 <span>{{ error }}</span>
-                             {% endfor %}
-                         </div>
-                     {% else %}
-                         {{ form.Date(class="form-control form-control-lg") }}
-                     {% endif %}
-                 </div>
-                 <div class="form-group">
-                     {{ form.Time.label(class="form-control-label") }}
-                     {% if form.Time.errors %}
-                         {{ form.Time(class="form-control is-invalid") }}
-                         <div class="invalid-feedback">
-                             {% for error in form.Time.errors %}
-                                 <span>{{ error }}</span>
-                             {% endfor %}
-                         </div>
-                     {% else %}
-                         {{ form.Time(class="form-control form-control-lg") }}
-                     {% endif %}
-                 </div>
-             </fieldset>
-             <div class="form-group">
-                 {{ form.submit(class="btn btn-outline-info") }}
-             </div>
-             <hr class="bg-info my-4 w-100">
-         </form>
+{#            <form method="POST" action="">#}
+{#               {{ form.hidden_tag() }}#}
+{#             <!-- display the form -->#}
+{#              <fieldset class="form-group">#}
+{#                <select class="form-control" name="cars">#}
+{#                    {% for car in cars %}#}
+{#                        <option value="{{ car }}">{{ car }}</option>#}
+{#                    {% endfor %}#}
+{#                </select>#}
+{#                  <div class="form-group">#}
+{#                      {{ form.fromField.label(class="form-control-label") }}#}
+{#                      {% if form.fromField.errors %} }#}
+{#                         {{ form.fromField(class="form-control is-invalid") }}#}
+{#                         <div class="invalid-feedback">#}
+{#                             {% for error in form.fromField.errors %}#}
+{#                                 <span>{{ error }}</span>#}
+{#                             {% endfor %}#}
+{#                         </div>#}
+{#                     {% else %}#}
+{#                         {{ form.fromField(class="form-control form-control-lg") }}#}
+{#                     {% endif %}#}
+{#                 </div>#}
+{#                 <div class="form-group">#}
+{#                     {{ form.toField.label(class="form-control-label") }}#}
+{#                     {% if form.toField.errors %}#}
+{#                         {{ form.toField(class="form-control is-invalid") }}#}
+{#                         <div class="invalid-feedback">#}
+{#                             {% for error in form.toField.errors %}#}
+{#                                 <span>{{ error }}</span>#}
+{#                             {% endfor %}#}
+{#                         </div>#}
+{#                     {% else %}#}
+{#                         {{ form.toField(class="form-control form-control-lg") }}#}
+{#                     {% endif %}#}
+{#                 </div>#}
+{#                 <div class="form-group">#}
+{#                     {{ form.Date.label(class="form-control-label") }}#}
+{#                     {% if form.Date.errors %}#}
+{#                         {{ form.Date(class="form-control is-invalid") }}#}
+{#                         <div class="invalid-feedback">#}
+{#                             {% for error in form.Date.errors %}#}
+{#                                 <span>{{ error }}</span>#}
+{#                             {% endfor %}#}
+{#                         </div>#}
+{#                     {% else %}#}
+{#                         {{ form.Date(class="form-control form-control-lg") }}#}
+{#                     {% endif %}#}
+{#                 </div>#}
+{#                 <div class="form-group">#}
+{#                     {{ form.Time.label(class="form-control-label") }}#}
+{#                     {% if form.Time.errors %}#}
+{#                         {{ form.Time(class="form-control is-invalid") }}#}
+{#                         <div class="invalid-feedback">#}
+{#                             {% for error in form.Time.errors %}#}
+{#                                 <span>{{ error }}</span>#}
+{#                             {% endfor %}#}
+{#                         </div>#}
+{#                     {% else %}#}
+{#                         {{ form.Time(class="form-control form-control-lg") }}#}
+{#                     {% endif %}#}
+{#                 </div>#}
+{#             </fieldset>#}
+{#             <div class="form-group">#}
+{#                 {{ form.submit(class="btn btn-outline-info") }}#}
+{#             </div>#}
+{#             <hr class="bg-info my-4 w-100">#}
+{#         </form>#}
 {% endblock contentContent %}
