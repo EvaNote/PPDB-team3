@@ -173,6 +173,8 @@ class Rides:
     #     return rides
 
     def match_rides_with_passenger(self, p_from, p_to, p_time_option, p_datetime):
+        print(p_from)
+        print(p_to)
         """
         Check if:
             1) driver destination is close enough to passenger destination
@@ -186,37 +188,46 @@ class Rides:
         :param p_datetime:
         :return:
         """
+
+        lat_from, lat_to, lng_from, lng_to = None
+
         from src.utils import campus_access
         if isinstance(p_from, int):  # p_from is campus
-            p_from = campus_access.get_on_id(p_from).to_dict()
-        else:  # p_to is campus
-            p_to = campus_access.get_on_id(p_from).to_dict()
+            campus = campus_access.get_on_id(p_from)
+            lat_from = campus['lat']
+            lng_from = campus['lng']
+        else:
+            lat_from = p_from['lat']
+            lng_from = p_from['lng']
+        if isinstance(p_to, int):  # p_to is campus
+            campus = campus_access.get_on_id(p_to)
+            lat_to = campus['lat']
+            lng_to = campus['lng']
+        else:
+            lat_to = p_to['lat']
+            lng_to = p_to['lng']
 
         cursor = self.dbconnect.get_cursor()
         if p_time_option == "Arrive by":
             cursor.execute("""
-            SELECT r.id, r.departure_time, r.arrival_time, r.user_id, r.address_1, r.campus, r.car_id
-            FROM ride r join campus c on r.campus = c.id join address a on r.address_1 = a.id
-            WHERE r.address_1 = 1 AND
-                  r.campus = 301 AND
-                  distance_difference(c.latitude, c.longitude, %s, %s) <= 3000 AND -- 1)
-                  (time_difference(%s, r.arrival_time) BETWEEN 0 AND 600) AND -- 2)
-                  (
-                               distance_difference(a.latitude, a.longitude, %s, %s) <= 3000 OR -- 3)
+                        SELECT r.id, r.departure_time, r.arrival_time, r.user_id, r.address_1, r.campus, r.car_id
+                        FROM ride r join campus c on r.campus = c.id join address a on r.address_1 = a.id
+                        WHERE distance_difference(c.latitude, c.longitude, %s, %s) <= 3000 AND -- 1)
+                              (time_difference(%s, r.arrival_time) BETWEEN 0 AND 600) AND -- 2)
                               (
-                              select count(p.id) from pickup_point p where p.id in (r.pickup_point_1, r.pickup_point_2, r.pickup_point_3)
-                              and distance_difference(p.latitude, p.longitude, %s, %s) <= 3000
-                              ) > 0
+                                           distance_difference(a.latitude, a.longitude, %s, %s) <= 3000 OR -- 3)
+                                          (
+                                          select count(p.id) from pickup_point p where p.id in (r.pickup_point_1, r.pickup_point_2, r.pickup_point_3)
+                                          and distance_difference(p.latitude, p.longitude, %s, %s) <= 3000
+                                          ) > 0
 
-                      )""", (
-            p_from['lat'], p_from['lng'], p_datetime, p_to['lat'], p_to['lng'], p_from['lat'], p_from['lng']))
+                                  )""", (
+                lat_from, lng_from, p_datetime, lat_to, lng_to, lat_from, lat_to))
         else:
             cursor.execute("""
             SELECT r.id, r.departure_time, r.arrival_time, r.user_id, r.address_1, r.campus, r.car_id
             FROM ride r join campus c on r.campus = c.id join address a on r.address_1 = a.id
-            WHERE r.address_1 = 1 AND
-                  r.campus = 301 AND
-                  distance_difference(c.latitude, c.longitude, %s, %s) <= 3000 AND -- 1)
+            WHERE distance_difference(c.latitude, c.longitude, %s, %s) <= 3000 AND -- 1)
                   (time_difference(%s, r.departure_time) BETWEEN 0 AND 600) AND -- 2)
                   (
                                distance_difference(a.latitude, a.longitude, %s, %s) <= 3000 OR -- 3)
@@ -226,7 +237,7 @@ class Rides:
                               ) > 0
 
                       )""", (
-            p_from['lat'], p_from['lng'], p_datetime, p_to['lat'], p_to['lng'], p_from['lat'], p_from['lng']))
+                lat_from, lng_from, p_datetime, lat_to, lng_to, lat_from, lat_to))
         rides = list()
         for row in cursor:
             ride = Ride(row[0], row[1], row[2], row[3], row[4], row[5], row[6])
