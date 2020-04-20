@@ -24,8 +24,7 @@ class Ride:
         self.to_lat = None
         self.to_lng = None
         self.shortest_dist = 0
-        self.closest_lat = self.from_lat
-        self.closest_lng = self.from_lng
+        self.closest = 0
         self.string_addr_from = ''
         self.string_addr_to = ''
         self.string_addr_p1 = ''
@@ -33,25 +32,24 @@ class Ride:
         self.string_addr_p3 = ''
 
     def add_pickup(self, p, dist, addr):
-        if not self.closest_lat:
-            self.closest_lat = self.from_lat
-            self.closest_lng = self.from_lng
-        if dist < self.shortest_dist:
-            self.shortest_dist = dist
-            self.closest_lat = p.latitude
-            self.closest_lng = p.longitude
         if not self.pickup_1_lat:
+            i = 1
             self.pickup_1_lat = p.latitude
             self.pickup_1_lng = p.longitude
             self.string_addr_p1 = addr
         elif not self.pickup_2_lat:
+            i = 2
             self.pickup_2_lat = p.latitude
             self.pickup_2_lng = p.longitude
             self.string_addr_p2 = addr
         else:
+            i = 3
             self.pickup_3_lat = p.latitude
             self.pickup_3_lng = p.longitude
             self.string_addr_p3 = addr
+        if dist < self.shortest_dist:
+            self.shortest_dist = dist
+            self.closest = i
 
     def get_id(self):
         return self.id
@@ -71,35 +69,76 @@ class Ride:
             # other is not campus because else wouldn't be executed
             alias_to = ''
 
+        waypoints = dict()
+
+        start_type = 'address'
+        end_type = 'campus'
+        if not self.to_campus:
+            start_type = 'campus'
+            end_type = 'address'
+
+        index_of_closest = 0
+
+        waypoints[0] = {
+            'lat': self.from_lat,
+            'lng': self.from_lng,
+            'addr': self.string_addr_from,
+            'type': start_type,
+            'alias': alias_from
+        }
+
+        i = 1
+        if self.pickup_1:
+            waypoints[i] = {
+                'lat': self.pickup_1_lat,
+                'lng': self.pickup_1_lng,
+                'addr': self.string_addr_p1,
+                'id': self.pickup_1,
+                'type': 'pickup_point',
+                'alias': 'pickup 1'
+            }
+            i += 1
+
+        if self.pickup_2:
+            waypoints[i] = {
+                'lat': self.pickup_2_lat,
+                'lng': self.pickup_2_lng,
+                'addr': self.string_addr_p2,
+                'id': self.pickup_2,
+                'type': 'pickup_point',
+                'alias': 'pickup 2'
+            }
+            i += 1
+
+        if self.pickup_3:
+            waypoints[i] = {
+                'lat': self.pickup_3_lat,
+                'lng': self.pickup_3_lng,
+                'addr': self.string_addr_p3,
+                'id': self.pickup_3,
+                'type': 'pickup_point',
+                'alias': 'pickup 3'
+            }
+            i += 1
+
+        waypoints[i] = {
+            'lat': self.to_lat,
+            'lng': self.to_lng,
+            'addr': self.string_addr_to,
+            'type': end_type,
+            'alias': alias_to
+        }
+
         return {
             'id': self.id,
             'departure_time': self.departure_time,
             'arrival_time': self.arrival_time,
-            'lat_from': self.from_lat,
-            'lng_from': self.from_lng,
-            'alias_from': alias_from,
-            'lat_to': self.to_lat,
-            'lng_to': self.to_lng,
-            'alias_to': alias_to,
-            'pickup_1': self.pickup_1,
-            'pickup_1_lat': self.pickup_1_lat,
-            'pickup_1_lng': self.pickup_1_lng,
-            'pickup_2': self.pickup_2,
-            'pickup_2_lat': self.pickup_2_lat,
-            'pickup_2_lng': self.pickup_2_lng,
-            'pickup_3': self.pickup_3,
-            'pickup_3_lat': self.pickup_3_lat,
-            'pickup_3_lng': self.pickup_3_lng,
-            'closest_lat': self.closest_lat,
-            'closest_lng': self.closest_lng,
+            'closest': self.closest,
+            'len': i + 1,
             'car_id': self.car_id,
             'passengers': self.passengers,
             'user_id': self.user_id,
-            'str_addr_from': self.string_addr_from,
-            'str_addr_to': self.string_addr_to,
-            'str_addr_pickup_1': self.string_addr_p1,
-            'str_addr_pickup_2': self.string_addr_p2,
-            'str_addr_pickup_3': self.string_addr_p3
+            'waypoints': waypoints
         }
 
 class Rides:

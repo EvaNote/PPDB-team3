@@ -211,6 +211,8 @@ def myrides():
 
 @users.route("/user=<userid>", methods=['GET', 'POST'])
 def user(userid):
+    if not userid.isdigit():
+        abort(404)
     form = Reviews()
     target_user = user_access.get_user_on_id(userid)
     form2 = SelectSubject()
@@ -324,6 +326,8 @@ def add_vehicle():
 
 @users.route("/edit_vehicle=<car_id>", methods=['GET', 'POST'])
 def edit_vehicle(car_id):
+    if not car_id.isdigit():
+        abort(404)
     if not current_user.is_authenticated:  # makes sure user won`t be able to go to page without logging in
         return redirect(url_for('users.login'))
     form = VehicleForm()
@@ -366,6 +370,8 @@ def edit_vehicle(car_id):
 
 @users.route("/delete_vehicle=<car_id>", methods=['GET', 'POST'])
 def delete_vehicle(car_id):
+    if not car_id.isdigit:
+        abort(404)
     if not current_user.is_authenticated and not current_app.config[
         'TESTING']:  # makes sure user won`t be able to go to page without logging in
         return redirect(url_for('users.login'))

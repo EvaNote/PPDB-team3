@@ -34,6 +34,8 @@ def before_request():
 
 @reviews.route("/user=<userid>/new_review", methods=['GET', 'POST'])
 def new_review(userid):
+    if not userid.isdigit():
+        abort(404)
     if not current_user.is_authenticated and not current_app.config[
         'TESTING']:  # makes sure user won`t be able to go to login/register page
         return redirect(url_for('users.login'))
