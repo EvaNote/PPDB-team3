@@ -33,6 +33,8 @@ let control = L.Routing.control({
     geocoder: L.Control.Geocoder.nominatim(),
 }).addTo(map);
 
+//L.control.locate().addTo(map);
+
 function createButton(label, container) {
     var btn = L.DomUtil.create('button', '', container);
     btn.setAttribute('type', 'button');
