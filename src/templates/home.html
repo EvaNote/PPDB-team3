@@ -25,11 +25,7 @@
             <div class="col-md-11 p-5">
                 <h2 class="home-title">{{ _('How does it work?') }}</h2>
                 <p class="lead">
-                    Lorem ipsum dolor sit amet, consectetur adipisicing elit. Consectetur debitis dolorum ducimus eos
-                    exercitationem ipsum laudantium nostrum provident quo tenetur. Adipisci aspernatur esse hic in
-                    magnam necessitatibus numquam, placeat ratione veritatis. Accusamus aliquid assumenda commodi
-                    consectetur debitis deleniti dolorem, ducimus eius facilis fugiat in incidunt iusto maxime minima
-                    non odio officia pariatur possimus quasi quos repellendus rerum tenetur totam veritatis!
+                    {{ _('Just Make an account, log in, personalize your profile, then just click \'Find a ride\' and enter the required info. You can easily select rides from or to the same campus. View the driver\s profile to see what others think about them, then simply confirm you ride. If you are a driver, make sure to register your car on your account page.' ) }}
                 </p>
             </div>
         </div>
@@ -84,6 +80,7 @@
             <div class="col-md-1 bg-info"></div>
         </div>
         <!-- end of second info section -->
+        {% if displayinterested %}
         <!-- signup section -->
         <div class="row m-0 my-5 py-5 justify-content-center text-center">
             <div class="col-7">
@@ -94,6 +91,7 @@
             </div>
         </div>
         <!-- end of signup section -->
+        {% endif %}
     </section>
     <!-- end of content section -->
 {% endblock content %}
