@@ -26,8 +26,13 @@ class Ride:
         self.shortest_dist = 0
         self.closest_lat = self.from_lat
         self.closest_lng = self.from_lng
+        self.string_addr_from = ''
+        self.string_addr_to = ''
+        self.string_addr_p1 = ''
+        self.string_addr_p2 = ''
+        self.string_addr_p3 = ''
 
-    def add_pickup(self, p, dist=0.0):
+    def add_pickup(self, p, dist, addr):
         if not self.closest_lat:
             self.closest_lat = self.from_lat
             self.closest_lng = self.from_lng
@@ -38,12 +43,15 @@ class Ride:
         if not self.pickup_1_lat:
             self.pickup_1_lat = p.latitude
             self.pickup_1_lng = p.longitude
+            self.string_addr_p1 = addr
         elif not self.pickup_2_lat:
             self.pickup_2_lat = p.latitude
             self.pickup_2_lng = p.longitude
+            self.string_addr_p2 = addr
         else:
             self.pickup_3_lat = p.latitude
             self.pickup_3_lng = p.longitude
+            self.string_addr_p3 = addr
 
     def get_id(self):
         return self.id
@@ -86,7 +94,12 @@ class Ride:
             'closest_lng': self.closest_lng,
             'car_id': self.car_id,
             'passengers': self.passengers,
-            'user_id': self.user_id
+            'user_id': self.user_id,
+            'str_addr_from': self.string_addr_from,
+            'str_addr_to': self.string_addr_to,
+            'str_addr_pickup_1': self.string_addr_p1,
+            'str_addr_pickup_2': self.string_addr_p2,
+            'str_addr_pickup_3': self.string_addr_p3
         }
 
 class Rides:
@@ -270,21 +283,15 @@ class Rides:
             ride.to_lat = row[14]
             ride.to_lng = row[15]
 
+            ride.string_addr_from = self.__helper_function_get_address(lat_from, lng_from)
+            ride.string_addr_to = self.__helper_function_get_address(lat_to, lng_to)
+
             from src.utils import pickup_point_access
-            from math import atan2, sqrt, sin, radians, cos
             lat1 = lat_from
             lng1 = lng_from
             lat2 = ride.from_lat
             lng2 = ride.from_lng
-            dist = 6371000 * (2 * atan2(sqrt(sin(radians(lat2 - lat1) / 2) * sin(radians(lat2 - lat1) / 2) +
-                                             cos(radians(lat1)) * cos(radians(lat2)) * sin(radians(lng2 - lng1) / 2) *
-                                             sin(radians(lng2 - lng1) / 2)), sqrt(1 -
-                                                                                  (sin(radians(lat2 - lat1) / 2) * sin(
-                                                                                      radians(lat2 - lat1) / 2) +
-                                                                                   cos(radians(lat1)) * cos(
-                                                                                              radians(lat2)) *
-                                                                                   sin(radians(lng2 - lng1) / 2) *
-                                                                                   sin(radians(lng2 - lng1) / 2)))))
+            dist = self.__helper_function_dist(lat1, lng1, lat2, lng2)
             ride.shortest_dist = dist
             print(dist)
 
@@ -298,17 +305,50 @@ class Rides:
                 lng1 = lng_from
                 lat2 = pp.latitude
                 lng2 = pp.longitude
-                dist = 6371000 * (2 * atan2(sqrt(sin(radians(lat2 - lat1) / 2) * sin(radians(lat2 - lat1) / 2) +
-                                                 cos(radians(lat1)) * cos(radians(lat2)) * sin(
-                    radians(lng2 - lng1) / 2) *
-                                                 sin(radians(lng2 - lng1) / 2)), sqrt(1 -
-                                                                                      (sin(radians(
-                                                                                          lat2 - lat1) / 2) * sin(
-                                                                                          radians(lat2 - lat1) / 2) +
-                                                                                       cos(radians(lat1)) * cos(
-                                                                                                  radians(lat2)) *
-                                                                                       sin(radians(lng2 - lng1) / 2) *
-                                                                                       sin(radians(lng2 - lng1) / 2)))))
-                ride.add_pickup(pp, dist)
+                dist = self.__helper_function_dist(lat1, lng1, lat2, lng2)
+                addr = self.__helper_function_get_address(lat2, lng2)
+                ride.add_pickup(pp, dist, addr)
             rides.append(ride)
         return rides
+
+    def __helper_function_dist(self, lat1, lng1, lat2, lng2):
+        from src.utils import pickup_point_access
+        from math import atan2, sqrt, sin, radians, cos
+        return 6371000 * (2 * atan2(sqrt(sin(radians(lat2 - lat1) / 2) * sin(radians(lat2 - lat1) / 2) +
+                                         cos(radians(lat1)) * cos(radians(lat2)) * sin(
+            radians(lng2 - lng1) / 2) *
+                                         sin(radians(lng2 - lng1) / 2)), sqrt(1 -
+                                                                              (sin(radians(
+                                                                                  lat2 - lat1) / 2) * sin(
+                                                                                  radians(lat2 - lat1) / 2) +
+                                                                               cos(radians(lat1)) * cos(
+                                                                                          radians(lat2)) *
+                                                                               sin(radians(lng2 - lng1) / 2) *
+                                                                               sin(radians(lng2 - lng1) / 2)))))
+
+    def __helper_function_get_address(self, lat, lng):
+        # straat, huisnr, postocde, stad
+        from geopy.geocoders import Nominatim
+        geolocator = Nominatim(user_agent="campus_carpool")
+        location = geolocator.reverse(str(lat) + ', ' + str(lng), True, timeout=300)
+        try:
+            housenr = location.raw['address']['house_number']
+        except Exception as e:
+            housenr = ''
+        try:
+            road = location.raw['address']['road']
+        except Exception as e:
+            road = ''
+            housenr = ''  # no road = no housenumber
+        try:
+            town = location.raw['address']['town']
+        except Exception as e:
+            try:
+                town = location.raw['address']['city_district']
+            except Exception as e:
+                town = ''
+        try:
+            postcode = location.raw['address']['postcode']
+        except Exception as e:
+            postcode = ''
+        return road + ' ' + str(housenr) + ', ' + str(postcode) + ' ' + town
