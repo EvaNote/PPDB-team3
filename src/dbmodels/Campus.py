@@ -25,6 +25,7 @@ class Campusses:
         return result
 
     def get_on_id(self, school_id):
+        print(school_id)
         cursor = self.dbconnect.get_cursor()
         cursor.execute("SELECT id,name,category,latitude,longitude FROM campus WHERE id=%s", (school_id,))
         # 1 result

@@ -24,6 +24,10 @@
     <!-- Geocoder leaflet -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.css" />
 
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/leaflet.locatecontrol@0.70/dist/L.Control.Locate.min.css"/>
+
     {% if title %}
         <title>Campus Carpool - {{ title }}</title>
     {% else %}
@@ -169,5 +173,8 @@
 
 <!-- Custom JavaScript file -->
 <script type="text/javascript" src="{{ url_for('static', filename='main.js') }}"></script>
+
+<script src="https://cdn.jsdelivr.net/npm/leaflet.locatecontrol@0.70.0/dist/L.Control.Locate.min.js"
+        charset="utf-8"></script>
 </body>
 </html>

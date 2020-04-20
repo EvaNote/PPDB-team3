@@ -222,3 +222,47 @@ CREATE TABLE review (
 --                       );
 --
 -- select time_difference('2020-04-15 02:00', '2020-04-15 02:20');
+
+
+
+insert into "user"
+values (default , 'John', 'Castle', 'admin@blog.com', 'password', '1999-04-04 01:12:11', 5, 'M', NULL, NULL, 3);
+
+insert into car
+values (default , '9999', 'Red', 'Toyota', 'asdf', 4, 1996, '4', 'ethanol', 2, NULL);
+
+
+
+
+-- DROP TABLE IF EXISTS ride CASCADE;
+-- CREATE TABLE ride (
+--     id SERIAL PRIMARY KEY,
+--     departure_time timestamp NOT NULL,
+--     arrival_time timestamp NOT NULL,
+--     user_id int REFERENCES "user"(id) NOT NULL,
+--     address_1 int REFERENCES address(id) NOT NULL,
+--     campus int REFERENCES campus(id) NOT NULL,
+--     to_campus bool default true,
+--     car_id int REFERENCES car(id) NOT NULL,
+--     pickup_point_1 int REFERENCES pickup_point(id),
+--     pickup_point_2 int REFERENCES pickup_point(id),
+--     pickup_point_3 int REFERENCES pickup_point(id)
+-- );
+
+insert into address
+values (default, 'Belgium', 'Antwerp', '2600', 'KwebbelStraat', '69', 51.0953, 4.49607); /*startpunt*/
+
+insert into ride
+values (default , '2020-04-14 13:00', '2020-04-14 14:00', 1, 5, 301, true, 1, null, null, null);
+
+insert into ride
+values (default, '2020-04-14 13:00', '2020-04-14 14:00', 1, 5, 300, true, 1, null, null, null);
+
+insert into ride
+values (default, '2020-04-14 13:00', '2020-04-14 14:00', 1, 5, 148, true, 1, null, null, null);
+
+insert into ride
+values (default, '2020-04-14 13:00', '2020-04-14 14:00', 1, 5, 14, true, 1, null, null, null);
+
+insert into ride
+values (default, '2020-04-14 13:00', '2020-04-14 14:00', 1, 5, 248, true, 1, null, null, null);
