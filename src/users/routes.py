@@ -72,7 +72,7 @@ def account():
         pfp_path += "temp_profile_pic.png"
     return render_template('account.html', title=lazy_gettext('Account'), form=form, loggedIn=True, data=data,
                            current_user=user, cars=cars, address=address, carPicpaths=car_picpaths, pfp_path=pfp_path,
-                           car_picpaths=car_picpaths)
+                           car_picpaths=car_picpaths, target_user=user)
 
 
 # van https://www.youtube.com/watch?v=803Ei2Sq-Zs
