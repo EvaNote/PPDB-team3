@@ -183,71 +183,11 @@ CREATE TABLE review (
     creation date default now()
 );
 
--- insert into address                                                     /*LAT LONG*/
--- values (default, 'Belgium', 'Antwerp', '2600', 'KwebbelStraat', '69', 50.95688, 3.88724 ); /*startpunt*/
--- insert into address
--- values (default, 'Belgium', 'Antwerp', '2600', 'KlusStraat', '0', 50.93862, 3.7861);  /*eindpunt*/
---
--- insert into "user"
--- values (default , 'John', 'Castle', 'admin@blog.com', 'password', '1999-04-04 01:12:11', 5, 'M', NULL, NULL, 3);
---
--- insert into car
--- values (default , '9999', 'Red', 'Toyota', 'asdf', 4, 1996, '4', 'ethanol', 2, NULL);
---
--- --
--- -- insert into pickup_point
--- values(1, 50.90365, 3.50967, '2020-04-14 00:00');
--- values(2, 50.8925, 3.49324, '2020-04-14 00:00');
--- values(3, 50.89272, 3.50949, '2020-04-14 00:00');
--- -- p_from, p_to, p_time_option, p_datetime
---
--- insert into ride
--- values (1, '2020-04-14 00:00', '2020-04-15 02:00', 1, 1, 2, true, 1, 1, 2, 3);
---
--- SELECT r.id, r.departure_time, r.arrival_time, r.user_id, r.address_1, r.campus, r.car_id
---             FROM ride as r,
---                  -- pickup_point_ride as pr,
---                  address as dep, -- departure address
---                  address as dest -- destination address
---             WHERE r.address_1 = dest.id AND
---                   r.campus = dep.id AND
---                   -- r.id = pr.ride_id AND
---                   distance_difference(dest.latitude, dest.longitude, 50.7633, 3.64007) <= 3000 AND -- 1)
---                   (time_difference('2020-04-15 02:09', r.arrival_time) BETWEEN 0 AND 600) AND -- 2)
---                   (
---                               distance_difference(dep.latitude, dep.longitude, 50.7633, 3.64007) <= 3000 OR -- 3)
---                               (pickup_point_distance_difference(r.pickup_point_1, 50.7633, 3.64007) AND
---                               pickup_point_distance_difference(r.pickup_point_2, 50.7633, 3.64007) AND
---                               pickup_point_distance_difference(r.pickup_point_3, 50.7633, 3.64007))
---                       );
---
--- select time_difference('2020-04-15 02:00', '2020-04-15 02:20');
-
-
-
 insert into "user"
 values (default , 'John', 'Castle', 'admin@blog.com', 'password', '1999-04-04 01:12:11', 5, 'M', NULL, NULL, 3);
 
 insert into car
 values (default , '9999', 'Red', 'Toyota', 'asdf', 4, 1996, '4', 'ethanol', 2, NULL);
-
-
-
-
--- DROP TABLE IF EXISTS ride CASCADE;
--- CREATE TABLE ride (
---     id SERIAL PRIMARY KEY,
---     departure_time timestamp NOT NULL,
---     arrival_time timestamp NOT NULL,
---     user_id int REFERENCES "user"(id) NOT NULL,
---     address_1 int REFERENCES address(id) NOT NULL,
---     campus int REFERENCES campus(id) NOT NULL,
---     to_campus bool default true,
---     car_id int REFERENCES car(id) NOT NULL,
---     pickup_point_1 int REFERENCES pickup_point(id),
---     pickup_point_2 int REFERENCES pickup_point(id),
---     pickup_point_3 int REFERENCES pickup_point(id)
--- );
 
 insert into address
 values (default, 'Belgium', 'Antwerp', '2600', 'KwebbelStraat', '69', 51.0953, 4.49607); /*startpunt*/
