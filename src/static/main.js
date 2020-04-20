@@ -8,8 +8,8 @@
 
  // get time between waypoints
  let instr = control._line._route.instructions;
-        let time = 0;
-        for (let i in instr) {
+ let time = 0;
+ for (let i in instr) {
             time += instr[i].time;
             if (instr[i].type === "WaypointReached") {
                 console.log("Time to waypoint: " + time);
@@ -309,42 +309,47 @@ $(function () {
                     for (let d = 0; d < data["results"].length; d++) {
                         let result = data.results[d];
                         let choice = document.createElement("div");
-                        choice.setAttribute("class", "border border-info rounded col-md-5 m-3 text-left");
-                        let from, to;
-                        if (result["to_campus"] === true) {
-                            from = result["address_1"];
-                            to = result["campus"];
-                        } else {
-                            from = result["campus"];
-                            to = result["address_1"];
+                        choice.setAttribute("class", "border border-info rounded col-md-5 m-3");
+                        let from = result["str_addr_from"];
+                        let to = result["str_addr_to"];
+                        if (result["alias_from"] !== "") {
+                            from += " (" + result["alias_from"] + ")"
+                        }
+                        if (result["alias_to"] !== "") {
+                            to += " (" + result["alias_to"] + ")"
                         }
                         let innerRow = document.createElement("div");
-                        innerRow.setAttribute("class", "row");
+                        innerRow.setAttribute("class", "row justify-content-center");
 
                         let leftColumn = document.createElement("div");
-                        leftColumn.setAttribute("class", "col-md-5");
+                        leftColumn.setAttribute("class", "col-md-6 text-left");
 
                         let rightColumn = document.createElement("div");
-                        rightColumn.setAttribute("class", "col-md-5");
+                        rightColumn.setAttribute("class", "col-md-6 text-left");
 
-                        leftColumn.innerHTML = "<br><p>From: " + from.toString() + "</p>\n" +
-                            "<p>To: " + to.toString() + "</p>\n" +
-                            "<p>Departure: " + result["departure_time"] + "</p>\n" +
-                            "<p>Arrival: " + result["arrival_time"] + "</p>";
+                        leftColumn.innerHTML = "<p class=\"my-3\"><b>From:</b> " + from + "</p>\n" +
+                            "<p><b>Departure:</b> " + result["departure_time"] + "</p>\n";
+
+                        rightColumn.innerHTML = "<p class=\"my-3\"><b>To:</b> " + to + "</p>\n" +
+                            "<p><b>Arrival:</b> " + result["arrival_time"] + "</p>";
+
+                        let underColumn = document.createElement("div");
+                        underColumn.setAttribute("class", "col-md-8 text-center");
 
                         let mapButton = document.createElement("button");
-                        mapButton.setAttribute("class","btn btn-success m-2");
+                        mapButton.setAttribute("class", "btn btn-info m-2");
                         mapButton.innerHTML = "Show on map";
 
                         let addButton = document.createElement("button");
-                        addButton.setAttribute("class","btn btn-success m-2");
-                        addButton.innerHTML = "Add this ride";
+                        addButton.setAttribute("class", "btn btn-info m-2");
+                        addButton.innerHTML = "Join this ride";
 
-                        rightColumn.appendChild(mapButton);
-                        rightColumn.appendChild(addButton);
+                        underColumn.appendChild(mapButton);
+                        underColumn.appendChild(addButton);
 
                         innerRow.appendChild(leftColumn);
                         innerRow.appendChild(rightColumn);
+                        innerRow.appendChild(underColumn);
 
                         choice.appendChild(innerRow);
 
@@ -380,7 +385,6 @@ $(function () {
     // insert the current date and time in the correct input field
     $('input[type="datetime-local"]').setNow();
 });
-
 
 
 /*
