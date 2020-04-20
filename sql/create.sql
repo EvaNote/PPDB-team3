@@ -143,8 +143,6 @@ CREATE TABLE ride (
     pickup_point_2 int REFERENCES pickup_point(id),
     pickup_point_3 int REFERENCES pickup_point(id)
 );
--- insert into ride
--- values (1, '2020-04-14 00:00', '2020-04-15 02:00', 1, 1, 1, 1);
 
 /*
 pickup point table keeps track of all the pickup points used in a ride.
@@ -154,7 +152,7 @@ CREATE TABLE pickup_point (
     id SERIAL PRIMARY KEY,
     latitude float8 NOT NULL,
     longitude float8 NOT NULL,
-    estimated_time timestamp NOT NULL
+    estimated_time interval NOT NULL
 );
 
 /*

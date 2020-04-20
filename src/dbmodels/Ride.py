@@ -11,24 +11,83 @@ class Ride:
         self.car_id = car_id
         self.passengers = passengers
         self.pickup_1 = p1
+        self.pickup_1_lat = None
+        self.pickup_1_lng = None
         self.pickup_2 = p2
+        self.pickup_2_lat = None
+        self.pickup_2_lng = None
         self.pickup_3 = p3
+        self.pickup_3_lat = None
+        self.pickup_3_lng = None
         self.from_lat = None
         self.from_lng = None
         self.to_lat = None
         self.to_lng = None
+        self.shortest_dist = 0
+        self.closest_lat = self.from_lat
+        self.closest_lng = self.from_lng
+
+    def add_pickup(self, p, dist=0.0):
+        if not self.closest_lat:
+            self.closest_lat = self.from_lat
+            self.closest_lng = self.from_lng
+        if dist < self.shortest_dist:
+            self.shortest_dist = dist
+            self.closest_lat = p.latitude
+            self.closest_lng = p.longitude
+        if not self.pickup_1_lat:
+            self.pickup_1_lat = p.latitude
+            self.pickup_1_lng = p.longitude
+        elif not self.pickup_2_lat:
+            self.pickup_2_lat = p.latitude
+            self.pickup_2_lng = p.longitude
+        else:
+            self.pickup_3_lat = p.latitude
+            self.pickup_3_lng = p.longitude
 
     def get_id(self):
         return self.id
 
     def to_dict(self):
-        return {'id': self.id, 'departure_time': self.departure_time, 'arrival_time': self.arrival_time,
-                'user_id': self.user_id, 'address_1': self.address_1, 'campus': self.campus,
-                'to_campus': self.to_campus, 'car_id': self.car_id, 'passengers': self.passengers, 'pickup_1': self.pickup_1,
-                'pickup_2': self.pickup_2,
-                'pickup_3': self.pickup_3, 'from_lat': self.from_lat, 'from_lng': self.from_lng, 'to_lat': self.to_lat,
-                'to_lng': self.to_lng}
+        if self.to_campus:
+            from src.utils import campus_access
+            c = campus_access.get_on_id(self.campus)
+            alias_to = c.name
+            # check if other is campus too
+            alias_from = campus_access.get_name_if_exists(self.from_lat, self.from_lng)
 
+        else:
+            from src.utils import campus_access
+            c = campus_access.get_on_id(self.campus)
+            alias_from = c.name
+            # other is not campus because else wouldn't be executed
+            alias_to = ''
+
+        return {
+            'id': self.id,
+            'departure_time': self.departure_time,
+            'arrival_time': self.arrival_time,
+            'lat_from': self.from_lat,
+            'lng_from': self.from_lng,
+            'alias_from': alias_from,
+            'lat_to': self.to_lat,
+            'lng_to': self.to_lng,
+            'alias_to': alias_to,
+            'pickup_1': self.pickup_1,
+            'pickup_1_lat': self.pickup_1_lat,
+            'pickup_1_lng': self.pickup_1_lng,
+            'pickup_2': self.pickup_2,
+            'pickup_2_lat': self.pickup_2_lat,
+            'pickup_2_lng': self.pickup_2_lng,
+            'pickup_3': self.pickup_3,
+            'pickup_3_lat': self.pickup_3_lat,
+            'pickup_3_lng': self.pickup_3_lng,
+            'closest_lat': self.closest_lat,
+            'closest_lng': self.closest_lng,
+            'car_id': self.car_id,
+            'passengers': self.passengers,
+            'user_id': self.user_id
+        }
 
 class Rides:
     def __init__(self, dbconnect):
@@ -210,5 +269,46 @@ class Rides:
             ride.from_lng = row[13]
             ride.to_lat = row[14]
             ride.to_lng = row[15]
+
+            from src.utils import pickup_point_access
+            from math import atan2, sqrt, sin, radians, cos
+            lat1 = lat_from
+            lng1 = lng_from
+            lat2 = ride.from_lat
+            lng2 = ride.from_lng
+            dist = 6371000 * (2 * atan2(sqrt(sin(radians(lat2 - lat1) / 2) * sin(radians(lat2 - lat1) / 2) +
+                                             cos(radians(lat1)) * cos(radians(lat2)) * sin(radians(lng2 - lng1) / 2) *
+                                             sin(radians(lng2 - lng1) / 2)), sqrt(1 -
+                                                                                  (sin(radians(lat2 - lat1) / 2) * sin(
+                                                                                      radians(lat2 - lat1) / 2) +
+                                                                                   cos(radians(lat1)) * cos(
+                                                                                              radians(lat2)) *
+                                                                                   sin(radians(lng2 - lng1) / 2) *
+                                                                                   sin(radians(lng2 - lng1) / 2)))))
+            ride.shortest_dist = dist
+            print(dist)
+
+            for i in range(8, 11):
+                print(row[i])
+                if not row[i]:
+                    break
+                pp = pickup_point_access.get_on_id(row[i])
+                print(pp.to_dict())
+                lat1 = lat_from
+                lng1 = lng_from
+                lat2 = pp.latitude
+                lng2 = pp.longitude
+                dist = 6371000 * (2 * atan2(sqrt(sin(radians(lat2 - lat1) / 2) * sin(radians(lat2 - lat1) / 2) +
+                                                 cos(radians(lat1)) * cos(radians(lat2)) * sin(
+                    radians(lng2 - lng1) / 2) *
+                                                 sin(radians(lng2 - lng1) / 2)), sqrt(1 -
+                                                                                      (sin(radians(
+                                                                                          lat2 - lat1) / 2) * sin(
+                                                                                          radians(lat2 - lat1) / 2) +
+                                                                                       cos(radians(lat1)) * cos(
+                                                                                                  radians(lat2)) *
+                                                                                       sin(radians(lng2 - lng1) / 2) *
+                                                                                       sin(radians(lng2 - lng1) / 2)))))
+                ride.add_pickup(pp, dist)
             rides.append(ride)
         return rides
