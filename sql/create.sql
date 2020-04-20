@@ -145,6 +145,15 @@ CREATE TABLE ride (
 );
 
 /*
+ride passenger table keeps track of all passengers that belong to a ride.
+ */
+DROP TABLE IF EXISTS passenger_ride CASCADE;
+CREATE TABLE passenger_ride (
+    user_id int REFERENCES "user"(id) NOT NULL,
+    ride_id int REFERENCES ride(id) NOT NULL
+);
+
+/*
 pickup point table keeps track of all the pickup points used in a ride.
 */
 DROP TABLE IF EXISTS pickup_point CASCADE;
