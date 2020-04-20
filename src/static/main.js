@@ -310,13 +310,13 @@ $(function () {
                         let result = data.results[d];
                         let choice = document.createElement("div");
                         choice.setAttribute("class", "border border-info rounded col-md-5 m-3");
-                        let from = result["str_addr_from"];
-                        let to = result["str_addr_to"];
-                        if (result["alias_from"] !== "") {
-                            from += " (" + result["alias_from"] + ")"
+                        let from = result.waypoints[0]["addr"];
+                        let to = result.waypoints[result["len"] - 1]["addr"];
+                        if (result.waypoints[0]["alias"] !== "") {
+                            from += " (" + result.waypoints[0]["alias"] + ")"
                         }
-                        if (result["alias_to"] !== "") {
-                            to += " (" + result["alias_to"] + ")"
+                        if (result.waypoints[result["len"] - 1]["alias"] !== "") {
+                            to += " (" + result.waypoints[result["len"] - 1]["alias"] + ")"
                         }
                         let innerRow = document.createElement("div");
                         innerRow.setAttribute("class", "row justify-content-center");
