@@ -64,6 +64,7 @@ def createride():
         return redirect(url_for('users.myrides'))
     return render_template("createride.html", title="Create a ride", form=form, cars=cars_list)
 
+
 @rides.route("/ride_info")
 def ride_details():
     return render_template("ride_information.html", title=lazy_gettext("Ride information"))
@@ -73,6 +74,12 @@ def ride_details():
 def ride_history():
     return render_template("ride_history.html", title=lazy_gettext("Ride history"))
 
+
 @rides.route("/maps")
 def maps():
     return render_template("maps.html", title="maps")
+
+
+@rides.route("/joinride", methods=['GET', 'POST'])
+def joinride():
+    return
