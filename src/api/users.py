@@ -26,7 +26,7 @@ class RegisterApi(Resource):
             user_password = bcrypt.generate_password_hash(form.password.data).decode('utf-8')
             user_obj = User(form.first_name.data, form.last_name.data, form.email.data, user_password)
             user_access.add_user(user_obj)
-            return {"id": user_access.get_user(form.email.data).id}, 201
+            return {"id": user_access.get_user_on_email(form.email.data).id}, 201
         else:
             abort(400, message=form.errors)
 
@@ -35,7 +35,7 @@ class AuthApi(Resource):
     def post(self):
         if not all(key in request.json for key in ("username", "password")):
             abort(400, message="missing parameter(s) in body.")
-        user = user_access.get_user(request.json.get("username") + "@campuscarpool.com")
+        user = user_access.get_user_on_email(request.json.get("username") + "@campuscarpool.com")
         if user and bcrypt.check_password_hash(user.password, request.json.get("password")):
             # if user in database and password is correct, generate authentication token
             token = user.generate_auth_token()
