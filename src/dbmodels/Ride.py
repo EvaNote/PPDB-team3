@@ -322,8 +322,8 @@ class Rides:
             ride.to_lat = row[14]
             ride.to_lng = row[15]
 
-            ride.string_addr_from = self.__helper_function_get_address(lat_from, lng_from)
-            ride.string_addr_to = self.__helper_function_get_address(lat_to, lng_to)
+            ride.string_addr_from = self.__helper_function_get_address(row[12], row[13])
+            ride.string_addr_to = self.__helper_function_get_address(row[14], row[15])
 
             from src.utils import pickup_point_access
             lat1 = lat_from
