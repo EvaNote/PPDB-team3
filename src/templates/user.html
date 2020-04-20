@@ -10,7 +10,7 @@
 
                             <a class="btn btn-info" href="{{ url_for('reviews.new_review',userid=target_user.id) }}"
                    role="button">{{ _('new review') }}</a>
-    {% endif %}
+
 
       <button class="btn btn-info" type="button" data-toggle="collapse" data-target="#contact_form" aria-expanded="false" aria-controls="contact_form">
     {{ _('contact') }}
@@ -40,7 +40,7 @@
         </fieldset>
                   </form>
     <!-- Einde contactformulier -->
-
+    {% endif %}
 
 <br>
     <div>
