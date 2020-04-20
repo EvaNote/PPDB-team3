@@ -3,7 +3,7 @@ from flask_babel import lazy_gettext
 from flask import Blueprint, flash, render_template, g, current_app, abort, redirect, url_for, request
 from flask_login import current_user
 import src.users.routes
-from src.utils import user_access, car_access
+from src.utils import user_access, car_access, ride_access
 
 rides = Blueprint('rides', __name__, url_prefix='/<lang_code>')
 
@@ -63,4 +63,7 @@ def maps():
 
 @rides.route("/joinride", methods=['GET', 'POST'])
 def joinride():
-    return
+    ride_id = request.get("ride_id")
+
+    return ride_access.registerPassenger(current_user.id, ride_id)
+

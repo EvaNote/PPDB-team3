@@ -363,17 +363,49 @@ $(function () {
 
                             let mapButton = document.createElement("button");
                             mapButton.setAttribute("class", "btn btn-info m-2");
+                            mapButton.onclick = function(){
+                                //beginCoords  find the closest maybe pickupPoint
+                                let results = data.results[d];
+                                let tempArr = [];
+                                let n = results.closest;
+                                while(n<results.len){
+                                    if(results.waypoints[n] != null){
+                                        tempArr.push(L.latLng(results.waypoints[n].lat, results.waypoints[n].lng))
+                                    }
+                                    n++;
+                                }
+                                map.removeControl(control);
+                                control = L.Routing.control({
+                                    serviceUrl: 'http://127.0.0.1:5001/route/v1',
+                                    waypoints: tempArr,
+                                    autoRoute: true,
+                                }).addTo(map);
+                            }
                             mapButton.innerHTML = "Show on map";
+
 
                             let addButton = document.createElement("button");
                             addButton.setAttribute("class", "btn btn-info m-2");
+                            addButton.setAttribute("id", "ride-button-"+d.toString());
                             addButton.innerHTML = "Join this ride";
-
+                            mapButton.addEventListener("click", function() {
+                                $.post({
+                                    contentType: "application/json",
+                                    url: "/en/joinride",
+                                    data: JSON.stringify({ride_id: data.results[d].id})
+                                })
+                                    // when post request is done, get the returned data and do something with it
+                                    .done(function (data2) {
+                                        if(data2){
+                                            alert(" Ei tis gelukt!")
+                                        }
+                                    });
+                            } )
                             underColumn.appendChild(mapButton);
                             underColumn.appendChild(addButton);
 
                             innerRow.appendChild(leftColumn);
-                            innerRow.appendChild(rightColumn);
+                                innerRow.appendChild(rightColumn);
                             innerRow.appendChild(underColumn);
 
                             choice.appendChild(innerRow);
