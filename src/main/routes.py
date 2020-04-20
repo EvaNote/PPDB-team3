@@ -62,6 +62,7 @@ def receiver():
     to_coord = data.get('to')
     time_option = data.get('time_option')
     datetime = data.get('datetime').replace('T', ' ') + ':00'
+    print(from_coord, to_coord, time_option, datetime)
     rides = ride_access.match_rides_with_passenger(from_coord, to_coord, time_option, datetime)
     results = []
     for ride in rides:
@@ -76,16 +77,4 @@ def get_schools():
     campus_objects = campus_access.get_all()
     for campus in campus_objects:
         schools[campus.id] = campus.to_dict()
-
-    # geolocator = Nominatim(user_agent="specify_your_app_name_here")
-    # locations = geolocator.geocode('Universiteit België', False, limit=100000, timeout=30)
-    # for location in locations:
-    #     location.raw['soort'] = 'u'
-    #     schools[location.raw['osm_id']] = location.raw
-    #     print(location.raw)
-    # locations = geolocator.geocode('Hogeschool België', False, limit=100000, timeout=30)
-    # for location in locations:
-    #     schools[location.raw['osm_id']] = location.raw
-    #     location.raw['soort'] = 'h'
-    #     print(location.raw)
     return schools

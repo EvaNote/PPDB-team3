@@ -7,8 +7,8 @@ class Campus:
         self.longitude = longitude
 
     def to_dict(self):
-        return {'id': self.id, 'name': self.name, 'category': self.category, 'latitude': self.latitude,
-                'longitude': self.longitude}
+        return {'id': self.id, 'name': self.name, 'category': self.category, 'lat': self.latitude,
+                'lng': self.longitude}
 
 
 class Campusses:
@@ -28,6 +28,6 @@ class Campusses:
         cursor = self.dbconnect.get_cursor()
         cursor.execute("SELECT id,name,category,latitude,longitude FROM campus WHERE id=%s", (school_id,))
         # 1 result
-        row = cursor[0]
+        row = cursor.fetchone()
         school = Campus(row[0], row[1], row[2], row[3], row[4])
         return school
