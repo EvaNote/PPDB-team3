@@ -17,3 +17,7 @@ class Reviews(FlaskForm):
     submit_value = Markup('<b>Hello</b>')
     filter = SubmitField('<b>Hello</b>')
     search = StringField('')
+    sort_rate_low_high = SubmitField('Rate Low-High')
+    sort_rate_high_low = SubmitField('Rate High-Low')
+    sort_date_old_new = SubmitField('Date Old-New')
+    sort_date_new_old = SubmitField('Date New-Old')

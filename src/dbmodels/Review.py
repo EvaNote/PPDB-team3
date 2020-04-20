@@ -11,8 +11,20 @@ class Review:
         self.creation = creation
 
     def to_dict(self):
-        return {'id': self.id, 'user_for': self.user_for, 'user_from': self.user_from,
-                'amount_of_stars': self.amount_of_stars, 'title': self.title, 'review_text': self.review_text}
+        from src.utils import user_access
+        user_from = user_access.get_user_on_id(self.user_from)
+        user_for = user_access.get_user_on_id(self.user_for)
+        return {'id': self.id,
+                'user_for_id': self.user_for,
+                'user_for_first_name': user_for.first_name,
+                'user_for_last_name': user_for.last_name,
+                'user_from_id': self.user_from,
+                'user_from_first_name': user_from.first_name,
+                'user_from_last_name': user_from.last_name,
+                'amount_of_stars': self.amount_of_stars,
+                'title': self.title,
+                'review_text': self.review_text,
+                'creation': self.get_creation_date_as_string()}
 
     def get_user_from_as_object(self):
         from src.utils import user_access
@@ -98,7 +110,7 @@ class Reviews:
             print(review.amount_of_stars)
             print(review.title)
             print(review.review_text)
-            cursor.execute('INSERT INTO "review" VALUES(default, %s, %s, %s, %s, %s, default)',
+            cursor.execute('INSERT INTO "review" VALUES(default, %s, %s, %s, %s, %s, now())',
                            (
                            review.user_for, review.user_from, review.amount_of_stars, review.title, review.review_text))
             self.dbconnect.commit()

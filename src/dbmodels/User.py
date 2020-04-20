@@ -27,7 +27,6 @@ class User:
     def is_authenticated(self):
         return True
 
-    @property
     def get_id(self):
         try:
             return self.id
