@@ -79,15 +79,15 @@ values (default , '9999', 'Red', 'Toyota', 'asdf', 4, 1996, '4', 'ethanol', 1, N
 
 /* pickup 1 */
 insert into pickup_point
-values (default, 51.1, 4.4, '00:03');
+values (default, 51.100562, 4.473305, '00:03');
 
 /* pickup 2 */
 insert into pickup_point
-values (default, 51.0973, 4.48, '00:03');
+values (default, 51.106853, 4.438677, '00:03');
 
 /* pickup 3 */
 insert into pickup_point
-values (default, 51.009, 4.51, '00:03');
+values (default, 51.112011, 4.424566, '00:03');
 
 /* route 1:
         start punt: address 1
