@@ -1,56 +1,4 @@
 /*
-Function for calculating distance difference (in metres) between two coordinates
- */
-DROP FUNCTION IF EXISTS distance_difference;
-CREATE FUNCTION distance_difference(lat1 float8, lng1 float8, lat2 float8, lng2 float8) RETURNS float8 AS
-$$
-BEGIN
-    RETURN 6371000 * (2 * atan2(sqrt(sin(radians(lat2 - lat1) / 2) * sin(radians(lat2 - lat1) / 2) +
-                                     cos(radians(lat1)) * cos(radians(lat2)) * sin(radians(lng2 - lng1) / 2) *
-                                     sin(radians(lng2 - lng1) / 2)), sqrt(1 -
-                                                                          (sin(radians(lat2 - lat1) / 2) * sin(radians(lat2 - lat1) / 2) +
-                                                                           cos(radians(lat1)) * cos(radians(lat2)) *
-                                                                           sin(radians(lng2 - lng1) / 2) *
-                                                                           sin(radians(lng2 - lng1) / 2)))));
-END;
-$$
-    LANGUAGE PLPGSQL;
-
-
-/*
-Function for calculating time difference (in seconds) between two timestamps
- */
-DROP FUNCTION IF EXISTS time_difference;
-CREATE FUNCTION time_difference(time1 timestamp, time2 timestamp) RETURNS integer AS
-$$
-BEGIN
-     IF time2 is not null
-     THEN
-        RETURN EXTRACT(EPOCH FROM time1-time2);
-     ELSE
-        RETURN -1;
-     END IF;
-END;
-$$
-    LANGUAGE PLPGSQL;
-
-DROP FUNCTION IF EXISTS pickup_point_distance_difference;
-CREATE FUNCTION pickup_point_distance_difference(pickup_id integer, lat float8, lng float8) RETURNS boolean AS
-$$
-BEGIN
-    IF pickup_id is not null
-    THEN
-        select p.latitude as pLat, p.longitude as pLong from pickup_point p where id = pickup_id;
-        return distance_difference(pLat, pLong, lat, long) <= 3000;
-    ELSE
-        return false;
-    END IF;
-END;
-$$
-    LANGUAGE PLPGSQL;
-
-
-/*
 address table, doesn't need a "user" in case the address is
 a destination. all fields are required
 */
@@ -248,3 +196,54 @@ SELECT r.id, r.departure_time, r.arrival_time, r.user_id, r.address_to, r.addres
                       );
 
 select time_difference('2020-04-15 02:00', '2020-04-15 02:20');
+
+/*
+Function for calculating distance difference (in metres) between two coordinates
+ */
+DROP FUNCTION IF EXISTS distance_difference;
+CREATE FUNCTION distance_difference(lat1 float8, lng1 float8, lat2 float8, lng2 float8) RETURNS float8 AS
+$$
+BEGIN
+    RETURN 6371000 * (2 * atan2(sqrt(sin(radians(lat2 - lat1) / 2) * sin(radians(lat2 - lat1) / 2) +
+                                     cos(radians(lat1)) * cos(radians(lat2)) * sin(radians(lng2 - lng1) / 2) *
+                                     sin(radians(lng2 - lng1) / 2)), sqrt(1 -
+                                                                          (sin(radians(lat2 - lat1) / 2) * sin(radians(lat2 - lat1) / 2) +
+                                                                           cos(radians(lat1)) * cos(radians(lat2)) *
+                                                                           sin(radians(lng2 - lng1) / 2) *
+                                                                           sin(radians(lng2 - lng1) / 2)))));
+END;
+$$
+    LANGUAGE PLPGSQL;
+
+
+/*
+Function for calculating time difference (in seconds) between two timestamps
+ */
+DROP FUNCTION IF EXISTS time_difference;
+CREATE FUNCTION time_difference(time1 timestamp, time2 timestamp) RETURNS integer AS
+$$
+BEGIN
+     IF time2 is not null
+     THEN
+        RETURN EXTRACT(EPOCH FROM time1-time2);
+     ELSE
+        RETURN -1;
+     END IF;
+END;
+$$
+    LANGUAGE PLPGSQL;
+
+DROP FUNCTION IF EXISTS pickup_point_distance_difference;
+CREATE FUNCTION pickup_point_distance_difference(pickup_id integer, lat float8, lng float8) RETURNS boolean AS
+$$
+BEGIN
+    IF pickup_id is not null
+    THEN
+        select p.latitude as pLat, p.longitude as pLong from pickup_point p where id = pickup_id;
+        return distance_difference(pLat, pLong, lat, long) <= 3000;
+    ELSE
+        return false;
+    END IF;
+END;
+$$
+    LANGUAGE PLPGSQL;
