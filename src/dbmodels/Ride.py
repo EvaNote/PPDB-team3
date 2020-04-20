@@ -1,5 +1,5 @@
 class Ride:
-    def __init__(self, id, departure_time, arrival_time, user_id, address_1, campus, to_campus, car_id, p1, p2, p3):
+    def __init__(self, id, departure_time, arrival_time, user_id, address_1, campus, to_campus, car_id, passengers, p1, p2, p3):
         # address_to & address_from are id's pointing to addresses
         self.id = id
         self.departure_time = departure_time
@@ -9,6 +9,7 @@ class Ride:
         self.campus = campus
         self.to_campus = to_campus
         self.car_id = car_id
+        self.passengers = passengers
         self.pickup_1 = p1
         self.pickup_2 = p2
         self.pickup_3 = p3
@@ -16,8 +17,8 @@ class Ride:
     def to_dict(self):
         return {'id': self.id, 'departure_time': self.departure_time, 'arrival_time': self.arrival_time,
                 'user_id': self.user_id, 'address_1': self.address_1, 'campus': self.campus,
-                'to_campus': self.to_campus,
-                'car_id': self.car_id, 'pickup_1': self.pickup_1, 'pickup_2': self.pickup_2, 'pickup_3': self.pickup_3}
+                'to_campus': self.to_campus, 'car_id': self.car_id, 'passengers': self.passengers,
+                'pickup_1': self.pickup_1, 'pickup_2': self.pickup_2, 'pickup_3': self.pickup_3}
 
 
 class Rides:
@@ -27,11 +28,11 @@ class Rides:
     def get_on(self, on, val):
         cursor = self.dbconnect.get_cursor()
         cursor.execute(
-            "SELECT id, departure_time, arrival_time, user_id, address_1, campus, to_campus, car_id, pickup_point_1, pickup_point_2, pickup_point_3 FROM ride WHERE %s=%s",
+            "SELECT id, departure_time, arrival_time, user_id, address_1, campus, to_campus, car_id, passengers, pickup_point_1, pickup_point_2, pickup_point_3 FROM ride WHERE %s=%s",
             (on, val))
         rides = list()
         for row in cursor:
-            ride = Ride(row[0], row[1], row[2], row[3], row[4], row[5], row[6], row[7], row[8], row[9], row[10])
+            ride = Ride(row[0], row[1], row[2], row[3], row[4], row[5], row[6], row[7], row[8], row[9], row[10], row[11])
             rides.append(ride)
         return rides
 
@@ -87,20 +88,20 @@ class Rides:
     def get_all(self, dbconnect):
         cursor = dbconnect.get_cursor()
         cursor.execute(
-            "SELECT id, departure_time, arrival_time, user_id, address_1, campus, to_campus, car_id, pickup_point_1, pickup_point_2, pickup_point_3 FROM ride")
+            "SELECT id, departure_time, arrival_time, user_id, address_1, campus, to_campus, car_id, passengers, pickup_point_1, pickup_point_2, pickup_point_3 FROM ride")
         rides = list()
         for row in cursor:
-            ride = Ride(row[0], row[1], row[2], row[3], row[4], row[5], row[6], row[7], row[8], row[9], row[10])
+            ride = Ride(row[0], row[1], row[2], row[3], row[4], row[5], row[6], row[7], row[8], row[9], row[10], row[11])
             rides.append(ride)
         return rides
 
     def add_ride(self, ride):
         cursor = self.dbconnect.get_cursor()
         try:
-            cursor.execute('INSERT INTO "ride" VALUES(default, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)',
+            cursor.execute('INSERT INTO "ride" VALUES(default, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)',
                            (ride.departure_time, ride.arrival_time, ride.user_id, ride.address_1, ride.campus,
                             ride.to_campus,
-                            ride.car_id, ride.pickup_1, ride.pickup_2, ride.pickup_3))
+                            ride.car_id, ride.passengers, ride.pickup_1, ride.pickup_2, ride.pickup_3))
             self.dbconnect.commit()
         except:
             raise Exception('Unable to add ride')

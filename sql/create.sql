@@ -147,7 +147,8 @@ CREATE TABLE ride (
     address_1 int REFERENCES address(id) NOT NULL,
     campus int REFERENCES campus(id) NOT NULL,
     to_campus bool default true,
-    car_id int REFERENCES car(id) NOT NULL,
+    car_id int REFERENCES car(id),
+    passengers int NOT NULL,
     pickup_point_1 int REFERENCES pickup_point(id),
     pickup_point_2 int REFERENCES pickup_point(id),
     pickup_point_3 int REFERENCES pickup_point(id)
