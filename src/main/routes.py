@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, g, current_app, abort, request, jsonify, url_for, redirect
+from flask import Blueprint, render_template, g, current_app, abort, request, jsonify, url_for, redirect, flash
 from flask_login import current_user, login_user, logout_user
 from src.utils import campus_access, user_access, ride_access, address_access
 from flask_babel import lazy_gettext
@@ -8,6 +8,7 @@ from src.dbmodels.Ride import Ride
 from flask_login import current_user
 from geopy.geocoders import Nominatim
 from src.utils import geolocator
+from src.users import routes
 
 main = Blueprint('main', __name__, url_prefix='/<lang_code>')
 
@@ -86,9 +87,6 @@ def get_schools():
 
 @main.route('/createRide', methods=['POST'])
 def receiver_create():
-    if not current_user.is_authenticated:
-        return redirect(url_for('users.login'))
-    # TODO data nodig in json: 'from', 'to', 'time_option', 'datetime', 'passengers'
     # TODO wat met pickup points?
     data = request.json
 
