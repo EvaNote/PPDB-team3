@@ -218,8 +218,8 @@ class Rides:
         else:
             return None
 
-    def get_all(self, dbconnect):
-        cursor = dbconnect.get_cursor()
+    def get_all(self):
+        cursor = self.dbconnect.get_cursor()
         cursor.execute(
             "SELECT id, departure_time, arrival_time, user_id, address_1, campus, to_campus, car_id, passengers, pickup_point_1, pickup_point_2, pickup_point_3 FROM ride")
         rides = list()
