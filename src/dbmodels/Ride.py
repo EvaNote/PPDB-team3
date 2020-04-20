@@ -166,11 +166,15 @@ class Rides:
         return ride_id
 
     def get_on_id(self, id):
-        found = self.get_on('id', id)
-        if len(found) > 0:
-            return found[0]
-        else:
+        cursor = self.dbconnect.get_cursor()
+        cursor.execute(
+            "SELECT id, departure_time, arrival_time, user_id, address_1, campus, to_campus, car_id, passengers, pickup_point_1, pickup_point_2, pickup_point_3 FROM ride WHERE id=%s",
+            (id,))
+        ride = cursor.fetchone()
+        if ride is None:
             return None
+        ride_obj = Ride(ride[0], ride[1], ride[2], ride[3], ride[4], ride[5], ride[6], ride[7], ride[8], ride[9], ride[10], ride[11])
+        return ride_obj
 
     def get_on_user_id(self, user_id):
         found = self.get_on('user_id', user_id)
@@ -226,14 +230,13 @@ class Rides:
 
     def add_ride(self, ride):
         cursor = self.dbconnect.get_cursor()
-        try:
-            cursor.execute('INSERT INTO "ride" VALUES(default, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)',
+
+        cursor.execute('INSERT INTO "ride" VALUES(default, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)',
                            (ride.departure_time, ride.arrival_time, ride.user_id, ride.address_1, ride.campus,
                             ride.to_campus,
                             ride.car_id, ride.passengers, ride.pickup_1, ride.pickup_2, ride.pickup_3))
-            self.dbconnect.commit()
-        except:
-            raise Exception('Unable to add ride')
+        self.dbconnect.commit()
+
 
     def match_rides_with_passenger(self, p_from, p_to, p_time_option, p_datetime):
         """

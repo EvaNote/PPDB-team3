@@ -92,15 +92,16 @@ def receiver_create():
     # TODO wat met pickup points?
     data = request.json
 
-    # adressen from en to -> eentje is een campus, andere is een adres dat aangemaakt moet worden
+    # adressen from en to -> campussen of campus en adres
     from_coord = data.get('from')
     to_coord = data.get('to')
+    print(from_coord, to_coord)
     coords = list()
     to_campus = True
     campus_id = 0
 
     if isinstance(from_coord, int):  # p_from is campus, p_to is adres
-        campus = campus_access.get_on_id(from_coord).to_dict()
+        campus = campus_access.get_on_id(from_coord)
         campus_id = campus.id
         lat_to = to_coord['lat']
         lng_to = to_coord['lng']
@@ -108,21 +109,40 @@ def receiver_create():
         coords.append(lng_to)
         to_campus = False
     elif isinstance(to_coord, int):    # p_to is campus, p_from is adres
-        campus = campus_access.get_on_id(to_coord).to_dict()
+        campus = campus_access.get_on_id(to_coord)
         campus_id = campus.id
         lat_from = from_coord['lat']
         lng_from = from_coord['lng']
         coords.append(lat_from)
         coords.append(lng_from)
 
-    location = geolocator.reverse(coords)
+    coords_string = "{},{}".format(coords[0], coords[1])
+    location = geolocator.reverse(coords_string)
+    print(location.raw)
     address = location.raw['address']
-    street = address['road']
-    nr = address['house_number']
-    postcode = address['postcode']
-    city = address['suburb']
-    country = address['country']
-    loc = geolocator.geocode(street + " " + nr + " " + postcode + " " + city)
+    if 'road' in address:
+        street = address['road']
+    else:
+        street = " "
+    if 'house_number' in address:
+        nr = address['house_number']
+    else:
+        nr = " "
+    if 'postcode' in address:
+        postcode = address['postcode']
+    else:
+        postcode = 0
+    if 'town' in address:
+        city = address['town']
+    else:
+        city = " "
+    if 'country' in address:
+        country = address['country']
+    else:
+        country = " "
+
+    geo_locatie = street + " " + str(nr) + " " + str(postcode) + " " + city + " " + country
+    loc = geolocator.geocode(geo_locatie)
     address_obj = Address(None, country, city, postcode, street, nr, loc.latitude, loc.longitude)
     address_access.add_address(address_obj)
     address_id = address_access.get_id(country, city, postcode, street, nr)
@@ -143,8 +163,9 @@ def receiver_create():
     passengers = data.get('passengers')
 
     ride = Ride(None, departure_time, arrival_time, user_id, address_id, campus_id, to_campus, None, passengers, None, None, None)
+    print(ride.to_dict())
     ride_access.add_ride(ride)
-    ride_id = ride_access.get_id_on_all(departure_time, arrival_time, user, address_id, campus_id)
+    ride_id = ride_access.get_id_on_all(departure_time, arrival_time, user_id, address_id, campus_id)
     ride_to_return = ride_access.get_on_id(ride_id)
 
     return jsonify({"ride": ride_to_return.to_dict()})

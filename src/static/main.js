@@ -227,7 +227,15 @@ $(document).ready(function () {
         "    </select>\n" +
         "        <input id=\"time_input\" type=\"datetime-local\" name=\"datetime\">\n" +
         "    </label>\n" +
-        "    <input type=\"submit\" value=\"Update\">\n" +
+        "    <label for=\"passengers\">Available passenger seats (only when creating a ride):\n" +
+        "    <input type=\"number\" id=\"passengers\" name=\"passengers\" value=\"0\" required>\n<br>" +
+        "    </label>\n" +
+        "    <label for=\"ride_option\">\n<select name=\"ride_option\" id=\"ride_option\">\n" +
+        "        <option value=\"create\">Create ride</option>\n" +
+        "        <option value=\"find\">Find ride</option>\n" +
+        "    </select>\n" +
+        "    </label>\n" +
+        "    <input type=\"submit\" value=\"Submit\">\n" +
         "</form>";
     child = child.firstChild;
     document.getElementsByClassName('leaflet-routing-geocoders')[0].appendChild(child);
@@ -292,92 +300,110 @@ $(function () {
         let form = $('form').serializeObject();
         // check if from-to are defined. If they aren't, nothing should happen
         if (typeof from !== 'undefined' && typeof to !== 'undefined') {
-            $.post({
-                contentType: "application/json",
-                url: "/en/calculateCompatibleRides",
-                data: JSON.stringify({from: from, to: to, time_option: form.time_option, datetime: form.datetime})
-            })
-                // when post request is done, get the returned data and do something with it
-                .done(function (data) { // response function
-                    alert("Result: " + JSON.stringify(data));
-                    if (data === null) {
-                        return
-                    }
-                    let result_div = $('#result');
-                    result_div.empty();
-                    result_div.attr("class", "row justify-content-center");
-                    for (let d = 0; d < data["results"].length; d++) {
-                        let result = data.results[d];
-                        let choice = document.createElement("div");
-                        choice.setAttribute("class", "border border-info rounded col-md-5 m-3");
-                        let from = result.waypoints[0]["addr"];
-                        let to = result.waypoints[result["len"] - 1]["addr"];
-                        if (result.waypoints[0]["alias"] !== "") {
-                            from += " (" + result.waypoints[0]["alias"] + ")"
+            var e = document.getElementById("ride_option")
+            var ride_option = e.options[e.selectedIndex].value
+            if (ride_option === "create") {
+                $.post({
+                    contentType: "application/json",
+                    url: "/en/createRide",
+                    data: JSON.stringify({from: from, to: to, time_option: form.time_option, datetime: form.datetime, passengers: form.passengers})
+                })
+                    // when post request is done, get the returned data and do something with it
+                    .done(function (data) { // response function
+                        alert("CREATE: " + JSON.stringify(data));
+
+
+                    });
+
+            }
+            if (ride_option === "find") {
+                $.post({
+                    contentType: "application/json",
+                    url: "/en/calculateCompatibleRides",
+                    data: JSON.stringify({from: from, to: to, time_option: form.time_option, datetime: form.datetime})
+                })
+                    // when post request is done, get the returned data and do something with it
+                    .done(function (data) { // response function
+                        alert("FIND: " + JSON.stringify(data));
+                        if (data === null) {
+                            return
                         }
-                        if (result.waypoints[result["len"] - 1]["alias"] !== "") {
-                            to += " (" + result.waypoints[result["len"] - 1]["alias"] + ")"
+                        let result_div = $('#result');
+                        result_div.empty();
+                        result_div.attr("class", "row justify-content-center");
+                        for (let d = 0; d < data["results"].length; d++) {
+                            let result = data.results[d];
+                            let choice = document.createElement("div");
+                            choice.setAttribute("class", "border border-info rounded col-md-5 m-3 text-left");
+                            let from, to;
+                            if (result["to_campus"] === true) {
+                                from = result["address_1"];
+                                to = result["campus"];
+                            } else {
+                                from = result["campus"];
+                                to = result["address_1"];
+                            }
+                            let innerRow = document.createElement("div");
+                            innerRow.setAttribute("class", "row");
+
+                            let leftColumn = document.createElement("div");
+                            leftColumn.setAttribute("class", "col-md-6 text-left");
+
+                            let rightColumn = document.createElement("div");
+                            rightColumn.setAttribute("class", "col-md-6 text-left");
+
+                            leftColumn.innerHTML = "<p class=\"my-3\"><b>From:</b> " + from + "</p>\n" +
+                                "<p><b>Departure:</b> " + result["departure_time"] + "</p>\n";
+
+                            rightColumn.innerHTML = "<p class=\"my-3\"><b>To:</b> " + to + "</p>\n" +
+                                "<p><b>Arrival:</b> " + result["arrival_time"] + "</p>";
+
+                            let underColumn = document.createElement("div");
+                            underColumn.setAttribute("class", "col-md-8 text-center");
+
+                            let mapButton = document.createElement("button");
+                            mapButton.setAttribute("class", "btn btn-info m-2");
+                            mapButton.innerHTML = "Show on map";
+
+                            let addButton = document.createElement("button");
+                            addButton.setAttribute("class", "btn btn-info m-2");
+                            addButton.innerHTML = "Join this ride";
+
+                            underColumn.appendChild(mapButton);
+                            underColumn.appendChild(addButton);
+
+                            innerRow.appendChild(leftColumn);
+                            innerRow.appendChild(rightColumn);
+                            innerRow.appendChild(underColumn);
+
+                            choice.appendChild(innerRow);
+
+                            result_div.append(choice);
                         }
-                        let innerRow = document.createElement("div");
-                        innerRow.setAttribute("class", "row justify-content-center");
-
-                        let leftColumn = document.createElement("div");
-                        leftColumn.setAttribute("class", "col-md-6 text-left");
-
-                        let rightColumn = document.createElement("div");
-                        rightColumn.setAttribute("class", "col-md-6 text-left");
-
-                        leftColumn.innerHTML = "<p class=\"my-3\"><b>From:</b> " + from + "</p>\n" +
-                            "<p><b>Departure:</b> " + result["departure_time"] + "</p>\n";
-
-                        rightColumn.innerHTML = "<p class=\"my-3\"><b>To:</b> " + to + "</p>\n" +
-                            "<p><b>Arrival:</b> " + result["arrival_time"] + "</p>";
-
-                        let underColumn = document.createElement("div");
-                        underColumn.setAttribute("class", "col-md-8 text-center");
-
-                        let mapButton = document.createElement("button");
-                        mapButton.setAttribute("class", "btn btn-info m-2");
-                        mapButton.innerHTML = "Show on map";
-
-                        let addButton = document.createElement("button");
-                        addButton.setAttribute("class", "btn btn-info m-2");
-                        addButton.innerHTML = "Join this ride";
-
-                        underColumn.appendChild(mapButton);
-                        underColumn.appendChild(addButton);
-
-                        innerRow.appendChild(leftColumn);
-                        innerRow.appendChild(rightColumn);
-                        innerRow.appendChild(underColumn);
-
-                        choice.appendChild(innerRow);
-
-                        result_div.append(choice);
-                    }
 
 
-                    // $('#result').attr("class", "row justify-content-center");
-                    // for (let d = 0; d < data["results"].length; d++) {
-                    //     let result = data.results[d];
-                    //     let btn = document.createElement("button");
-                    //     btn.setAttribute("id", "result" + d.toString())
-                    //     btn.setAttribute("class","btn btn-info col-md-5 m-3 text-left");
-                    //     let from, to;
-                    //     if (result["to_campus"] === true) {
-                    //         from = result["address_1"];
-                    //         to = result["campus"];
-                    //     } else {
-                    //         from = result["campus"];
-                    //         to = result["address_1"];
-                    //     }
-                    //     btn.innerHTML = "From: " + from.toString() + "<br>\n" +
-                    //                     "To: " + to.toString() + "<br>\n" +
-                    //                     "Departure: " + result["departure_time"] + "<br>\n" +
-                    //                     "Arrival: " + result["arrival_time"] + "<br>";
-                    //     $('#result').append(btn);
-                    // }
-                });
+                        // $('#result').attr("class", "row justify-content-center");
+                        // for (let d = 0; d < data["results"].length; d++) {
+                        //     let result = data.results[d];
+                        //     let btn = document.createElement("button");
+                        //     btn.setAttribute("id", "result" + d.toString())
+                        //     btn.setAttribute("class","btn btn-info col-md-5 m-3 text-left");
+                        //     let from, to;
+                        //     if (result["to_campus"] === true) {
+                        //         from = result["address_1"];
+                        //         to = result["campus"];
+                        //     } else {
+                        //         from = result["campus"];
+                        //         to = result["address_1"];
+                        //     }
+                        //     btn.innerHTML = "From: " + from.toString() + "<br>\n" +
+                        //                     "To: " + to.toString() + "<br>\n" +
+                        //                     "Departure: " + result["departure_time"] + "<br>\n" +
+                        //                     "Arrival: " + result["arrival_time"] + "<br>";
+                        //     $('#result').append(btn);
+                        // }
+                    });
+            }
         }
         return false;
     });
