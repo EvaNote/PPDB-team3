@@ -201,6 +201,8 @@ def address_edit():
     return render_template('address_edit.html', title=lazy_gettext('Edit address'), loggedIn=True, form=form)
 
 
+
+
 @users.route("/myrides")
 def myrides():
     if not current_user.is_authenticated and not current_app.config[
@@ -210,6 +212,8 @@ def myrides():
     userrides = []
     addresses = []
     campuses = []
+    pfps = []
+    allids = []
     for ride in allrides:
         if ride.user_id == current_user.id:
             userrides.append(ride)
@@ -217,9 +221,24 @@ def myrides():
             addresses.append(temp.city + ", " + temp.street + ", " + temp.nr)
             temp = campus_access.get_on_id(ride.campus)
             campuses.append(temp.name)
+            temp = list(ride_access.get_passenger_ids(ride.id))
+            allids.append(temp)
+            ride_pfp = []
+            #userids = []
+            for user_id in temp:
+                #userids.append(user_id)
+                user = user_access.get_user_on_id(user_id)
+                if (user.picture) is not None:
+                    ride_pfp.append("images/" + str(picture_access.get_picture_on_id(user.picture).filename))
+                else:
+                    ride_pfp.append("images/temp_profile_pic.png")
+
+            #allids.append(userids)
+            pfps.append(ride_pfp)
+
 
     return render_template('ride_history.html', title=lazy_gettext('My rides'), loggedIn=True, userrides=userrides,
-                           addresses=addresses, campuses=campuses)
+                           addresses=addresses, campuses=campuses, pfps=pfps, allids=allids)
 
 @users.route("/joinedrides")
 def joinedrides():

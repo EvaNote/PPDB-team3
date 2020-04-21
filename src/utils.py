@@ -25,6 +25,7 @@ ride_access = Rides(connection)
 user_access = UserAccess(connection)
 pickup_point_access = PickupPoints(connection)
 
+
 # create extensions
 babel = Babel()
 bcrypt = Bcrypt()
