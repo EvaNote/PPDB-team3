@@ -43,30 +43,30 @@
 
     <div class="row">
         <div class="ride_history_wrap_3">
-            <div class="ride_history_wrap_5"> {{ _('Departure: ') }} {{ ride.departure_time }}</div>
+            <div class="ride_history_wrap_6"><b> {{ _('Departure: ') }} </b>{{ ride.departure_time }}</div>
         <br>
-            <div class="ride_history_wrap_5"> {{ _('Arrival: ') }} {{ ride.arrival_time }}</div>
+            <div class="ride_history_wrap_6"><b> {{ _('Arrival: ') }} </b>{{ ride.arrival_time }}</div>
         <br>
             {% if pickupbool[0] %}
-                <div class="ride_history_wrap_5"> {{ _('Pickup 1: ') }} {{ pickuppoint[0] }}</div>
+                <div class="ride_history_wrap_5"><b> {{ _('Pickup 1: ') }} </b>{{ pickuppoint[0] }}</div>
                 <br>
             {% endif %}
             {% if pickupbool[1] %}
-                <div class="ride_history_wrap_5"> {{ _('Pickup 2: ') }} {{ pickuppoint[1] }}</div>
+                <div class="ride_history_wrap_5"><b> {{ _('Pickup 2: ') }} </b>{{ pickuppoint[1] }}</div>
                 <br>
             {% endif %}
             {% if pickupbool[2] %}
-                <div class="ride_history_wrap_5"> {{ _('Pickup 3: ') }} {{ pickuppoint[2] }}</div>
+                <div class="ride_history_wrap_5"><b> {{ _('Pickup 3: ') }}</b> {{ pickuppoint[2] }}</div>
                 <br>
             {% endif %}
             {% if ride.to_campus %}
-                <div class="ride_history_wrap_4"> {{ _('From: ') }} {{ address }}  </div>
+                <div class="ride_history_wrap_7"><b> {{ _('From: ') }}</b> {{ address }}  </div>
                 <br>
-                    <div class="ride_history_wrap_4"> {{ _('To: ') }} {{ campus }}</div>
+                <div class="ride_history_wrap_7"><b> {{ _('To: ') }} </b>{{ campus }}</div>
             {% else %}
-                <div class="ride_history_wrap_4">{{ _('From: ') }} {{ campus }} </div>
+                <div class="ride_history_wrap_7"><b>{{ _('From: ') }} </b>{{ campus }} </div>
                 <br>
-                <div class="ride_history_wrap_4"> {{ _('To: ') }} {{ address }}</div>
+                <div class="ride_history_wrap_7"><b> {{ _('To: ') }}</b> {{ address }}</div>
             {% endif %}
         <br>
 

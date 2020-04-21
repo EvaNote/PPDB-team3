@@ -144,7 +144,7 @@ hr {
   margin-bottom: 10px;
 }
 .ride_history_wrap_1{
-  border-radius: 10px;
+    border-radius: 15px;
   background: #17a2b8;
   font-size:100%;
   width:20%;
@@ -154,8 +154,19 @@ hr {
   text-align: center;
  }
 .ride_history_wrap_5{
-  border-radius: 10px;
-  background: #17a2b8;
+    background: #e4e7e8;
+    font-size: 100%;
+    width: 25%;
+    position: relative;
+    left: 10px;
+    top: 10px;
+    display: inline-block;
+    height: auto;
+    text-align: center;
+}
+
+.ride_history_wrap_6 {
+    background: #40b1c4;
   font-size:100%;
   width:25%;
   position: relative;
@@ -166,20 +177,17 @@ hr {
   text-align: center;
  }
 .ride_history_wrap_4{
-  border-radius: 10px;
-  background: #17a2b9;
+    background: #40b1c4;
   font-size:100%;
   width:70%;
   position: relative;
     left: 490px;
-
-
   display: inline-block;
   height: auto;
   text-align: center;
+    border-radius: 10px;
  }
 .ride_history_wrap_2{
-  border-radius: 25px;
   font-size:100%;
   width:50%;
   position: relative;
@@ -189,6 +197,27 @@ hr {
   border-color: #17a2b8;
 
  }
+
+.ride_history_wrap_7 {
+    background: #40b1c4;
+    font-size: 100%;
+    width: 70%;
+    position: relative;
+    left: 490px;
+    display: inline-block;
+    height: auto;
+    text-align: center;
+}
+
+.ride_history_wrap_8 {
+    background: #17a2b8;
+    font-size: 100%;
+    width: 20%;
+    position: relative;
+    display: inline-block;
+    height: auto;
+    text-align: center;
+}
 
 .map {
     border: 3px solid #17a2b8;
