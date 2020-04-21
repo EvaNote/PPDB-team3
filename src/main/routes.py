@@ -94,6 +94,28 @@ def get_schools():
     return schools
 
 
+@main.route('/canceljoinedride=<ride_id>', methods=['POST', 'GET'])
+def canceljoinedride(ride_id):
+    if not current_user.is_authenticated and not current_app.config[
+        'TESTING']:  # makes sure user won`t be able to go to page without logging in
+        return redirect(url_for('users.login'))
+
+    ride_access.deletePassenger(current_user.id, ride_id)
+    flash('Canceled ride.', 'success')
+    return redirect(url_for('users.account'))
+
+
+@main.route('/deleteride=<ride_id>', methods=['POST', 'GET'])
+def deleteride(ride_id):
+    if not current_user.is_authenticated and not current_app.config[
+        'TESTING']:  # makes sure user won`t be able to go to page without logging in
+        return redirect(url_for('users.login'))
+
+    ride_access.deleteFromPassengerRide(ride_id)
+    ride_access.delete_ride(ride_id)
+    flash('Deleted ride.', 'success')
+    return redirect(url_for('users.account'))
+
 @main.route('/createRide', methods=['POST'])
 def receiver_create():
     data = request.json

@@ -9,10 +9,11 @@ from src.dbmodels.Car import Car
 from src.dbmodels.Address import Address
 from src.dbmodels.Picture import Picture
 from src.reviews.forms import Reviews
+from src.dbmodels.PickupPoint import PickupPoint
 from src.users.forms import LoginForm, RegistrationForm, VehicleForm, EditAccountForm, EditAddressForm, SelectSubject, \
     DeleteUserForm
 from src.utils import user_access, bcrypt, review_access, car_access, address_access, current_app, picture_access, ride_access, campus_access, \
-    geolocator
+    geolocator, pickup_point_access
 from flask_babel import lazy_gettext
 
 users = Blueprint('users', __name__, url_prefix='/<lang_code>')
@@ -167,33 +168,30 @@ def address_edit():
             form.nr.data = " "
             form.city.data = " "
             form.postal_code.data = " "
-            form.country.data = " "
         else:
             address = address_access.get_on_id(user.address)
             form.street.data = address.street
             form.nr.data = address.nr
             form.city.data = address.city
             form.postal_code.data = address.postal_code
-            form.country.data = address.country
         return render_template('address_edit.html', title=lazy_gettext('Edit address'), loggedIn=True, form=form)
 
     if form.validate_on_submit():
         street = form.street.data
-        nr = form.nr.data
+        nr = str(form.nr.data)
         city = form.city.data
         postal_code = form.postal_code.data
-        country = form.country.data
 
         address_id = None
         user = user_access.get_user_on_id(current_user.id)
-        loc = geolocator.geocode(street + " " + nr + " " + postal_code + " " + city)
+        loc = geolocator.geocode(str(street) + " " + str(nr) + " " + str(postal_code) + " " + str(city))
         if user.address is None:
-            address_obj = Address(None, country, city, postal_code, street, nr, loc.latitude, loc.longitude)
+            address_obj = Address(None, "Belgie", city, postal_code, street, nr, loc.latitude, loc.longitude)
             address_access.add_address(address_obj)
-            address_id = address_access.get_id(country, city, postal_code, street, nr)
+            address_id = address_access.get_id("Belgie", city, postal_code, street, nr)
         else:
             address = address_access.get_on_id(user.address)
-            address_access.edit_address(address.id, street, nr, city, postal_code, country, loc.latitude, loc.longitude)
+            address_access.edit_address(address.id, street, nr, city, postal_code, "Belgie", loc.latitude, loc.longitude)
             address_id = address.id
 
         user = user_access.get_user_on_id(current_user.id)
@@ -253,39 +251,62 @@ def joinedrides():
     campuses = []
     pfps = []
     allids = []
+    pickuppoints = []
+    pickupbools = []
     for ride in allrides:
-        if ride.user_id == current_user.id: #should always be true
-            userrides.append(ride)
-            temp = address_access.get_on_id(ride.address_1)
-            addresses.append(temp.city + ", " + temp.street + ", " + temp.nr)
-            temp = campus_access.get_on_id(ride.campus)
-            campuses.append(temp.name)
-            temp = list(ride_access.get_passenger_ids(ride.id))
-            temp2 = []
-            ride_pfp = []
-            # userids = []
-            for user_id in temp:
-                if user_id is not current_user.id:
-                    temp2.append(user_id)
-                    # userids.append(user_id)
-                    user = user_access.get_user_on_id(user_id)
-                    if (user.picture) is not None:
-                        ride_pfp.append("images/" + str(picture_access.get_picture_on_id(user.picture).filename))
-                    else:
-                        ride_pfp.append("images/temp_profile_pic.png")
-            temp2.append(ride.user_id)
-            # userids.append(user_id)
-            user = user_access.get_user_on_id(ride.user_id)
-            if (user.picture) is not None:
-                ride_pfp.append("images/" + str(picture_access.get_picture_on_id(user.picture).filename))
-            else:
-                ride_pfp.append("images/temp_profile_pic.png")
+        userrides.append(ride)
+        temp = address_access.get_on_id(ride.address_1)
+        addresses.append(temp.city + ", " + temp.street + ", " + temp.nr)
+        temp = campus_access.get_on_id(ride.campus)
+        campuses.append(temp.name)
+        temp = list(ride_access.get_passenger_ids(ride.id))
+        temp2 = []
+        ride_pfp = []
+        userids = []
+        points = []
+        bools = [False,False,False]
 
-            allids.append(temp2)
-            pfps.append(ride_pfp)
+        for user_id in temp:
+            if user_id is not current_user.id:
+                temp2.append(user_id)
+                # userids.append(user_id)
+                user = user_access.get_user_on_id(user_id)
+                # if user.picture is not None:
+                #     ride_pfp.append("images/" + str(picture_access.get_picture_on_id(user.picture).filename))
+                # else:
+                #     ride_pfp.append("images/temp_profile_pic.png")
+        temp2.append(ride.user_id)
+        #userids.append(user_id)
+        user = user_access.get_user_on_id(ride.user_id)
+
+        if user.picture is not None:
+            pfps.append("images/" + str(picture_access.get_picture_on_id(user.picture).filename))
+        else:
+            pfps.append("images/temp_profile_pic.png")
+
+        allids.append(temp2)
+        #pfps.append(ride_pfp)
+        if ride.pickup_1 is not None:
+            pickup_1_id = ride.pickup_1
+            time_1 = pickup_point_access.get_on_id(pickup_1_id).estimated_time
+            points.append(time_1)
+            bools[0] = True
+            if ride.pickup_2 is not None:
+                pickup_2_id = ride.pickup_2
+                time_2 = pickup_point_access.get_on_id(pickup_2_id).estimated_time
+                points.append(time_2)
+                bools[1] = True
+                if ride.pickup_3 is not None:
+                    pickup_3_id = ride.pickup_3
+                    time_3 = pickup_point_access.get_on_id(pickup_3_id).estimated_time
+                    points.append(time_3)
+                    bools[2] = True
+        pickupbools.append(bools)
+        pickuppoints.append(points)
+
     return render_template('joined_rides.html', title=lazy_gettext('Joined rides'), loggedIn=True,
-                           userrides=userrides,
-                           addresses=addresses, campuses=campuses, pfps=pfps, allids=allids)
+                           userrides=list(reversed(userrides)), pickuppoints=list(reversed(pickuppoints)), pickupbools=list(reversed(pickupbools)),
+                           addresses=list(reversed(addresses)), campuses=list(reversed(campuses)), pfps=list(reversed(pfps)))
 
 
 @users.route("/user=<userid>", methods=['GET', 'POST'])

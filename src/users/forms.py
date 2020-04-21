@@ -59,8 +59,7 @@ class EditAddressForm(FlaskForm):
     street = StringField(lazy_gettext('Street'), validators=[DataRequired()])
     nr = StringField(lazy_gettext('Number'), validators=[DataRequired()])
     city = StringField(lazy_gettext('City'), validators=[DataRequired()])
-    postal_code = IntegerField(lazy_gettext('Postal code'))
-    country = StringField(lazy_gettext('Country'), validators=[DataRequired()])
+    postal_code = StringField(lazy_gettext('Postal code'), validators=[DataRequired()])
 
     submit = SubmitField(lazy_gettext('Save'))
 

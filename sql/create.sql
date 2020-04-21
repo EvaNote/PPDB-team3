@@ -124,6 +124,17 @@ CREATE TABLE car (
 );
 
 /*
+pickup point table keeps track of all the pickup points used in a ride.
+*/
+DROP TABLE IF EXISTS pickup_point CASCADE;
+CREATE TABLE pickup_point (
+    id SERIAL PRIMARY KEY,
+    latitude float8 NOT NULL,
+    longitude float8 NOT NULL,
+    estimated_time timestamp NOT NULL
+);
+
+/*
 ride table, belongs to a "user"
 has a departure time (date + time) that's required
 arrival time is not required
@@ -152,17 +163,6 @@ CREATE TABLE passenger_ride (
     user_id int REFERENCES "user"(id) NOT NULL,
     ride_id int REFERENCES ride(id) NOT NULL,
     primary key(user_id, ride_id)
-);
-
-/*
-pickup point table keeps track of all the pickup points used in a ride.
-*/
-DROP TABLE IF EXISTS pickup_point CASCADE;
-CREATE TABLE pickup_point (
-    id SERIAL PRIMARY KEY,
-    latitude float8 NOT NULL,
-    longitude float8 NOT NULL,
-    estimated_time timestamp NOT NULL
 );
 
 /*
