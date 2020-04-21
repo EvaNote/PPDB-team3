@@ -1,6 +1,6 @@
 {% extends "roundborder.html" %}
 
-{% block contentTitle %}Ride History{{ _('Ride History') }}
+{% block contentTitle %}{{ _('Ride History') }}
 
 
 {% endblock contentTitle %}
@@ -33,22 +33,21 @@
             </div>
         </div>
     </div>
+
+    {% for ride in userrides %}
+        {% set address = addresses[loop.index0] %}
+        {% set campus = campuses[loop.index0] %}
+
     <div class="row">
         <div class="ride_history_wrap_3">
-            <div class="ride_history_wrap_1">{{_('Date')}}</div>
-            <div class="ride_history_wrap_2">{{ _('From-To') }}</div>
+            <div class="ride_history_wrap_1">{{ ride.departure_time }}</div>
+            {% if ride.to_campus %}
+                <div class="ride_history_wrap_2">{{ _('Campus-To') }} {{ address }} {{ campus }}</div>
+            {% else %}
+                <div class="ride_history_wrap_2">{{ _('From-Campus') }} {{ campus }} {{ address }}</div>
+            {% endif %}
         </div>
     </div>
-    <div class="row">
-        <div class="ride_history_wrap_3">
-            <div class="ride_history_wrap_1">{{_('Date')}}</div>
-            <div class="ride_history_wrap_2">{{ _('From-To') }}</div>
-        </div>
-    </div>
-    <div class="row">
-        <div class="ride_history_wrap_3">
-            <div class="ride_history_wrap_1">{{_('Date')}}</div>
-            <div class="ride_history_wrap_2">{{ _('From-To') }}</div>
-        </div>
-    </div>
+
+    {% endfor %}
 {% endblock contentContent %}

@@ -391,13 +391,17 @@ class Rides:
         return road + ' ' + str(housenr) + ', ' + str(postcode) + ' ' + town
 
     def checkPassengerRegistered(self, p_id, r_id):
-        cursor.execute("select * from passenger_ride WHERE passenger_ride.ride_id=%s AND passenger_ride.user_id=%s", (r_id, p_id))
-        if len(cursor) == 0:
+        cursor = self.dbconnect.get_cursor()
+        cursor.execute("select count(*) from passenger_ride WHERE passenger_ride.ride_id=%s AND passenger_ride.user_id=%s", (r_id, p_id))
+        result = cursor.fetchone()
+        if result[0] == 0:
             return False
         return True
 
     def registerPassenger(self, p_id, r_id):
-        if not checkPassengerRegistered(p_id, r_id):
-            cursor.execute("insert into passenger_ride VALUES %s, %s", (p_id, r_id))
+        if not self.checkPassengerRegistered(p_id, r_id):
+            cursor = self.dbconnect.get_cursor()
+            cursor.execute("insert into passenger_ride VALUES (%s, %s)", (p_id, r_id))
+            self.dbconnect.commit()
             return True
         return False
