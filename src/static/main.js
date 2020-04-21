@@ -234,6 +234,7 @@ function resetState() {
 map.on('click', function (e) {
     var startBtn, destBtn, addWaypointBtn;
     var container = L.DomUtil.create('div');
+    console.log(state);
     if (state.startFromThisLocationClicked && state.goToThisLocationClicked && state.situation === 'create') {
         if (state.p3 !== null) {
             container.appendChild(document.createElement("br"));
@@ -272,7 +273,7 @@ map.on('click', function (e) {
     L.DomEvent.on(startBtn, 'click', function () {
         if (startBtn.getAttribute('id') === 'start') {
             // case 1: state.startFromThisLocationClicked === true && campusFromId !== nul
-            if (state.startFromThisLocationClicked !== null) { //in case a campus was clicked before
+            if (state.startFromThisLocationClicked !== null && state.campusFromId !== null) { //in case a campus was clicked before
                 resetState()  // to location is not chosen yet so safely reset
             }
             // case 2: state.startFromThisLocationClicked === true && campusFromId === nul
@@ -298,7 +299,7 @@ map.on('click', function (e) {
 
     L.DomEvent.on(destBtn, 'click', function () {
         // case 1: state.goToThisLocationClicked === true && campusToId !== nul
-        if (state.goToThisLocationClicked !== false) { //in case a campus was clicked before
+        if (state.goToThisLocationClicked !== false && state.campusToId !== null) { //in case a campus was clicked before
             resetState()  // to location is not chosen yet so safely reset
         }
         // case 2: state.goToThisLocationClicked === true && campusToId === nul
