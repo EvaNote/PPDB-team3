@@ -16,8 +16,8 @@ class DrivesApi(Resource):  # /api/drives
         token = auth_header.split(" ")[1]
         if token is None:
             return abort(401)
-        user_id = User.verify_auth_token(token)
-        if user_id is None:
+        user_id = User.verify_auth_token(token).id
+        if user_id is None or not user_id.isdigit():
             return abort(401, message=str(user_id))
         # if logged in, continue
         data = request.json
@@ -82,7 +82,7 @@ class DriveApi(Resource):  # /api/drives/{drive_id}
         if drive_id is None:
             return abort(400)
         ride = ride_access.get_on_id(drive_id)
-        if ride is None:
+        if ride is None or not drive_id.isdigit():
             return abort(400)
         rd = ride.to_dict()
         data = ride_access.get_data_for_api(drive_id)
@@ -100,7 +100,7 @@ class DriveApi(Resource):  # /api/drives/{drive_id}
 
 class DrivePassengerApi(Resource):
     def get(self, drive_id):
-        if drive_id is None:
+        if drive_id is None or not drive_id.isdigit():
             return abort(400)
         passengers = ride_access.get_passenger_ids_names(drive_id)
         result = []
@@ -113,3 +113,57 @@ class DrivePassengerApi(Resource):
                 "username": uname
             })
         return result, 200
+
+
+class DrivePassengerRequestApi(Resource):
+    def get(self, drive_id):
+        auth_header = request.headers.get("Authorization")
+        token = auth_header.split(" ")[1]
+        if token is None:
+            return abort(401)
+        user_id = user_access.get_user(User.verify_auth_token(token)).id
+        if user_id is None or not user_id.isdigit():
+            return abort(401)
+        # we do not have passenger requests, so return empty list
+        return [], 200
+
+    def post(self, drive_id):
+        auth_header = request.headers.get("Authorization")
+        token = auth_header.split(" ")[1]
+        if token is None:
+            return abort(401)
+        user_id = user_access.get_user(User.verify_auth_token(token)).id
+        if user_id is None or not user_id.isdigit() or not drive_id.isdigit():
+            return abort(401)
+        # 1) check if passenger is already subscribed for the given ride
+        passengers = ride_access.get_passenger_ids(drive_id)
+        if user_id in passengers:
+            return {'status': 'rejected', 'reason': 'duplicate_request'}, 200
+        # 2) check if car is fully occupied
+        ride = ride_access.get_on_id(drive_id)
+        if not passengers:
+            ride_access.registerPassenger(user_id, drive_id)
+            return {'status': 'success'}, 201
+        elif len(passengers) >= ride.passengers:
+            return {'status': 'rejected', 'reason': 'car fully occupied'}, 200
+        # 3) else: subscribe for the ride (= add to passenger_ride)
+        else:
+            ride_access.registerPassenger(user_id, drive_id)
+            return {'status': 'success'}, 201
+
+
+class DrivePassengerRequestUserApi(Resource):
+    def post(self, drive_id, user_id):
+        auth_header = request.headers.get("Authorization")
+        token = auth_header.split(" ")[1]
+        if token is None:
+            return abort(401)
+        current_user_id = user_access.get_user(User.verify_auth_token(token)).id
+        if current_user_id is None or not user_id.isdigit() or not drive_id.isdigit() or not current_user_id.isdigit():
+            return abort(401)
+        # strategy: if user_id in passengers: return "accepted", else return "rejected"
+        passengers = ride_access.get_passenger_ids(drive_id)
+        for p in passengers:
+            if int(p) == int(user_id):
+                return {'status': 'accepted'}, 200
+        return {'status': 'rejected'}, 200

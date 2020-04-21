@@ -82,22 +82,22 @@ insert into address  -- one address = id 1
 values (default, 'Belgium', 'Antwerp', '2600', 'KwebbelStraat', '69', 51.0953, 4.49607);
 
 insert into "user"  -- one user = id 1
-values (default , 'Kabouter', 'Lui', 'lui@blog.com', 'password', '1999-04-04 01:12:11', 20, 'M', NULL, NULL, 1);
+values (default , 'Kabouter', 'Lui', 'lui@campuscarpool.com', 'password', '1999-04-04 01:12:11', 20, 'M', NULL, NULL, 1);
 
 insert into "user"  -- one user = id 2
-values (default , 'Kabouter', 'Plop', 'plop@blog.com', 'password', '1999-04-04 01:12:11', 20, 'M', NULL, NULL, 1);
+values (default , 'Kabouter', 'Plop', 'plop@campuscarpool.com', 'password', '1999-04-04 01:12:11', 20, 'M', NULL, NULL, 1);
 
 insert into "user"  -- one user = id 3
-values (default , 'Kabouter', 'Kwebbel', 'kwebbel@blog.com', 'password', '1999-04-04 01:12:11', 20, 'M', NULL, NULL, 1);
+values (default , 'Kabouter', 'Kwebbel', 'kwebbel@campuscarpool.com', 'password', '1999-04-04 01:12:11', 20, 'M', NULL, NULL, 1);
 
 insert into "user"  -- one user = id 4
-values (default , 'Kabouter', 'Smul', 'smul@blog.com', 'password', '1999-04-04 01:12:11', 20, 'M', NULL, NULL, 1);
+values (default , 'Kabouter', 'Smul', 'smul@campuscarpool.com', 'password', '1999-04-04 01:12:11', 20, 'M', NULL, NULL, 1);
 
 insert into "user"  -- one user = id 5
-values (default , 'Kabouter', 'Klus', 'klus@blog.com', 'password', '1999-04-04 01:12:11', 20, 'M', NULL, NULL, 1);
+values (default , 'Kabouter', 'Klus', 'klus@campuscarpool.com', 'password', '1999-04-04 01:12:11', 20, 'M', NULL, NULL, 1);
 
 insert into "user"  -- one user = id 6
-values (default , 'Kabouter', 'Smal', 'smal@blog.com', 'password', '1999-04-04 01:12:11', 20, 'M', NULL, NULL, 1);
+values (default , 'Kabouter', 'Smal', 'smal@campuscarpool.com', 'password', '1999-04-04 01:12:11', 20, 'M', NULL, NULL, 1);
 
 insert into car  -- one car = id 1
 values (default , '9999', 'Red', 'Toyota', 'asdf', 4, 1996, '4', 'ethanol', 1, NULL);
