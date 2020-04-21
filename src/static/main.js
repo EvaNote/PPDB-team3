@@ -30,6 +30,7 @@ L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
 let control = L.Routing.control({
     serviceUrl: 'http://127.0.0.1:5001/route/v1',
     routeWhileDragging: true,
+    draggableWaypoints: false,
     geocoder: L.Control.Geocoder.nominatim(),
     addWaypoints: false,
     createMarker: function (i, wp) {
@@ -93,28 +94,30 @@ let control = L.Routing.control({
             });
 
             L.DomEvent.on(changeOrderBtn, 'click', function () {
-                var btn1, btn2, btn3;
+                var btn1;
+                var btn2;
+                var btn3;
                 var container = L.DomUtil.create('div');
 
                 if (e.latlng === state.p1) {
                     btn2 = createButton('2', container);
-                    btn2.setAttribute('id', 'id_1');
+                    btn2.setAttribute('id', 'id_1_2');
                     if (state.p3 !== null) {
                         btn3 = createButton('3', container);
-                        btn3.setAttribute('id', 'id_1');
+                        btn3.setAttribute('id', 'id_1_3');
                     }
                 } else if (e.latlng === state.p2) {
                     btn1 = createButton('1', container);
-                    btn1.setAttribute('id', 'id_2');
+                    btn1.setAttribute('id', 'id_2_1');
                     if (state.p3 !== null) {
                         btn3 = createButton('3', container);
-                        btn3.setAttribute('id', 'id_2');
+                        btn3.setAttribute('id', 'id_2_3');
                     }
                 } else {
                     btn1 = createButton('1', container);
-                    btn1.setAttribute('id', 'id_3');
+                    btn1.setAttribute('id', 'id_3_1');
                     btn2 = createButton('2', container);
-                    btn2.setAttribute('id', 'id_3');
+                    btn2.setAttribute('id', 'id_3_2');
                 }
 
                 container.setAttribute('style', 'text-align: center');
@@ -128,83 +131,68 @@ let control = L.Routing.control({
                     .setLatLng(e.latlng)
                     .openOn(map);
 
-                L.DomEvent.on(btn1, 'click', function () {
-                    let id = btn1.getAttribute('id');
+                $('#id_1_2').on('click', function () {
+                    //swap index 1 with index 2
+                    let temp = state.p1;
+                    state.p1 = state.p2;
+                    state.p2 = temp;
                     let waypoints = control.getWaypoints();
-                    var i, j;
-                    if (id === 'id_2') {
-                        //swap index 1 with index 2
-                        i = 1;
-                        j = 2;
-                        let temp = state.p1;
-                        state.p1 = state.p2;
-                        state.p2 = temp;
-                    } else {
-                        // swap index 1 with index 3
-                        i = 1;
-                        j = 3;
-                        let temp = state.p1;
-                        state.p1 = state.p3;
-                        state.p3 = temp;
-                    }
-                    let temp = waypoints[i];
-                    waypoints[i] = waypoints[j];
-                    waypoints[j] = temp;
-                    control.setWaypoints(waypoints);
+                    waypoints[1] = state.p1;
+                    waypoints[2] = state.p2;
+                    control.setWaypoints(waypoints)
                 });
 
-                L.DomEvent.on(btn2, 'click', function () {
-                    let id = btn1.getAttribute('id');
+                $('#id_2_1').on('click', function () {
+                    //swap index 1 with index 2
+                    let temp = state.p1;
+                    state.p1 = state.p2;
+                    state.p2 = temp;
                     let waypoints = control.getWaypoints();
-                    var i, j;
-                    if (id === 'id_1') {
-                        //swap index 1 with index 2
-                        i = 1;
-                        j = 2;
-                        let temp = state.p1;
-                        state.p1 = state.p2;
-                        state.p2 = temp;
-                    } else {
-                        // swap index 2 with index 3
-                        i = 2;
-                        j = 3;
-                        let temp = state.p2;
-                        state.p2 = state.p3;
-                        state.p3 = temp;
-                    }
-                    let temp = waypoints[i];
-                    waypoints[i] = waypoints[j];
-                    waypoints[j] = temp;
-                    control.setWaypoints(waypoints);
+                    waypoints[1] = state.p1;
+                    waypoints[2] = state.p2;
+                    control.setWaypoints(waypoints)
                 });
 
-                L.DomEvent.on(btn3, 'click', function () {
-                    let id = btn1.getAttribute('id');
+                $('#id_3_1').on('click', function () {
+                    let temp = state.p1;
+                    state.p1 = state.p3;
+                    state.p3 = temp;
                     let waypoints = control.getWaypoints();
-                    var i, j;
-                    if (id === 'id_1') {
-                        //swap index 1 with index 3
-                        i = 1;
-                        j = 3;
-                        let temp = state.p1;
-                        state.p1 = state.p3;
-                        state.p3 = temp;
-                    } else {
-                        // swap index 2 with index 3
-                        i = 2;
-                        j = 3;
-                        let temp = state.p2;
-                        state.p2 = state.p3;
-                        state.p3 = temp;
-                    }
-                    let temp = waypoints[i];
-                    waypoints[i] = waypoints[j];
-                    waypoints[j] = temp;
-                    control.setWaypoints(waypoints);
+                    waypoints[1] = state.p1;
+                    waypoints[3] = state.p3;
+                    control.setWaypoints(waypoints)
+                })
+
+                $('#id_1_3').on('click', function () {
+                    let temp = state.p1;
+                    state.p1 = state.p3;
+                    state.p3 = temp;
+                    let waypoints = control.getWaypoints();
+                    waypoints[1] = state.p1;
+                    waypoints[3] = state.p3;
+                    control.setWaypoints(waypoints)
+                })
+
+                $('#id_2_3').on('click', function () {
+                    let temp = state.p2;
+                    state.p2 = state.p3;
+                    state.p3 = temp;
+                    let waypoints = control.getWaypoints();
+                    waypoints[2] = state.p2;
+                    waypoints[3] = state.p3;
+                    control.setWaypoints(waypoints)
+                })
+
+                $('#id_3_2').on('click', function () {
+                    let temp = state.p2;
+                    state.p2 = state.p3;
+                    state.p3 = temp;
+                    let waypoints = control.getWaypoints();
+                    waypoints[2] = state.p2;
+                    waypoints[3] = state.p3;
+                    control.setWaypoints(waypoints)
                 })
             });
-
-
         });
     }
 }).addTo(map);
@@ -246,7 +234,7 @@ function resetState() {
 map.on('click', function (e) {
     var startBtn, destBtn, addWaypointBtn;
     var container = L.DomUtil.create('div');
-    if (state.startFromThisLocationClicked && state.goToThisLocationClicked) {
+    if (state.startFromThisLocationClicked && state.goToThisLocationClicked && state.situation === 'create') {
         if (state.p3 !== null) {
             container.appendChild(document.createElement("br"));
             let b = document.createElement("b");
@@ -255,7 +243,8 @@ map.on('click', function (e) {
             container.appendChild(b);
             container.setAttribute('style', 'text-align: center')
         } else {
-            addWaypointBtn = createButton('Add this point as pickup point', container)
+            startBtn = createButton('Add this point as pickup point', container);
+            startBtn.setAttribute('id', 'pickup')
         }
     } else if ((state.startFromThisLocationClicked || state.goToThisLocationClicked) && !state.campusClicked) {
         container.appendChild(document.createElement("br"));
@@ -271,6 +260,7 @@ map.on('click', function (e) {
         container.setAttribute('style', 'text-align: center')
     } else {
         startBtn = createButton('Start from this location', container);
+        startBtn.setAttribute('id', 'start');
         destBtn = createButton('Go to this location', container);
     }
 
@@ -279,32 +269,31 @@ map.on('click', function (e) {
         .setLatLng(e.latlng)
         .openOn(map);
 
-
-    L.DomEvent.on(addWaypointBtn, 'click', function () {
-        if (state.p1 === null) {
-            state.p1 = e.latlng
-            control.spliceWaypoints(1, 0, e.latlng);
-        } else if (state.p2 === null) {
-            state.p2 = e.latlng
-            control.spliceWaypoints(2, 0, e.latlng);
-        } else {
-            state.p3 = e.latlng
-            control.spliceWaypoints(3, 0, e.latlng);
-        }
-        control.spliceWaypoints(1, 0, e.latlng);
-        map.closePopup();
-    });
-
     L.DomEvent.on(startBtn, 'click', function () {
-        // case 1: state.startFromThisLocationClicked === true && campusFromId !== nul
-        if (state.startFromThisLocationClicked !== null) { //in case a campus was clicked before
-            resetState()  // to location is not chosen yet so safely reset
-        }
-        // case 2: state.startFromThisLocationClicked === true && campusFromId === nul
-        // does not require any action
-        state.startFromThisLocationClicked = e.latlng;
-        control.spliceWaypoints(0, 1, e.latlng);
+        if (startBtn.getAttribute('id') === 'start') {
+            // case 1: state.startFromThisLocationClicked === true && campusFromId !== nul
+            if (state.startFromThisLocationClicked !== null) { //in case a campus was clicked before
+                resetState()  // to location is not chosen yet so safely reset
+            }
+            // case 2: state.startFromThisLocationClicked === true && campusFromId === nul
+            // does not require any action
+            state.startFromThisLocationClicked = e.latlng;
+            map.closePopup();
+            control.spliceWaypoints(0, 1, e.latlng);
+        } else {
+            if (state.p1 === null) {
+                state.p1 = e.latlng;
+                control.spliceWaypoints(1, 0, e.latlng);
+            } else if (state.p2 === null) {
+                state.p2 = e.latlng;
+                control.spliceWaypoints(2, 0, e.latlng);
+            } else {
+                state.p3 = e.latlng;
+                control.spliceWaypoints(3, 0, e.latlng);
+            }
         map.closePopup();
+            control.spliceWaypoints(1, 0, e.latlng);
+        }
     });
 
     L.DomEvent.on(destBtn, 'click', function () {
@@ -315,8 +304,8 @@ map.on('click', function (e) {
         // case 2: state.goToThisLocationClicked === true && campusToId === nul
         // does not require any action
         state.goToThisLocationClicked = e.latlng;
-        control.spliceWaypoints(control.getWaypoints().length - 1, 1, e.latlng);
         map.closePopup();
+        control.spliceWaypoints(control.getWaypoints().length - 1, 1, e.latlng);
     });
 });
 
@@ -535,8 +524,6 @@ $(function () {
                     .done(function (data) { // response function
                         //alert("CREATE: " + JSON.stringify(data));
                         alert("Created a new ride. You can see, edit and delete your created rides on the 'My Rides' page.")
-
-
                     });
 
             }
