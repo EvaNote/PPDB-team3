@@ -2,7 +2,7 @@ from flask_restful import Api
 
 from src.api.users import RegisterApi, AuthApi
 
-from src.api.drives import DrivesSearchAPI, DriveApi, DrivePassengerApi, DrivePassengerRequestApi, \
+from src.api.drives import DrivesApi, DrivesSearchAPI, DriveApi, DrivePassengerApi, DrivePassengerRequestApi, \
     DrivePassengerRequestUserApi
 
 # setup API

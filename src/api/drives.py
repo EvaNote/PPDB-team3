@@ -173,68 +173,32 @@ class DrivesSearchAPI(Resource):
     def get(self):
         args = request.args
         #parse available arguments
-        dict = {}
         results = []
-        #make dict
+        dict = {'fLat': None, 'fLng':None, 'tLat': None, 'tLng':None, 'arrive_by': None, 'limit': 5}
         for i in args:
-
+            if i == 'from':
+                dict['fLat'] = float(args[i].split(",")[0])
+                dict['fLng'] = float(args[i].split(",")[1])
+            elif i == 'to':
+                dict['tLat'] = float(args[i].split(",")[0])
+                dict['tLng'] = float(args[i].split(",")[1])
             dict[i] = args[i]
-
-        for i in args:
-            dict2 = {}
-            if(i == "from"):
-                dict2["lat"] = float(args[i].split(",")[0])
-                dict2["lng"] = float(args[i].split(",")[1])
-                rides = ride_access.get_rides_with_from(dict2)
-
-                #print(rides[0].waypoints[0].addr)
-                limit = 5
-                if(dict['limit']):
-                    limit = int(dict['limit'])
-                n = 0
-                while n < limit:
-                    # find passengers given ride id
-                    rDict = rides[n].to_dict()
-                    #print(rDict['waypoints'][rDict['closest']]['lat'])
-
-                    #return jsonify({"r":rDict})
-
-                    passengers = ride_access.findRidePassengers(rDict['id'])
-                    results.append({"id": rDict['user_id'],
-                                    "driver-id": rDict['user_id'],
-                                    "passenger-ids": len(passengers),
-                                    "from": [rDict['waypoints'][rDict['closest']]['lat'],
-                                             rDict['waypoints'][rDict['closest']]['lng']],
-                                    "to": [rDict['waypoints'][4]['lat'], rDict['waypoints'][4]['lng']],
-                                    "arrive-by": rDict['arrival_time'].strftime("%Y-%m-%dT%H:%M:%S"),
-                                    })
-                    n += 1
-            if(i == "to"):
-                dict2["lat"] = float(args[i].split(",")[0])
-                dict2["lng"] = float(args[i].split(",")[1])
-                rides = ride_access.get_rides_with_to(dict2)
-
-                # print(rides[0].waypoints[0].addr)
-                limit = 5
-                if (dict['limit']):
-                    limit = int(dict['limit'])
-                n = 0
-                while n < limit:
-                    # find passengers given ride id
-                    rDict = rides[n].to_dict()
-                    # print(rDict['waypoints'][rDict['closest']]['lat'])
-
-                    # return jsonify({"r":rDict})
-
-                    passengers = ride_access.findRidePassengers(rDict['id'])
-                    results.append({"id": rDict['user_id'],
-                                    "driver-id": rDict['user_id'],
-                                    "passenger-ids": len(passengers),
-                                    "from": [rDict['waypoints'][rDict['closest']]['lat'],
-                                             rDict['waypoints'][rDict['closest']]['lng']],
-                                    "to": [rDict['waypoints'][4]['lat'], rDict['waypoints'][4]['lng']],
-                                    "arrive-by": rDict['arrival_time'].strftime("%Y-%m-%dT%H:%M:%S"),
-                                    })
-                    n += 1
-
+        rides = ride_access.match_rides_with_passenger(
+            {'lat': dict['fLat'], 'lng': dict['fLng']},
+            {'lat': dict['tLat'], 'lng': dict['tLng']},
+            None,
+            dict['arrive_by'])
+        n = 0
+        while n < dict['limit']:
+            rDict = rides[n].to_dict()
+            passengers = ride_access.findRidePassengers(rDict['id'])
+            results.append({"id": rDict['user_id'],
+                            "driver-id": rDict['user_id'],
+                            "passenger-ids": len(passengers),
+                            "from": [rDict['waypoints'][rDict['closest']]['lat'],
+                                     rDict['waypoints'][rDict['closest']]['lng']],
+                            "to": [rDict['waypoints'][4]['lat'], rDict['waypoints'][4]['lng']],
+                            "arrive-by": rDict['arrival_time'].strftime("%Y-%m-%dT%H:%M:%S"),
+                            })
+            n += 1
         return results
