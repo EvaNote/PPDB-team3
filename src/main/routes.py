@@ -93,12 +93,11 @@ def receiver_create():
     # adressen from en to -> campussen of campus en adres
     from_coord = data.get('from')
     to_coord = data.get('to')
-    print(from_coord, to_coord)
     coords = list()
     to_campus = True
     campus_id = 0
 
-    if isinstance(from_coord, int):  # p_from is campus, p_to is adres
+    if isinstance(from_coord, int) and not isinstance(to_coord, int):  # p_from is campus, p_to is adres
         campus = campus_access.get_on_id(from_coord)
         campus_id = campus.id
         lat_to = to_coord['lat']
@@ -106,17 +105,26 @@ def receiver_create():
         coords.append(lat_to)
         coords.append(lng_to)
         to_campus = False
-    elif isinstance(to_coord, int):    # p_to is campus, p_from is adres
+    if isinstance(to_coord, int) and not isinstance(from_coord, int):    # p_to is campus, p_from is adres
         campus = campus_access.get_on_id(to_coord)
         campus_id = campus.id
         lat_from = from_coord['lat']
         lng_from = from_coord['lng']
         coords.append(lat_from)
         coords.append(lng_from)
+    if isinstance(to_coord, int) and isinstance(from_coord, int):       # p_to and p_from are campussen
+        # p_to blijft campus, p_from wordt adres
+        campus = campus_access.get_on_id(to_coord)
+        campus_id = campus.id
+
+        campus_from = campus_access.get_on_id(from_coord)
+        lat_from = campus_from.latitude
+        lng_from = campus_from.longitude
+        coords.append(lat_from)
+        coords.append(lng_from)
 
     coords_string = "{},{}".format(coords[0], coords[1])
     location = geolocator.reverse(coords_string)
-    print(location.raw)
     address = location.raw['address']
     if 'road' in address:
         street = address['road']
@@ -161,7 +169,6 @@ def receiver_create():
     passengers = data.get('passengers')
 
     ride = Ride(None, departure_time, arrival_time, user_id, address_id, campus_id, to_campus, None, passengers, None, None, None)
-    print(ride.to_dict())
     ride_access.add_ride(ride)
     ride_id = ride_access.get_id_on_all(departure_time, arrival_time, user_id, address_id, campus_id)
     ride_to_return = ride_access.get_on_id(ride_id)
