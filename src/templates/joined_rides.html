@@ -1,0 +1,51 @@
+{% extends "roundborder.html" %}
+
+{% block contentTitle %}{{ _('Joined Rides History') }}
+
+
+{% endblock contentTitle %}
+
+
+{% block contentContent %}
+    <div class="row">
+        <div class="col-md-3">
+            <div class="search-box">
+                <input class="search-txt"  type="text" name="" placeholder="{{ _('Type to search') }}">
+                <a class="search-btn" href="#"></a>
+                <i class="fas fa-search"></i>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div>
+                <form>
+                    <fieldset>
+                    <p>
+                    <label>{{ _('sort by') }}</label>
+                    <select id = "myList">
+                        <option value = "1">{{_('Date')}}</option>
+                        <option value = "2">two</option>
+                        <option value = "3">three</option>
+                        <option value = "4">four</option>
+                    </select>
+                    </p>
+                    </fieldset>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    {% for ride in rides %}
+
+    <div class="row">
+        <div class="ride_history_wrap_3">
+            <div class="ride_history_wrap_1">{{ ride.departure_time }}</div>
+            {% if ride.to_campus %}
+                <div class="ride_history_wrap_2">{{ _('Campus-To') }} {{ address }} {{ campus }}</div>
+            {% else %}
+                <div class="ride_history_wrap_2">{{ _('From-Campus') }} {{ campus }} {{ address }}</div>
+            {% endif %}
+        </div>
+    </div>
+
+    {% endfor %}
+{% endblock contentContent %}

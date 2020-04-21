@@ -405,3 +405,13 @@ class Rides:
             self.dbconnect.commit()
             return True
         return False
+
+    def getRidesFromPassenger(self, p_id):
+        cursor = self.dbconnect.get_cursor()
+        cursor.execute("SELECT ride_id FROM passenger_ride WHERE user_id=%s", (p_id,))
+        rides = []
+        for row in cursor:
+            ride_id = row[0]
+            ride = self.get_on_id(ride_id)
+            rides.append(ride)
+        return rides
