@@ -11,7 +11,7 @@ from src.dbmodels.Picture import Picture
 from src.reviews.forms import Reviews
 from src.users.forms import LoginForm, RegistrationForm, VehicleForm, EditAccountForm, EditAddressForm, SelectSubject, \
     DeleteUserForm
-from src.utils import user_access, bcrypt, review_access, car_access, address_access, current_app, picture_access, \
+from src.utils import user_access, bcrypt, review_access, car_access, address_access, current_app, picture_access, ride_access, campus_access, \
     geolocator
 from flask_babel import lazy_gettext
 
@@ -154,7 +154,6 @@ def account_edit():
     return render_template('account_edit.html', title=lazy_gettext('Edit account info'), loggedIn=True, form=form)
 
 
-
 @users.route("/edit_address", methods=['GET', 'POST'])
 def address_edit():
     # makes sure user won`t be able to go to page without logging in
@@ -210,12 +209,27 @@ def myrides():
     # makes sure user won`t be able to go to page without logging in
     if not current_user.is_authenticated and not current_app.config['TESTING']:
         return redirect(url_for('users.login'))
-    return render_template('ride_history.html', title=lazy_gettext('My rides'), loggedIn=True)
+    allrides = ride_access.get_all()
+    userrides = []
+    addresses = []
+    campuses = []
+    for ride in allrides:
+        if ride.user_id == current_user.id:
+            userrides.append(ride)
+            temp = address_access.get_on_id(ride.address_1)
+            addresses.append(temp.city + ", " + temp.street + ", " + temp.nr)
+            temp = campus_access.get_on_id(ride.campus)
+            campuses.append(temp.name)
+
+    return render_template('ride_history.html', title=lazy_gettext('My rides'), loggedIn=True, userrides=userrides,
+                           addresses=addresses, campuses=campuses)
 
 
 @users.route("/user=<userid>", methods=['GET', 'POST'])
 def user(userid):
-    allow_review= False
+    if not userid.isdigit():
+        abort(404)
+    allow_review= False  # TODO: als dit failt dan mag dit weg (3 lijnen)
     if current_user.is_authenticated:
         allow_review = True
     form = Reviews()
@@ -253,7 +267,7 @@ def user(userid):
     return render_template('user.html', title=lazy_gettext('User profile'), form=form, loggedIn=False,
                            target_user=target_user,
                            data=data, cars=cars, form2=form2, pfp_path=pfp_path, car_picpaths=car_picpaths,
-                           allow_review=allow_review)
+                           allow_review=allow_review)  # TODO: same
 
 
 @users.route("/login", methods=['GET', 'POST'])
@@ -332,6 +346,8 @@ def add_vehicle():
 
 @users.route("/edit_vehicle=<car_id>", methods=['GET', 'POST'])
 def edit_vehicle(car_id):
+    if not car_id.isdigit():
+        abort(404)
     if not current_user.is_authenticated:  # makes sure user won`t be able to go to page without logging in
         return redirect(url_for('users.login'))
     form = VehicleForm()
@@ -374,6 +390,8 @@ def edit_vehicle(car_id):
 
 @users.route("/delete_vehicle=<car_id>", methods=['GET', 'POST'])
 def delete_vehicle(car_id):
+    if not car_id.isdigit:
+        abort(404)
     # makes sure user won`t be able to go to page without logging in
     if not current_user.is_authenticated and not current_app.config['TESTING']:
         return redirect(url_for('users.login'))

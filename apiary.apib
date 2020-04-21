@@ -12,8 +12,6 @@ This minimum requirement needs to be implemented to receive live data.
 
 ### POST [POST]
 
-Registers the user to the database and returns the user ID. "username" will be stored in the database as an email address (e.g. "MarkP" will be stored in the database as "MarkP@campuscarpool.com").
-
 + Request (application/json)
 
 
@@ -271,7 +269,7 @@ Decide on a passenger request. Action can either be "accept" or "reject". Checks
 
 
 
-## /drives/search{?limit}
+## /drives/search{?from}{?to}{?arrive_by}{?limit}
 
 These are the basic parameters of search. Specific search queries can be supported, e.g.: max-from-distance, max-to-distance, max-time-difference (before and/or after), ... .
 
@@ -279,16 +277,13 @@ These are the basic parameters of search. Specific search queries can be support
 
 + Parameters
 
-    + limit (optional, number) - Amount of results to return. Default 5, maximum 25.
+    + from (required, coords, `51.130215,4.571509`) ... Find rides that can pick up a person from this location. 
+    + to (required, coords, `51.184170,4.419310`) ... Find rides that can drop off a person at this location. 
+    + arrive_by (required, time, `2020-02-12T9:30:00.00`) ... Time by which the person should arrive at their location.
+    + limit (optional, number) - Amount of results to return (maximum 25).
+        + default: `5`
 
-+ Request (application/json)
 
-        {
-            "from": [51.130215, 4.571509],
-            "to": [51.184170, 4.419310],
-            "arrive-by": "2020-02-12T10:00:00.00"
-        }
-    
 + Response 200 (application/json)
 
         [

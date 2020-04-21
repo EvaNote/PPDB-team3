@@ -24,6 +24,10 @@
     <!-- Geocoder leaflet -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.css" />
 
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/leaflet.locatecontrol@0.70/dist/L.Control.Locate.min.css"/>
+
     {% if title %}
         <title>Campus Carpool - {{ title }}</title>
     {% else %}
@@ -50,10 +54,14 @@
             <ul class="navbar-nav ml-auto">
                 {% if current_user.is_authenticated %}
                     <li class="nav-item">
-                        <a class="nav-link active" href={{ url_for('main.home') }}>Home</a> <!-- TODO change active link -->
+                        <a class="nav-link active" href={{ url_for('main.home') }}>Home</a>
+                        <!-- TODO change active link -->
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href={{ url_for('rides.findride') }}>{{ _('Find a ride') }}</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href={{ url_for('rides.createride') }}>{{ _('Create a ride') }}</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href={{ url_for('users.myrides') }}>{{ _('My rides') }}</a>
@@ -170,5 +178,8 @@
 <script type="text/javascript" src="{{ url_for('static', filename='main.js') }}"></script>
 
 <script type="text/javascript" src="{{ url_for('static', filename="reviews.js") }}"></script>
+
+<script src="https://cdn.jsdelivr.net/npm/leaflet.locatecontrol@0.70.0/dist/L.Control.Locate.min.js"
+        charset="utf-8"></script>
 </body>
 </html>

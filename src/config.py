@@ -3,6 +3,7 @@ class BaseConfig(object):
     Base configuration class with variables used in the creation of our Flask
     app and database connection.
     """
+
     # general
     SECRET_KEY = 'ce6593aceb62762cb4d3537c96100349'
 
@@ -35,3 +36,7 @@ class TestConfig(BaseConfig):
     ENV = 'development'
     DEBUG = True
     TESTING = True
+
+    # database
+    DB_USER = 'app'
+    DB_NAME = 'dbcarpool_test'

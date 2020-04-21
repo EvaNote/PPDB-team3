@@ -1,6 +1,9 @@
 from flask import Blueprint, flash, render_template, g, current_app, abort
-from src.rides.forms import FindRideForm
 from flask_babel import lazy_gettext
+from flask import Blueprint, flash, render_template, g, current_app, abort, redirect, url_for, request
+from flask_login import current_user
+import src.users.routes
+from src.utils import user_access, car_access, ride_access
 
 rides = Blueprint('rides', __name__, url_prefix='/<lang_code>')
 
@@ -31,10 +34,16 @@ def before_request():
 
 @rides.route("/findride", methods=['GET', 'POST'])
 def findride():
-    form = FindRideForm()
-    if form.validate_on_submit():
-        flash('You have been logged in successfully.', 'success')
-    return render_template("findride.html", title=lazy_gettext("Find a ride"), form=form)
+    if not current_user.is_authenticated and not current_app.config['TESTING']:
+        return redirect(url_for('users.login'))
+    return render_template("findride.html", title=lazy_gettext("Find a ride"))
+
+
+@rides.route("/createride", methods=['GET', 'POST'])
+def createride():
+    if not current_user.is_authenticated:
+        return redirect(url_for('users.login'))
+    return render_template("createride.html", title="Create a ride")
 
 
 @rides.route("/ride_info")
@@ -46,6 +55,18 @@ def ride_details():
 def ride_history():
     return render_template("ride_history.html", title=lazy_gettext("Ride history"))
 
+
 @rides.route("/maps")
 def maps():
     return render_template("maps.html", title="maps")
+
+
+@rides.route("/joinride", methods=['GET', 'POST'])
+def joinride():
+    ride_id = request.json.get("ride_id")
+    result = ride_access.registerPassenger(current_user.id, ride_id)
+    if result:
+        return {"result": "success"}
+    return {"result": "failed"}
+
+

@@ -8,8 +8,8 @@
 
  // get time between waypoints
  let instr = control._line._route.instructions;
-        let time = 0;
-        for (let i in instr) {
+ let time = 0;
+ for (let i in instr) {
             time += instr[i].time;
             if (instr[i].type === "WaypointReached") {
                 console.log("Time to waypoint: " + time);
@@ -31,7 +31,95 @@ let control = L.Routing.control({
     serviceUrl: 'http://127.0.0.1:5001/route/v1',
     routeWhileDragging: true,
     geocoder: L.Control.Geocoder.nominatim(),
+    addWaypoints: false,
+    createMarker: function (i, wp) {
+        return L.marker(wp.latLng).on('mouseover', function (e) {
+            var msg, changeOrderBtn;
+            var container = L.DomUtil.create('div');
+            if (e.latlng === state.startFromThisLocationClicked) {
+                msg = 'start point';
+                container.appendChild(document.createTextNode(msg));
+            } else if (e.latlng === state.goToThisLocationClicked) {
+                msg = 'end point';
+                container.appendChild(document.createTextNode(msg));
+            } else if (e.latlng === state.p1) {
+                msg = 'pickup point 1';
+                container.appendChild(document.createTextNode(msg));
+                if (state.p2 !== null) {
+                    changeOrderBtn = createButton('Change order...', container)
+                }
+            } else if (e.latlng === state.p2) {
+                msg = 'pickup point 2';
+                container.appendChild(document.createTextNode(msg));
+                changeOrderBtn = createButton('Change order...', container)
+            } else {
+                msg = 'pickup point 3';
+                container.appendChild(document.createTextNode(msg));
+                changeOrderBtn = createButton('Change order...', container)
+            }
+            L.popup({
+                offset: [0, -20]
+            })
+                .setContent(container)
+                .setLatLng(e.latlng)
+                .openOn(map);
+            setTimeout(function () {
+                map.closePopup();
+            }, 10000);
+
+            L.DomEvent.on(changeOrderBtn, 'click', function () {
+                var btn1, btn2, btn3;
+                var container = L.DomUtil.create('div');
+
+                if (e.latlng === state.p1) {
+                    btn2 = createButton('2', container);
+                    btn2.setAttribute('id', 'id_1');
+                    if (state.p3 !== null) {
+                        btn3 = createButton('3', container);
+                        btn3.setAttribute('id', 'id_1');
+                    }
+                } else if (e.latlng === state.p2) {
+                    btn1 = createButton('1', container);
+                    btn1.setAttribute('id', 'id_2');
+                    if (state.p3 !== null) {
+                        btn3 = createButton('3', container);
+                        btn3.setAttribute('id', 'id_2');
+                    }
+                } else {
+                    btn1 = createButton('1', container);
+                    btn1.setAttribute('id', 'id_3');
+                    btn2 = createButton('2', container);
+                    btn2.setAttribute('id', 'id_3');
+                }
+
+                map.closePopup();
+
+                L.popup({
+                    offset: [0, -20]
+                })
+                    .setContent(container)
+                    .setLatLng(e.latlng)
+                    .openOn(map);
+
+                L.DomEvent.on(btn1, 'click', function () {
+                    alert()
+                });
+
+                L.DomEvent.on(btn2, 'click', function () {
+                    alert()
+                });
+
+                L.DomEvent.on(btn3, 'click', function () {
+                    alert()
+                })
+            });
+
+
+        });
+    }
 }).addTo(map);
+
+//L.control.locate().addTo(map);
 
 function createButton(label, container) {
     var btn = L.DomUtil.create('button', '', container);
@@ -40,39 +128,120 @@ function createButton(label, container) {
     return btn;
 }
 
+let state = {
+    situation: null,
+    campusClicked: false,
+    campusFromId: null,
+    campusToId: null,
+    startFromThisLocationClicked: null,
+    goToThisLocationClicked: null,
+    p1: null,
+    p2: null,
+    p3: null
+};
+
+function resetState() {
+    state = {  // do not reset situation
+        campusClicked: false,
+        campusFromId: null,
+        campusToId: null,
+        startFromThisLocationClicked: null,
+        goToThisLocationClicked: null,
+        p1: null,
+        p2: null,
+        p3: null
+    };
+}
+
+
 map.on('click', function (e) {
-    var container = L.DomUtil.create('div'),
-        startBtn = createButton('Start from this location', container),
+    var startBtn, destBtn, addWaypointBtn;
+    var container = L.DomUtil.create('div');
+    if (state.startFromThisLocationClicked && state.goToThisLocationClicked) {
+        if (state.p3 !== null) {
+            container.appendChild(document.createElement("br"));
+            let b = document.createElement("b");
+            b.setAttribute('style', 'color: #cc0000');
+            b.appendChild(document.createTextNode('Hi there! You can\'t indicate more than three pickup points.'));
+            container.appendChild(b);
+            container.setAttribute('style', 'text-align: center')
+        } else {
+            addWaypointBtn = createButton('Add this point as pickup point', container)
+        }
+    } else if ((state.startFromThisLocationClicked || state.goToThisLocationClicked) && !state.campusClicked) {
+        container.appendChild(document.createElement("br"));
+        let b = document.createElement("b");
+        b.setAttribute('style', 'color: #cc0000');
+        b.appendChild(document.createTextNode('Hi there! This is campus carpool, one of your endpoints needs to be a campus.'));
+        container.appendChild(b);
+        if (state.startFromThisLocationClicked) {
+            startBtn = createButton('Start from this location instead', container);
+        } else {
+            destBtn = createButton('Go to this location instead', container);
+        }
+        container.setAttribute('style', 'text-align: center')
+    } else {
+        startBtn = createButton('Start from this location', container);
         destBtn = createButton('Go to this location', container);
+    }
 
     L.popup()
         .setContent(container)
         .setLatLng(e.latlng)
         .openOn(map);
+
+
+    L.DomEvent.on(addWaypointBtn, 'click', function () {
+        if (state.p1 === null) {
+            state.p1 = e.latlng
+            control.spliceWaypoints(1, 0, e.latlng);
+        } else if (state.p2 === null) {
+            state.p2 = e.latlng
+            control.spliceWaypoints(2, 0, e.latlng);
+        } else {
+            state.p3 = e.latlng
+            control.spliceWaypoints(3, 0, e.latlng);
+        }
+        control.spliceWaypoints(1, 0, e.latlng);
+        map.closePopup();
+    });
+
     L.DomEvent.on(startBtn, 'click', function () {
+        // case 1: state.startFromThisLocationClicked === true && campusFromId !== nul
+        if (state.startFromThisLocationClicked !== null) { //in case a campus was clicked before
+            resetState()  // to location is not chosen yet so safely reset
+        }
+        // case 2: state.startFromThisLocationClicked === true && campusFromId === nul
+        // does not require any action
+        state.startFromThisLocationClicked = e.latlng;
         control.spliceWaypoints(0, 1, e.latlng);
         map.closePopup();
     });
 
     L.DomEvent.on(destBtn, 'click', function () {
+        // case 1: state.goToThisLocationClicked === true && campusToId !== nul
+        if (state.goToThisLocationClicked !== false) { //in case a campus was clicked before
+            resetState()  // to location is not chosen yet so safely reset
+        }
+        // case 2: state.goToThisLocationClicked === true && campusToId === nul
+        // does not require any action
+        state.goToThisLocationClicked = e.latlng;
         control.spliceWaypoints(control.getWaypoints().length - 1, 1, e.latlng);
         map.closePopup();
     });
 });
+
 
 /**************
  * jQuery functions
  * ************/
 
 $(document).ready(function () {
+
     //TODO: dropdown? Lijst? Niks?
     document.getElementsByClassName('leaflet-routing-geocoder')[1].remove();
-    document.getElementsByClassName('leaflet-routing-add-waypoint')[0].remove();
-    // let child = document.createElement('div');
-    // child.innerHTML = "<p>Kies een campus op de kaart (geen campus gekozen)</p>";
-    // child = child.firstChild;
-    // document.getElementsByClassName('leaflet-routing-geocoders')[0].appendChild(child);
-    // add time form
+    document.getElementsByClassName('leaflet-routing-geocoder')[0].remove();
+    //document.getElementsByClassName('leaflet-routing-add-waypoint')[0].remove();
 
     //src: https://github.com/pointhi/leaflet-color-markers
     var universityIcon = new L.Icon({
@@ -93,16 +262,6 @@ $(document).ready(function () {
         shadowSize: [32, 32]
     });
 
-    let formChild = document.createElement('form');
-    formChild.setAttribute('action', '#');
-    formChild.setAttribute('id', 'campus');
-    let labelChild = document.createElement('label');
-    labelChild.setAttribute('for', 'campus_option');
-    let selectChild = document.createElement('select');
-    selectChild.setAttribute('id', 'campus_option');
-    selectChild.setAttribute('name', 'campus_option');
-
-
     $.post({
         contentType: "application/json",
         url: "/en/fillschools"
@@ -115,7 +274,6 @@ $(document).ready(function () {
                 let optionChild = document.createElement('option');
                 let textOption = document.createTextNode(hover_display);
                 optionChild.appendChild(textOption);
-                selectChild.appendChild(optionChild);
 
                 //hover_display = hover_display.substr(0, hover_display.length - 29);
                 let icon = null;
@@ -125,7 +283,7 @@ $(document).ready(function () {
                     icon = collegeIcon
                 }
 
-                (L.marker([markers[i].latitude, markers[i].longitude], {
+                (L.marker([markers[i].lat, markers[i].lng], {
                     icon: icon,
                     name: hover_display,
                     id: markers[i].id
@@ -142,16 +300,21 @@ $(document).ready(function () {
                                 .setContent(container)
                                 .setLatLng(e.latlng)
                                 .openOn(map);
-                        },
-                        'mouseout': function (e) {
                             setTimeout(function () {
                                 map.closePopup();
-                            }, 2500)
+                            }, 7000)
                         },
+                        // 'mouseout': function (e) {
+                        //     setTimeout(function () {
+                        //         map.closePopup();
+                        //     }, 2500)
+                        // },
                         'click': function (e) {
                             let container = L.DomUtil.create('div'),
                                 startBtn = createButton('Start from this location', container),
                                 destBtn = createButton('Go to this location', container);
+                            startBtn.setAttribute('id', this.options['id']);
+                            destBtn.setAttribute('id', this.options['id']);
                             container.appendChild(document.createElement("br"));
                             container.appendChild(document.createTextNode(this.options['name']));
 
@@ -161,11 +324,17 @@ $(document).ready(function () {
                                 .setLatLng(e.latlng)
                                 .openOn(map);
                             L.DomEvent.on(startBtn, 'click', function () {
+                                state.campusClicked = true;
+                                state.campusFromId = e.target['options'].id;
+                                state.startFromThisLocationClicked = e.latlng;
                                 control.spliceWaypoints(0, 1, e.latlng);
                                 map.closePopup();
                             });
 
                             L.DomEvent.on(destBtn, 'click', function () {
+                                state.campusClicked = true;
+                                state.campusToId = e.target['options'].id;
+                                state.goToThisLocationClicked = e.latlng;
                                 control.spliceWaypoints(control.getWaypoints().length - 1, 1, e.latlng);
                                 map.closePopup();
                             });
@@ -176,23 +345,45 @@ $(document).ready(function () {
 
         });
 
-    formChild.appendChild(selectChild);
-    formChild.appendChild(labelChild);
-
-    document.getElementsByClassName('leaflet-routing-geocoders')[0].appendChild(formChild);
-
     let child = document.createElement('div');
-    child.innerHTML = "<form action=\"#\" id=\"ride-time\">\n" +
+    let temp = "<form action=\"#\" id=\"ride-time\">\n" +
         "    <label for=\"time_option\">\n<select name=\"time_option\">\n" +
         "        <option>Arrive by</option>\n" +
         "        <option>Depart at</option>\n" +
         "    </select>\n" +
         "        <input id=\"time_input\" type=\"datetime-local\" name=\"datetime\">\n" +
-        "    </label>\n" +
-        "    <input type=\"submit\" value=\"Update\">\n" +
+        "    </label>\n"
+    let el = document.getElementById('create_ride');
+    if (el !== null) {
+        state.situation = 'create'
+    } else {
+        state.situation = 'find'
+    }
+
+    if (state.situation === 'create') {
+        console.log(el);
+        temp += "    <label for=\"passengers\">Available passenger seats:\n" +
+            "    <input type=\"number\" id=\"passengers\" name=\"passengers\" value=\"0\" required style='width: 30px'>\n<br>" +
+            "    </label>\n";
+    }
+    temp +=
+        "    <input type=\"submit\" value=\"Submit\">\n" +
         "</form>";
+    child.innerHTML = temp;
     child = child.firstChild;
     document.getElementsByClassName('leaflet-routing-geocoders')[0].appendChild(child);
+
+    // let rbutton = document.createElement("button");
+    // rbutton.innerHTML = "Do Something";
+    //
+    // // 2. Append somewhere
+    // let rbody = document.getElementsByTagName("rbody")[0];
+    // rbody.appendChild(rbutton);
+    //
+    // // 3. Add event handler
+    // rbutton.addEventListener ("click", function() {
+    //   alert("did something");
+    // });
 });
 
 $.fn.setNow = function (onlyBlank) {
@@ -236,31 +427,166 @@ $.fn.serializeObject = function () {
 $(function () {
     // make sure pressing the 'update' button doesn't refresh the entire page
     $('form').submit(function () {
-        let from = control.getWaypoints()[0].latLng;
-        let to = control.getWaypoints()[1].latLng;
+        var from, to;
+        state.campusFromId ? from = state.campusFromId : from = control.getWaypoints()[0].latLng;
+        state.campusToId ? to = state.campusToId : to = control.getWaypoints()[1].latLng;
         let form = $('form').serializeObject();
         // check if from-to are defined. If they aren't, nothing should happen
         if (typeof from !== 'undefined' && typeof to !== 'undefined') {
-            $.post({
-                contentType: "application/json",
-                url: "/en/calculateCompatibleRides",
-                data: JSON.stringify({from: from, to: to, time_option: form.time_option, datetime: form.datetime})
-            })
-                // when post request is done, get the returned data and do something with it
-                .done(function (data) { // response function
-                    alert("Result: " + JSON.stringify(data));
-                    $('#result').append(JSON.stringify(data));
-                    let bttn = document.createElement("button");
-                    bttn.setAttribute("id", "asd")
-                    bttn.innerHTML = "hi there";
-                    $('#result').append(bttn);
-                    let bttn2 = document.createElement("button");
-                    bttn2.setAttribute("class","btn btn-outline-info");
+            var e = document.getElementById("ride_option");
+            let el = document.getElementById('create_ride');
+            let ride_option = state.situation;
+            if (ride_option === "create") {
+                $.post({
+                    contentType: "application/json",
+                    url: "/en/createRide",
+                    data: JSON.stringify({from: from, to: to, time_option: form.time_option, datetime: form.datetime, passengers: form.passengers})
+                })
+                    // when post request is done, get the returned data and do something with it
+                    .done(function (data) { // response function
+                        //alert("CREATE: " + JSON.stringify(data));
+                        alert("Created a new ride. You can see, edit and delete your created rides on the 'My Rides' page.")
 
-                    bttn2.innerHTML = "Arno6969696969";
-                    $('#result').append(bttn2);
 
-                });
+                    });
+
+            }
+            if (ride_option === "find") {
+                $.post({
+                    contentType: "application/json",
+                    url: "/en/calculateCompatibleRides",
+                    data: JSON.stringify({from: from, to: to, time_option: form.time_option, datetime: form.datetime})
+                })
+                    // when post request is done, get the returned data and do something with it
+                    .done(function (data) { // response function
+                        ride_count = data["results"].length
+                        alert("Found " + ride_count + " matches! Scroll down to see them.")
+                        //alert("FIND: " + JSON.stringify(data));
+                        if (data === null) {
+                            return
+                        }
+                        let result_div = $('#result');
+                        result_div.empty();
+                        result_div.attr("class", "row justify-content-center");
+                        for (let d = 0; d < data["results"].length; d++) {
+                            let result = data.results[d];
+                            let driver = data["drivers"][d]
+                            let driver_name = driver["first_name"] + " " + driver["last_name"]
+                            let choice = document.createElement("div");
+                            choice.setAttribute("class", "border border-info rounded col-md-5 m-3 text-left");
+                            let from = result.waypoints[0]["addr"];
+                            let to = result.waypoints[result["len"] - 1]["addr"];
+                            if (result.waypoints[0]["alias"] !== "") {
+                                from += " (" + result.waypoints[0]["alias"] + ")"
+                            }
+                            if (result.waypoints[result["len"] - 1]["alias"] !== "") {
+                                to += " (" + result.waypoints[result["len"] - 1]["alias"] + ")"
+                            }
+                            let innerRow = document.createElement("div");
+                            innerRow.setAttribute("class", "row");
+
+                            let leftColumn = document.createElement("div");
+                            leftColumn.setAttribute("class", "col-md-6 text-left");
+
+                            let rightColumn = document.createElement("div");
+                            rightColumn.setAttribute("class", "col-md-6 text-left");
+
+                            leftColumn.innerHTML = "<p class=\"my-3\"><b>From:</b> " + from + "</p>\n" +
+                                "<p><b>Departure:</b> " + result["departure_time"] + "</p>\n"  +
+                                "<p><b>Driver:</b> " + driver_name + "</p>\n";
+
+                            rightColumn.innerHTML = "<p class=\"my-3\"><b>To:</b> " + to + "</p>\n" +
+                                "<p><b>Arrival:</b> " + result["arrival_time"] + "</p>\n";
+
+                            let underColumn = document.createElement("div");
+                            underColumn.setAttribute("class", "col-md-8 text-center");
+
+                            let mapButton = document.createElement("button");
+                            mapButton.setAttribute("class", "btn btn-info m-2");
+                            mapButton.onclick = function() {
+                                //beginCoords  find the closest maybe pickupPoint
+                                let results = data.results[d];
+                                let tempArr = [];
+                                let n = results.closest;
+                                while(n<results.len){
+                                    if(results.waypoints[n] != null){
+                                        tempArr.push(L.latLng(results.waypoints[n].lat, results.waypoints[n].lng))
+                                    }
+                                    n++;
+                                }
+                                map.removeControl(control);
+                                control = L.Routing.control({
+                                    serviceUrl: 'http://127.0.0.1:5001/route/v1',
+                                    waypoints: tempArr,
+                                    autoRoute: true,
+                                }).addTo(map);
+                            }
+                            mapButton.innerHTML = "Show on map";
+
+
+                            let addButton = document.createElement("button");
+                            addButton.setAttribute("class", "btn btn-info m-2");
+                            addButton.setAttribute("id", "ride-button-" + d.toString());
+                            addButton.innerHTML = "Join this ride";
+                            addButton.addEventListener("click", function() {
+                                $.post({
+                                    contentType: "application/json",
+                                    url: "/en/joinride",
+                                    data: JSON.stringify({ride_id: result.id})
+                                })
+                                    // when post request is done, get the returned data and do something with it
+                                    .done(function (data2) {
+                                        if(data2){
+                                            if (data2["result"] === "success") {
+                                                alert("Ride joined successfully.")
+                                            } else {
+                                                alert("You already joined this ride.")
+                                            }
+                                        }
+                                    });
+                            } )
+                            let driverButton = document.createElement("button");
+                            driverButton.setAttribute("class", "btn btn-info m-2");
+                            driverButton.innerHTML = "See driver profile";
+                            driverButton.onclick = function() {
+                                alert("under construction")
+                                }
+                            underColumn.appendChild(mapButton);
+                            underColumn.appendChild(addButton);
+                            underColumn.appendChild(driverButton)
+
+                            innerRow.appendChild(leftColumn);
+                                innerRow.appendChild(rightColumn);
+                            innerRow.appendChild(underColumn);
+
+                            choice.appendChild(innerRow);
+
+                            result_div.append(choice);
+                        }
+
+
+                        // $('#result').attr("class", "row justify-content-center");
+                        // for (let d = 0; d < data["results"].length; d++) {
+                        //     let result = data.results[d];
+                        //     let btn = document.createElement("button");
+                        //     btn.setAttribute("id", "result" + d.toString())
+                        //     btn.setAttribute("class","btn btn-info col-md-5 m-3 text-left");
+                        //     let from, to;
+                        //     if (result["to_campus"] === true) {
+                        //         from = result["address_1"];
+                        //         to = result["campus"];
+                        //     } else {
+                        //         from = result["campus"];
+                        //         to = result["address_1"];
+                        //     }
+                        //     btn.innerHTML = "From: " + from.toString() + "<br>\n" +
+                        //                     "To: " + to.toString() + "<br>\n" +
+                        //                     "Departure: " + result["departure_time"] + "<br>\n" +
+                        //                     "Arrival: " + result["arrival_time"] + "<br>";
+                        //     $('#result').append(btn);
+                        // }
+                    });
+            }
         }
         return false;
     });
@@ -270,17 +596,6 @@ $(function () {
 });
 
 
-var rbutton = document.createElement("button");
-rbutton.innerHTML = "Do Something";
-
-// 2. Append somewhere
-var rbody = document.getElementsByTagName("rbody")[0];
-rbody.appendChild(rbutton);
-
-// 3. Add event handler
-rbutton.addEventListener ("click", function() {
-  alert("did something");
-});
 /*
 
 function Geeks() {

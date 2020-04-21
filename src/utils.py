@@ -11,6 +11,7 @@ from src.dbmodels.Picture import Pictures
 from src.dbmodels.Review import Reviews
 from src.dbmodels.Ride import Rides
 from src.dbmodels.User import UserAccess
+from src.dbmodels.PickupPoint import PickupPoints
 from src.config import BaseConfig
 
 # connect to database
@@ -22,6 +23,7 @@ picture_access = Pictures(connection)
 review_access = Reviews(connection)
 ride_access = Rides(connection)
 user_access = UserAccess(connection)
+pickup_point_access = PickupPoints(connection)
 
 # create extensions
 babel = Babel()
@@ -45,5 +47,5 @@ def get_timezone():
 
 
 @login_manager.user_loader
-def load_user(user_email):
-    return UserAccess(connection).get_user(user_email)
+def load_user(user_id):
+    return UserAccess(connection).get_user_on_id(user_id)
