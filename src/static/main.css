@@ -153,6 +153,31 @@ hr {
   height: auto;
   text-align: center;
  }
+.ride_history_wrap_5{
+  border-radius: 10px;
+  background: #17a2b8;
+  font-size:100%;
+  width:25%;
+  position: relative;
+    left: 10px;
+    top: 10px;
+  display: inline-block;
+  height: auto;
+  text-align: center;
+ }
+.ride_history_wrap_4{
+  border-radius: 10px;
+  background: #17a2b9;
+  font-size:100%;
+  width:70%;
+  position: relative;
+    left: 490px;
+
+
+  display: inline-block;
+  height: auto;
+  text-align: center;
+ }
 .ride_history_wrap_2{
   border-radius: 25px;
   font-size:100%;

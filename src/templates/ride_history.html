@@ -42,7 +42,9 @@
 
     <div class="row">
         <div class="ride_history_wrap_3">
-            <div class="ride_history_wrap_1">{{ ride.departure_time }}</div>
+            <div class="ride_history_wrap_1"> {{ _('Departure: ') }} {{ ride.departure_time }}</div>
+                    <div class="ride_history_wrap_1"> {{ _('Arrival: ') }}{{ ride.arrival_time }}</div>
+
             {% if ride.to_campus %}
                 <div class="ride_history_wrap_2"> {{ _('From ') }} {{ address }} {{ _(' to ') }} {{ campus }}</div>
             {% else %}
@@ -56,6 +58,8 @@
                     alt="passenger pic" style="border-radius: 50%"><br>
             </a>
         {% endfor %}
+            <a class="btn btn-info" href="{{ url_for('main.deleteride', ride_id=ride.id) }}" role="button">{{ _('Delete ride') }}</a>
+
         </div>
     </div>
 

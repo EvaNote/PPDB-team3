@@ -38,24 +38,46 @@
         {% set address = addresses[loop.index0] %}
         {% set campus = campuses[loop.index0] %}
         {% set pfplist = pfps[loop.index0] %}
-        {% set passids = allids[loop.index0] %}
+        {% set pickuppoint = pickuppoints[loop.index0] %}
+        {% set pickupbool = pickupbools[loop.index0] %}
 
     <div class="row">
         <div class="ride_history_wrap_3">
-            <div class="ride_history_wrap_1">{{ ride.departure_time }}</div>
+            <div class="ride_history_wrap_5"> {{ _('Departure: ') }} {{ ride.departure_time }}</div>
+        <br>
+            <div class="ride_history_wrap_5"> {{ _('Arrival: ') }} {{ ride.arrival_time }}</div>
+        <br>
+            {% if pickupbool[0] %}
+                <div class="ride_history_wrap_5"> {{ _('Pickup 1: ') }} {{ pickuppoint[0] }}</div>
+                <br>
+            {% endif %}
+            {% if pickupbool[1] %}
+                <div class="ride_history_wrap_5"> {{ _('Pickup 2: ') }} {{ pickuppoint[1] }}</div>
+                <br>
+            {% endif %}
+            {% if pickupbool[2] %}
+                <div class="ride_history_wrap_5"> {{ _('Pickup 3: ') }} {{ pickuppoint[2] }}</div>
+                <br>
+            {% endif %}
             {% if ride.to_campus %}
-                <div class="ride_history_wrap_2"> {{ _('From ') }} {{ address }} {{ _(' to ') }} {{ campus }}</div>
+                <div class="ride_history_wrap_4"> {{ _('From: ') }} {{ address }}  </div>
+                <br>
+                    <div class="ride_history_wrap_4"> {{ _('To: ') }} {{ campus }}</div>
             {% else %}
-                <div class="ride_history_wrap_2">{{ _('From ') }} {{ campus }} {{ _(' to ') }} {{ address }}</div>
+                <div class="ride_history_wrap_4">{{ _('From: ') }} {{ campus }} </div>
+                <br>
+                <div class="ride_history_wrap_4"> {{ _('To: ') }} {{ address }}</div>
             {% endif %}
         <br>
-        {% for pfp in pfplist %}
-            {% set linkid = passids[loop.index0] %}
-            <a href={{ url_for('users.user', userid=linkid) }}>
-                            <img src="{{ url_for('static', filename=pfp) }}" class="float-left mr-2" width="127px"
-                    alt="passenger pic" style="border-radius: 50%"><br>
+
+            <a href={{ url_for('users.user', userid=ride.user_id) }}>
+                            <img src="{{ url_for('static', filename=pfplist) }}" class="float-left mr-2" width="127px"
+                    alt="driver pic" style="border-radius: 50%"><br>
             </a>
-        {% endfor %}
+            <a class="btn btn-info" href="{{ url_for('users.user', userid=ride.user_id) }}" role="button">{{ _('See driver profile') }}</a>
+        <a class="btn btn-info" href="{{ url_for('main.canceljoinedride', ride_id=ride.id) }}" role="button">{{ _('Cancel ride') }}</a>
+
+
         </div>
     </div>
 
