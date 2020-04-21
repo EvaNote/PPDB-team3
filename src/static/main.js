@@ -30,11 +30,12 @@ L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
 let control = L.Routing.control({
     serviceUrl: 'http://127.0.0.1:5001/route/v1',
     routeWhileDragging: true,
+    draggableWaypoints: false,
     geocoder: L.Control.Geocoder.nominatim(),
     addWaypoints: false,
     createMarker: function (i, wp) {
         return L.marker(wp.latLng).on('mouseover', function (e) {
-            var msg, changeOrderBtn;
+            var msg, changeOrderBtn, removeWaypointBtn;
             var container = L.DomUtil.create('div');
             if (e.latlng === state.startFromThisLocationClicked) {
                 msg = 'start point';
@@ -44,19 +45,27 @@ let control = L.Routing.control({
                 container.appendChild(document.createTextNode(msg));
             } else if (e.latlng === state.p1) {
                 msg = 'pickup point 1';
-                container.appendChild(document.createTextNode(msg));
                 if (state.p2 !== null) {
-                    changeOrderBtn = createButton('Change order...', container)
+                    changeOrderBtn = createButton('Change order...', container);
                 }
+                removeWaypointBtn = createButton('Remove this waypoint', container);
+                container.appendChild(document.createElement("br"));
+                container.appendChild(document.createTextNode(msg));
             } else if (e.latlng === state.p2) {
                 msg = 'pickup point 2';
+                removeWaypointBtn = createButton('Remove this waypoint', container);
+                changeOrderBtn = createButton('Change order...', container);
+                container.appendChild(document.createElement("br"));
                 container.appendChild(document.createTextNode(msg));
-                changeOrderBtn = createButton('Change order...', container)
             } else {
                 msg = 'pickup point 3';
+                removeWaypointBtn = createButton('Remove this waypoint', container);
+                changeOrderBtn = createButton('Change order...', container);
+                container.appendChild(document.createElement("br"));
                 container.appendChild(document.createTextNode(msg));
-                changeOrderBtn = createButton('Change order...', container)
             }
+            container.setAttribute('style', 'text-align: center')
+
             L.popup({
                 offset: [0, -20]
             })
@@ -67,30 +76,51 @@ let control = L.Routing.control({
                 map.closePopup();
             }, 10000);
 
+            L.DomEvent.on(removeWaypointBtn, 'click', function () {
+                let waypoints = control.getWaypoints();
+                var i;
+                if (e.latlng === state.p1) {
+                    i = 1;
+                    state.p1 = state.p2;
+                    state.p2 = state.p3;
+                } else if (e.latlng === state.p2) {
+                    i = 2;
+                    state.p2 = state.p3;
+                } else {
+                    i = 3;
+                }
+                waypoints.splice(i, 1);
+                control.setWaypoints(waypoints);
+            });
+
             L.DomEvent.on(changeOrderBtn, 'click', function () {
-                var btn1, btn2, btn3;
+                var btn1;
+                var btn2;
+                var btn3;
                 var container = L.DomUtil.create('div');
 
                 if (e.latlng === state.p1) {
                     btn2 = createButton('2', container);
-                    btn2.setAttribute('id', 'id_1');
+                    btn2.setAttribute('id', 'id_1_2');
                     if (state.p3 !== null) {
                         btn3 = createButton('3', container);
-                        btn3.setAttribute('id', 'id_1');
+                        btn3.setAttribute('id', 'id_1_3');
                     }
                 } else if (e.latlng === state.p2) {
                     btn1 = createButton('1', container);
-                    btn1.setAttribute('id', 'id_2');
+                    btn1.setAttribute('id', 'id_2_1');
                     if (state.p3 !== null) {
                         btn3 = createButton('3', container);
-                        btn3.setAttribute('id', 'id_2');
+                        btn3.setAttribute('id', 'id_2_3');
                     }
                 } else {
                     btn1 = createButton('1', container);
-                    btn1.setAttribute('id', 'id_3');
+                    btn1.setAttribute('id', 'id_3_1');
                     btn2 = createButton('2', container);
-                    btn2.setAttribute('id', 'id_3');
+                    btn2.setAttribute('id', 'id_3_2');
                 }
+
+                container.setAttribute('style', 'text-align: center');
 
                 map.closePopup();
 
@@ -101,20 +131,68 @@ let control = L.Routing.control({
                     .setLatLng(e.latlng)
                     .openOn(map);
 
-                L.DomEvent.on(btn1, 'click', function () {
-                    alert()
+                $('#id_1_2').on('click', function () {
+                    //swap index 1 with index 2
+                    let temp = state.p1;
+                    state.p1 = state.p2;
+                    state.p2 = temp;
+                    let waypoints = control.getWaypoints();
+                    waypoints[1] = state.p1;
+                    waypoints[2] = state.p2;
+                    control.setWaypoints(waypoints)
                 });
 
-                L.DomEvent.on(btn2, 'click', function () {
-                    alert()
+                $('#id_2_1').on('click', function () {
+                    //swap index 1 with index 2
+                    let temp = state.p1;
+                    state.p1 = state.p2;
+                    state.p2 = temp;
+                    let waypoints = control.getWaypoints();
+                    waypoints[1] = state.p1;
+                    waypoints[2] = state.p2;
+                    control.setWaypoints(waypoints)
                 });
 
-                L.DomEvent.on(btn3, 'click', function () {
-                    alert()
+                $('#id_3_1').on('click', function () {
+                    let temp = state.p1;
+                    state.p1 = state.p3;
+                    state.p3 = temp;
+                    let waypoints = control.getWaypoints();
+                    waypoints[1] = state.p1;
+                    waypoints[3] = state.p3;
+                    control.setWaypoints(waypoints)
+                })
+
+                $('#id_1_3').on('click', function () {
+                    let temp = state.p1;
+                    state.p1 = state.p3;
+                    state.p3 = temp;
+                    let waypoints = control.getWaypoints();
+                    waypoints[1] = state.p1;
+                    waypoints[3] = state.p3;
+                    control.setWaypoints(waypoints)
+                })
+
+                $('#id_2_3').on('click', function () {
+                    let temp = state.p2;
+                    state.p2 = state.p3;
+                    state.p3 = temp;
+                    let waypoints = control.getWaypoints();
+                    waypoints[2] = state.p2;
+                    waypoints[3] = state.p3;
+                    control.setWaypoints(waypoints)
+                })
+
+                $('#id_3_2').on('click', function () {
+                    let temp = state.p2;
+                    state.p2 = state.p3;
+                    state.p3 = temp;
+                    let waypoints = control.getWaypoints();
+                    waypoints[2] = state.p2;
+                    waypoints[3] = state.p3;
+                    control.setWaypoints(waypoints)
                 })
             });
-
-
         });
     }
 }).addTo(map);
@@ -153,11 +231,11 @@ function resetState() {
     };
 }
 
-
 map.on('click', function (e) {
     var startBtn, destBtn, addWaypointBtn;
     var container = L.DomUtil.create('div');
-    if (state.startFromThisLocationClicked && state.goToThisLocationClicked) {
+    console.log(state);
+    if (state.startFromThisLocationClicked && state.goToThisLocationClicked && state.situation === 'create') {
         if (state.p3 !== null) {
             container.appendChild(document.createElement("br"));
             let b = document.createElement("b");
@@ -166,7 +244,8 @@ map.on('click', function (e) {
             container.appendChild(b);
             container.setAttribute('style', 'text-align: center')
         } else {
-            addWaypointBtn = createButton('Add this point as pickup point', container)
+            startBtn = createButton('Add this point as pickup point', container);
+            startBtn.setAttribute('id', 'pickup')
         }
     } else if ((state.startFromThisLocationClicked || state.goToThisLocationClicked) && !state.campusClicked) {
         container.appendChild(document.createElement("br"));
@@ -182,6 +261,7 @@ map.on('click', function (e) {
         container.setAttribute('style', 'text-align: center')
     } else {
         startBtn = createButton('Start from this location', container);
+        startBtn.setAttribute('id', 'start');
         destBtn = createButton('Go to this location', container);
     }
 
@@ -190,44 +270,43 @@ map.on('click', function (e) {
         .setLatLng(e.latlng)
         .openOn(map);
 
-
-    L.DomEvent.on(addWaypointBtn, 'click', function () {
-        if (state.p1 === null) {
-            state.p1 = e.latlng
-            control.spliceWaypoints(1, 0, e.latlng);
-        } else if (state.p2 === null) {
-            state.p2 = e.latlng
-            control.spliceWaypoints(2, 0, e.latlng);
-        } else {
-            state.p3 = e.latlng
-            control.spliceWaypoints(3, 0, e.latlng);
-        }
-        control.spliceWaypoints(1, 0, e.latlng);
-        map.closePopup();
-    });
-
     L.DomEvent.on(startBtn, 'click', function () {
-        // case 1: state.startFromThisLocationClicked === true && campusFromId !== nul
-        if (state.startFromThisLocationClicked !== null) { //in case a campus was clicked before
-            resetState()  // to location is not chosen yet so safely reset
-        }
-        // case 2: state.startFromThisLocationClicked === true && campusFromId === nul
-        // does not require any action
-        state.startFromThisLocationClicked = e.latlng;
-        control.spliceWaypoints(0, 1, e.latlng);
+        if (startBtn.getAttribute('id') === 'start') {
+            // case 1: state.startFromThisLocationClicked === true && campusFromId !== nul
+            if (state.startFromThisLocationClicked !== null && state.campusFromId !== null) { //in case a campus was clicked before
+                resetState()  // to location is not chosen yet so safely reset
+            }
+            // case 2: state.startFromThisLocationClicked === true && campusFromId === nul
+            // does not require any action
+            state.startFromThisLocationClicked = e.latlng;
+            map.closePopup();
+            control.spliceWaypoints(0, 1, e.latlng);
+        } else {
+            if (state.p1 === null) {
+                state.p1 = e.latlng;
+                control.spliceWaypoints(1, 0, e.latlng);
+            } else if (state.p2 === null) {
+                state.p2 = e.latlng;
+                control.spliceWaypoints(2, 0, e.latlng);
+            } else {
+                state.p3 = e.latlng;
+                control.spliceWaypoints(3, 0, e.latlng);
+            }
         map.closePopup();
+            control.spliceWaypoints(1, 0, e.latlng);
+        }
     });
 
     L.DomEvent.on(destBtn, 'click', function () {
         // case 1: state.goToThisLocationClicked === true && campusToId !== nul
-        if (state.goToThisLocationClicked !== false) { //in case a campus was clicked before
+        if (state.goToThisLocationClicked !== false && state.campusToId !== null) { //in case a campus was clicked before
             resetState()  // to location is not chosen yet so safely reset
         }
         // case 2: state.goToThisLocationClicked === true && campusToId === nul
         // does not require any action
         state.goToThisLocationClicked = e.latlng;
-        control.spliceWaypoints(control.getWaypoints().length - 1, 1, e.latlng);
         map.closePopup();
+        control.spliceWaypoints(control.getWaypoints().length - 1, 1, e.latlng);
     });
 });
 
@@ -429,8 +508,90 @@ $(function () {
     $('form').submit(function () {
         var from, to;
         state.campusFromId ? from = state.campusFromId : from = control.getWaypoints()[0].latLng;
-        state.campusToId ? to = state.campusToId : to = control.getWaypoints()[1].latLng;
+        var points = control.getWaypoints().length;
+        state.campusToId ? to = state.campusToId : to = control.getWaypoints()[points-1].latLng;
+
         let form = $('form').serializeObject();
+        let time_option = form.time_option;
+        var arrive_time;
+        var depart_time;
+
+        let instr = control._line._route.instructions;
+        let time = 0;
+        var times = [];
+        for (let i in instr) {
+            time += instr[i].time;
+            if (instr[i].type === "WaypointReached") {
+                //console.log("Time to waypoint: " + time);
+                times.push(time);
+                time = 0;
+            }
+            if (instr[i].type === "DestinationReached"){
+                //alert("ka");
+                times.push(time);
+                time = 0;
+            }
+        }
+        let seconds = times[times.length-1];
+        arrive_time = new Date(form.datetime.replace('T', ' ') + ":00");
+        depart_time = new Date(form.datetime.replace('T', ' ') + ":00");
+        var arrive = true;
+        if (time_option === "Arrive by"){
+            depart_time.setSeconds( depart_time.getSeconds() + seconds );
+            //alert("wiewa arrive")
+        }
+        if (time_option === "Depart at"){
+            arrive_time.setSeconds(arrive_time.getSeconds() + seconds);
+            //alert("wiewa depart")
+            arrive = false;
+        }
+        var pickup_points = [];
+        var estimated_times = [];
+        if (points > 2){
+            var pickup = control.getWaypoints()[1].latLng;
+            pickup_points.push(pickup);
+            var estimated_time = new Date(form.datetime.replace('T', ' ') + ":00");
+            if (arrive){
+                estimated_time.setSeconds(arrive_time.getSeconds() - times[0]);
+            }
+            else{
+                estimated_time.setSeconds(depart_time.getSeconds() + times[0]);
+            }
+            estimated_times.push(estimated_time);
+            if (points > 3){
+                var pickup2 = control.getWaypoints()[2].latLng;
+                pickup_points.push(pickup2);
+                var estimated_time2 = new Date(form.datetime.replace('T', ' ') + ":00");
+                if (arrive){
+                    estimated_time2.setSeconds(arrive_time.getSeconds() - times[1]);
+                }
+                else{
+                    estimated_time2.setSeconds(depart_time.getSeconds() + times[1]);
+                }
+                estimated_times.push(estimated_time2);
+                if (points > 4){
+                    var pickup3 = control.getWaypoints()[3].latLng;
+                    pickup_points.push(pickup3);
+                    var estimated_time3 = new Date(form.datetime.replace('T', ' ') + ":00");
+                    if (arrive){
+                        estimated_time3.setSeconds(arrive_time.getSeconds() - times[2]);
+                    }
+                    else{
+                        estimated_time3.setSeconds(depart_time.getSeconds() + times[2]);
+                    }
+                    estimated_times.push(estimated_time3);
+                }
+            }
+        }
+
+        for (let i in estimated_times){
+            time = estimated_times[i];
+            //alert("estimated time voor omzet:" + time);
+            estimated_times[i] = time.toISOString().split('T')[0]+' '+time.toTimeString().split(' ')[0];
+            //alert("estimated time na omzet:" + estimated_times[i]);
+        }
+
+        //alert(estimated_times);
         // check if from-to are defined. If they aren't, nothing should happen
         if (typeof from !== 'undefined' && typeof to !== 'undefined') {
             var e = document.getElementById("ride_option");
@@ -440,14 +601,14 @@ $(function () {
                 $.post({
                     contentType: "application/json",
                     url: "/en/createRide",
-                    data: JSON.stringify({from: from, to: to, time_option: form.time_option, datetime: form.datetime, passengers: form.passengers})
+                    data: JSON.stringify({from: from, to: to, arrive_time: arrive_time.toMysqlFormat(),
+                        depart_time: depart_time.toMysqlFormat(),
+                        passengers: form.passengers, pickup_points: pickup_points, estimated_times: estimated_times})
                 })
                     // when post request is done, get the returned data and do something with it
                     .done(function (data) { // response function
                         //alert("CREATE: " + JSON.stringify(data));
                         alert("Created a new ride. You can see, edit and delete your created rides on the 'My Rides' page.")
-
-
                     });
 
             }
@@ -595,6 +756,26 @@ $(function () {
     $('input[type="datetime-local"]').setNow();
 });
 
+
+// src https://stackoverflow.com/questions/5129624/convert-js-date-time-to-mysql-datetime/11150727#11150727
+/**
+ * You first need to create a formatting function to pad numbers to two digits…
+ **/
+function twoDigits(d) {
+    if(0 <= d && d < 10) return "0" + d.toString();
+    if(-10 < d && d < 0) return "-0" + (-1*d).toString();
+    return d.toString();
+}
+
+/**
+ * …and then create the method to output the date string as desired.
+ * Some people hate using prototypes this way, but if you are going
+ * to apply this to more than one Date object, having it as a prototype
+ * makes sense.
+ **/
+Date.prototype.toMysqlFormat = function() {
+    return this.getUTCFullYear() + "-" + twoDigits(1 + this.getUTCMonth()) + "-" + twoDigits(this.getUTCDate()) + " " + twoDigits(this.getUTCHours()+2) + ":" + twoDigits(this.getUTCMinutes()) + ":" + twoDigits(this.getUTCSeconds());
+};
 
 /*
 

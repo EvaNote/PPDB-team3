@@ -285,7 +285,6 @@ class Rides:
         self.dbconnect.commit()
 
     def match_rides_with_passenger(self, p_from, p_to, p_time_option, p_datetime):
-        print(p_from, p_to, p_time_option, p_datetime)
         """
         Check if:
             1) driver destination is close enough to passenger destination

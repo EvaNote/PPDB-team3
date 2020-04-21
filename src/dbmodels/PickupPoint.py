@@ -25,6 +25,12 @@ class PickupPoints:
             points.append(ride)
         return points
 
+    def get_id(self, latitude, longitude):
+        cursor = self.dbconnect.get_cursor()
+        cursor.execute("SELECT id FROM pickup_point WHERE latitude=%s AND longitude=%s", (latitude, longitude))
+        id = cursor.fetchone()[0]
+        return id
+
     def get_on_id(self, id):
         cursor = self.dbconnect.get_cursor()
         cursor.execute(
@@ -32,8 +38,8 @@ class PickupPoints:
         row = cursor.fetchone()
         return PickupPoint(id, row[1], row[2], row[3])
 
-    def get_all(self, dbconnect):
-        cursor = dbconnect.get_cursor()
+    def get_all(self):
+        cursor = self.dbconnect.get_cursor()
         cursor.execute(
             "SELECT id, latitude, longitude, estimated_time FROM pickup_point")
         points = list()
@@ -41,3 +47,9 @@ class PickupPoints:
             ride = PickupPoint(row[0], row[1], row[2], row[3])
             points.append(ride)
         return points
+
+    def add_pickup_point(self, p):
+        cursor = self.dbconnect.get_cursor()
+
+        cursor.execute('INSERT INTO "pickup_point" VALUES(default, %s, %s, %s)', (p.latitude, p.longitude, p.estimated_time))
+        self.dbconnect.commit()
