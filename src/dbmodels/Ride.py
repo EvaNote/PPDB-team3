@@ -176,6 +176,14 @@ class Rides:
         ride_obj = Ride(ride[0], ride[1], ride[2], ride[3], ride[4], ride[5], ride[6], ride[7], ride[8], ride[9], ride[10], ride[11])
         return ride_obj
 
+    def get_passenger_ids(self, ride_id):
+        cursor = self.dbconnect.get_cursor()
+        cursor.execute("SELECT p.user_id FROM passenger_ride as p WHERE p.ride_id = %s", (ride_id,))
+        results = list()
+        for row in cursor:
+            results.append(row[0])
+        return results
+
     def get_data_for_api(self, id):
         cursor = self.dbconnect.get_cursor()
         cursor.execute(

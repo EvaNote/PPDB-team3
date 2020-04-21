@@ -41,3 +41,13 @@ class Campusses:
             return row[0]
         else:
             return ''
+
+    def is_campus(self, lat, lng):
+        cursor = self.dbconnect.get_cursor()
+        cursor.execute("""
+                SELECT c.id FROM campus as c WHERE distance_difference(%s, %s, c.latitude, c.longitude) <= 1000
+                ORDER BY distance_difference(%s, %s, c.latitude, c.longitude) LIMIT 1""", (lat, lng, lat, lng))
+        if cursor.rowcount == 0:
+            return None
+        else:
+            return cursor.fetchone()[0]

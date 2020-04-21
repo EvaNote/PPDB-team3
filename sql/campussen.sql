@@ -1,5 +1,4 @@
-drop table if exists campus;
-
+drop table if exists campus CASCADE;
 create table campus(
 	 id serial primary key,
 	 name varchar(255),
