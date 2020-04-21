@@ -30,7 +30,7 @@ class Addresses:
 
     def get_on_id(self, id):
         cursor = self.dbconnect.get_cursor()
-        cursor.execute('SELECT id,country,city,postal_code,street,nr FROM address WHERE id=%s',
+        cursor.execute('SELECT id,country,city,postal_code,street,nr,latitude,longitude FROM address WHERE id=%s',
                        (id,))
         address = cursor.fetchone()
         if address is None:

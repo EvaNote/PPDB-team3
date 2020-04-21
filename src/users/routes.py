@@ -11,7 +11,7 @@ from src.dbmodels.Picture import Picture
 from src.reviews.forms import Reviews
 from src.users.forms import LoginForm, RegistrationForm, VehicleForm, EditAccountForm, EditAddressForm, SelectSubject, \
     DeleteUserForm
-from src.utils import user_access, bcrypt, review_access, car_access, address_access, current_app, picture_access, \
+from src.utils import user_access, bcrypt, review_access, car_access, address_access, current_app, picture_access, ride_access, campus_access, \
     geolocator
 from flask_babel import lazy_gettext
 
@@ -206,7 +206,20 @@ def myrides():
     if not current_user.is_authenticated and not current_app.config[
         'TESTING']:  # makes sure user won`t be able to go to page without logging in
         return redirect(url_for('users.login'))
-    return render_template('ride_history.html', title=lazy_gettext('My rides'), loggedIn=True)
+    allrides = ride_access.get_all()
+    userrides = []
+    addresses = []
+    campuses = []
+    for ride in allrides:
+        if ride.user_id == current_user.id:
+            userrides.append(ride)
+            temp = address_access.get_on_id(ride.address_1)
+            addresses.append(temp.city + ", " + temp.street + ", " + temp.nr)
+            temp = campus_access.get_on_id(ride.campus)
+            campuses.append(temp.name)
+
+    return render_template('ride_history.html', title=lazy_gettext('My rides'), loggedIn=True, userrides=userrides,
+                           addresses=addresses, campuses=campuses)
 
 
 @users.route("/user=<userid>", methods=['GET', 'POST'])
