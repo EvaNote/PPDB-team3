@@ -221,6 +221,14 @@ def myrides():
     return render_template('ride_history.html', title=lazy_gettext('My rides'), loggedIn=True, userrides=userrides,
                            addresses=addresses, campuses=campuses)
 
+@users.route("/joinedrides")
+def joinedrides():
+    if not current_user.is_authenticated and not current_app.config['TESTING']:
+        return redirect(url_for('users.login'))
+    allrides = ride_access.getRidesFromPassenger(current_user.id)
+
+    return render_template('joined_rides.html', title=lazy_gettext('Joined rides'), loggedIn=True, rides=allrides)
+
 
 @users.route("/user=<userid>", methods=['GET', 'POST'])
 def user(userid):
