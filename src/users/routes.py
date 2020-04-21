@@ -280,7 +280,7 @@ def joinedrides():
 
             allids.append(temp2)
             pfps.append(ride_pfp)
-    return render_template('ride_history.html', title=lazy_gettext('Joined rides'), loggedIn=True,
+    return render_template('joined_rides.html', title=lazy_gettext('Joined rides'), loggedIn=True,
                            userrides=userrides,
                            addresses=addresses, campuses=campuses, pfps=pfps, allids=allids)
 
