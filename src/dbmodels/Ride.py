@@ -452,3 +452,192 @@ class Rides:
             self.dbconnect.commit()
             return True
         return False
+
+    def findRidePassengers(self, r_id):
+        cursor = self.dbconnect.get_cursor()
+        cursor.execute("select user_id from passenger_ride where passenger_ride.ride_id=%s", (r_id,))
+        passengers = []
+        for passenger in cursor:
+            passengers.append(passenger)
+        return passengers
+
+
+
+    def get_rides_with_from(self, p_from):
+        """
+        Check if:
+            1) driver destination is close enough to passenger destination
+            2) driver departure/arrival time is close enough to passenger departure/arrival time
+            3) driver departure is close enough to passenger departure, OR
+            4) driver pickup point(s) are close enough to passenger departure
+
+        :param p_from:
+        :param p_to:
+        :param p_time_option:
+        :param p_datetime:
+        :return:
+        """
+
+        # p_datetime = '2020-04-14 13:00'
+        campus = 0
+
+        from src.utils import campus_access
+        if isinstance(p_from, int):  # p_from is campus
+            campus = campus_access.get_on_id(p_from).to_dict()
+            lat_from = campus['lat']
+            lng_from = campus['lng']
+            campus = 1
+        else:
+            lat_from = p_from['lat']
+            lng_from = p_from['lng']
+
+        cursor = self.dbconnect.get_cursor()
+        if campus == 1:  # riding FROM campus
+            cursor.execute("""
+                                    SELECT r.id, r.departure_time, r.arrival_time, r.user_id, r.address_1, r.campus, 
+                                    r.to_campus, r.car_id, r.passengers, r.pickup_point_1, r.pickup_point_2, r.pickup_point_3,
+                                    c.latitude, c.longitude, a.latitude, a.longitude
+                                    FROM ride r join campus c on r.campus = c.id join address a on r.address_1 = a.id
+                                    WHERE 
+                                          (distance_difference(c.latitude, c.longitude, %s, %s) <= 3000 OR -- 3)
+                                          (select count(p.id) from pickup_point p where p.id in (r.pickup_point_1, r.pickup_point_2, r.pickup_point_3)
+                                                      and distance_difference(p.latitude, p.longitude, %s, %s) <= 3000
+                                                      ) > 0
+
+                                              )""", (lat_from, lng_from, lat_from, lng_from))
+        else:  # riding TO campus
+            cursor.execute("""
+                                    SELECT r.id, r.departure_time, r.arrival_time, r.user_id, r.address_1, r.campus, 
+                                    r.to_campus, r.car_id, r.passengers, r.pickup_point_1, r.pickup_point_2, r.pickup_point_3,
+                                    a.latitude, a.longitude, c.latitude, c.longitude
+                                    FROM ride r join campus c on r.campus = c.id join address a on r.address_1 = a.id
+                                    WHERE ( distance_difference(a.latitude, a.longitude, %s, %s) <= 3000 OR -- 3)
+                                          (select count(p.id) from pickup_point p where p.id in (r.pickup_point_1, r.pickup_point_2, r.pickup_point_3)
+                                            and distance_difference(p.latitude, p.longitude, %s, %s) <= 3000
+                                          ) > 0
+                                          )""", (lat_from, lng_from, lat_from, lng_from))
+
+        rides = list()
+        for row in cursor:
+            ride = Ride(row[0], row[1], row[2], row[3], row[4], row[5], row[6], row[7], row[8], row[9], row[10],
+                        row[11])
+            ride.from_lat = row[12]
+            ride.from_lng = row[13]
+            ride.to_lat = row[14]
+            ride.to_lng = row[15]
+
+            ride.string_addr_from = self.__helper_function_get_address(row[12], row[13])
+            ride.string_addr_to = self.__helper_function_get_address(row[14], row[15])
+
+            from src.utils import pickup_point_access
+            lat1 = lat_from
+            lng1 = lng_from
+            lat2 = ride.from_lat
+            lng2 = ride.from_lng
+            dist = self.__helper_function_dist(lat1, lng1, lat2, lng2)
+            ride.shortest_dist = dist
+
+            for i in range(9, 12):
+                if not row[i]:
+                    break
+                pp = pickup_point_access.get_on_id(row[i])
+                lat1 = lat_from
+                lng1 = lng_from
+                lat2 = pp.latitude
+                lng2 = pp.longitude
+                dist = self.__helper_function_dist(lat1, lng1, lat2, lng2)
+                addr = self.__helper_function_get_address(lat2, lng2)
+                ride.add_pickup(pp, dist, addr)
+            rides.append(ride)
+        return rides
+
+    def get_rides_with_to(self, p_to):
+        """
+            Check if:
+                1) driver destination is close enough to passenger destination
+                2) driver departure/arrival time is close enough to passenger departure/arrival time
+                3) driver departure is close enough to passenger departure, OR
+                4) driver pickup point(s) are close enough to passenger departure
+
+            :param p_from:
+            :param p_to:
+            :param p_time_option:
+            :param p_datetime:
+            :return:
+        """
+        # p_datetime = '2020-04-14 13:00'
+        campus = 0
+
+        from src.utils import campus_access
+        if isinstance(p_from, int):  # p_from is campus
+            campus = campus_access.get_on_id(p_from).to_dict()
+            lat_from = campus['lat']
+            lng_from = campus['lng']
+            campus = 1
+        else:
+            lat_from = p_from['lat']
+            lng_from = p_from['lng']
+        if isinstance(p_to, int):  # p_to is campus
+            campus = campus_access.get_on_id(p_to).to_dict()
+            lat_to = campus['lat']
+            lng_to = campus['lng']
+            if campus == 0:
+                campus = 2
+        else:
+            lat_to = p_to['lat']
+            lng_to = p_to['lng']
+
+        cursor = self.dbconnect.get_cursor()
+
+        if p_time_option == 'Arrive by':
+            p_time_option = 'r.arrival_time'
+            print(p_time_option)
+        else:
+            p_time_option = 'r.departure_time'
+        if campus == 1:  # riding FROM campus
+            cursor.execute("""
+                                            SELECT r.id, r.departure_time, r.arrival_time, r.user_id, r.address_1, r.campus, 
+                                            r.to_campus, r.car_id, r.passengers, r.pickup_point_1, r.pickup_point_2, r.pickup_point_3,
+                                            c.latitude, c.longitude, a.latitude, a.longitude
+                                            FROM ride r join campus c on r.campus = c.id join address a on r.address_1 = a.id
+                                            WHERE ((distance_difference(a.latitude, a.longitude, %s, %s) <= 3000))""", (lat_to, lng_to))
+        else:  # riding TO campus
+            cursor.execute("""
+                                            SELECT r.id, r.departure_time, r.arrival_time, r.user_id, r.address_1, r.campus, 
+                                            r.to_campus, r.car_id, r.passengers, r.pickup_point_1, r.pickup_point_2, r.pickup_point_3,
+                                            a.latitude, a.longitude, c.latitude, c.longitude
+                                            FROM ride r join campus c on r.campus = c.id join address a on r.address_1 = a.id
+                                            WHERE ((distance_difference(c.latitude, c.longitude, %s, %s) <= 3000))""", (lat_to, lng_to))
+        rides = list()
+        for row in cursor:
+            ride = Ride(row[0], row[1], row[2], row[3], row[4], row[5], row[6], row[7], row[8], row[9], row[10],
+                        row[11])
+            ride.from_lat = row[12]
+            ride.from_lng = row[13]
+            ride.to_lat = row[14]
+            ride.to_lng = row[15]
+
+            ride.string_addr_from = self.__helper_function_get_address(row[12], row[13])
+            ride.string_addr_to = self.__helper_function_get_address(row[14], row[15])
+
+            from src.utils import pickup_point_access
+            lat1 = lat_from
+            lng1 = lng_from
+            lat2 = ride.from_lat
+            lng2 = ride.from_lng
+            dist = self.__helper_function_dist(lat1, lng1, lat2, lng2)
+            ride.shortest_dist = dist
+
+            for i in range(9, 12):
+                if not row[i]:
+                    break
+                pp = pickup_point_access.get_on_id(row[i])
+                lat1 = lat_from
+                lng1 = lng_from
+                lat2 = pp.latitude
+                lng2 = pp.longitude
+                dist = self.__helper_function_dist(lat1, lng1, lat2, lng2)
+                addr = self.__helper_function_get_address(lat2, lng2)
+                ride.add_pickup(pp, dist, addr)
+            rides.append(ride)
+        return rides
