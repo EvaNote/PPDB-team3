@@ -34,7 +34,7 @@ let control = L.Routing.control({
     addWaypoints: false,
     createMarker: function (i, wp) {
         return L.marker(wp.latLng).on('mouseover', function (e) {
-            var msg, changeOrderBtn;
+            var msg, changeOrderBtn, removeWaypointBtn;
             var container = L.DomUtil.create('div');
             if (e.latlng === state.startFromThisLocationClicked) {
                 msg = 'start point';
@@ -46,16 +46,19 @@ let control = L.Routing.control({
                 msg = 'pickup point 1';
                 container.appendChild(document.createTextNode(msg));
                 if (state.p2 !== null) {
-                    changeOrderBtn = createButton('Change order...', container)
+                    changeOrderBtn = createButton('Change order...', container);
+                    removeWaypointBtn = createButton('Remove this waypoint', container);
                 }
             } else if (e.latlng === state.p2) {
                 msg = 'pickup point 2';
                 container.appendChild(document.createTextNode(msg));
-                changeOrderBtn = createButton('Change order...', container)
+                changeOrderBtn = createButton('Change order...', container);
+                removeWaypointBtn = createButton('Remove this waypoint', container);
             } else {
                 msg = 'pickup point 3';
                 container.appendChild(document.createTextNode(msg));
-                changeOrderBtn = createButton('Change order...', container)
+                changeOrderBtn = createButton('Change order...', container);
+                removeWaypointBtn = createButton('Remove this waypoint', container);
             }
             L.popup({
                 offset: [0, -20]
@@ -66,6 +69,23 @@ let control = L.Routing.control({
             setTimeout(function () {
                 map.closePopup();
             }, 10000);
+
+            L.DomEvent.on(removeWaypointBtn, 'click', function () {
+                let waypoints = control.getWaypoints();
+                var i;
+                if (e.latlng === state.p1) {
+                    i = 1;
+                    state.p1 = state.p2;
+                    state.p2 = state.p3;
+                } else if (e.latlng === state.p2) {
+                    i = 2;
+                    state.p2 = state.p3;
+                } else {
+                    i = 3;
+                }
+                alert(i);
+                waypoints.splice(i);
+            });
 
             L.DomEvent.on(changeOrderBtn, 'click', function () {
                 var btn1, btn2, btn3;
@@ -102,15 +122,78 @@ let control = L.Routing.control({
                     .openOn(map);
 
                 L.DomEvent.on(btn1, 'click', function () {
-                    alert()
+                    let id = btn1.getAttribute('id');
+                    let waypoints = control.getWaypoints();
+                    var i, j;
+                    if (id === 'id_2') {
+                        //swap index 1 with index 2
+                        i = 1;
+                        j = 2;
+                        let temp = state.p1;
+                        state.p1 = state.p2;
+                        state.p2 = temp;
+                    } else {
+                        // swap index 1 with index 3
+                        i = 1;
+                        j = 3;
+                        let temp = state.p1;
+                        state.p1 = state.p3;
+                        state.p3 = temp;
+                    }
+                    let temp = waypoints[i];
+                    waypoints[i] = waypoints[j];
+                    waypoints[j] = temp;
+                    control.setWaypoints(waypoints);
                 });
 
                 L.DomEvent.on(btn2, 'click', function () {
-                    alert()
+                    let id = btn1.getAttribute('id');
+                    let waypoints = control.getWaypoints();
+                    var i, j;
+                    if (id === 'id_1') {
+                        //swap index 1 with index 2
+                        i = 1;
+                        j = 2;
+                        let temp = state.p1;
+                        state.p1 = state.p2;
+                        state.p2 = temp;
+                    } else {
+                        // swap index 2 with index 3
+                        i = 2;
+                        j = 3;
+                        let temp = state.p2;
+                        state.p2 = state.p3;
+                        state.p3 = temp;
+                    }
+                    let temp = waypoints[i];
+                    waypoints[i] = waypoints[j];
+                    waypoints[j] = temp;
+                    control.setWaypoints(waypoints);
                 });
 
                 L.DomEvent.on(btn3, 'click', function () {
-                    alert()
+                    let id = btn1.getAttribute('id');
+                    let waypoints = control.getWaypoints();
+                    var i, j;
+                    if (id === 'id_1') {
+                        //swap index 1 with index 3
+                        i = 1;
+                        j = 3;
+                        let temp = state.p1;
+                        state.p1 = state.p3;
+                        state.p3 = temp;
+                    } else {
+                        // swap index 2 with index 3
+                        i = 2;
+                        j = 3;
+                        let temp = state.p2;
+                        state.p2 = state.p3;
+                        state.p3 = temp;
+                    }
+                    let temp = waypoints[i];
+                    waypoints[i] = waypoints[j];
+                    waypoints[j] = temp;
+                    control.setWaypoints(waypoints);
                 })
             });
 
