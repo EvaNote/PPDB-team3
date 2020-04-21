@@ -14,10 +14,10 @@ class ReviewForm(FlaskForm):
 
 
 class Reviews(FlaskForm):
-    submit_value = Markup('<b>Hello</b>')
-    filter = SubmitField('<b>Hello</b>')
+    submit_value = Markup(lazy_gettext('<b>Hello</b>'))
+    filter = SubmitField(lazy_gettext('<b>Hello</b>'))
     search = StringField('')
-    sort_rate_low_high = SubmitField('Rate Low-High')
-    sort_rate_high_low = SubmitField('Rate High-Low')
-    sort_date_old_new = SubmitField('Date Old-New')
-    sort_date_new_old = SubmitField('Date New-Old')
+    sort_rate_low_high = SubmitField(lazy_gettext('Rate Low-High'))
+    sort_rate_high_low = SubmitField(lazy_gettext('Rate High-Low'))
+    sort_date_old_new = SubmitField(lazy_gettext('Date Old-New'))
+    sort_date_new_old = SubmitField(lazy_gettext('Date New-Old'))
