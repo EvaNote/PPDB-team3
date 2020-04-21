@@ -220,23 +220,25 @@ $(document).ready(function () {
         });
 
     let child = document.createElement('div');
-    child.innerHTML = "<form action=\"#\" id=\"ride-time\">\n" +
+    let temp = "<form action=\"#\" id=\"ride-time\">\n" +
         "    <label for=\"time_option\">\n<select name=\"time_option\">\n" +
         "        <option>Arrive by</option>\n" +
         "        <option>Depart at</option>\n" +
         "    </select>\n" +
         "        <input id=\"time_input\" type=\"datetime-local\" name=\"datetime\">\n" +
-        "    </label>\n" +
-        "    <label for=\"passengers\">Available passenger seats (only when creating a ride):\n" +
-        "    <input type=\"number\" id=\"passengers\" name=\"passengers\" value=\"0\" required>\n<br>" +
-        "    </label>\n" +
-        "    <label for=\"ride_option\">\n<select name=\"ride_option\" id=\"ride_option\">\n" +
-        "        <option value=\"create\">Create ride</option>\n" +
-        "        <option value=\"find\">Find ride</option>\n" +
-        "    </select>\n" +
-        "    </label>\n" +
+        "    </label>\n"
+    let el = document.getElementById('create_ride');
+
+    if (el !== null) {
+        console.log(el);
+        temp += "    <label for=\"passengers\">Available passenger seats:\n" +
+            "    <input type=\"number\" id=\"passengers\" name=\"passengers\" value=\"0\" required style='width: 30px'>\n<br>" +
+            "    </label>\n"
+    }
+    temp +=
         "    <input type=\"submit\" value=\"Submit\">\n" +
         "</form>";
+    child.innerHTML = temp;
     child = child.firstChild;
     document.getElementsByClassName('leaflet-routing-geocoders')[0].appendChild(child);
 
@@ -300,8 +302,14 @@ $(function () {
         let form = $('form').serializeObject();
         // check if from-to are defined. If they aren't, nothing should happen
         if (typeof from !== 'undefined' && typeof to !== 'undefined') {
-            var e = document.getElementById("ride_option")
-            var ride_option = e.options[e.selectedIndex].value
+            var e = document.getElementById("ride_option");
+            let el = document.getElementById('create_ride');
+            if (el !== null) {
+                ride_option = 'create'
+            } else {
+                ride_option = 'find'
+            }
+
             if (ride_option === "create") {
                 $.post({
                     contentType: "application/json",
@@ -310,7 +318,8 @@ $(function () {
                 })
                     // when post request is done, get the returned data and do something with it
                     .done(function (data) { // response function
-                        alert("CREATE: " + JSON.stringify(data));
+                        //alert("CREATE: " + JSON.stringify(data));
+                        alert("Created a new ride. You can see, edit and delete your created rides on the 'My Rides' page.")
 
 
                     });
