@@ -64,7 +64,7 @@ CREATE TABLE pickup_point (
     id SERIAL PRIMARY KEY,
     latitude float8 NOT NULL,
     longitude float8 NOT NULL,
-    estimated_time interval NOT NULL
+    estimated_time timestamp NOT NULL
 );
 
 /*
@@ -104,15 +104,15 @@ values (default , '9999', 'Red', 'Toyota', 'asdf', 4, 1996, '4', 'ethanol', 1, N
 
 /* pickup 1 */
 insert into pickup_point
-values (default, 51.100562, 4.473305, '00:03');
+values (default, 51.100562, 4.473305, '2020-04-14 13:03');
 
 /* pickup 2 */
 insert into pickup_point
-values (default, 51.106853, 4.438677, '00:03');
+values (default, 51.106853, 4.438677, '2020-04-14 13:05');
 
 /* pickup 3 */
 insert into pickup_point
-values (default, 51.112011, 4.424566, '00:03');
+values (default, 51.112011, 4.424566, '2020-04-14 13:08');
 
 /* route 1:
         start punt: address 1

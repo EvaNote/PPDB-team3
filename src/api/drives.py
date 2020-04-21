@@ -186,10 +186,10 @@ class DrivesSearchAPI(Resource):
         rides = ride_access.match_rides_with_passenger(
             {'lat': dict['fLat'], 'lng': dict['fLng']},
             {'lat': dict['tLat'], 'lng': dict['tLng']},
-            None,
+            'Arrive by',
             dict['arrive_by'])
         n = 0
-        while n < dict['limit']:
+        while n < int(dict['limit']) and n < len(rides):
             rDict = rides[n].to_dict()
             passengers = ride_access.findRidePassengers(rDict['id'])
             results.append({"id": rDict['user_id'],
