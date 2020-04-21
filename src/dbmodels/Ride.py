@@ -286,9 +286,11 @@ class Rides:
 
         if p_time_option == 'Arrive by':
             p_time_option = 'r.arrival_time'
-            print(p_time_option)
+            pickup_time_check = False
         else:
             p_time_option = 'r.departure_time'
+            pickup_time_check = True
+
         if campus == 1:  # riding FROM campus
             cursor.execute("""
                                     SELECT r.id, r.departure_time, r.arrival_time, r.user_id, r.address_1, r.campus, 
@@ -302,10 +304,13 @@ class Rides:
                                                       (
                                                       select count(p.id) from pickup_point p where p.id in (r.pickup_point_1, r.pickup_point_2, r.pickup_point_3)
                                                       and distance_difference(p.latitude, p.longitude, %s, %s) <= 3000
+                                                      and (((time_difference(%s, p.estimated_time) between 0 and 600) and %s = true)
+                                                        or (%s = false))
                                                       ) > 0
 
                                               ))""", (
-                lat_to, lng_to, p_datetime, lat_from, lng_from, lat_from, lng_from))
+                lat_to, lng_to, p_datetime, lat_from, lng_from, lat_from, lng_from, p_datetime, pickup_time_check,
+                pickup_time_check))
         else:  # riding TO campus
             cursor.execute("""
                                     SELECT r.id, r.departure_time, r.arrival_time, r.user_id, r.address_1, r.campus, 
@@ -319,10 +324,13 @@ class Rides:
                                                       (
                                                       select count(p.id) from pickup_point p where p.id in (r.pickup_point_1, r.pickup_point_2, r.pickup_point_3)
                                                       and distance_difference(p.latitude, p.longitude, %s, %s) <= 3000
+                                                      and (((time_difference(%s, p.estimated_time) between 0 and 600) and %s = true)
+                                                        or (%s = false))
                                                       ) > 0
 
                                               ))""", (
-                lat_to, lng_to, p_datetime, lat_from, lng_from, lat_from, lng_from))
+                lat_to, lng_to, p_datetime, lat_from, lng_from, lat_from, lng_from, p_datetime, pickup_time_check,
+                pickup_time_check))
         rides = list()
         for row in cursor:
             ride = Ride(row[0], row[1], row[2], row[3], row[4], row[5], row[6], row[7], row[8], row[9], row[10], row[11])

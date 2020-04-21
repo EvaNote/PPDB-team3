@@ -161,7 +161,7 @@ CREATE TABLE pickup_point (
     id SERIAL PRIMARY KEY,
     latitude float8 NOT NULL,
     longitude float8 NOT NULL,
-    estimated_time interval NOT NULL
+    estimated_time timestamp NOT NULL
 );
 
 /*
