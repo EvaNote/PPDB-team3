@@ -335,13 +335,13 @@ $(function () {
                             let result = data.results[d];
                             let choice = document.createElement("div");
                             choice.setAttribute("class", "border border-info rounded col-md-5 m-3 text-left");
-                            let from, to;
-                            if (result["to_campus"] === true) {
-                                from = result["address_1"];
-                                to = result["campus"];
-                            } else {
-                                from = result["campus"];
-                                to = result["address_1"];
+                            let from = result.waypoints[0]["addr"];
+                            let to = result.waypoints[result["len"] - 1]["addr"];
+                            if (result.waypoints[0]["alias"] !== "") {
+                                from += " (" + result.waypoints[0]["alias"] + ")"
+                            }
+                            if (result.waypoints[result["len"] - 1]["alias"] !== "") {
+                                to += " (" + result.waypoints[result["len"] - 1]["alias"] + ")"
                             }
                             let innerRow = document.createElement("div");
                             innerRow.setAttribute("class", "row");
@@ -363,7 +363,7 @@ $(function () {
 
                             let mapButton = document.createElement("button");
                             mapButton.setAttribute("class", "btn btn-info m-2");
-                            mapButton.onclick = function(){
+                            mapButton.onclick = function() {
                                 //beginCoords  find the closest maybe pickupPoint
                                 let results = data.results[d];
                                 let tempArr = [];
@@ -386,18 +386,22 @@ $(function () {
 
                             let addButton = document.createElement("button");
                             addButton.setAttribute("class", "btn btn-info m-2");
-                            addButton.setAttribute("id", "ride-button-"+d.toString());
+                            addButton.setAttribute("id", "ride-button-" + d.toString());
                             addButton.innerHTML = "Join this ride";
-                            mapButton.addEventListener("click", function() {
+                            addButton.addEventListener("click", function() {
                                 $.post({
                                     contentType: "application/json",
                                     url: "/en/joinride",
-                                    data: JSON.stringify({ride_id: data.results[d].id})
+                                    data: JSON.stringify({ride_id: result.id})
                                 })
                                     // when post request is done, get the returned data and do something with it
                                     .done(function (data2) {
                                         if(data2){
-                                            alert(" Ei tis gelukt!")
+                                            if (data2["result"] === "success") {
+                                                alert("Ride joined successfully.")
+                                            } else {
+                                                alert("You already joined this ride.")
+                                            }
                                         }
                                     });
                             } )
