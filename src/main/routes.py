@@ -1,10 +1,11 @@
 from flask import Blueprint, render_template, g, current_app, abort, request, jsonify, url_for, redirect, flash
 from flask_login import current_user, login_user, logout_user
-from src.utils import campus_access, user_access, ride_access, address_access
+from src.utils import campus_access, user_access, ride_access, address_access, pickup_point_access
 from flask_babel import lazy_gettext
 from src.dbmodels.Campus import Campus
 from src.dbmodels.Address import Address
 from src.dbmodels.Ride import Ride
+from src.dbmodels.PickupPoint import PickupPoint
 from flask_login import current_user
 from geopy.geocoders import Nominatim
 from src.utils import geolocator
@@ -158,22 +159,45 @@ def receiver_create():
     address_id = address_access.get_id(country, city, postcode, street, nr)
 
     time_option = data.get('time_option')
-    datetime = data.get('datetime').replace('T', ' ') + ':00'
-
-    if time_option == "Arrive by":
-        arrival_time = datetime
-        departure_time = datetime   # TODO fix
-    else:
-        departure_time = datetime
-        arrival_time = datetime     # TODO fix
+    datetime = data.get('datetime')
+    arrival_time = data.get('arrive_time')
+    departure_time = data.get('depart_time')
 
     user = user_access.get_user_on_id(current_user.id)
     user_id = user.get_id()
 
     passengers = data.get('passengers')
+    pickup_points = data.get('pickup_points')   # tuples van coordinaten
+    pick_up_ids = list()
+    estimated_times = data.get('estimated_times')
+    index = 0
+    for point in pickup_points:
+        latitude = point['lat']
+        longitude = point['lng']
+        estimated_time = estimated_times[index]
+        point = PickupPoint(None, latitude, longitude, estimated_time)
+        pickup_point_access.add_pickup_point(point)
+        point_id = pickup_point_access.get_id(latitude, longitude)
+        pick_up_ids.append(point_id)
+        #print(point.to_dict())
+        index += 1
 
-    ride = Ride(None, departure_time, arrival_time, user_id, address_id, campus_id, to_campus, None, passengers, None, None, None)
+    ride = None
+    if len(pick_up_ids) == 0:
+        ride = Ride(None, departure_time, arrival_time, user_id, address_id, campus_id, to_campus, None, passengers,
+                    None, None, None)
+    if len(pick_up_ids) == 1:
+        ride = Ride(None, departure_time, arrival_time, user_id, address_id, campus_id, to_campus, None, passengers,
+                    pick_up_ids[0], None, None)
+    if len(pick_up_ids) == 2:
+        ride = Ride(None, departure_time, arrival_time, user_id, address_id, campus_id, to_campus, None, passengers,
+                    pick_up_ids[0], pick_up_ids[1], None)
+    if len(pick_up_ids) == 3:
+        ride = Ride(None, departure_time, arrival_time, user_id, address_id, campus_id, to_campus, None, passengers,
+                    pick_up_ids[0], pick_up_ids[1], pick_up_ids[2])
+
     ride_access.add_ride(ride)
+    #print(departure_time, arrival_time)
     ride_id = ride_access.get_id_on_all(departure_time, arrival_time, user_id, address_id, campus_id)
     ride_to_return = ride_access.get_on_id(ride_id)
 

@@ -508,8 +508,90 @@ $(function () {
     $('form').submit(function () {
         var from, to;
         state.campusFromId ? from = state.campusFromId : from = control.getWaypoints()[0].latLng;
-        state.campusToId ? to = state.campusToId : to = control.getWaypoints()[1].latLng;
+        var points = control.getWaypoints().length;
+        state.campusToId ? to = state.campusToId : to = control.getWaypoints()[points-1].latLng;
+
         let form = $('form').serializeObject();
+        let time_option = form.time_option;
+        var arrive_time;
+        var depart_time;
+
+        let instr = control._line._route.instructions;
+        let time = 0;
+        var times = [];
+        for (let i in instr) {
+            time += instr[i].time;
+            if (instr[i].type === "WaypointReached") {
+                //console.log("Time to waypoint: " + time);
+                times.push(time);
+                time = 0;
+            }
+            if (instr[i].type === "DestinationReached"){
+                //alert("ka");
+                times.push(time);
+                time = 0;
+            }
+        }
+        let seconds = times[times.length-1];
+        arrive_time = new Date(form.datetime.replace('T', ' ') + ":00");
+        depart_time = new Date(form.datetime.replace('T', ' ') + ":00");
+        var arrive = true;
+        if (time_option === "Arrive by"){
+            depart_time.setSeconds( depart_time.getSeconds() + seconds );
+            //alert("wiewa arrive")
+        }
+        if (time_option === "Depart at"){
+            arrive_time.setSeconds(arrive_time.getSeconds() + seconds);
+            //alert("wiewa depart")
+            arrive = false;
+        }
+        var pickup_points = [];
+        var estimated_times = [];
+        if (points > 2){
+            var pickup = control.getWaypoints()[1].latLng;
+            pickup_points.push(pickup);
+            var estimated_time = new Date(form.datetime.replace('T', ' ') + ":00");
+            if (arrive){
+                estimated_time.setSeconds(arrive_time.getSeconds() - times[0]);
+            }
+            else{
+                estimated_time.setSeconds(depart_time.getSeconds() + times[0]);
+            }
+            estimated_times.push(estimated_time);
+            if (points > 3){
+                var pickup2 = control.getWaypoints()[2].latLng;
+                pickup_points.push(pickup2);
+                var estimated_time2 = new Date(form.datetime.replace('T', ' ') + ":00");
+                if (arrive){
+                    estimated_time2.setSeconds(arrive_time.getSeconds() - times[1]);
+                }
+                else{
+                    estimated_time2.setSeconds(depart_time.getSeconds() + times[1]);
+                }
+                estimated_times.push(estimated_time2);
+                if (points > 4){
+                    var pickup3 = control.getWaypoints()[3].latLng;
+                    pickup_points.push(pickup3);
+                    var estimated_time3 = new Date(form.datetime.replace('T', ' ') + ":00");
+                    if (arrive){
+                        estimated_time3.setSeconds(arrive_time.getSeconds() - times[2]);
+                    }
+                    else{
+                        estimated_time3.setSeconds(depart_time.getSeconds() + times[2]);
+                    }
+                    estimated_times.push(estimated_time3);
+                }
+            }
+        }
+
+        for (let i in estimated_times){
+            time = estimated_times[i];
+            //alert("estimated time voor omzet:" + time);
+            estimated_times[i] = time.toISOString().split('T')[0]+' '+time.toTimeString().split(' ')[0];
+            //alert("estimated time na omzet:" + estimated_times[i]);
+        }
+
+        //alert(estimated_times);
         // check if from-to are defined. If they aren't, nothing should happen
         if (typeof from !== 'undefined' && typeof to !== 'undefined') {
             var e = document.getElementById("ride_option");
@@ -519,7 +601,9 @@ $(function () {
                 $.post({
                     contentType: "application/json",
                     url: "/en/createRide",
-                    data: JSON.stringify({from: from, to: to, time_option: form.time_option, datetime: form.datetime, passengers: form.passengers})
+                    data: JSON.stringify({from: from, to: to, arrive_time: arrive_time.toMysqlFormat(),
+                        depart_time: depart_time.toMysqlFormat(),
+                        passengers: form.passengers, pickup_points: pickup_points, estimated_times: estimated_times})
                 })
                     // when post request is done, get the returned data and do something with it
                     .done(function (data) { // response function
@@ -672,6 +756,26 @@ $(function () {
     $('input[type="datetime-local"]').setNow();
 });
 
+
+// src https://stackoverflow.com/questions/5129624/convert-js-date-time-to-mysql-datetime/11150727#11150727
+/**
+ * You first need to create a formatting function to pad numbers to two digits…
+ **/
+function twoDigits(d) {
+    if(0 <= d && d < 10) return "0" + d.toString();
+    if(-10 < d && d < 0) return "-0" + (-1*d).toString();
+    return d.toString();
+}
+
+/**
+ * …and then create the method to output the date string as desired.
+ * Some people hate using prototypes this way, but if you are going
+ * to apply this to more than one Date object, having it as a prototype
+ * makes sense.
+ **/
+Date.prototype.toMysqlFormat = function() {
+    return this.getUTCFullYear() + "-" + twoDigits(1 + this.getUTCMonth()) + "-" + twoDigits(this.getUTCDate()) + " " + twoDigits(this.getUTCHours()+2) + ":" + twoDigits(this.getUTCMinutes()) + ":" + twoDigits(this.getUTCSeconds());
+};
 
 /*
 
