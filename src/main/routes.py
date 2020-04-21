@@ -92,7 +92,6 @@ def get_schools():
 
 @main.route('/createRide', methods=['POST'])
 def receiver_create():
-    # TODO wat met pickup points?
     data = request.json
 
     # adressen from en to -> campussen of campus en adres
