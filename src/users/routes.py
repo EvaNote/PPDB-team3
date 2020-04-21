@@ -245,8 +245,44 @@ def joinedrides():
     if not current_user.is_authenticated and not current_app.config['TESTING']:
         return redirect(url_for('users.login'))
     allrides = ride_access.getRidesFromPassenger(current_user.id)
+    userrides = []
+    addresses = []
+    campuses = []
+    pfps = []
+    allids = []
+    for ride in allrides:
+        if ride.user_id == current_user.id: #should always be true
+            userrides.append(ride)
+            temp = address_access.get_on_id(ride.address_1)
+            addresses.append(temp.city + ", " + temp.street + ", " + temp.nr)
+            temp = campus_access.get_on_id(ride.campus)
+            campuses.append(temp.name)
+            temp = list(ride_access.get_passenger_ids(ride.id))
+            temp2 = []
+            ride_pfp = []
+            # userids = []
+            for user_id in temp:
+                if user_id is not current_user.id:
+                    temp2.append(user_id)
+                    # userids.append(user_id)
+                    user = user_access.get_user_on_id(user_id)
+                    if (user.picture) is not None:
+                        ride_pfp.append("images/" + str(picture_access.get_picture_on_id(user.picture).filename))
+                    else:
+                        ride_pfp.append("images/temp_profile_pic.png")
+            temp2.append(ride.user_id)
+            # userids.append(user_id)
+            user = user_access.get_user_on_id(ride.user_id)
+            if (user.picture) is not None:
+                ride_pfp.append("images/" + str(picture_access.get_picture_on_id(user.picture).filename))
+            else:
+                ride_pfp.append("images/temp_profile_pic.png")
 
-    return render_template('joined_rides.html', title=lazy_gettext('Joined rides'), loggedIn=True, rides=allrides)
+            allids.append(temp2)
+            pfps.append(ride_pfp)
+    return render_template('ride_history.html', title=lazy_gettext('Joined rides'), loggedIn=True,
+                           userrides=userrides,
+                           addresses=addresses, campuses=campuses, pfps=pfps, allids=allids)
 
 
 @users.route("/user=<userid>", methods=['GET', 'POST'])

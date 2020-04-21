@@ -431,3 +431,25 @@ class Rides:
             ride = self.get_on_id(ride_id)
             rides.append(ride)
         return rides
+
+    # #TODO: bij users aanpassen
+    # def delete_ride(self, ride_id):
+    #     cursor = self.dbconnect.get_cursor()
+    #     try:
+    #         cursor.execute('DELETE FROM "ride" WHERE id=%s',(ride_id,))
+    #         self.dbconnect.commit()
+    #     except:
+    #         raise Exception('Unable to delete ride')
+    #
+    # #TODO: meer bewerken
+    # def edit_ride(self, ride_id, departure_time,  ):
+    #     cursor = self.dbconnect.get_cursor()
+    #     ride = self.get_on_id(ride_id)
+    #     #user_id = user.id
+    #
+    #     try:
+    #         cursor.execute('UPDATE "ride" SET departure_time=%s,  WHERE id=%s',
+    #         (departure_time,ride_id))
+    #         self.dbconnect.commit()
+    #     except:
+    #         raise Exception('Unable to edit user')
