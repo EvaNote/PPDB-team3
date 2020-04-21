@@ -36,7 +36,10 @@ def before_request():
 @main.route("/home")
 def home():
     users = user_access.get_users()
-    return render_template('home.html', users=users, loggedIn=False)
+    interested = True
+    if current_user.is_authenticated:
+        interested = False
+    return render_template('home.html', users=users, loggedIn=False, displayinterested=interested)
 
 
 @main.route("/about")

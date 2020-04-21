@@ -72,7 +72,7 @@ def account():
         pfp_path += "temp_profile_pic.png"
     return render_template('account.html', title=lazy_gettext('Account'), form=form, loggedIn=True, data=data,
                            current_user=user, cars=cars, address=address, carPicpaths=car_picpaths, pfp_path=pfp_path,
-                           car_picpaths=car_picpaths)
+                           car_picpaths=car_picpaths, target_user=user)
 
 
 # van https://www.youtube.com/watch?v=803Ei2Sq-Zs
@@ -215,6 +215,9 @@ def myrides():
 
 @users.route("/user=<userid>", methods=['GET', 'POST'])
 def user(userid):
+    allow_review= False
+    if current_user.is_authenticated:
+        allow_review = True
     form = Reviews()
     target_user = user_access.get_user_on_id(userid)
     form2 = SelectSubject()
@@ -249,7 +252,8 @@ def user(userid):
             car_picpaths.append("images/" + picture_access.get_picture_on_id(car.picture).filename)
     return render_template('user.html', title=lazy_gettext('User profile'), form=form, loggedIn=False,
                            target_user=target_user,
-                           data=data, cars=cars, form2=form2, pfp_path=pfp_path, car_picpaths=car_picpaths)
+                           data=data, cars=cars, form2=form2, pfp_path=pfp_path, car_picpaths=car_picpaths,
+                           allow_review=allow_review)
 
 
 @users.route("/login", methods=['GET', 'POST'])

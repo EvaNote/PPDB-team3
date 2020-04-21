@@ -25,11 +25,7 @@
             <div class="col-md-11 p-5">
                 <h2 class="home-title">{{ _('How does it work?') }}</h2>
                 <p class="lead">
-                    Lorem ipsum dolor sit amet, consectetur adipisicing elit. Consectetur debitis dolorum ducimus eos
-                    exercitationem ipsum laudantium nostrum provident quo tenetur. Adipisci aspernatur esse hic in
-                    magnam necessitatibus numquam, placeat ratione veritatis. Accusamus aliquid assumenda commodi
-                    consectetur debitis deleniti dolorem, ducimus eius facilis fugiat in incidunt iusto maxime minima
-                    non odio officia pariatur possimus quasi quos repellendus rerum tenetur totam veritatis!
+                    {{ _('Just Make an account, log in, personalize your profile, then just click \'Find a ride\' and enter the required info. You can easily select rides from or to the same campus. View the driver\s profile to see what others think about them, then simply confirm you ride. If you are a driver, make sure to register your car on your account page.' ) }}
                 </p>
             </div>
         </div>
@@ -45,9 +41,9 @@
                      alt="User review 1" class="img-fluid review-pic">
                 <blockquote class="blockquote">
                     <p class="mb-0 font-weight-light">
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer posuere erat a ante.
+                        {{ _('The review system really makes sure I only have very stipt drivers. Very nice community.') }}
                     </p>
-                    <footer class="blockquote-footer font-weight-light">John Doe</footer>
+                    <footer class="blockquote-footer font-weight-light">John Castle</footer>
                 </blockquote>
             </div>
             <div class="col-sm-8 col-md-5 text-center pb-5">
@@ -55,9 +51,9 @@
                      alt="User review 1" class="img-fluid review-pic">
                 <blockquote class="blockquote">
                     <p class="mb-0 font-weight-light">
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer posuere erat a ante.
+                        {{ _('Simple to use, even on mobile devices') }}
                     </p>
-                    <footer class="blockquote-footer font-weight-light">John Doe</footer>
+                    <footer class="blockquote-footer font-weight-light">Arno Troch</footer>
                 </blockquote>
             </div>
             <div class="col-sm-8 col-md-5 text-center">
@@ -65,9 +61,9 @@
                      alt="User review 1" class="img-fluid review-pic">
                 <blockquote class="blockquote">
                     <p class="mb-0 font-weight-light">
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer posuere erat a ante.
+                        {{ _('Very easy to find the rides I need thanks to the specific target audience.') }}
                     </p>
-                    <footer class="blockquote-footer font-weight-light">John Doe</footer>
+                    <footer class="blockquote-footer font-weight-light">Jana Osstyn</footer>
                 </blockquote>
             </div>
         </div>
@@ -78,14 +74,13 @@
             <div class="col-md-11 p-5">
                 <h2 class="home-title">{{ _('Transport should be the least of your worries.') }}</h2>
                 <p class="lead">
-                    Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ad adipisci amet culpa doloremque eos
-                    fugiat illo iste libero nesciunt nulla odio quibusdam reiciendis ut veritatis, voluptatum. Et
-                    eveniet id officia!
+                    {{ _('Bus always late? Train never arrives? Too little public transport near you? Campus just out of walking distance? Don\'t want to drive alone? Use Campus Carpool!') }}
                 </p>
             </div>
             <div class="col-md-1 bg-info"></div>
         </div>
         <!-- end of second info section -->
+        {% if displayinterested %}
         <!-- signup section -->
         <div class="row m-0 my-5 py-5 justify-content-center text-center">
             <div class="col-7">
@@ -96,6 +91,7 @@
             </div>
         </div>
         <!-- end of signup section -->
+        {% endif %}
     </section>
     <!-- end of content section -->
 {% endblock content %}

@@ -92,8 +92,10 @@
                             </div>
                         </div>
                         <div class="row" style="margin-left: 0">
+                            <a href={{ url_for('users.user',userid=review.user_from) }}>
                             <img class="display-profile-pic-review"
                                  src="{{ url_for('static', filename="images/temp_profile_pic.png") }}" alt="HTML5 Icon">
+                            </a>
                         </div>
                         <div class="row display-review">
                             <p>{{ review.review_text }}</p>
@@ -158,7 +160,7 @@
                         {% endif %}
                     </div>
                     <button type="button" class="btn btn-outline-info" data-toggle="modal" data-target="#exampleModal">
-                        Show results
+                        {{_('Show results')}}
                     </button>
                 </div>
             </div>
