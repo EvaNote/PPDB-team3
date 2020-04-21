@@ -1,3 +1,39 @@
+DROP TABLE IF EXISTS address CASCADE;
+CREATE TABLE address (
+    id SERIAL PRIMARY KEY,
+    country VARCHAR(256) NOT NULL,
+    city VARCHAR(256) NOT NULL,
+    postal_code VARCHAR(256) NOT NULL,
+    street VARCHAR(256) NOT NULL,
+    nr VARCHAR(256) NOT NULL,
+    latitude float8 NOT NULL,
+    longitude float8 NOT NULL
+);
+
+/*
+type for gender, 2 options
+*/
+DROP TYPE IF EXISTS gender_type CASCADE;
+CREATE TYPE gender_type AS ENUM (
+    'M',
+    'F'
+);
+
+/*
+picture table for profile picture ("user") and picture of car
+(not required for either -> doesn't go in "user"/car tables)
+filename is path to file
+*/
+DROP TABLE IF EXISTS picture CASCADE;
+CREATE TABLE picture (
+    id SERIAL PRIMARY KEY,
+    filename VARCHAR(256) NOT NULL
+);
+
+/*
+"user" table, last name & age are required
+gender either M or F from gender_type
+*/
 DROP TABLE IF EXISTS "user" CASCADE;
 CREATE TABLE "user" (
     id SERIAL PRIMARY KEY,
@@ -13,18 +49,25 @@ CREATE TABLE "user" (
     address int REFERENCES address(id)
 );
 
-DROP TABLE IF EXISTS address CASCADE;
-CREATE TABLE address (
-    id SERIAL PRIMARY KEY,
-    country VARCHAR(256) NOT NULL,
-    city VARCHAR(256) NOT NULL,
-    postal_code VARCHAR(256) NOT NULL,
-    street VARCHAR(256) NOT NULL,
-    nr VARCHAR(256) NOT NULL,
-    latitude float8 NOT NULL,
-    longitude float8 NOT NULL
+/*
+type for fuel, 5 options (for now?)
+*/
+DROP TYPE IF EXISTS fuel_type CASCADE;
+CREATE TYPE fuel_type AS ENUM (
+    'benzine', /* = gasoline = petrol */
+    'diesel',
+    'electricity',
+    'CNG', /* = compressed natural gas */
+    'LPG', /* = liquefied petroleum gas */
+    'ethanol',
+    'bio-diesel'
 );
 
+/*
+car table, color/brand/model is optional
+optional picture
+fuel from 5 fuel options (fuel_type)
+*/
 DROP TABLE IF EXISTS car CASCADE;
 CREATE TABLE car (
     id SERIAL PRIMARY KEY,
@@ -40,6 +83,11 @@ CREATE TABLE car (
     picture int REFERENCES picture(id)
 );
 
+/*
+ride table, belongs to a "user"
+has a departure time (date + time) that's required
+arrival time is not required
+*/
 DROP TABLE IF EXISTS ride CASCADE;
 CREATE TABLE ride (
     id SERIAL PRIMARY KEY,
@@ -57,6 +105,15 @@ CREATE TABLE ride (
 );
 
 /*
+ride passenger table keeps track of all passengers that belong to a ride.
+ */
+DROP TABLE IF EXISTS passenger_ride CASCADE;
+CREATE TABLE passenger_ride (
+    user_id int REFERENCES "user"(id) NOT NULL,
+    ride_id int REFERENCES ride(id) NOT NULL
+);
+
+/*
 pickup point table keeps track of all the pickup points used in a ride.
 */
 DROP TABLE IF EXISTS pickup_point CASCADE;
@@ -66,6 +123,24 @@ CREATE TABLE pickup_point (
     longitude float8 NOT NULL,
     estimated_time timestamp NOT NULL
 );
+
+/*
+review table for a review, is connected to 2 people: the writer and the reviewed person
+also holds an amount of stars, the title of the review and the text
+title and text can be empty, it's possible to only leave the star review
+*/
+
+DROP TABLE IF EXISTS review CASCADE;
+CREATE TABLE review (
+    id SERIAL PRIMARY KEY,
+    user_for int REFERENCES "user"(id) NOT NULL,
+    user_from int REFERENCES "user"(id) NOT NULL,
+    amount_of_stars INTEGER NOT NULL,
+    title VARCHAR(256),
+    review_text VARCHAR(1000),
+    creation date default now()
+);
+
 
 /* start punt: Thomas More - Lesplaats Duffel (SNOR), coordinaten: 51.0953, 4.49607 */
 insert into address  -- one address = id 1
