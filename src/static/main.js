@@ -318,7 +318,8 @@ $(function () {
                 })
                     // when post request is done, get the returned data and do something with it
                     .done(function (data) { // response function
-                        alert("CREATE: " + JSON.stringify(data));
+                        //alert("CREATE: " + JSON.stringify(data));
+                        alert("Created a new ride. You can see, edit and delete your created rides on the 'My Rides' page.")
 
 
                     });
