@@ -30,7 +30,7 @@ class Addresses:
 
     def get_on_id(self, id):
         cursor = self.dbconnect.get_cursor()
-        cursor.execute('SELECT id,country,city,postal_code,street,nr FROM address WHERE id=%s',
+        cursor.execute('SELECT id,country,city,postal_code,street,nr,latitude,longitude FROM address WHERE id=%s',
                        (id,))
         address = cursor.fetchone()
         if address is None:
@@ -42,10 +42,10 @@ class Addresses:
     def get_id(self, country, city, postal_code, street, nr):
         cursor = self.dbconnect.get_cursor()
         cursor.execute(
-            'SELECT id FROM address WHERE street=%s AND nr=%s AND city=%s AND postal_code=%s AND country=%s;',
+            'SELECT id FROM address WHERE street=%s AND nr=%s AND city=%s AND postal_code=%s AND country=%s',
             (street, nr, city, postal_code, country))
-        id = cursor.fetchone()
-        return id
+        row = cursor.fetchone()
+        return row[0]
 
     def get_all(self):
         cursor = self.dbconnect.get_cursor()
