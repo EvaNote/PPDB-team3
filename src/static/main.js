@@ -333,7 +333,9 @@ $(function () {
                 })
                     // when post request is done, get the returned data and do something with it
                     .done(function (data) { // response function
-                        alert("FIND: " + JSON.stringify(data));
+                        ride_count = data["results"].length
+                        alert("Found " + ride_count + " matches! Scroll down to see them.")
+                        //alert("FIND: " + JSON.stringify(data));
                         if (data === null) {
                             return
                         }
@@ -342,6 +344,8 @@ $(function () {
                         result_div.attr("class", "row justify-content-center");
                         for (let d = 0; d < data["results"].length; d++) {
                             let result = data.results[d];
+                            let driver = data["drivers"][d]
+                            let driver_name = driver["first_name"] + " " + driver["last_name"]
                             let choice = document.createElement("div");
                             choice.setAttribute("class", "border border-info rounded col-md-5 m-3 text-left");
                             let from = result.waypoints[0]["addr"];
@@ -362,10 +366,11 @@ $(function () {
                             rightColumn.setAttribute("class", "col-md-6 text-left");
 
                             leftColumn.innerHTML = "<p class=\"my-3\"><b>From:</b> " + from + "</p>\n" +
-                                "<p><b>Departure:</b> " + result["departure_time"] + "</p>\n";
+                                "<p><b>Departure:</b> " + result["departure_time"] + "</p>\n"  +
+                                "<p><b>Driver:</b> " + driver_name + "</p>\n";
 
                             rightColumn.innerHTML = "<p class=\"my-3\"><b>To:</b> " + to + "</p>\n" +
-                                "<p><b>Arrival:</b> " + result["arrival_time"] + "</p>";
+                                "<p><b>Arrival:</b> " + result["arrival_time"] + "</p>\n";
 
                             let underColumn = document.createElement("div");
                             underColumn.setAttribute("class", "col-md-8 text-center");
@@ -414,8 +419,15 @@ $(function () {
                                         }
                                     });
                             } )
+                            let driverButton = document.createElement("button");
+                            driverButton.setAttribute("class", "btn btn-info m-2");
+                            driverButton.innerHTML = "See driver profile";
+                            driverButton.onclick = function() {
+                                alert("under construction")
+                                }
                             underColumn.appendChild(mapButton);
                             underColumn.appendChild(addButton);
+                            underColumn.appendChild(driverButton)
 
                             innerRow.appendChild(leftColumn);
                                 innerRow.appendChild(rightColumn);

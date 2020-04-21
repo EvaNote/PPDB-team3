@@ -70,9 +70,13 @@ def receiver():
     print(from_coord, to_coord, time_option, datetime)
     rides = ride_access.match_rides_with_passenger(from_coord, to_coord, time_option, datetime)
     results = []
+    drivers = []
     for ride in rides:
         results.append(ride.to_dict())
-    return jsonify({"results": results})
+        driver_id = ride.user_id
+        driver = user_access.get_user_on_id(driver_id)
+        drivers.append(driver.to_dict())
+    return jsonify({"results": results, "drivers": drivers})
 
 
 @main.route('/fillschools', methods=['POST'])
