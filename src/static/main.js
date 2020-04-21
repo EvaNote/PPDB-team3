@@ -44,22 +44,27 @@ let control = L.Routing.control({
                 container.appendChild(document.createTextNode(msg));
             } else if (e.latlng === state.p1) {
                 msg = 'pickup point 1';
-                container.appendChild(document.createTextNode(msg));
                 if (state.p2 !== null) {
                     changeOrderBtn = createButton('Change order...', container);
-                    removeWaypointBtn = createButton('Remove this waypoint', container);
                 }
+                removeWaypointBtn = createButton('Remove this waypoint', container);
+                container.appendChild(document.createElement("br"));
+                container.appendChild(document.createTextNode(msg));
             } else if (e.latlng === state.p2) {
                 msg = 'pickup point 2';
-                container.appendChild(document.createTextNode(msg));
-                changeOrderBtn = createButton('Change order...', container);
                 removeWaypointBtn = createButton('Remove this waypoint', container);
+                changeOrderBtn = createButton('Change order...', container);
+                container.appendChild(document.createElement("br"));
+                container.appendChild(document.createTextNode(msg));
             } else {
                 msg = 'pickup point 3';
-                container.appendChild(document.createTextNode(msg));
-                changeOrderBtn = createButton('Change order...', container);
                 removeWaypointBtn = createButton('Remove this waypoint', container);
+                changeOrderBtn = createButton('Change order...', container);
+                container.appendChild(document.createElement("br"));
+                container.appendChild(document.createTextNode(msg));
             }
+            container.setAttribute('style', 'text-align: center')
+
             L.popup({
                 offset: [0, -20]
             })
@@ -83,8 +88,8 @@ let control = L.Routing.control({
                 } else {
                     i = 3;
                 }
-                alert(i);
-                waypoints.splice(i);
+                waypoints.splice(i, 1);
+                control.setWaypoints(waypoints);
             });
 
             L.DomEvent.on(changeOrderBtn, 'click', function () {
@@ -111,6 +116,8 @@ let control = L.Routing.control({
                     btn2 = createButton('2', container);
                     btn2.setAttribute('id', 'id_3');
                 }
+
+                container.setAttribute('style', 'text-align: center');
 
                 map.closePopup();
 
@@ -235,7 +242,6 @@ function resetState() {
         p3: null
     };
 }
-
 
 map.on('click', function (e) {
     var startBtn, destBtn, addWaypointBtn;
