@@ -150,7 +150,8 @@ ride passenger table keeps track of all passengers that belong to a ride.
 DROP TABLE IF EXISTS passenger_ride CASCADE;
 CREATE TABLE passenger_ride (
     user_id int REFERENCES "user"(id) NOT NULL,
-    ride_id int REFERENCES ride(id) NOT NULL
+    ride_id int REFERENCES ride(id) NOT NULL,
+    primary key(user_id, ride_id)
 );
 
 /*

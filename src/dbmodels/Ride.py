@@ -180,7 +180,7 @@ class Rides:
         cursor = self.dbconnect.get_cursor()
         cursor.execute(
             """
-            SELECT car.nr_seats, a.longitude, a.latitude, c.longitude, c.latitude, r.to_campus
+            SELECT car.nr_seats, a.longitude, a.latitude, c.longitude, c.latitude, r.arrival_time, r.to_campus
             FROM car, address as a, campus as c, ride as r
             WHERE r.id = %s AND
                   r.car_id = car.id AND
@@ -188,12 +188,32 @@ class Rides:
                   r.campus = c.id
             """, (id,))
         result = {}
-        temp = [cursor[0][0], cursor[0][1], cursor[0][2], cursor[0][3], cursor[0][4], cursor[0][5]]
-        if temp[5]:
-            result = {"passenger-places": temp[0], "from": [temp[1], temp[2]], "to": [temp[3], temp[4]]}
+        temp = cursor.fetchone()
+        if temp[6]:
+            result = {"passenger-places": temp[0], "from": [temp[1], temp[2]], "to": [temp[3], temp[4]],
+                      "arrival_time": temp[5]}
         else:
-            result = {"passenger-places": temp[0], "from": [temp[3], temp[4]], "to": [temp[1], temp[2]]}
+            result = {"passenger-places": temp[0], "from": [temp[3], temp[4]], "to": [temp[1], temp[2]],
+                      "arrival_time": temp[5]}
         return result
+
+    def get_passenger_ids(self, ride_id):
+        cursor = self.dbconnect.get_cursor()
+        cursor.execute("SELECT p.user_id FROM passenger_ride as p WHERE p.ride_id = %s", (ride_id,))
+        results = list()
+        for row in cursor:
+            results.append(row[0])
+        return results
+
+    def get_passenger_ids_names(self, ride_id):
+        cursor = self.dbconnect.get_cursor()
+        cursor.execute(
+            'SELECT p.user_id, u.email FROM passenger_ride p join "user" u on p.user_id = u.id  WHERE p.ride_id = %s',
+            (ride_id,))
+        results = list()
+        for row in cursor:
+            results.append({"id": row[0], "email": row[1]})
+        return results
 
     def get_on_user_id(self, user_id):
         found = self.get_on('user_id', user_id)

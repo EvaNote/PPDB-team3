@@ -67,12 +67,37 @@ CREATE TABLE pickup_point (
     estimated_time interval NOT NULL
 );
 
+/*
+ride passenger table keeps track of all passengers that belong to a ride.
+ */
+DROP TABLE IF EXISTS passenger_ride CASCADE;
+CREATE TABLE passenger_ride (
+    user_id int REFERENCES "user"(id) NOT NULL,
+    ride_id int REFERENCES ride(id) NOT NULL,
+    primary key(user_id, ride_id)
+);
+
 /* start punt: Thomas More - Lesplaats Duffel (SNOR), coordinaten: 51.0953, 4.49607 */
 insert into address  -- one address = id 1
 values (default, 'Belgium', 'Antwerp', '2600', 'KwebbelStraat', '69', 51.0953, 4.49607);
 
 insert into "user"  -- one user = id 1
-values (default , 'Kabouter', 'Lui', 'admin@blog.com', 'password', '1999-04-04 01:12:11', 20, 'M', NULL, NULL, 1);
+values (default , 'Kabouter', 'Lui', 'lui@blog.com', 'password', '1999-04-04 01:12:11', 20, 'M', NULL, NULL, 1);
+
+insert into "user"  -- one user = id 2
+values (default , 'Kabouter', 'Plop', 'plop@blog.com', 'password', '1999-04-04 01:12:11', 20, 'M', NULL, NULL, 1);
+
+insert into "user"  -- one user = id 3
+values (default , 'Kabouter', 'Kwebbel', 'kwebbel@blog.com', 'password', '1999-04-04 01:12:11', 20, 'M', NULL, NULL, 1);
+
+insert into "user"  -- one user = id 4
+values (default , 'Kabouter', 'Smul', 'smul@blog.com', 'password', '1999-04-04 01:12:11', 20, 'M', NULL, NULL, 1);
+
+insert into "user"  -- one user = id 5
+values (default , 'Kabouter', 'Klus', 'klus@blog.com', 'password', '1999-04-04 01:12:11', 20, 'M', NULL, NULL, 1);
+
+insert into "user"  -- one user = id 6
+values (default , 'Kabouter', 'Smal', 'smal@blog.com', 'password', '1999-04-04 01:12:11', 20, 'M', NULL, NULL, 1);
 
 insert into car  -- one car = id 1
 values (default , '9999', 'Red', 'Toyota', 'asdf', 4, 1996, '4', 'ethanol', 1, NULL);
@@ -123,6 +148,35 @@ values (default, '2020-04-14 13:00', '2020-04-14 14:00', 1, 1, 248, true, 1, 3, 
  */
 insert into ride
 values (default, '2020-04-14 13:00', '2020-04-14 14:00', 1, 1, 14, true, 1, 3, 1, 2, 3);
+
+
+insert into passenger_ride
+values (2, 1);
+
+insert into passenger_ride
+values (3, 1);
+
+insert into passenger_ride
+values (2, 2);
+
+insert into passenger_ride
+values (3, 2);
+
+insert into passenger_ride
+values (6, 2);
+
+insert into passenger_ride
+values (5, 3);
+
+insert into passenger_ride
+values (6, 4);
+
+insert into passenger_ride
+values (3, 5);
+
+insert into passenger_ride
+values (5, 5);
+
 
 /*
 USAGE:
