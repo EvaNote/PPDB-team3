@@ -31,6 +31,92 @@ let control = L.Routing.control({
     serviceUrl: 'http://127.0.0.1:5001/route/v1',
     routeWhileDragging: true,
     geocoder: L.Control.Geocoder.nominatim(),
+    addWaypoints: false,
+    createMarker: function (i, wp) {
+        return L.marker(wp.latLng).on('mouseover', function (e) {
+            var msg, changeOrderBtn;
+            var container = L.DomUtil.create('div');
+            if (e.latlng === state.startFromThisLocationClicked) {
+                msg = 'start point';
+                container.appendChild(document.createTextNode(msg));
+            } else if (e.latlng === state.goToThisLocationClicked) {
+                msg = 'end point';
+                container.appendChild(document.createTextNode(msg));
+            } else if (e.latlng === state.p1) {
+                msg = 'pickup point 1';
+                container.appendChild(document.createTextNode(msg));
+                if (state.p2 !== null) {
+                    changeOrderBtn = createButton('Change order...', container)
+                }
+            } else if (e.latlng === state.p2) {
+                msg = 'pickup point 2';
+                container.appendChild(document.createTextNode(msg));
+                changeOrderBtn = createButton('Change order...', container)
+            } else {
+                msg = 'pickup point 3';
+                container.appendChild(document.createTextNode(msg));
+                changeOrderBtn = createButton('Change order...', container)
+            }
+            L.popup({
+                offset: [0, -20]
+            })
+                .setContent(container)
+                .setLatLng(e.latlng)
+                .openOn(map);
+            setTimeout(function () {
+                map.closePopup();
+            }, 10000);
+
+            L.DomEvent.on(changeOrderBtn, 'click', function () {
+                var btn1, btn2, btn3;
+                var container = L.DomUtil.create('div');
+
+                if (e.latlng === state.p1) {
+                    btn2 = createButton('2', container);
+                    btn2.setAttribute('id', 'id_1');
+                    if (state.p3 !== null) {
+                        btn3 = createButton('3', container);
+                        btn3.setAttribute('id', 'id_1');
+                    }
+                } else if (e.latlng === state.p2) {
+                    btn1 = createButton('1', container);
+                    btn1.setAttribute('id', 'id_2');
+                    if (state.p3 !== null) {
+                        btn3 = createButton('3', container);
+                        btn3.setAttribute('id', 'id_2');
+                    }
+                } else {
+                    btn1 = createButton('1', container);
+                    btn1.setAttribute('id', 'id_3');
+                    btn2 = createButton('2', container);
+                    btn2.setAttribute('id', 'id_3');
+                }
+
+                map.closePopup();
+
+                L.popup({
+                    offset: [0, -20]
+                })
+                    .setContent(container)
+                    .setLatLng(e.latlng)
+                    .openOn(map);
+
+                L.DomEvent.on(btn1, 'click', function () {
+                    alert()
+                });
+
+                L.DomEvent.on(btn2, 'click', function () {
+                    alert()
+                });
+
+                L.DomEvent.on(btn3, 'click', function () {
+                    alert()
+                })
+            });
+
+
+        });
+    }
 }).addTo(map);
 
 //L.control.locate().addTo(map);
@@ -43,33 +129,56 @@ function createButton(label, container) {
 }
 
 let state = {
+    situation: null,
     campusClicked: false,
     campusFromId: null,
     campusToId: null,
-    startFromThisLocationClicked: false,
-    goToThisLocationClicked: false
+    startFromThisLocationClicked: null,
+    goToThisLocationClicked: null,
+    p1: null,
+    p2: null,
+    p3: null
 };
 
 function resetState() {
-    state = {
+    state = {  // do not reset situation
         campusClicked: false,
         campusFromId: null,
         campusToId: null,
-        startFromThisLocationClicked: false,
-        goToThisLocationClicked: false
+        startFromThisLocationClicked: null,
+        goToThisLocationClicked: null,
+        p1: null,
+        p2: null,
+        p3: null
     };
 }
 
 
 map.on('click', function (e) {
-    var startBtn, destBtn;
+    var startBtn, destBtn, addWaypointBtn;
     var container = L.DomUtil.create('div');
-    if ((state.startFromThisLocationClicked || state.goToThisLocationClicked) && !state.campusClicked) {
+    if (state.startFromThisLocationClicked && state.goToThisLocationClicked) {
+        if (state.p3 !== null) {
+            container.appendChild(document.createElement("br"));
+            let b = document.createElement("b");
+            b.setAttribute('style', 'color: #cc0000');
+            b.appendChild(document.createTextNode('Hi there! You can\'t indicate more than three pickup points.'));
+            container.appendChild(b);
+            container.setAttribute('style', 'text-align: center')
+        } else {
+            addWaypointBtn = createButton('Add this point as pickup point', container)
+        }
+    } else if ((state.startFromThisLocationClicked || state.goToThisLocationClicked) && !state.campusClicked) {
         container.appendChild(document.createElement("br"));
         let b = document.createElement("b");
         b.setAttribute('style', 'color: #cc0000');
         b.appendChild(document.createTextNode('Hi there! This is campus carpool, one of your endpoints needs to be a campus.'));
         container.appendChild(b);
+        if (state.startFromThisLocationClicked) {
+            startBtn = createButton('Start from this location instead', container);
+        } else {
+            destBtn = createButton('Go to this location instead', container);
+        }
         container.setAttribute('style', 'text-align: center')
     } else {
         startBtn = createButton('Start from this location', container);
@@ -80,26 +189,43 @@ map.on('click', function (e) {
         .setContent(container)
         .setLatLng(e.latlng)
         .openOn(map);
+
+
+    L.DomEvent.on(addWaypointBtn, 'click', function () {
+        if (state.p1 === null) {
+            state.p1 = e.latlng
+            control.spliceWaypoints(1, 0, e.latlng);
+        } else if (state.p2 === null) {
+            state.p2 = e.latlng
+            control.spliceWaypoints(2, 0, e.latlng);
+        } else {
+            state.p3 = e.latlng
+            control.spliceWaypoints(3, 0, e.latlng);
+        }
+        control.spliceWaypoints(1, 0, e.latlng);
+        map.closePopup();
+    });
+
     L.DomEvent.on(startBtn, 'click', function () {
-        if (state.goToThisLocationClicked && !state.campusClicked) {
-            alert('Kies een campus!')
+        // case 1: state.startFromThisLocationClicked === true && campusFromId !== nul
+        if (state.startFromThisLocationClicked !== null) { //in case a campus was clicked before
+            resetState()  // to location is not chosen yet so safely reset
         }
-        if (state.startFromThisLocationClicked === true) { //in case a campus was clicked before
-            resetState()
-        }
-        state.startFromThisLocationClicked = true;
+        // case 2: state.startFromThisLocationClicked === true && campusFromId === nul
+        // does not require any action
+        state.startFromThisLocationClicked = e.latlng;
         control.spliceWaypoints(0, 1, e.latlng);
         map.closePopup();
     });
 
     L.DomEvent.on(destBtn, 'click', function () {
-        if (state.startFromThisLocationClicked && !state.campusClicked) {
-            alert('Kies een campus!')
+        // case 1: state.goToThisLocationClicked === true && campusToId !== nul
+        if (state.goToThisLocationClicked !== false) { //in case a campus was clicked before
+            resetState()  // to location is not chosen yet so safely reset
         }
-        if (state.goToThisLocationClicked === true) { //in case a campus was clicked before
-            resetState()
-        }
-        state.goToThisLocationClicked = true;
+        // case 2: state.goToThisLocationClicked === true && campusToId === nul
+        // does not require any action
+        state.goToThisLocationClicked = e.latlng;
         control.spliceWaypoints(control.getWaypoints().length - 1, 1, e.latlng);
         map.closePopup();
     });
@@ -115,7 +241,7 @@ $(document).ready(function () {
     //TODO: dropdown? Lijst? Niks?
     document.getElementsByClassName('leaflet-routing-geocoder')[1].remove();
     document.getElementsByClassName('leaflet-routing-geocoder')[0].remove();
-    document.getElementsByClassName('leaflet-routing-add-waypoint')[0].remove();
+    //document.getElementsByClassName('leaflet-routing-add-waypoint')[0].remove();
 
     //src: https://github.com/pointhi/leaflet-color-markers
     var universityIcon = new L.Icon({
@@ -200,7 +326,7 @@ $(document).ready(function () {
                             L.DomEvent.on(startBtn, 'click', function () {
                                 state.campusClicked = true;
                                 state.campusFromId = e.target['options'].id;
-                                state.startFromThisLocationClicked = true;
+                                state.startFromThisLocationClicked = e.latlng;
                                 control.spliceWaypoints(0, 1, e.latlng);
                                 map.closePopup();
                             });
@@ -208,7 +334,7 @@ $(document).ready(function () {
                             L.DomEvent.on(destBtn, 'click', function () {
                                 state.campusClicked = true;
                                 state.campusToId = e.target['options'].id;
-                                state.goToThisLocationClicked = true;
+                                state.goToThisLocationClicked = e.latlng;
                                 control.spliceWaypoints(control.getWaypoints().length - 1, 1, e.latlng);
                                 map.closePopup();
                             });
@@ -228,12 +354,17 @@ $(document).ready(function () {
         "        <input id=\"time_input\" type=\"datetime-local\" name=\"datetime\">\n" +
         "    </label>\n"
     let el = document.getElementById('create_ride');
-
     if (el !== null) {
+        state.situation = 'create'
+    } else {
+        state.situation = 'find'
+    }
+
+    if (state.situation === 'create') {
         console.log(el);
         temp += "    <label for=\"passengers\">Available passenger seats:\n" +
             "    <input type=\"number\" id=\"passengers\" name=\"passengers\" value=\"0\" required style='width: 30px'>\n<br>" +
-            "    </label>\n"
+            "    </label>\n";
     }
     temp +=
         "    <input type=\"submit\" value=\"Submit\">\n" +
@@ -304,12 +435,7 @@ $(function () {
         if (typeof from !== 'undefined' && typeof to !== 'undefined') {
             var e = document.getElementById("ride_option");
             let el = document.getElementById('create_ride');
-            if (el !== null) {
-                ride_option = 'create'
-            } else {
-                ride_option = 'find'
-            }
-
+            let ride_option = state.situation;
             if (ride_option === "create") {
                 $.post({
                     contentType: "application/json",
