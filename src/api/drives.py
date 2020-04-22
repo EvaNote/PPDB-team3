@@ -16,8 +16,8 @@ class DrivesApi(Resource):  # /api/drives
         token = auth_header.split(" ")[1]
         if token is None:
             return abort(401)
-        user_id = User.verify_auth_token(token).id
-        if user_id is None or not user_id.isdigit():
+        user_id = User.verify_auth_token(token)
+        if user_id is None:
             return abort(401, message=str(user_id))
         # if logged in, continue
         data = request.json
