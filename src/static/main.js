@@ -74,7 +74,7 @@ let control = L.Routing.control({
                 .openOn(map);
             setTimeout(function () {
                 map.closePopup();
-            }, 10000);
+            }, 15000);
 
             L.DomEvent.on(removeWaypointBtn, 'click', function () {
                 let waypoints = control.getWaypoints();
@@ -381,7 +381,7 @@ $(document).ready(function () {
                                 .openOn(map);
                             setTimeout(function () {
                                 map.closePopup();
-                            }, 7000)
+                            }, 15000)
                         },
                         // 'mouseout': function (e) {
                         //     setTimeout(function () {
