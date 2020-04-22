@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2020-04-21 18:05+0200\n"
+"POT-Creation-Date: 2020-04-22 10:25+0200\n"
 "PO-Revision-Date: 2020-03-23 16:24+0100\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: nl\n"
@@ -22,15 +22,15 @@ msgstr ""
 msgid "ERROR: Unable to connect to database"
 msgstr "ERROR: Unable to connect to database"
 
-#: src/main/routes.py:52
+#: src/main/routes.py:53
 msgid "About"
 msgstr "Over"
 
-#: src/main/routes.py:57 src/templates/faq.html:3
+#: src/main/routes.py:58 src/templates/faq.html:3
 msgid "FAQ"
 msgstr "FAQ"
 
-#: src/main/routes.py:62 src/templates/user.html:16
+#: src/main/routes.py:63 src/templates/user.html:16
 msgid "contact"
 msgstr "contact"
 
@@ -42,7 +42,7 @@ msgstr "Voor"
 msgid "From"
 msgstr "Van"
 
-#: src/reviews/forms.py:10 src/templates/reviews.html:123
+#: src/reviews/forms.py:10 src/templates/reviews.html:124
 msgid "Rating"
 msgstr "Beoordeling"
 
@@ -74,15 +74,11 @@ msgstr "Datum nieuw-oud"
 msgid "Your review has been posted successfully!"
 msgstr "Jouw recensie is succesvol geplaatst!"
 
-#: src/reviews/routes.py:56
-msgid "Writing review failed."
-msgstr "Recensie schrijven mislukt"
-
 #: src/reviews/routes.py:57
 msgid "New review"
 msgstr "Nieuwe recensie"
 
-#: src/rides/routes.py:39 src/templates/base.html:61 src/templates/base.html:84
+#: src/rides/routes.py:39 src/templates/base.html:61 src/templates/base.html:87
 msgid "Find a ride"
 msgstr "Vind een rit"
 
@@ -148,12 +144,12 @@ msgid "Edit account"
 msgstr "Bewerk account"
 
 #: src/templates/account.html:9 src/templates/account_edit.html:92
-#: src/users/routes.py:175 src/users/routes.py:201
+#: src/users/routes.py:187 src/users/routes.py:212
 msgid "Edit address"
 msgstr "Adres bewerken"
 
 #: src/templates/account.html:11 src/templates/base.html:67
-#: src/users/routes.py:221
+#: src/users/routes.py:251
 msgid "My rides"
 msgstr "Mijn ritten"
 
@@ -195,7 +191,7 @@ msgstr "Postcode"
 msgid "City"
 msgstr "Stad"
 
-#: src/templates/account.html:85 src/users/forms.py:63
+#: src/templates/account.html:85
 msgid "Country"
 msgstr "Land"
 
@@ -204,7 +200,7 @@ msgid "Car:"
 msgstr "Auto:"
 
 #: src/templates/account.html:99 src/templates/car_edit.html:5
-#: src/users/routes.py:362 src/users/routes.py:385
+#: src/users/routes.py:467 src/users/routes.py:490
 msgid "Edit car"
 msgstr "Bewerk auto"
 
@@ -264,24 +260,29 @@ msgstr "Bewerk mijn adres"
 msgid "Create a ride"
 msgstr "Maak een rit"
 
-#: src/templates/base.html:80
+#: src/templates/base.html:70 src/templates/joined_rides.html:3
+#: src/users/routes.py:317
+msgid "Joined rides"
+msgstr "Ritten waar je aan deelneemt"
+
+#: src/templates/base.html:83
 msgid "Home"
 msgstr "Home"
 
-#: src/templates/base.html:87 src/templates/register.html:83
+#: src/templates/base.html:90 src/templates/register.html:83
 #: src/users/forms.py:25
 msgid "Log in"
 msgstr "Inloggen"
 
-#: src/templates/base.html:90 src/templates/home.html:116 src/users/forms.py:14
+#: src/templates/base.html:93 src/templates/home.html:116 src/users/forms.py:14
 msgid "Sign up"
 msgstr "Registreren"
 
-#: src/templates/base.html:95
+#: src/templates/base.html:98
 msgid "Language"
 msgstr "Taal"
 
-#: src/templates/base.html:135
+#: src/templates/base.html:138
 msgid "About us"
 msgstr "Over ons"
 
@@ -305,8 +306,37 @@ msgstr "of"
 msgid ""
 "    <b>Will Campus Carpool be available in other languages?</b>\n"
 "        <br>\n"
-"    We are currently translating Campus Carpool into Dutch and French"
+"    Campus Carpool is also available in Dutch and French. No other "
+"languages will be supported."
 msgstr ""
+"    <b>Zal Campus Carpool in andere talen beschikbaar zijn??</b>\n"
+"        <br>\n"
+"    Campus Carpool is ook in het Engels en Frans beschikbaar."
+
+#: src/templates/faq.html:12
+msgid ""
+"    <b>How do I write a review?</b>\n"
+"        <br>\n"
+"    Go to another user's profile by clicking their profile picture in "
+"your \"My rides\" or \"Joined rides\" overview. Then click \"write "
+"review\"."
+msgstr ""
+"    <b>Hoe schrijf ik een recensie?</b>\n"
+"        <br>\n"
+"    Ga naarhet profiel van een andere gebruiker door te klikken op een "
+"profielfoto in  clicking their profile picture in je \"Mijn ritten\" or "
+"\"Ritten waar ik aan deelneem\" overzicht. Klik dan op \"Schrijf "
+"recensie\"."
+
+#: src/templates/faq.html:17
+msgid ""
+"    <b>How do I select points on the map?</b>\n"
+"        <br>\n"
+"    If the map feels unresponsive, try zooming in first."
+msgstr ""
+"    <b>Hoe selecteer ik een punt op de kaart?</b>\n"
+"        <br>\n"
+"    If the map feels unresponsive, try zooming in first."
 
 #: src/templates/home.html:9
 msgid "Make it easy for yourself to get to college or university."
@@ -331,8 +361,13 @@ msgid ""
 "from or to your campus. View the driver\\s profile to see what others "
 "think about them, then simply confirm you ride. If you are a driver, make"
 " sure to register your car on your account page."
-msgstr "Maak gewoon een account, log in, personaliseer je account, en klik dan gewoon op 'Vind een rit' en geef de gevraagde info in. Je kan makkelijk een rit van of naar je campus selecteren. Bekijk het profiel van de bestuurder "
-"om te kijken wat anderen van hem of haar denken, en bevestig dan je rit. Als je een bestuurder bent, zorg er dan voor dat je eerst je auto registreert."
+msgstr ""
+"Maak gewoon een account, log in, personaliseer je account, en klik dan "
+"gewoon op 'Vind een rit' en geef de gevraagde info in. Je kan makkelijk "
+"een rit van of naar je campus selecteren. Bekijk het profiel van de "
+"bestuurder om te kijken wat anderen van hem of haar denken, en bevestig "
+"dan je rit. Als je een bestuurder bent, zorg er dan voor dat je eerst je "
+"auto registreert."
 
 #: src/templates/home.html:42
 msgid "What our users say about us"
@@ -397,6 +432,42 @@ msgstr ""
 msgid "Interested? Sign up now!"
 msgstr "Interesse? Registreer je nu!"
 
+#: src/templates/joined_rides.html:46 src/templates/ride_history.html:46
+msgid "Departure: "
+msgstr "Vertrek: "
+
+#: src/templates/joined_rides.html:48 src/templates/ride_history.html:48
+msgid "Arrival: "
+msgstr "Aankomst: "
+
+#: src/templates/joined_rides.html:51
+msgid "Pickup 1: "
+msgstr "Ophaalpunt 1: "
+
+#: src/templates/joined_rides.html:55
+msgid "Pickup 2: "
+msgstr "Ophaalpunt 2: "
+
+#: src/templates/joined_rides.html:59
+msgid "Pickup 3: "
+msgstr "Ophaalpunt 3: "
+
+#: src/templates/joined_rides.html:63 src/templates/joined_rides.html:67
+msgid "From: "
+msgstr "Van: "
+
+#: src/templates/joined_rides.html:65 src/templates/joined_rides.html:69
+msgid "To: "
+msgstr "Naar: "
+
+#: src/templates/joined_rides.html:77
+msgid "See driver profile"
+msgstr "Bekijk bestuurdersprofiel"
+
+#: src/templates/joined_rides.html:78
+msgid "Cancel ride"
+msgstr "Annuleer rit"
+
 #: src/templates/login.html:46
 msgid "Forgot your password?"
 msgstr "Wachtwoord vergeten?"
@@ -438,7 +509,7 @@ msgid "Sort"
 msgstr "Sorteer"
 
 #: src/templates/reviews.html:76 src/templates/reviews.html:78
-#: src/templates/reviews.html:130 src/templates/reviews.html:132
+#: src/templates/reviews.html:131 src/templates/reviews.html:133
 msgid "stars"
 msgstr "sterren"
 
@@ -446,19 +517,19 @@ msgstr "sterren"
 msgid "by"
 msgstr "door"
 
-#: src/templates/reviews.html:139
+#: src/templates/reviews.html:140
 msgid "Other properties"
 msgstr "Andere eigenschappen"
 
-#: src/templates/reviews.html:144
+#: src/templates/reviews.html:145
 msgid "Written by me"
 msgstr "Geschreven door mij"
 
-#: src/templates/reviews.html:149
+#: src/templates/reviews.html:150
 msgid "Written by me (requires login)"
 msgstr "Geschreven door mij (inloggen vereist)"
 
-#: src/templates/reviews.html:163
+#: src/templates/reviews.html:164
 msgid "Show results"
 msgstr "Laat resultaten zien"
 
@@ -466,29 +537,25 @@ msgstr "Laat resultaten zien"
 msgid "Ride History"
 msgstr "Rittengeschiedenis"
 
-#: src/templates/ride_history.html:13
-msgid "Type to search"
-msgstr "Typ om te zoeken"
+#: src/templates/ride_history.html:52 src/templates/ride_history.html:55
+msgid "From "
+msgstr "Van "
 
-#: src/templates/ride_history.html:23
-msgid "sort by"
-msgstr "sorteer volgens"
+#: src/templates/ride_history.html:52 src/templates/ride_history.html:55
+msgid " to "
+msgstr " naar "
 
-#: src/templates/ride_history.html:25 src/templates/ride_information.html:92
-msgid "Date"
-msgstr "Datum"
-
-#: src/templates/ride_history.html:45
-msgid "Campus-To"
-msgstr "Campus-Naar"
-
-#: src/templates/ride_history.html:47
-msgid "From-Campus"
-msgstr "Van-Campus"
+#: src/templates/ride_history.html:66
+msgid "Delete ride"
+msgstr "Verwijder rit"
 
 #: src/templates/ride_information.html:2
 msgid "Ride Information"
 msgstr "Info over de rit"
+
+#: src/templates/ride_information.html:92
+msgid "Date"
+msgstr "Datum"
 
 #: src/templates/ride_information.html:95
 msgid "Departure"
@@ -515,7 +582,7 @@ msgstr "Passagier"
 msgid "Cancel"
 msgstr "Annuleren"
 
-#: src/templates/user.html:3 src/users/routes.py:264
+#: src/templates/user.html:3 src/users/routes.py:369
 msgid "User profile"
 msgstr "Gebruikersprofiel"
 
@@ -523,7 +590,7 @@ msgstr "Gebruikersprofiel"
 msgid "new review"
 msgstr "nieuwe recensie"
 
-#: src/templates/user.html:30 src/users/forms.py:68
+#: src/templates/user.html:30 src/users/forms.py:67
 msgid "Subject"
 msgstr "Onderwerp"
 
@@ -627,7 +694,7 @@ msgstr "Andere"
 msgid "Upload profile picture"
 msgstr "Profielfoto uploaden"
 
-#: src/users/forms.py:55 src/users/forms.py:65
+#: src/users/forms.py:55 src/users/forms.py:64
 msgid "Save"
 msgstr "Opslaan"
 
@@ -643,51 +710,51 @@ msgstr "Huisnummer"
 msgid "Postal code"
 msgstr "Postcode"
 
-#: src/users/forms.py:68
+#: src/users/forms.py:67
 msgid "Lost item"
 msgstr "Verloren voorwerp"
 
-#: src/users/forms.py:68
+#: src/users/forms.py:67
 msgid "Empty"
 msgstr "Leeg"
 
-#: src/users/forms.py:69
+#: src/users/forms.py:68
 msgid "Make Form"
 msgstr "Formulier maken"
 
-#: src/users/routes.py:73
+#: src/users/routes.py:84
 msgid "Account"
 msgstr "Account"
 
-#: src/users/routes.py:128
-msgid "Account edited!"
-msgstr "Account bewerkt!"
-
-#: src/users/routes.py:148
-msgid "Account deleted!"
-msgstr "Account verwijderd!"
-
-#: src/users/routes.py:151
+#: src/users/routes.py:123 src/users/routes.py:165
 msgid "Edit account info"
 msgstr "Account info bewerken"
 
-#: src/users/routes.py:199
+#: src/users/routes.py:142
+msgid "Account edited!"
+msgstr "Account bewerkt!"
+
+#: src/users/routes.py:162
+msgid "Account deleted!"
+msgstr "Account verwijderd!"
+
+#: src/users/routes.py:210
 msgid "Address edited!"
 msgstr "Adres bewerkt!"
 
-#: src/users/routes.py:244
+#: src/users/routes.py:341
 msgid "Campus Carpool: user message"
 msgstr "Capus Carpool: Gebruikersbericht"
 
-#: src/users/routes.py:245
+#: src/users/routes.py:342
 msgid "Dear "
 msgstr "Beste "
 
-#: src/users/routes.py:249
+#: src/users/routes.py:346
 msgid ": Lost item"
 msgstr ": Verloren voorwerp"
 
-#: src/users/routes.py:250
+#: src/users/routes.py:347
 msgid ""
 "While carpooling with you recently, I forgot my [ITEM] in your car. Can "
 "you let me know if you found it and when you can return it?"
@@ -696,7 +763,7 @@ msgstr ""
 " auto. Kanje me het laten weten als je het terugvindt en kan je het dan "
 "teruggeven?"
 
-#: src/users/routes.py:252
+#: src/users/routes.py:349
 msgid ""
 "\n"
 "Kind regards\n"
@@ -704,43 +771,43 @@ msgstr ""
 "\n"
 "Met vriendelijke groeten\n"
 
-#: src/users/routes.py:283
+#: src/users/routes.py:388
 msgid "Login failed. Please check your email and/or password."
 msgstr "Inloggen mislukt. Kijk alsjeblieft je email en/of wachtwoord na."
 
-#: src/users/routes.py:284
+#: src/users/routes.py:389
 msgid "Login"
 msgstr "Inloggen"
 
-#: src/users/routes.py:293
+#: src/users/routes.py:398
 msgid "Succesfully logged out."
 msgstr "Succesvol uitgelogd"
 
-#: src/users/routes.py:314
+#: src/users/routes.py:419
 msgid "Account created for"
 msgstr "Account gemaakt voor"
 
-#: src/users/routes.py:315
+#: src/users/routes.py:420
 msgid "! You can now log in."
 msgstr "! Je kan nu inloggen."
 
-#: src/users/routes.py:318
+#: src/users/routes.py:423
 msgid "Register"
 msgstr "Registreer"
 
-#: src/users/routes.py:339
+#: src/users/routes.py:444
 msgid "Vehicle registered!"
 msgstr "Voertuig geregistreerd!"
 
-#: src/users/routes.py:341
+#: src/users/routes.py:446
 msgid "Add Vehicle"
 msgstr "Voertuig toevoegen"
 
-#: src/users/routes.py:383
+#: src/users/routes.py:488
 msgid "Car edited!"
 msgstr "Auto bewerkt!"
 
-#: src/users/routes.py:397
+#: src/users/routes.py:502
 msgid "Vehicle deleted!"
 msgstr "Voertuig verwijderd!"
 
@@ -801,5 +868,32 @@ msgstr "Voertuig verwijderd!"
 #~ "you are a driver, make sure to "
 #~ "register your car on your account "
 #~ "page."
+#~ msgstr ""
+
+#~ msgid "Writing review failed."
+#~ msgstr "Recensie schrijven mislukt"
+
+#~ msgid "Type to search"
+#~ msgstr "Typ om te zoeken"
+
+#~ msgid "sort by"
+#~ msgstr "sorteer volgens"
+
+#~ msgid "Campus-To"
+#~ msgstr "Campus-Naar"
+
+#~ msgid "From-Campus"
+#~ msgstr "Van-Campus"
+
+#~ msgid ""
+#~ "    <b>Will Campus Carpool be available in other languages?</b>\n"
+#~ "        <br>\n"
+#~ "    We are currently translating Campus Carpool into Dutch and French"
+#~ msgstr ""
+
+#~ msgid ""
+#~ "    <b>How do I select points on the map?</b>\n"
+#~ "        <br>\n"
+#~ "    If the map feels unresponsive, try zooming in first.."
 #~ msgstr ""
 

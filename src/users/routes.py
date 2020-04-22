@@ -71,9 +71,19 @@ def account():
         pfp_path += picture_access.get_picture_on_id(user.picture).filename
     else:
         pfp_path += "temp_profile_pic.png"
+
+    rev_pfps = []
+    for review in data:
+        user2 = user_access.get_user_on_id(review.user_from)
+        if user2.picture is not None:
+            rev_pfps.append("images/" + picture_access.get_picture_on_id(user2.picture).filename)
+        else:
+            rev_pfps.append("images/temp_profile_pic.png")
+
+
     return render_template('account.html', title=lazy_gettext('Account'), form=form, loggedIn=True, data=data,
                            current_user=user, cars=cars, address=address, carPicpaths=car_picpaths, pfp_path=pfp_path,
-                           car_picpaths=car_picpaths, target_user=user)
+                           car_picpaths=car_picpaths, target_user=user, rev_pfps=rev_pfps)
 
 
 # van https://www.youtube.com/watch?v=803Ei2Sq-Zs
@@ -110,7 +120,7 @@ def account_edit():
         form.age.data = user.age
         form.phone_number.data = user.phone_number
 
-        return render_template('account_edit.html', title='Edit account info', loggedIn=True, form=form)
+        return render_template('account_edit.html', title=lazy_gettext('Edit account info'), loggedIn=True, form=form)
     if form.validate_on_submit():
         if form.submit.data:
             first_name = form.first_name.data
@@ -348,10 +358,18 @@ def user(userid):
             car_picpaths.append("images/temp_car_pic.jpg")
         else:
             car_picpaths.append("images/" + picture_access.get_picture_on_id(car.picture).filename)
+    rev_pfps = []
+    for review in data:
+        user2 = user_access.get_user_on_id(review.user_from)
+        if user2.picture is not None:
+            rev_pfps.append("images/" + picture_access.get_picture_on_id(user2.picture).filename)
+        else:
+            rev_pfps.append("images/temp_profile_pic.png")
+
     return render_template('user.html', title=lazy_gettext('User profile'), form=form, loggedIn=False,
                            target_user=target_user,
                            data=data, cars=cars, form2=form2, pfp_path=pfp_path, car_picpaths=car_picpaths,
-                           allow_review=allow_review)  # TODO: same
+                           allow_review=allow_review, rev_pfps=rev_pfps)  # TODO: same
 
 
 @users.route("/login", methods=['GET', 'POST'])

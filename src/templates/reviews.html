@@ -93,8 +93,9 @@
                         </div>
                         <div class="row" style="margin-left: 0">
                             <a href={{ url_for('users.user',userid=review.user_from) }}>
+            {% set rev_pfp = rev_pfps[loop.index0] %}
                             <img class="display-profile-pic-review"
-                                 src="{{ url_for('static', filename="images/temp_profile_pic.png") }}" alt="HTML5 Icon">
+                                 src="{{ url_for('static', filename=rev_pfp) }}" alt="HTML5 Icon">
                             </a>
                         </div>
                         <div class="row display-review">

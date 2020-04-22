@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2020-04-21 18:05+0200\n"
+"POT-Creation-Date: 2020-04-22 10:25+0200\n"
 "PO-Revision-Date: 2020-03-23 16:50+0100\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -22,15 +22,15 @@ msgstr ""
 msgid "ERROR: Unable to connect to database"
 msgstr "ÉCHEC: Connexion à la base de données impossible"
 
-#: src/main/routes.py:52
+#: src/main/routes.py:53
 msgid "About"
 msgstr "À propos"
 
-#: src/main/routes.py:57 src/templates/faq.html:3
+#: src/main/routes.py:58 src/templates/faq.html:3
 msgid "FAQ"
 msgstr "FAQ"
 
-#: src/main/routes.py:62 src/templates/user.html:16
+#: src/main/routes.py:63 src/templates/user.html:16
 msgid "contact"
 msgstr "contact"
 
@@ -42,7 +42,7 @@ msgstr "Pour"
 msgid "From"
 msgstr "De"
 
-#: src/reviews/forms.py:10 src/templates/reviews.html:123
+#: src/reviews/forms.py:10 src/templates/reviews.html:124
 msgid "Rating"
 msgstr "Évaluation"
 
@@ -74,15 +74,11 @@ msgstr ""
 msgid "Your review has been posted successfully!"
 msgstr "Votre revue a été publiée avec succès!"
 
-#: src/reviews/routes.py:56
-msgid "Writing review failed."
-msgstr "Écriture du revue échouée."
-
 #: src/reviews/routes.py:57
 msgid "New review"
 msgstr "Nouvelle revue"
 
-#: src/rides/routes.py:39 src/templates/base.html:61 src/templates/base.html:84
+#: src/rides/routes.py:39 src/templates/base.html:61 src/templates/base.html:87
 msgid "Find a ride"
 msgstr "Trouvez un trajet"
 
@@ -158,12 +154,12 @@ msgid "Edit account"
 msgstr "Modifier mon compte"
 
 #: src/templates/account.html:9 src/templates/account_edit.html:92
-#: src/users/routes.py:175 src/users/routes.py:201
+#: src/users/routes.py:187 src/users/routes.py:212
 msgid "Edit address"
 msgstr "Modifier l'addresse"
 
 #: src/templates/account.html:11 src/templates/base.html:67
-#: src/users/routes.py:221
+#: src/users/routes.py:251
 msgid "My rides"
 msgstr "Mes trajets"
 
@@ -205,7 +201,7 @@ msgstr "Code postale"
 msgid "City"
 msgstr "Ville"
 
-#: src/templates/account.html:85 src/users/forms.py:63
+#: src/templates/account.html:85
 msgid "Country"
 msgstr "Pays"
 
@@ -214,7 +210,7 @@ msgid "Car:"
 msgstr "Voiture:"
 
 #: src/templates/account.html:99 src/templates/car_edit.html:5
-#: src/users/routes.py:362 src/users/routes.py:385
+#: src/users/routes.py:467 src/users/routes.py:490
 msgid "Edit car"
 msgstr "Modifier voiture"
 
@@ -274,24 +270,29 @@ msgstr "Modifier mon adresse"
 msgid "Create a ride"
 msgstr ""
 
-#: src/templates/base.html:80
+#: src/templates/base.html:70 src/templates/joined_rides.html:3
+#: src/users/routes.py:317
+msgid "Joined rides"
+msgstr ""
+
+#: src/templates/base.html:83
 msgid "Home"
 msgstr "Accueil"
 
-#: src/templates/base.html:87 src/templates/register.html:83
+#: src/templates/base.html:90 src/templates/register.html:83
 #: src/users/forms.py:25
 msgid "Log in"
 msgstr "Se connecter"
 
-#: src/templates/base.html:90 src/templates/home.html:116 src/users/forms.py:14
+#: src/templates/base.html:93 src/templates/home.html:116 src/users/forms.py:14
 msgid "Sign up"
 msgstr "S'inscrire"
 
-#: src/templates/base.html:95
+#: src/templates/base.html:98
 msgid "Language"
 msgstr "Langue"
 
-#: src/templates/base.html:135
+#: src/templates/base.html:138
 msgid "About us"
 msgstr "À propos"
 
@@ -315,13 +316,25 @@ msgstr "ou"
 msgid ""
 "    <b>Will Campus Carpool be available in other languages?</b>\n"
 "        <br>\n"
-"    We are currently translating Campus Carpool into Dutch and French"
+"    Campus Carpool is also available in Dutch and French. No other "
+"languages will be supported."
 msgstr ""
-"    <b>Est-ce que Campus Carpool sera disponible en plusieurs "
-"langues?</b>\n"
+
+#: src/templates/faq.html:12
+msgid ""
+"    <b>How do I write a review?</b>\n"
 "        <br>\n"
-"    En ce moment, Campus Carpool est disponible en 3 langues: le "
-"Français, le Néerlandais et  l'Anglais."
+"    Go to another user's profile by clicking their profile picture in "
+"your \"My rides\" or \"Joined rides\" overview. Then click \"write "
+"review\"."
+msgstr ""
+
+#: src/templates/faq.html:17
+msgid ""
+"    <b>How do I select points on the map?</b>\n"
+"        <br>\n"
+"    If the map feels unresponsive, try zooming in first."
+msgstr ""
 
 #: src/templates/home.html:9
 msgid "Make it easy for yourself to get to college or university."
@@ -398,6 +411,42 @@ msgstr ""
 msgid "Interested? Sign up now!"
 msgstr "Interessé(e)? Enregistrez-vous maintenant!"
 
+#: src/templates/joined_rides.html:46 src/templates/ride_history.html:46
+msgid "Departure: "
+msgstr ""
+
+#: src/templates/joined_rides.html:48 src/templates/ride_history.html:48
+msgid "Arrival: "
+msgstr ""
+
+#: src/templates/joined_rides.html:51
+msgid "Pickup 1: "
+msgstr ""
+
+#: src/templates/joined_rides.html:55
+msgid "Pickup 2: "
+msgstr ""
+
+#: src/templates/joined_rides.html:59
+msgid "Pickup 3: "
+msgstr ""
+
+#: src/templates/joined_rides.html:63 src/templates/joined_rides.html:67
+msgid "From: "
+msgstr ""
+
+#: src/templates/joined_rides.html:65 src/templates/joined_rides.html:69
+msgid "To: "
+msgstr ""
+
+#: src/templates/joined_rides.html:77
+msgid "See driver profile"
+msgstr ""
+
+#: src/templates/joined_rides.html:78
+msgid "Cancel ride"
+msgstr ""
+
 #: src/templates/login.html:46
 msgid "Forgot your password?"
 msgstr "Oublié votre mot de passe?"
@@ -439,7 +488,7 @@ msgid "Sort"
 msgstr "Trier"
 
 #: src/templates/reviews.html:76 src/templates/reviews.html:78
-#: src/templates/reviews.html:130 src/templates/reviews.html:132
+#: src/templates/reviews.html:131 src/templates/reviews.html:133
 msgid "stars"
 msgstr "étoiles"
 
@@ -447,19 +496,19 @@ msgstr "étoiles"
 msgid "by"
 msgstr "par"
 
-#: src/templates/reviews.html:139
+#: src/templates/reviews.html:140
 msgid "Other properties"
 msgstr ""
 
-#: src/templates/reviews.html:144
+#: src/templates/reviews.html:145
 msgid "Written by me"
 msgstr ""
 
-#: src/templates/reviews.html:149
+#: src/templates/reviews.html:150
 msgid "Written by me (requires login)"
 msgstr ""
 
-#: src/templates/reviews.html:163
+#: src/templates/reviews.html:164
 msgid "Show results"
 msgstr ""
 
@@ -467,29 +516,25 @@ msgstr ""
 msgid "Ride History"
 msgstr "Histoire de trajets"
 
-#: src/templates/ride_history.html:13
-msgid "Type to search"
-msgstr "Chercher"
-
-#: src/templates/ride_history.html:23
-msgid "sort by"
-msgstr "trier par"
-
-#: src/templates/ride_history.html:25 src/templates/ride_information.html:92
-msgid "Date"
-msgstr "Date"
-
-#: src/templates/ride_history.html:45
-msgid "Campus-To"
+#: src/templates/ride_history.html:52 src/templates/ride_history.html:55
+msgid "From "
 msgstr ""
 
-#: src/templates/ride_history.html:47
-msgid "From-Campus"
+#: src/templates/ride_history.html:52 src/templates/ride_history.html:55
+msgid " to "
+msgstr ""
+
+#: src/templates/ride_history.html:66
+msgid "Delete ride"
 msgstr ""
 
 #: src/templates/ride_information.html:2
 msgid "Ride Information"
 msgstr "Information du trajet"
+
+#: src/templates/ride_information.html:92
+msgid "Date"
+msgstr "Date"
 
 #: src/templates/ride_information.html:95
 msgid "Departure"
@@ -516,7 +561,7 @@ msgstr "Passager"
 msgid "Cancel"
 msgstr "Annuler"
 
-#: src/templates/user.html:3 src/users/routes.py:264
+#: src/templates/user.html:3 src/users/routes.py:369
 msgid "User profile"
 msgstr "profil d'utilisateur"
 
@@ -524,7 +569,7 @@ msgstr "profil d'utilisateur"
 msgid "new review"
 msgstr ""
 
-#: src/templates/user.html:30 src/users/forms.py:68
+#: src/templates/user.html:30 src/users/forms.py:67
 msgid "Subject"
 msgstr "Sujet"
 
@@ -628,7 +673,7 @@ msgstr "Autre"
 msgid "Upload profile picture"
 msgstr "Ajouter photo de profil"
 
-#: src/users/forms.py:55 src/users/forms.py:65
+#: src/users/forms.py:55 src/users/forms.py:64
 msgid "Save"
 msgstr "Sauvegarder"
 
@@ -644,51 +689,51 @@ msgstr "Numéro"
 msgid "Postal code"
 msgstr "Code postale"
 
-#: src/users/forms.py:68
+#: src/users/forms.py:67
 msgid "Lost item"
 msgstr "Objets perdus"
 
-#: src/users/forms.py:68
+#: src/users/forms.py:67
 msgid "Empty"
 msgstr "Vide"
 
-#: src/users/forms.py:69
+#: src/users/forms.py:68
 msgid "Make Form"
 msgstr "Créer formulaire"
 
-#: src/users/routes.py:73
+#: src/users/routes.py:84
 msgid "Account"
 msgstr "Compte"
 
-#: src/users/routes.py:128
-msgid "Account edited!"
-msgstr "Compte modifié!"
-
-#: src/users/routes.py:148
-msgid "Account deleted!"
-msgstr "Compte supprimé!"
-
-#: src/users/routes.py:151
+#: src/users/routes.py:123 src/users/routes.py:165
 msgid "Edit account info"
 msgstr "Modifier info du compte"
 
-#: src/users/routes.py:199
+#: src/users/routes.py:142
+msgid "Account edited!"
+msgstr "Compte modifié!"
+
+#: src/users/routes.py:162
+msgid "Account deleted!"
+msgstr "Compte supprimé!"
+
+#: src/users/routes.py:210
 msgid "Address edited!"
 msgstr "Adresse modifié!"
 
-#: src/users/routes.py:244
+#: src/users/routes.py:341
 msgid "Campus Carpool: user message"
 msgstr "Campus Carpool: message d'utilisateur"
 
-#: src/users/routes.py:245
+#: src/users/routes.py:342
 msgid "Dear "
 msgstr "Cher/Chère"
 
-#: src/users/routes.py:249
+#: src/users/routes.py:346
 msgid ": Lost item"
 msgstr ": Objet perdu"
 
-#: src/users/routes.py:250
+#: src/users/routes.py:347
 msgid ""
 "While carpooling with you recently, I forgot my [ITEM] in your car. Can "
 "you let me know if you found it and when you can return it?"
@@ -697,7 +742,7 @@ msgstr ""
 "voiture. Est-ce que vous pourriez me contacter si vous l'avez trouvé et "
 "quand vous pourriez me le rendre?"
 
-#: src/users/routes.py:252
+#: src/users/routes.py:349
 msgid ""
 "\n"
 "Kind regards\n"
@@ -705,43 +750,43 @@ msgstr ""
 "\n"
 "Sincèrement\n"
 
-#: src/users/routes.py:283
+#: src/users/routes.py:388
 msgid "Login failed. Please check your email and/or password."
 msgstr "Échec de connexion. Vérifiez votre adresse mail et/ou mot de passe."
 
-#: src/users/routes.py:284
+#: src/users/routes.py:389
 msgid "Login"
 msgstr "Connexion"
 
-#: src/users/routes.py:293
+#: src/users/routes.py:398
 msgid "Succesfully logged out."
 msgstr "Déconnexion réussite."
 
-#: src/users/routes.py:314
+#: src/users/routes.py:419
 msgid "Account created for"
 msgstr "Compte créé pour"
 
-#: src/users/routes.py:315
+#: src/users/routes.py:420
 msgid "! You can now log in."
 msgstr "! Vous pouvez vous connecter."
 
-#: src/users/routes.py:318
+#: src/users/routes.py:423
 msgid "Register"
 msgstr "S'inscrire"
 
-#: src/users/routes.py:339
+#: src/users/routes.py:444
 msgid "Vehicle registered!"
 msgstr "Véhicule enregistré!"
 
-#: src/users/routes.py:341
+#: src/users/routes.py:446
 msgid "Add Vehicle"
 msgstr "Ajouter un véhicule"
 
-#: src/users/routes.py:383
+#: src/users/routes.py:488
 msgid "Car edited!"
 msgstr "Voiture modifiée!"
 
-#: src/users/routes.py:397
+#: src/users/routes.py:502
 msgid "Vehicle deleted!"
 msgstr "Voiture supprimée"
 
@@ -805,5 +850,39 @@ msgstr "Voiture supprimée"
 #~ "you are a driver, make sure to "
 #~ "register your car on your account "
 #~ "page."
+#~ msgstr ""
+
+#~ msgid "Writing review failed."
+#~ msgstr "Écriture du revue échouée."
+
+#~ msgid "Type to search"
+#~ msgstr "Chercher"
+
+#~ msgid "sort by"
+#~ msgstr "trier par"
+
+#~ msgid "Campus-To"
+#~ msgstr ""
+
+#~ msgid "From-Campus"
+#~ msgstr ""
+
+#~ msgid ""
+#~ "    <b>Will Campus Carpool be available in other languages?</b>\n"
+#~ "        <br>\n"
+#~ "    We are currently translating Campus Carpool into Dutch and French"
+#~ msgstr ""
+#~ "    <b>Est-ce que Campus Carpool "
+#~ "sera disponible en plusieurs langues?</b>\n"
+#~ ""
+#~ "        <br>\n"
+#~ "    En ce moment, Campus Carpool "
+#~ "est disponible en 3 langues: le "
+#~ "Français, le Néerlandais et  l'Anglais."
+
+#~ msgid ""
+#~ "    <b>How do I select points on the map?</b>\n"
+#~ "        <br>\n"
+#~ "    If the map feels unresponsive, try zooming in first.."
 #~ msgstr ""
 
