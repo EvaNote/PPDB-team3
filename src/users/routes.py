@@ -225,6 +225,8 @@ def myrides():
     campuses = []
     pfps = []
     allids = []
+    pickuppoints = []
+    pickupbools = []
     for ride in allrides:
         if ride.user_id == current_user.id:
             userrides.append(ride)
@@ -236,6 +238,8 @@ def myrides():
             allids.append(temp)
             ride_pfp = []
             #userids = []
+            points = []
+            bools = [False, False, False]
             for user_id in temp:
                 #userids.append(user_id)
                 user = user_access.get_user_on_id(user_id)
@@ -246,10 +250,28 @@ def myrides():
 
             #allids.append(userids)
             pfps.append(ride_pfp)
+            if ride.pickup_1 is not None:
+                pickup_1_id = ride.pickup_1
+                time_1 = pickup_point_access.get_on_id(pickup_1_id).estimated_time
+                points.append(time_1)
+                bools[0] = True
+                if ride.pickup_2 is not None:
+                    pickup_2_id = ride.pickup_2
+                    time_2 = pickup_point_access.get_on_id(pickup_2_id).estimated_time
+                    points.append(time_2)
+                    bools[1] = True
+                    if ride.pickup_3 is not None:
+                        pickup_3_id = ride.pickup_3
+                        time_3 = pickup_point_access.get_on_id(pickup_3_id).estimated_time
+                        points.append(time_3)
+                        bools[2] = True
+            pickupbools.append(bools)
+            pickuppoints.append(points)
 
 
     return render_template('ride_history.html', title=lazy_gettext('My rides'), loggedIn=True, userrides=userrides,
-                           addresses=addresses, campuses=campuses, pfps=pfps, allids=allids)
+                           addresses=addresses, campuses=campuses, pfps=pfps, allids=allids, pickuppoints=pickuppoints,
+                           pickupbools=pickupbools)
 
 @users.route("/joinedrides")
 def joinedrides():

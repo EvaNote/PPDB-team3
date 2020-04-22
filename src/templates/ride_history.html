@@ -1,61 +1,53 @@
 {% extends "roundborder.html" %}
 
-{% block contentTitle %}{{ _('Ride History') }}
+{% block contentTitle %}{{ _('My rides') }}
 
 
 {% endblock contentTitle %}
 
 
 {% block contentContent %}
-{#    <div class="row">#}
-{#        <div class="col-md-3">#}
-{#            <div class="search-box">#}
-{#                <input class="search-txt"  type="text" name="" placeholder="{{ _('Type to search') }}">#}
-{#                <a class="search-btn" href="#"></a>#}
-{#                <i class="fas fa-search"></i>#}
-{#            </div>#}
-{#        </div>#}
-{#        <div class="col-md-3">#}
-{#            <div>#}
-{#                <form>#}
-{#                    <fieldset>#}
-{#                    <p>#}
-{#                    <label>{{ _('sort by') }}</label>#}
-{#                    <select id = "myList">#}
-{#                        <option value = "1">{{_('Date')}}</option>#}
-{#                        <option value = "2">two</option>#}
-{#                        <option value = "3">three</option>#}
-{#                        <option value = "4">four</option>#}
-{#                    </select>#}
-{#                    </p>#}
-{#                    </fieldset>#}
-{#                </form>#}
-{#            </div>#}
-{#        </div>#}
-{#    </div>#}
 
+    <div class="row">
     {% for ride in userrides %}
         {% set address = addresses[loop.index0] %}
         {% set campus = campuses[loop.index0] %}
         {% set pfplist = pfps[loop.index0] %}
+        {% set pickuppoint = pickuppoints[loop.index0] %}
+        {% set pickupbool = pickupbools[loop.index0] %}
         {% set passids = allids[loop.index0] %}
 
-    <div class="row">
-        <div class="ride_history_wrap_3">
-            <div class="ride_history_wrap_1"
-                 style="margin-left: 5px; margin-top: 5px"> {{ _('Departure: ') }} {{ ride.departure_time }}</div>
-            <div class="ride_history_wrap_1" style="margin-left: 5px; margin-top: 5px">
-                {{ _('Arrival: ') }}{{ ride.arrival_time }}</div>
 
+
+        <div class="ride_history_wrap_3">
+            <div class="ride_history_wrap_6"><b> {{ _('Departure: ') }} </b>{{ ride.departure_time }}</div>
+            <br>
+            <div class="ride_history_wrap_6"><b> {{ _('Arrival: ') }} </b>{{ ride.arrival_time }}</div>
+            <br>
+            {% if pickupbool[0] %}
+                <div class="ride_history_wrap_5"><b> {{ _('Pickup 1: ') }} </b>{{ pickuppoint[0] }}</div>
+                <br>
+            {% endif %}
+            {% if pickupbool[1] %}
+                <div class="ride_history_wrap_5"><b> {{ _('Pickup 2: ') }} </b>{{ pickuppoint[1] }}</div>
+                <br>
+            {% endif %}
+            {% if pickupbool[2] %}
+                <div class="ride_history_wrap_5"><b> {{ _('Pickup 3: ') }}</b> {{ pickuppoint[2] }}</div>
+                <br>
+            {% endif %}
             {% if ride.to_campus %}
-                <div class="ride_history_wrap_2"
-                     style="margin-left: 5px; margin-top: 5px"> {{ _('From ') }} {{ address }} {{ _(' to ') }} {{ campus }}</div>
+                <div class="ride_history_wrap_7"><b> {{ _('From: ') }}</b> {{ address }}  </div>
+                <br>
+                <div class="ride_history_wrap_7"><b> {{ _('To: ') }} </b>{{ campus }}</div>
             {% else %}
-                <div class="ride_history_wrap_2"
-                     style="margin-left: 5px; margin-top: 5px">{{ _('From ') }} {{ campus }} {{ _(' to ') }} {{ address }}</div>
+                <div class="ride_history_wrap_7"><b>{{ _('From: ') }} </b>{{ campus }} </div>
+                <br>
+                <div class="ride_history_wrap_7"><b> {{ _('To: ') }}</b> {{ address }}</div>
             {% endif %}
         <br>
-        {% for pfp in pfplist %}
+
+            {% for pfp in pfplist %}
             {% set linkid = passids[loop.index0] %}
             <a href={{ url_for('users.user', userid=linkid) }}>
                             <img src="{{ url_for('static', filename=pfp) }}" class="float-left mr-2" width="127px"
@@ -64,9 +56,8 @@
         {% endfor %}
             <a class="btn btn-info" href="{{ url_for('main.deleteride', ride_id=ride.id) }}" role="button"
                style="margin-left: 5px; margin-bottom: 5px; margin-top: 5px">{{ _('Delete ride') }}</a>
-
         </div>
-    </div>
-
     {% endfor %}
+
+    </div>
 {% endblock contentContent %}
