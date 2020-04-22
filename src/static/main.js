@@ -537,7 +537,7 @@ $(function () {
         depart_time = new Date(form.datetime.replace('T', ' ') + ":00");
         var arrive = true;
         if (time_option === "Arrive by"){
-            depart_time.setSeconds( depart_time.getSeconds() + seconds );
+            depart_time.setSeconds( depart_time.getSeconds() - seconds );
             //alert("wiewa arrive")
         }
         if (time_option === "Depart at"){
