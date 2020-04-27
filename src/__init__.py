@@ -1,15 +1,18 @@
-from flask import Flask, g, request, redirect, url_for
 from src.config import *
-from src.utils import babel, bcrypt, login_manager
-from src.api import api
-# import all blueprints
-from src.main.routes import main
-from src.reviews.routes import reviews
-from src.rides.routes import rides
-from src.users.routes import users
 
 
-def create_app(config_class=BaseConfig):
+def create_app(config_class):
+    set_config(config_class)
+
+    from flask import Flask, g, request, redirect, url_for
+    from src.api import api
+    from src.utils import bcrypt, babel, login_manager
+    # import all blueprints
+    from src.main.routes import main
+    from src.reviews.routes import reviews
+    from src.rides.routes import rides
+    from src.users.routes import users
+
     """
     Create a Flask application with a given configuration. This function allows us to create
     multiple instances of our app with different configurations.

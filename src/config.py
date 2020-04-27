@@ -1,3 +1,11 @@
+class TheConfig:
+    config = None
+
+
+def set_config(config):
+    TheConfig.config = config
+
+
 class BaseConfig(object):
     """
     Base configuration class with variables used in the creation of our Flask
@@ -12,10 +20,6 @@ class BaseConfig(object):
     BABEL_DEFAULT_TIMEZONE = 'UTC'
     SUPPORTED_LANGUAGES = {'en': 'English', 'nl': 'Nederlands', 'fr': 'Français'}
 
-    # database
-    DB_USER = 'app'
-    DB_NAME = 'dbcarpool'
-
 
 class ProductionConfig(BaseConfig):
     """ Configuration used for deploying our app in production. """
@@ -23,12 +27,20 @@ class ProductionConfig(BaseConfig):
     DEBUG = False
     TESTING = False
 
+    # database
+    DB_USER = 'app'
+    DB_NAME = 'dbcarpool'
+
 
 class DevelopmentConfig(BaseConfig):
     """ Configuration used for development purposes. """
     ENV = 'development'
     DEBUG = True
     TESTING = False
+
+    # database
+    DB_USER = 'app'
+    DB_NAME = 'dbcarpool'
 
 
 class TestConfig(BaseConfig):

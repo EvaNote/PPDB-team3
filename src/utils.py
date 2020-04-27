@@ -13,9 +13,10 @@ from src.dbmodels.Ride import Rides
 from src.dbmodels.User import UserAccess
 from src.dbmodels.PickupPoint import PickupPoints
 from src.config import BaseConfig
+from src.config import TheConfig
 
 # connect to database
-connection = DBConnection(dbname=BaseConfig.DB_NAME, dbuser=BaseConfig.DB_USER)
+connection = DBConnection(dbname=TheConfig.config.DB_NAME, dbuser=TheConfig.config.DB_USER)
 address_access = Addresses(connection)
 campus_access = Campusses(connection)
 car_access = Cars(connection)
