@@ -59,7 +59,7 @@ class User:
         __hash__ = object.__hash__
 
     def to_dict(self):
-        return {'id': None, ' email': self.email, 'first_name': self.first_name, 'last_name': self.last_name,
+        return {'id': self.id, ' email': self.email, 'first_name': self.first_name, 'last_name': self.last_name,
                 'age': self.age, 'gender': self.gender, 'phone_number': self.phone_number,
                 'joined_on': self.joined_on, 'picture': self.picture,
                 'address': self.address}

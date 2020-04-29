@@ -709,8 +709,12 @@ $(function () {
                             let driverButton = document.createElement("button");
                             driverButton.setAttribute("class", "btn btn-info m-2");
                             driverButton.innerHTML = "See driver profile";
+                            let driver_id = driver["id"];
                             driverButton.onclick = function() {
-                                alert("under construction")
+                                let current_url = window.location.href;
+                                let new_url = current_url.substring(0,current_url.length-8);
+                                new_url += "user=" + driver_id;
+                                window.open(new_url,"_blank");
                                 }
                             underColumn.appendChild(mapButton);
                             underColumn.appendChild(addButton);
