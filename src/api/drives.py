@@ -9,7 +9,6 @@ from src.dbmodels.Address import Address
 from src.dbmodels.Ride import Ride
 
 
-
 class DrivesApi(Resource):  # /api/drives
     def post(self):  # TODO make it work properly
         auth_header = request.headers.get("Authorization")
@@ -61,7 +60,7 @@ class DrivesApi(Resource):  # /api/drives
             postcode = location.raw['address']['postcode']
         except Exception as e:
             postcode = ''
-        fmt = '%Y-%m-%dT%H:%M:%S.%f'
+        fmt = '%Y-%m-%dT%H:%M:%S'
         dist = distance.distance((from_a[0], from_a[1]), (to_a[0], to_a[1])).km
         arr = datetime.strptime(arrive_by, fmt)
         time_diff_sec = timedelta(seconds=(dist / 0.01))
