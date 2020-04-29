@@ -1,9 +1,12 @@
 import os
+import sys
+
+cwd = os.getcwd()
+sys.path.append(cwd)
 import tempfile
 import unittest
 from src import create_app, TestConfig
 from flask_login import current_user, login_user, logout_user
-from src.utils import user_access, bcrypt
 from src.dbmodels.User import User
 import base64
 
@@ -22,6 +25,7 @@ class FlaskTestCase(unittest.TestCase):
         user_email = 'test@blog.com'
         user_first_name = 'test'
         user_last_name = 'test'
+        from src.utils import user_access, bcrypt
         user_password = bcrypt.generate_password_hash('test').decode('utf-8')
         self.user_obj = User(first_name=user_first_name, last_name=user_last_name, email=user_email,
                              password=user_password)
