@@ -314,23 +314,50 @@ class Rides:
             lng_from = campus['lng']
             from_coords = 'c.latitude, c.longitude'
             campus = True
-        else:
+        elif p_from['lat']:
             lat_from = p_from['lat']
             lng_from = p_from['lng']
             from_coords = 'a.latitude, a.longitude'
             campus = True
+        else:
+            from_coords = None
         if isinstance(p_to, int):  # p_to is campus
             campus = campus_access.get_on_id(p_to).to_dict()
             lat_to = campus['lat']
             lng_to = campus['lng']
             if from_coords == 'c.latitude, c.longitude':
                 to_coords = 'a.latitude, a.longitude'
-            else:
+            elif from_coords:
                 to_coords = 'c.latitude, c.longitude'
-        else:
+            else:
+                from_coords = 'a.latitude, a.longitude'
+                lat_from = 'a.latitude'
+                lng_from = 'a.longitude'
+                to_coords = 'c.latitude, c.longitude'
+        elif p_to['lat']:
+            if not from_coords:
+                from_coords = 'a.latitude, a.longitude'
+                lat_from = 'a.latitude'
+                lng_from = 'a.longitude'
             lat_to = p_to['lat']
             lng_to = p_to['lng']
             to_coords = 'c.latitude, c.longitude'
+        else:
+            if from_coords == 'c.latitude, c.longitude':
+                to_coords = 'a.latitude, a.longitude'
+                lat_to = 'a.latitude'
+                lng_to = 'a.longitude'
+            elif from_coords:
+                to_coords = 'c.latitude, c.longitude'
+                lat_to = 'c.latitude'
+                lng_to = 'c.longitude'
+            else:
+                from_coords = 'a.latitude, a.longitude'
+                to_coords = 'c.latitude, c.longitude'
+                lat_from = 'a.latitude'
+                lng_from = 'a.longitude'
+                lat_to = 'c.latitude'
+                lng_to = 'c.longitude'
 
         cursor = self.dbconnect.get_cursor()
 
@@ -350,6 +377,8 @@ class Rides:
         else:
             p_to = str(lat_to) + ',' + str(lng_to)  # latitude, longitude
         if not p_time_option:
+            p_time_value = p_time_option
+        elif not p_datetime:
             p_time_value = p_time_option
         else:
             p_time_value = "'" + p_datetime + "'"
@@ -420,6 +449,10 @@ class Rides:
         return rides
 
     def __helper_function_dist(self, lat1, lng1, lat2, lng2):
+        if not isinstance(lat1, float) or not isinstance(lng1, float) or not isinstance(lat2, float) or not isinstance(
+                lng2, float):
+            return 0.0
+
         from src.utils import pickup_point_access
         from math import atan2, sqrt, sin, radians, cos
         return 6371000 * (2 * atan2(sqrt(sin(radians(lat2 - lat1) / 2) * sin(radians(lat2 - lat1) / 2) +
