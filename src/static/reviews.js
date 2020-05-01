@@ -7,6 +7,8 @@ $(document).ready(function () {
     };
 
     $('.checkbox').prop('checked', false);
+    $('#iWasPassengerCheckbox').prop('checked', true);
+    $('#iWasDriverCheckbox').prop('checked', false);
 
     $('.sort-review').click(function (event) {
         event.preventDefault();
@@ -197,4 +199,16 @@ $(document).ready(function () {
             parent.append(textN);
         }
     }
+
+    $('#iWasDriverCheckbox').click(function (e) {
+        $(this).prop('checked', true);
+        $('#iWasPassengerCheckbox').prop('checked', false);
+        $('#role').attr('value', 0)
+    });
+
+    $('#iWasPassengerCheckbox').click(function (e) {
+        $(this).prop('checked', true);
+        $('#iWasDriverCheckbox').prop('checked', false);
+        $('#role').attr('value', 1)
+    })
 });

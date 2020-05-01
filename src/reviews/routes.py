@@ -48,7 +48,12 @@ def new_review(userid):
         amount_of_stars = form.amount_of_stars.data
         title = form.title.data
         text = form.text.data
-        review_obj = Review(None, user_for, user_from, amount_of_stars, title, text, None)
+        role = form.role.data
+        if role == 0:
+            role = 'driver'
+        else:
+            role = 'passenger'
+        review_obj = Review(None, user_for, user_from, amount_of_stars, title, text, None, role)
         review_access.add_review(review_obj)
         flash(lazy_gettext('Your review has been posted successfully!'), 'success')
         return redirect(url_for('users.user',userid=userid))

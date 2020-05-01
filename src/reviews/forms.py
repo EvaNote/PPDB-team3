@@ -1,6 +1,6 @@
 from flask_wtf import FlaskForm
 from markupsafe import Markup
-from wtforms import StringField, SubmitField, IntegerField, TextAreaField
+from wtforms import StringField, SubmitField, IntegerField, TextAreaField, RadioField
 from wtforms.validators import DataRequired, NumberRange, Length
 from flask_babel import lazy_gettext
 
@@ -11,6 +11,7 @@ class ReviewForm(FlaskForm):
     title = StringField('', validators=[DataRequired()])
     text = TextAreaField('', validators=[Length(0, 1000)])
     submit = SubmitField(lazy_gettext('Submit'))
+    role = IntegerField(lazy_gettext('Rating'), validators=[NumberRange(0, 1)])  # 0 = driver, 1 = passenger
 
 
 class Reviews(FlaskForm):

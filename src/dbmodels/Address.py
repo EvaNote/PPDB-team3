@@ -18,6 +18,13 @@ class Addresses:
     def __init__(self, dbconnect):
         self.dbconnect = dbconnect
 
+    def get_latest_id(self):
+        cursor = self.dbconnect.get_cursor()
+        cursor.execute(
+            "SELECT id,country,city,postal_code,street,nr,latitude,longitude FROM address order by id desc limit 1")
+        address = cursor.fetchone()
+        return address[0]
+
     def get_on(self, on, val):
         cursor = self.dbconnect.get_cursor()
         cursor.execute("SELECT id,country,city,postal_code,street,nr,latitude,longitude FROM address WHERE %s=%s",
@@ -32,6 +39,18 @@ class Addresses:
         cursor = self.dbconnect.get_cursor()
         cursor.execute('SELECT id,country,city,postal_code,street,nr,latitude,longitude FROM address WHERE id=%s',
                        (id,))
+        address = cursor.fetchone()
+        if address is None:
+            return None
+        address_obj = Address(address[0], address[1], address[2], address[3], address[4], address[5], address[6],
+                              address[7])
+        return address_obj
+
+    def get_on_lat_lng(self, latitude, longitude):
+        cursor = self.dbconnect.get_cursor()
+        cursor.execute(
+            'SELECT id,country,city,postal_code,street,nr,latitude,longitude FROM address WHERE latitude=%s and longitude=%s',
+            (latitude, longitude,))
         address = cursor.fetchone()
         if address is None:
             return None

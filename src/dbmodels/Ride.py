@@ -189,7 +189,7 @@ class Rides:
         cursor.execute(
             """
             SELECT car.nr_seats, a.longitude, a.latitude, c.longitude, c.latitude, r.arrival_time, r.to_campus
-            FROM car, address as a, campus as c, ride as r
+            FROM car, address as a, campus as camp join address c on camp.address_id = c.id, ride as r
             WHERE r.id = %s AND
                   r.car_id = car.id AND
                   r.address_1 = a.id AND
@@ -312,27 +312,30 @@ class Rides:
             campus = campus_access.get_on_id(p_from).to_dict()
             lat_from = campus['lat']
             lng_from = campus['lng']
-            from_coords = 'c.latitude, c.longitude'
+            from_coords = 'a1.latitude, a1.longitude'
             campus = True
         else:
             lat_from = p_from['lat']
             lng_from = p_from['lng']
-            from_coords = 'a.latitude, a.longitude'
+            from_coords = 'a2.latitude, a2.longitude'
             campus = True
         if isinstance(p_to, int):  # p_to is campus
             campus = campus_access.get_on_id(p_to).to_dict()
             lat_to = campus['lat']
             lng_to = campus['lng']
-            if from_coords == 'c.latitude, c.longitude':
-                to_coords = 'a.latitude, a.longitude'
+            if from_coords == 'a1.latitude, a1.longitude':
+                to_coords = 'a2.latitude, a2.longitude'
             else:
-                to_coords = 'c.latitude, c.longitude'
+                to_coords = 'a1.latitude, a1.longitude'
         else:
             lat_to = p_to['lat']
             lng_to = p_to['lng']
-            to_coords = 'c.latitude, c.longitude'
+            to_coords = 'a1.latitude, a1.longitude'
 
         cursor = self.dbconnect.get_cursor()
+
+        print('++++++++++++++++++++++++++++++++++++++ from ++' + from_coords)
+        print('++++++++++++++++++++++++++++++++++++++ to ++++' + to_coords)
 
         if p_time_option == 'Arrive by':
             p_time_option = 'r.arrival_time'
@@ -357,12 +360,15 @@ class Rides:
         cursor.execute("""
                         SELECT r.id, r.departure_time, r.arrival_time, r.user_id, r.address_1, r.campus, 
                         r.to_campus, r.car_id, r.passengers, r.pickup_point_1, r.pickup_point_2, r.pickup_point_3,
-                        a.latitude, a.longitude, c.latitude, c.longitude
-                        FROM ride r join campus c on r.campus = c.id join address a on r.address_1 = a.id
-                        WHERE ((distance_difference(c.latitude, c.longitude, """ + p_to + """) <= 3000) AND -- 1)
+                        a2.latitude, a2.longitude, a1.latitude, a1.longitude
+                        FROM ride r 
+                        join campus c on r.campus = c.id 
+                        join address a1 on c.address_id = a1.id
+                        join address a2 on r.address_1 = a2.id
+                        WHERE ((distance_difference(a1.latitude, a1.longitude, """ + p_to + """) <= 3000) AND -- 1)
                               (time_difference(""" + p_time_value + """, """ + p_time_option + """) BETWEEN 0 AND 600) AND -- 2)
                               (
-                                           distance_difference(a.latitude, a.longitude, """ + p_from + """) <= 3000 OR -- 3)
+                                           distance_difference(a2.latitude, a2.longitude, """ + p_from + """) <= 3000 OR -- 3)
                                           (
                                           select count(p.id) from pickup_point p where p.id in (r.pickup_point_1, r.pickup_point_2, r.pickup_point_3)
                                           and distance_difference(p.latitude, p.longitude, """ + p_from + """) <= 3000
@@ -372,10 +378,10 @@ class Rides:
 
                                   ) and r.to_campus)
                                   or
-                                  ((distance_difference(a.latitude, a.longitude, """ + p_to + """) <= 3000) AND -- 1)
+                                  ((distance_difference(a2.latitude, a2.longitude, """ + p_to + """) <= 3000) AND -- 1)
                                   (time_difference(""" + p_time_value + """, """ + p_time_option + """) BETWEEN 0 AND 600) AND -- 2)
                                   (
-                                               distance_difference(c.latitude, c.longitude, """ + p_from + """) <= 3000 OR -- 3)
+                                               distance_difference(a1.latitude, a1.longitude, """ + p_from + """) <= 3000 OR -- 3)
                                               (
                                               select count(p.id) from pickup_point p where p.id in (r.pickup_point_1, r.pickup_point_2, r.pickup_point_3)
                                               and distance_difference(p.latitude, p.longitude, """ + p_from + """) <= 3000

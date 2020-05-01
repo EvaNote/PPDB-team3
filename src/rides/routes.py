@@ -41,24 +41,28 @@ def findride():
 
 @rides.route("/createride", methods=['GET', 'POST'])
 def createride():
-    if not current_user.is_authenticated:
+    if not current_user.is_authenticated and not current_app.config['TESTING']:
         return redirect(url_for('users.login'))
     return render_template("createride.html", title="Create a ride")
 
 
 @rides.route("/ride_info")
 def ride_details():
+    if not current_user.is_authenticated and not current_app.config['TESTING']:
+        return redirect(url_for('users.login'))
     return render_template("ride_information.html", title=lazy_gettext("Ride information"))
 
 
 @rides.route("/ride_history")
 def ride_history():
+    if not current_user.is_authenticated and not current_app.config['TESTING']:
+        return redirect(url_for('users.login'))
     return render_template("ride_history.html", title=lazy_gettext("Ride history"))
 
 
-@rides.route("/maps")
-def maps():
-    return render_template("maps.html", title="maps")
+# @rides.route("/maps")
+# def maps():
+#     return render_template("maps.html", title="maps")
 
 
 @rides.route("/joinride", methods=['GET', 'POST'])

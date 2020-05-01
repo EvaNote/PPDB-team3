@@ -1,7 +1,7 @@
 from datetime import date
 
 class Review:
-    def __init__(self, id, user_for, user_from, amount_of_stars, title, review_text, creation):
+    def __init__(self, id, user_for, user_from, amount_of_stars, title, review_text, creation, role):
         self.id = id
         self.user_for = user_for
         self.user_from = user_from
@@ -9,6 +9,7 @@ class Review:
         self.title = title
         self.review_text = review_text
         self.creation = creation
+        self.role = role
 
     def to_dict(self):
         from src.utils import user_access
@@ -24,7 +25,8 @@ class Review:
                 'amount_of_stars': self.amount_of_stars,
                 'title': self.title,
                 'review_text': self.review_text,
-                'creation': self.get_creation_date_as_string()}
+                'creation': self.get_creation_date_as_string(),
+                'role': self.role}
 
     def get_user_from_as_object(self):
         from src.utils import user_access
@@ -54,11 +56,11 @@ class Reviews:
     def get_on(self, on, val):
         cursor = self.dbconnect.get_cursor()
         cursor.execute(
-            "SELECT id, user_for, user_from, amount_of_stars, title, review_text, creation FROM review WHERE %s=%s",
+            "SELECT id, user_for, user_from, amount_of_stars, title, review_text, creation, author_role FROM review WHERE %s=%s",
             (on, val))
         reviews = list()
         for row in cursor:
-            review = Review(row[0], row[1], row[2], row[3], row[4], row[5], row[6])
+            review = Review(row[0], row[1], row[2], row[3], row[4], row[5], row[6], row[7])
             reviews.append(review)
         return reviews
 
@@ -72,11 +74,11 @@ class Reviews:
     def get_on_user_for(self, the_id):
         cursor = self.dbconnect.get_cursor()
         cursor.execute(
-            "SELECT id, user_for, user_from, amount_of_stars, title, review_text, creation FROM review WHERE user_for=%s",
+            "SELECT id, user_for, user_from, amount_of_stars, title, review_text, creation, author_role FROM review WHERE user_for=%s",
             (the_id,))
         reviews = list()
         for row in cursor:
-            review = Review(row[0], row[1], row[2], row[3], row[4], row[5], row[6])
+            review = Review(row[0], row[1], row[2], row[3], row[4], row[5], row[6], row[7])
             reviews.append(review)
             print(review)
         return reviews
@@ -91,28 +93,28 @@ class Reviews:
     def get_on_title(self, title):
         return self.get_on('title', title)
 
+    def get_on_role(self, role):
+        return self.get_on('author_role', role)
+
     # get on review text not relevant
 
     def get_all(self, dbconnect):
         cursor = dbconnect.get_cursor()
-        cursor.execute("SELECT id, user_for, user_from, amount_of_stars, title, review_text, creation FROM review")
+        cursor.execute(
+            "SELECT id, user_for, user_from, amount_of_stars, title, review_text, creation, author_role FROM review")
         reviews = list()
         for row in cursor:
-            review = Review(row[0], row[1], row[2], row[3], row[4], row[5], row[6])
+            review = Review(row[0], row[1], row[2], row[3], row[4], row[5], row[6], row[7])
             reviews.append(review)
         return reviews
 
     def add_review(self, review):
         cursor = self.dbconnect.get_cursor()
         try:
-            print(review.user_for)
-            print(review.user_from)
-            print(review.amount_of_stars)
-            print(review.title)
-            print(review.review_text)
-            cursor.execute('INSERT INTO "review" VALUES(default, %s, %s, %s, %s, %s, now())',
+            cursor.execute('INSERT INTO "review" VALUES(default, %s, %s, %s, %s, %s, now(), %s)',
                            (
-                           review.user_for, review.user_from, review.amount_of_stars, review.title, review.review_text))
+                               review.user_for, review.user_from, review.amount_of_stars, review.title,
+                               review.review_text, review.role))
             self.dbconnect.commit()
         except:
             raise Exception('Unable to add review')

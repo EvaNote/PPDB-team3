@@ -15,6 +15,7 @@ from src.users.forms import LoginForm, RegistrationForm, VehicleForm, EditAccoun
 from src.utils import user_access, bcrypt, review_access, car_access, address_access, current_app, picture_access, ride_access, campus_access, \
     geolocator, pickup_point_access
 from flask_babel import lazy_gettext
+from math import floor
 
 users = Blueprint('users', __name__, url_prefix='/<lang_code>')
 
@@ -73,17 +74,29 @@ def account():
         pfp_path += "temp_profile_pic.png"
 
     rev_pfps = []
+    mean = 0
+    reviews = 0
     for review in data:
         user2 = user_access.get_user_on_id(review.user_from)
         if user2.picture is not None:
             rev_pfps.append("images/" + picture_access.get_picture_on_id(user2.picture).filename)
         else:
             rev_pfps.append("images/temp_profile_pic.png")
+        mean += review.amount_of_stars
+        reviews += 1
+    if reviews > 0:
+        mean = mean / reviews
 
+    whole_stars = floor(mean)
+    if mean - whole_stars >= 0.3:
+        half_stars = 1
+    else:
+        half_stars = 0
 
     return render_template('account.html', title=lazy_gettext('Account'), form=form, loggedIn=True, data=data,
                            current_user=user, cars=cars, address=address, carPicpaths=car_picpaths, pfp_path=pfp_path,
-                           car_picpaths=car_picpaths, target_user=user, rev_pfps=rev_pfps)
+                           car_picpaths=car_picpaths, target_user=user, rev_pfps=rev_pfps, mean_rate=mean,
+                           half_stars=half_stars, whole_stars=whole_stars, )
 
 
 # van https://www.youtube.com/watch?v=803Ei2Sq-Zs
@@ -345,7 +358,7 @@ def joinedrides():
 def user(userid):
     if not userid.isdigit():
         abort(404)
-    allow_review= False  # TODO: als dit failt dan mag dit weg (3 lijnen)
+    allow_review = False
     if current_user.is_authenticated:
         allow_review = True
     form = Reviews()
@@ -381,15 +394,27 @@ def user(userid):
         else:
             car_picpaths.append("images/" + picture_access.get_picture_on_id(car.picture).filename)
     rev_pfps = []
+    mean = 0
+    reviews = 0
     for review in data:
         user2 = user_access.get_user_on_id(review.user_from)
         if user2.picture is not None:
             rev_pfps.append("images/" + picture_access.get_picture_on_id(user2.picture).filename)
         else:
             rev_pfps.append("images/temp_profile_pic.png")
+        mean += review.amount_of_stars
+        reviews += 1
+    if reviews > 0:
+        mean = mean / reviews
 
-    return render_template('user.html', title=lazy_gettext('User profile'), form=form, loggedIn=False,
-                           target_user=target_user,
+    whole_stars = floor(mean)
+    if mean - whole_stars >= 0.3:
+        half_stars = 1
+    else:
+        half_stars = 0
+
+    return render_template('user.html', title=lazy_gettext('User profile'), form=form,
+                           target_user=target_user, mean_rate=mean, half_stars=half_stars, whole_stars=whole_stars,
                            data=data, cars=cars, form2=form2, pfp_path=pfp_path, car_picpaths=car_picpaths,
                            allow_review=allow_review, rev_pfps=rev_pfps)  # TODO: same
 
@@ -472,7 +497,8 @@ def add_vehicle():
 def edit_vehicle(car_id):
     if not car_id.isdigit():
         abort(404)
-    if not current_user.is_authenticated:  # makes sure user won`t be able to go to page without logging in
+    if not current_user.is_authenticated and not current_app.config[
+        'TESTING']:  # makes sure user won`t be able to go to page without logging in
         return redirect(url_for('users.login'))
     form = VehicleForm()
     if request.method != 'POST':
