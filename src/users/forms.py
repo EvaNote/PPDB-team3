@@ -66,3 +66,6 @@ class EditAddressForm(FlaskForm):
 class SelectSubject(FlaskForm):
     subject = SelectField(lazy_gettext('Subject'), choices=[('Lost item',lazy_gettext('Lost item')),('Empty',lazy_gettext('Empty'))])
     submit = SubmitField(lazy_gettext('Make Form'))
+
+class getCalendar(FlaskForm):
+    submit = SubmitField(lazy_gettext('Calendar link'))
