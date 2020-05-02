@@ -1,3 +1,8 @@
+from postgis import *
+from postgis.psycopg import register
+from shapely import geometry, wkb
+
+
 class Ride:
     def __init__(self, id, departure_time, arrival_time, user_id, address_1, campus, to_campus, car_id, passengers, p1, p2, p3):
         # address_to & address_from are id's pointing to addresses
@@ -30,6 +35,16 @@ class Ride:
         self.string_addr_p1 = ''
         self.string_addr_p2 = ''
         self.string_addr_p3 = ''
+
+    def set_from_coordinates(self, coordinates):
+        coordinates = wkb.loads(coordinates, hex=True)
+        self.from_lng = coordinates.x
+        self.from_lat = coordinates.y
+
+    def set_to_coordinates(self, coordinates):
+        coordinates = wkb.loads(coordinates, hex=True)
+        self.to_lng = coordinates.x
+        self.to_lat = coordinates.y
 
     def add_pickup(self, p, dist, addr):
         if not self.pickup_1_lat:
@@ -289,7 +304,346 @@ class Rides:
         cursor.execute('DELETE FROM "ride" WHERE id=%s', (ride_id,))
         self.dbconnect.commit()
 
+    def match_rides_with_passenger2(self, p_from, p_to, p_time_option, p_datetime, limit=20):
+        from time import time
+        start = time()
+        """
+        Check if:
+            1) driver destination is close enough to passenger destination
+            2) driver departure/arrival time is close enough to passenger departure/arrival time
+            3) driver departure is close enough to passenger departure, OR
+            4) driver pickup point(s) are close enough to passenger departure
+
+        :param p_from:
+        :param p_to:
+        :param p_time_option:
+        :param p_datetime:
+        :return:
+        """
+
+        from src.utils import campus_access
+
+        if isinstance(p_from, int):
+            p_from = campus_access.get_on_id(p_from).to_dict()
+            from_loc = 'ST_MakePoint(' + str(p_from['lng']) + ', ' + str(p_from['lat']) + ')'
+        else:
+            from_loc = 'ST_MakePoint(' + str(p_from['lng']) + ', ' + str(p_from['lat']) + ')'
+        if isinstance(p_to, int):
+            p_to = campus_access.get_on_id(p_to).to_dict()
+            to_loc = 'ST_MakePoint(' + str(p_to['lng']) + ', ' + str(p_to['lat']) + ')'
+        else:
+            to_loc = 'ST_MakePoint(' + str(p_to['lng']) + ', ' + str(p_to['lat']) + ')'
+
+        try:
+            p_time_value = "'" + p_datetime + "'"
+        except Exception as e:
+            p_time_value = ''
+        if p_time_option == 'Arrive by':
+            p_time_option = 'r.arrival_time'
+            p_pickup_time_value = p_time_option
+        else:
+            p_time_option = 'r.departure_time'
+            p_pickup_time_value = p_time_value
+        if not p_datetime:
+            p_datetime = p_time_option
+            p_time_value = p_datetime
+            p_pickup_time_value = p_time_option
+
+        cursor = self.dbconnect.get_cursor()
+        cursor.execute("""
+            select r.id, r.departure_time, r.arrival_time, r.user_id, r.address_1, r.campus, r.to_campus, r.car_id, 
+            r.passengers, r.pickup_point_1, r.pickup_point_2, r.pickup_point_3, a.coordinates, c.coordinates
+            from ride r
+            join campus c on r.campus = c.id
+            join address a on r.address_1 = a.id
+            
+            where (
+                -- driver destination is close enough to passenger destination
+                (ST_Distance(c.coordinates, """ + to_loc + """) < 3000 and r.to_campus)
+                or 
+                (ST_Distance(a.coordinates, """ + to_loc + """) < 3000 and not r.to_campus)
+                and
+                -- driver departure/arrival time is close enough to passenger departure/arrival time    
+                (time_difference(""" + p_time_value + """, """ + p_time_option + """) between 0 and 600)
+                and
+                (
+                -- driver departure is close enough to passenger departure
+                (ST_Distance(a.coordinates, """ + from_loc + """) < 3000 and r.to_campus)
+                or 
+                (ST_Distance(c.coordinates, """ + from_loc + """) < 3000 and not r.to_campus)
+                or
+                -- driver pickup point(s) are close enough to passenger departure
+                (select count(p.id)
+                from pickup_point p
+                where (
+                (p.id in (r.pickup_point_1, r.pickup_point_2, r.pickup_point_3))
+                and 
+                (ST_Distance(p.coordinates, """ + from_loc + """) < 3000)
+                and
+                (time_difference(""" + p_pickup_time_value + """, """ + p_time_option + """) between 0 and 600)
+                )
+                ) > 0
+                )
+            )
+            limit %s
+        """, (limit,))
+
+        rides = list()
+        for row in cursor:
+            # 0: r.id               5: r.campus         10: r.pickup_point_2
+            # 1: r.departure_time   6: r.to_campus      11: r.pickup_point_3
+            # 2: r.arrival_time     7: r.car_id         12: a.coordinates
+            # 3: r.user_id          8: r.passengers     13: c.coordinates
+            # 4: r.address_1        9: r.pickup_point_1
+
+            ride = Ride(row[0], row[1], row[2], row[3], row[4], row[5], row[6], row[7], row[8], row[9], row[10],
+                        row[11])
+
+            if row[6]:  # to_campus
+                ride.set_from_coordinates(row[12])
+                ride.set_to_coordinates(row[13])
+            else:
+                ride.set_from_coordinates(row[12])
+                ride.set_to_coordinates(row[13])
+
+            ride.string_addr_from = self.__helper_function_get_address(ride.from_lat, ride.from_lng)
+            ride.string_addr_to = self.__helper_function_get_address(ride.to_lat, ride.to_lng)
+
+            from src.utils import pickup_point_access, address_access, campus_access
+            dist = address_access.get_distance(p_from['lat'], p_from['lng'], row[4])
+            ride.shortest_dist = dist
+
+            for i in range(9, 12):
+                if not row[i]:
+                    break
+                pp = pickup_point_access.get_on_id(row[i])
+                dist = pickup_point_access.get_distance(p_from['lat'], p_from['lng'], row[i])
+                addr = self.__helper_function_get_address(pp.latitude, pp.longitude)
+                ride.add_pickup(pp, dist, addr)
+            rides.append(ride)
+        stop = time()
+        print('---------------------------------------------------------------------', stop - start)
+        return rides
+
+    def match_rides_with_passenger_missing_from(self, p_to, p_time_option, p_datetime, limit=20):
+        from time import time
+        start = time()
+
+        from src.utils import campus_access
+
+        if isinstance(p_to, int):
+            p_to = campus_access.get_on_id(p_to).to_dict()
+            to_loc = 'ST_MakePoint(' + str(p_to['lng']) + ', ' + str(p_to['lat']) + ')'
+        else:
+            to_loc = 'ST_MakePoint(' + str(p_to['lng']) + ', ' + str(p_to['lat']) + ')'
+
+        try:
+            p_time_value = "'" + p_datetime + "'"
+        except Exception as e:
+            p_time_value = ''
+        if p_time_option == 'Arrive by':
+            p_time_option = 'r.arrival_time'
+        else:
+            p_time_option = 'r.departure_time'
+        if not p_datetime:
+            p_time_value = p_time_option
+
+        cursor = self.dbconnect.get_cursor()
+        cursor.execute("""
+            select r.id, r.departure_time, r.arrival_time, r.user_id, r.address_1, r.campus, r.to_campus, r.car_id, 
+            r.passengers, r.pickup_point_1, r.pickup_point_2, r.pickup_point_3, a.coordinates, c.coordinates
+            from ride r
+            join campus c on r.campus = c.id
+            join address a on r.address_1 = a.id
+
+            where (
+                -- driver destination is close enough to passenger destination
+                (ST_Distance(c.coordinates, """ + to_loc + """) < 3000 and r.to_campus)
+                or 
+                (ST_Distance(a.coordinates, """ + to_loc + """) < 3000 and not r.to_campus)
+                and
+                -- driver departure/arrival time is close enough to passenger departure/arrival time    
+                (time_difference(""" + p_time_value + """, """ + p_time_option + """) between 0 and 600)
+            )
+            limit %s
+        """, (limit,))
+
+        rides = list()
+        for row in cursor:
+            # 0: r.id               5: r.campus         10: r.pickup_point_2
+            # 1: r.departure_time   6: r.to_campus      11: r.pickup_point_3
+            # 2: r.arrival_time     7: r.car_id         12: a.coordinates
+            # 3: r.user_id          8: r.passengers     13: c.coordinates
+            # 4: r.address_1        9: r.pickup_point_1
+
+            ride = Ride(row[0], row[1], row[2], row[3], row[4], row[5], row[6], row[7], row[8], row[9], row[10],
+                        row[11])
+
+            if row[6]:  # to_campus
+                ride.set_from_coordinates(row[12])
+                ride.set_to_coordinates(row[13])
+            else:
+                ride.set_from_coordinates(row[12])
+                ride.set_to_coordinates(row[13])
+
+            ride.string_addr_from = self.__helper_function_get_address(ride.from_lat, ride.from_lng)
+            ride.string_addr_to = self.__helper_function_get_address(ride.to_lat, ride.to_lng)
+
+            rides.append(ride)
+        stop = time()
+        print('---------------------------------------------------------------------', stop - start)
+        return rides
+
+    def match_rides_with_passenger_missing_to(self, p_from, p_time_option, p_datetime, limit=20):
+        from time import time
+        start = time()
+
+        from src.utils import campus_access
+
+        if isinstance(p_from, int):
+            p_from = campus_access.get_on_id(p_from).to_dict()
+            from_loc = 'ST_MakePoint(' + str(p_from['lng']) + ', ' + str(p_from['lat']) + ')'
+        else:
+            from_loc = 'ST_MakePoint(' + str(p_from['lng']) + ', ' + str(p_from['lat']) + ')'
+
+        try:
+            p_time_value = "'" + p_datetime + "'"
+        except Exception as e:
+            p_time_value = ''
+        if p_time_option == 'Arrive by':
+            p_time_option = 'r.arrival_time'
+            p_pickup_time_value = p_time_option
+        else:
+            p_time_option = 'r.departure_time'
+            p_pickup_time_value = p_time_value
+        if not p_datetime:
+            p_datetime = p_time_option
+            p_time_value = p_datetime
+            p_pickup_time_value = p_time_option
+
+        cursor = self.dbconnect.get_cursor()
+        cursor.execute("""
+            select r.id, r.departure_time, r.arrival_time, r.user_id, r.address_1, r.campus, r.to_campus, r.car_id, 
+            r.passengers, r.pickup_point_1, r.pickup_point_2, r.pickup_point_3, a.coordinates, c.coordinates
+            from ride r
+            join campus c on r.campus = c.id
+            join address a on r.address_1 = a.id
+
+            where (
+                -- driver departure/arrival time is close enough to passenger departure/arrival time    
+                (time_difference(""" + p_time_value + """, """ + p_time_option + """) between 0 and 600)
+                and
+                (
+                -- driver departure is close enough to passenger departure
+                (ST_Distance(a.coordinates, """ + from_loc + """) < 3000 and r.to_campus)
+                or 
+                (ST_Distance(c.coordinates, """ + from_loc + """) < 3000 and not r.to_campus)
+                or
+                -- driver pickup point(s) are close enough to passenger departure
+                (select count(p.id)
+                from pickup_point p
+                where (
+                (p.id in (r.pickup_point_1, r.pickup_point_2, r.pickup_point_3))
+                and 
+                (ST_Distance(p.coordinates, """ + from_loc + """) < 3000)
+                and
+                (time_difference(""" + p_pickup_time_value + """, """ + p_time_option + """) between 0 and 600)
+                )
+                ) > 0
+                )
+            )
+            limit %s
+        """, (limit,))
+
+        rides = list()
+        for row in cursor:
+            # 0: r.id               5: r.campus         10: r.pickup_point_2
+            # 1: r.departure_time   6: r.to_campus      11: r.pickup_point_3
+            # 2: r.arrival_time     7: r.car_id         12: a.coordinates
+            # 3: r.user_id          8: r.passengers     13: c.coordinates
+            # 4: r.address_1        9: r.pickup_point_1
+
+            ride = Ride(row[0], row[1], row[2], row[3], row[4], row[5], row[6], row[7], row[8], row[9], row[10],
+                        row[11])
+
+            if row[6]:  # to_campus
+                ride.set_from_coordinates(row[12])
+                ride.set_to_coordinates(row[13])
+            else:
+                ride.set_from_coordinates(row[12])
+                ride.set_to_coordinates(row[13])
+
+            ride.string_addr_from = self.__helper_function_get_address(ride.from_lat, ride.from_lng)
+            ride.string_addr_to = self.__helper_function_get_address(ride.to_lat, ride.to_lng)
+
+            rides.append(ride)
+        stop = time()
+        print('---------------------------------------------------------------------', stop - start)
+        return rides
+
+    def match_rides_with_passenger_missing_end_points(self, p_time_option, p_datetime, limit=20):
+        from time import time
+        start = time()
+
+        from src.utils import campus_access
+
+        try:
+            p_time_value = "'" + p_datetime + "'"
+        except Exception as e:
+            p_time_value = ''
+        if p_time_option == 'Arrive by':
+            p_time_option = 'r.arrival_time'
+        else:
+            p_time_option = 'r.departure_time'
+        if not p_datetime:
+            p_datetime = p_time_option
+            p_time_value = p_datetime
+
+        cursor = self.dbconnect.get_cursor()
+        cursor.execute("""
+            select r.id, r.departure_time, r.arrival_time, r.user_id, r.address_1, r.campus, r.to_campus, r.car_id, 
+            r.passengers, r.pickup_point_1, r.pickup_point_2, r.pickup_point_3, a.coordinates, c.coordinates
+            from ride r
+            join campus c on r.campus = c.id
+            join address a on r.address_1 = a.id
+
+            where (
+                -- driver departure/arrival time is close enough to passenger departure/arrival time    
+                (time_difference(""" + p_time_value + """, """ + p_time_option + """) between 0 and 600)
+            )
+            limit %s
+        """, (limit,))
+
+        rides = list()
+        for row in cursor:
+            # 0: r.id               5: r.campus         10: r.pickup_point_2
+            # 1: r.departure_time   6: r.to_campus      11: r.pickup_point_3
+            # 2: r.arrival_time     7: r.car_id         12: a.coordinates
+            # 3: r.user_id          8: r.passengers     13: c.coordinates
+            # 4: r.address_1        9: r.pickup_point_1
+
+            ride = Ride(row[0], row[1], row[2], row[3], row[4], row[5], row[6], row[7], row[8], row[9], row[10],
+                        row[11])
+
+            if row[6]:  # to_campus
+                ride.set_from_coordinates(row[12])
+                ride.set_to_coordinates(row[13])
+            else:
+                ride.set_from_coordinates(row[12])
+                ride.set_to_coordinates(row[13])
+
+            ride.string_addr_from = self.__helper_function_get_address(ride.from_lat, ride.from_lng)
+            ride.string_addr_to = self.__helper_function_get_address(ride.to_lat, ride.to_lng)
+
+            rides.append(ride)
+        stop = time()
+        print('---------------------------------------------------------------------', stop - start)
+        return rides
+
+
     def match_rides_with_passenger(self, p_from, p_to, p_time_option, p_datetime):
+        from time import time
+        start = time()
         """
         Check if:
             1) driver destination is close enough to passenger destination
@@ -446,6 +800,9 @@ class Rides:
                 addr = self.__helper_function_get_address(lat2, lng2)
                 ride.add_pickup(pp, dist, addr)
             rides.append(ride)
+
+        stop = time()
+        print('---------------------------------------------------------------------', stop - start)
         return rides
 
     def __helper_function_dist(self, lat1, lng1, lat2, lng2):

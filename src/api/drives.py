@@ -182,13 +182,32 @@ class DrivesSearchAPI(Resource):
                 dict['tLat'] = float(args[i].split(",")[0])
                 dict['tLng'] = float(args[i].split(",")[1])
             dict[i] = args[i]
-        rides = ride_access.match_rides_with_passenger(
-            {'lat': dict['fLat'], 'lng': dict['fLng']},
-            {'lat': dict['tLat'], 'lng': dict['tLng']},
-            'Arrive by',
-            dict['arrive_by'])
+        if dict['fLat'] and dict['tLat']:
+            rides = ride_access.match_rides_with_passenger2(
+                {'lat': dict['fLat'], 'lng': dict['fLng']},
+                {'lat': dict['tLat'], 'lng': dict['tLng']},
+                'Arrive by',
+                dict['arrive_by'],
+                dict['limit'])
+        elif dict['fLat']:
+            rides = ride_access.match_rides_with_passenger_missing_to(
+                {'lat': dict['fLat'], 'lng': dict['fLng']},
+                'Arrive by',
+                dict['arrive_by'],
+                dict['limit'])
+        elif dict['tLat']:
+            rides = ride_access.match_rides_with_passenger_missing_from(
+                {'lat': dict['tLat'], 'lng': dict['tLng']},
+                'Arrive by',
+                dict['arrive_by'],
+                dict['limit'])
+        else:
+            rides = ride_access.match_rides_with_passenger_missing_end_points(
+                'Arrive by',
+                dict['arrive_by'],
+                dict['limit'])
         n = 0
-        while n < int(dict['limit']) and n < len(rides):
+        while n < len(rides):
             rDict = rides[n].to_dict()
             passengers = ride_access.findRidePassengers(rDict['id'])
             results.append({"id": rDict['user_id'],

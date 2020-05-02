@@ -65,6 +65,8 @@ def contact():
 
 @main.route('/calculateCompatibleRides', methods=['POST'])
 def receiver():
+    from time import time
+    start = time()
     # read json + reply
     data = request.json
     from_coord = data.get('from')
@@ -73,7 +75,7 @@ def receiver():
     time_option = data.get('time_option')
     datetime = data.get('datetime').replace('T', ' ') + ':00'
     #print(from_coord, to_coord, time_option, datetime)
-    rides = ride_access.match_rides_with_passenger(from_coord, to_coord, time_option, datetime)
+    rides = ride_access.match_rides_with_passenger2(from_coord, to_coord, time_option, datetime)
     results = []
     drivers = []
     for ride in rides:
@@ -81,6 +83,8 @@ def receiver():
         driver_id = ride.user_id
         driver = user_access.get_user_on_id(driver_id)
         drivers.append(driver.to_dict())
+    stop = time()
+    print('+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++', stop - start)
     return jsonify({"results": results, "drivers": drivers})
 
 
