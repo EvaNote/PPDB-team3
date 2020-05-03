@@ -171,9 +171,9 @@ class DrivePassengerRequestUserApi(Resource):
 class DrivesSearchAPI(Resource):
     def get(self):
         args = request.args
-        #parse available arguments
+        # parse available arguments
         results = []
-        dict = {'fLat': None, 'fLng':None, 'tLat': None, 'tLng':None, 'arrive_by': None, 'limit': 5}
+        dict = {'fLat': None, 'fLng': None, 'tLat': None, 'tLng': None, 'arrive_by': None, 'limit': 5}
         for i in args:
             if i == 'from':
                 dict['fLat'] = float(args[i].split(",")[0])
@@ -181,9 +181,10 @@ class DrivesSearchAPI(Resource):
             elif i == 'to':
                 dict['tLat'] = float(args[i].split(",")[0])
                 dict['tLng'] = float(args[i].split(",")[1])
-            dict[i] = args[i]
+            else:
+                dict[i] = args[i]
         if dict['fLat'] and dict['tLat']:
-            rides = ride_access.match_rides_with_passenger2(
+            rides = ride_access.api_match_rides_with_passenger(
                 {'lat': dict['fLat'], 'lng': dict['fLng']},
                 {'lat': dict['tLat'], 'lng': dict['tLng']},
                 'Arrive by',
@@ -206,17 +207,4 @@ class DrivesSearchAPI(Resource):
                 'Arrive by',
                 dict['arrive_by'],
                 dict['limit'])
-        n = 0
-        while n < len(rides):
-            rDict = rides[n].to_dict()
-            passengers = ride_access.findRidePassengers(rDict['id'])
-            results.append({"id": rDict['user_id'],
-                            "driver-id": rDict['user_id'],
-                            "passenger-ids": len(passengers),
-                            "from": [rDict['waypoints'][rDict['closest']]['lat'],
-                                     rDict['waypoints'][rDict['closest']]['lng']],
-                            "to": [rDict['waypoints'][4]['lat'], rDict['waypoints'][4]['lng']],
-                            "arrive-by": rDict['arrival_time'].strftime("%Y-%m-%dT%H:%M:%S"),
-                            })
-            n += 1
-        return results
+        return rides

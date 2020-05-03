@@ -3,27 +3,71 @@ from postgis.psycopg import register
 from shapely import geometry, wkb
 
 
+# due to alter table, some addresses are inserted as '?', if these addresses are used, the address is set correctly to
+# avoid problems
+def get_address_function(lat, lng):
+    from geopy.geocoders import Nominatim
+    geolocator = Nominatim(user_agent="campus_carpool")
+    location = geolocator.reverse(str(lat) + ', ' + str(lng), True, timeout=300)
+    try:
+        housenr = location.raw['address']['house_number']
+    except Exception as e:
+        housenr = ''
+    try:
+        road = location.raw['address']['road']
+    except Exception as e:
+        road = ''
+        housenr = ''  # no road = no housenumber
+    try:
+        town = location.raw['address']['town']
+    except Exception as e:
+        try:
+            town = location.raw['address']['city_district']
+        except Exception as e:
+            town = ''
+    try:
+        postcode = location.raw['address']['postcode']
+    except Exception as e:
+        postcode = ''
+    return road, housenr, postcode, town
+
+
 class Address:
     def __init__(self, id, country, city, postal_code, street, nr, latitude, longitude, coordinates):
         self.id = id
-        self.country = country
-        self.city = city
-        self.postal_code = postal_code
-        self.street = street
-        self.nr = nr
         if coordinates:
             self.coordinates = wkb.loads(coordinates, hex=True)
             self.latitude = self.coordinates.y
             self.longitude = self.coordinates.x
         else:
-            self.coordinates = wkb.dumps(coordinates, hex=True)
-            self.latitude = latitude
-            self.longitude = longitude
+            try:  # new addresses may not have coordinates yet (None)
+                self.coordinates = wkb.dumps(coordinates, hex=True)
+                self.latitude = latitude
+                self.longitude = longitude
+            except Exception as e:
+                self.latitude = latitude
+                self.longitude = longitude
+        if country == '?':  # FIX: due to alter table, see above
+            self.street, self.nr, self.postal_code, self.city = get_address_function(self.latitude, self.longitude)
+            self.country = 'Belgium'
+            from src.utils import address_access
+            address_access.edit_address_non_recursive(self)
+        else:
+            self.country = country
+            self.city = city
+            self.postal_code = postal_code
+            self.street = street
+            self.nr = nr
 
     def to_dict(self):
         return {'id': self.id, 'country': self.country, 'city': self.city, 'postal_code': self.postal_code,
-                'street': self.street, 'nr': self.nr, 'latitude': self.latitude, 'longitude': self.longitude}
+                'street': self.street, 'nr': self.nr, 'lat': self.latitude, 'lng': self.longitude}
 
+    def addr_to_string(self):
+        return self.street + ' ' + self.nr + ', ' + self.postal_code + ' ' + self.city
+
+    def lat_lng(self):
+        return [self.latitude, self.longitude]
 
 class Addresses:
     def __init__(self, dbconnect):
@@ -36,7 +80,7 @@ class Addresses:
                        (on, val))
         addresses = list()
         for row in cursor:
-            address = Address(row[0], row[1], row[2], row[3], row[4], row[5], None, None, row[8])
+            address = Address(row[0], row[1], row[2], row[3], row[4], row[5], None, None, row[6])
             addresses.append(address)
         return addresses
 
@@ -48,7 +92,7 @@ class Addresses:
         if address is None:
             return None
         address_obj = Address(address[0], address[1], address[2], address[3], address[4], address[5], None,
-                              None, address[8])
+                              None, address[6])
         return address_obj
 
     def get_id(self, country, city, postal_code, street, nr):
@@ -64,7 +108,7 @@ class Addresses:
         cursor.execute("SELECT id,country,city,postal_code,street,nr,coordinates FROM address")
         addresses = list()
         for row in cursor:
-            address = Address(row[0], row[1], row[2], row[3], row[4], row[5], None, None, row[8])
+            address = Address(row[0], row[1], row[2], row[3], row[4], row[5], None, None, row[6])
             addresses.append(address)
         return addresses
 
@@ -75,6 +119,8 @@ class Addresses:
                            (address.country, address.city, address.postal_code, address.street, address.nr,
                             address.latitude, address.longitude, address.longitude, address.latitude))
             self.dbconnect.commit()
+            last_id = cursor.fetchone()['lastval']
+            return last_id
         except:
             raise Exception('Unable to add address')
 
@@ -94,6 +140,18 @@ class Addresses:
                 'UPDATE "address" SET street = %s, nr = %s, city = %s, postal_code = %s, country = %s, latitude = %s, '
                 'longitude = %s WHERE id=%s',
                 (street, nr, city, postal_code, country, latitude, longitude, address_id))
+            self.dbconnect.commit()
+        except:
+            raise Exception('Unable to edit address')
+
+    def edit_address_non_recursive(self, address: Address):
+        cursor = self.dbconnect.get_cursor()
+        try:
+            cursor.execute(
+                'UPDATE "address" SET street = %s, nr = %s, city = %s, postal_code = %s, country = %s, latitude = %s, '
+                'longitude = %s WHERE id=%s',
+                (address.street, address.nr, address.city, address.postal_code, address.country, address.latitude,
+                 address.longitude, address.id))
             self.dbconnect.commit()
         except:
             raise Exception('Unable to edit address')

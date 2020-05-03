@@ -120,6 +120,7 @@ def deleteride(ride_id):
     flash('Deleted ride.', 'success')
     return redirect(url_for('users.account'))
 
+
 @main.route('/createRide', methods=['POST'])
 def receiver_create():
     data = request.json

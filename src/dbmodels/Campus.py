@@ -4,10 +4,12 @@ from shapely import geometry, wkb
 
 
 class Campus:
-    def __init__(self, id, name, category, latitude, longitude, coordinates):
+    def __init__(self, id, name, category, latitude, longitude, coordinates, address_id):
         self.id = id
         self.name = name
         self.category = category
+        from src.utils import address_access
+        self.address = address_access.get_on_id(address_id)
         if coordinates:
             self.coordinates = wkb.loads(coordinates, hex=True)
             self.latitude = self.coordinates.y
@@ -18,8 +20,11 @@ class Campus:
             self.longitude = longitude
 
     def to_dict(self):
-        return {'id': self.id, 'name': self.name, 'category': self.category, 'lat': self.latitude,
-                'lng': self.longitude}
+        return {'id': self.id,
+                'name': self.name,
+                'category': self.category,
+                'lat': self.address.latitude,
+                'lng': self.address.longitude}
 
 
 class Campusses:
@@ -28,24 +33,31 @@ class Campusses:
 
     def get_all(self):
         cursor = self.dbconnect.get_cursor()
-        cursor.execute("SELECT id,name,category,latitude,longitude,coordinates FROM campus")
+        cursor.execute("SELECT id,name,category,latitude,longitude,coordinates,address FROM campus")
         result = list()
         for row in cursor:
-            school = Campus(row[0], row[1], row[2], row[3], row[4], row[5])
+            school = Campus(row[0], row[1], row[2], row[3], row[4], row[5], row[6])
             result.append(school)
         return result
 
     def get_on_id(self, school_id):
         cursor = self.dbconnect.get_cursor()
-        cursor.execute("SELECT id,name,category,latitude,longitude,coordinates FROM campus WHERE id=%s", (school_id,))
+        cursor.execute("SELECT id,name,category,latitude,longitude,coordinates,address FROM campus WHERE id=%s",
+                       (school_id,))
         # 1 result
         row = cursor.fetchone()
-        school = Campus(row[0], row[1], row[2], row[3], row[4], row[5])
-        return school
+        if row:
+            school = Campus(row[0], row[1], row[2], row[3], row[4], row[5], row[6])
+            return school
+        else:
+            return None
 
     def get_name_if_exists(self, lat, lng):
         cursor = self.dbconnect.get_cursor()
-        cursor.execute("SELECT id FROM campus WHERE ST_Distance(campus.coordinates, ST_MakePoint(%s, %s)) "
+        cursor.execute("SELECT campus.id "
+                       "FROM campus "
+                       "join address a on campus.address = a.id "
+                       "WHERE ST_Distance(a.coordinates, ST_MakePoint(%s, %s)) "
                        "< 50", (lng, lat))
         # 1 result
         row = cursor.fetchone()
@@ -56,8 +68,11 @@ class Campusses:
 
     def is_campus(self, lat, lng):
         cursor = self.dbconnect.get_cursor()
-        cursor.execute("SELECT id FROM campus WHERE ST_Distance(campus.coordinates, ST_MakePoint(%s, %s)) "
-                       "< 1000", (lng, lat))
+        cursor.execute("SELECT campus.id "
+                       "FROM campus "
+                       "join address a on campus.address = a.id "
+                       "WHERE ST_Distance(a.coordinates, ST_MakePoint(%s, %s)) "
+                       "< 200", (lng, lat))
         if cursor.rowcount == 0:
             return None
         else:
@@ -65,7 +80,9 @@ class Campusses:
 
     def get_distance(self, latitude, longitude, id):
         cursor = self.dbconnect.get_cursor()
-        cursor.execute("SELECT ST_Distance(campus.coordinates, ST_MakePoint(%s, %s)) FROM campus WHERE id=%s"
-                       , (longitude, latitude, id))
+        cursor.execute("SELECT ST_Distance(a.coordinates, ST_MakePoint(%s, %s)) "
+                       "FROM campus "
+                       "join address a on campus.address = a.id "
+                       "where campus.id=%s", (longitude, latitude, id))
         dist = cursor.fetchone()[0]
         return dist

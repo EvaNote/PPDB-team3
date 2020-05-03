@@ -622,7 +622,7 @@ $(function () {
                     // when post request is done, get the returned data and do something with it
                     .done(function (data) { // response function
                         ride_count = data["results"].length
-                        alert("Found " + ride_count + " matches! Scroll down to see them.")
+                        alert("Found " + ride_count + " matches! Scroll down to see them.");
                         //alert("FIND: " + JSON.stringify(data));
                         if (data === null) {
                             return
@@ -633,12 +633,12 @@ $(function () {
                         for (let d = 0; d < data["results"].length; d++) {
                             let stop = new Date();
                             console.log(stop - start);
-                            alert()
                             let result = data.results[d];
                             let driver = data["drivers"][d]
                             let driver_name = driver["first_name"] + " " + driver["last_name"]
                             let choice = document.createElement("div");
                             choice.setAttribute("class", "border border-info rounded col-md-5 m-3 text-left");
+                            console.log(result);
                             let from = result.waypoints[0]["addr"];
                             let to = result.waypoints[result["len"] - 1]["addr"];
                             if (result.waypoints[0]["alias"] !== "") {
