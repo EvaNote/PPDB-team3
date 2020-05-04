@@ -65,6 +65,8 @@ def contact():
 
 @main.route('/calculateCompatibleRides', methods=['POST'])
 def receiver():
+    from time import time
+    start = time()
     # read json + reply
     data = request.json
     from_coord = data.get('from')
@@ -81,6 +83,8 @@ def receiver():
         driver_id = ride.user_id
         driver = user_access.get_user_on_id(driver_id)
         drivers.append(driver.to_dict())
+    stop = time()
+    print('+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++', stop - start)
     return jsonify({"results": results, "drivers": drivers})
 
 
@@ -100,7 +104,7 @@ def canceljoinedride(ride_id):
         'TESTING']:  # makes sure user won`t be able to go to page without logging in
         return redirect(url_for('users.login'))
 
-    ride_access.deletePassenger(current_user.id, ride_id)
+    ride_access.delete_passenger(current_user.id, ride_id)
     flash('Canceled ride.', 'success')
     return redirect(url_for('users.account'))
 
@@ -111,7 +115,7 @@ def deleteride(ride_id):
         'TESTING']:  # makes sure user won`t be able to go to page without logging in
         return redirect(url_for('users.login'))
 
-    ride_access.deleteFromPassengerRide(ride_id)
+    ride_access.delete_from_passenger_ride(ride_id)
     ride_access.delete_ride(ride_id)
     flash('Deleted ride.', 'success')
     return redirect(url_for('users.account'))
@@ -201,7 +205,7 @@ def receiver_create():
         latitude = point['lat']
         longitude = point['lng']
         estimated_time = estimated_times[index]
-        point = PickupPoint(None, latitude, longitude, estimated_time)
+        point = PickupPoint(None, estimated_time, latitude, longitude)
         pickup_point_access.add_pickup_point(point)
         point_id = pickup_point_access.get_id(latitude, longitude)
         pick_up_ids.append(point_id)

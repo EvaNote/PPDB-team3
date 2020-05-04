@@ -1,101 +1,64 @@
+from postgis import *
+from postgis.psycopg import register
+from shapely import geometry, wkb
+
+
 class Campus:
-    def __init__(self, id, name, category, address_id):
+    def __init__(self, id, name, category, coordinates, address_id, latitude=None, longitude=None):
         self.id = id
         self.name = name
         self.category = category
-        self.address_id = address_id
+        from src.utils import address_access
+        self.address = address_access.get_on_id(address_id)
+        if coordinates:
+            self.coordinates = wkb.loads(coordinates, hex=True)
+            self.latitude = self.coordinates.y
+            self.longitude = self.coordinates.x
+        else:
+            self.coordinates = wkb.dumps(coordinates, hex=True)
+            self.latitude = latitude
+            self.longitude = longitude
 
     def to_dict(self):
-        from src.utils import address_access
-        addr = address_access.get_on_id(self.address_id).to_dict()
-        return {'id': self.id, 'name': self.name, 'category': self.category, 'address': addr, 'lat': addr['latitude'],
-                'lng': addr['longitude']}
+        return {'id': self.id,
+                'name': self.name,
+                'category': self.category,
+                'lat': self.address.latitude,
+                'lng': self.address.longitude}
 
 
 class Campusses:
     def __init__(self, dbconnect):
         self.dbconnect = dbconnect
-        # add campuses if needed
-        cursor = self.dbconnect.get_cursor()
-        cursor.execute("SELECT * FROM campus")
-        if not cursor.fetchone():
-            ref_id = None
-            from src.utils import address_access
-            from src.dbmodels.Address import Address
-            file = open('src/dbmodels/campusses.txt', 'r')
-            line = file.readline()
-            name = ''
-            type = ''
-            lat = ''
-            lng = ''
-            street = ''
-            city = ''
-            nr = ''
-            postcode = ''
-            while line:
-                line = "".join(line.split("'"))
-                line = "".join(line.split("\n"))
-                if line.startswith('name'):
-                    name = line[6:]
-                elif line.startswith('type'):
-                    type = line[6:]
-                elif line.startswith('lng'):
-                    lng = line[5:]
-                elif line.startswith('lat'):
-                    lat = line[5:]
-                elif line.startswith('street'):
-                    street = line[8:]
-                elif line.startswith('nr'):
-                    nr = line[4:]
-                elif line.startswith('postcode'):
-                    postcode = line[10:]
-                elif line.startswith('city'):
-                    city = line[6:]
-                    address_access.add_address(Address(None, 'Belgium', city, postcode, street, nr, lat, lng))
-                    if not ref_id:
-                        ref_id = address_access.get_latest_id()
-                    else:
-                        ref_id += 1
-                    cursor = self.dbconnect.get_cursor()
-                    try:
-                        cursor.execute('INSERT INTO "campus" VALUES(default, %s, %s, %s)',
-                                       (name, type, ref_id))
-                        self.dbconnect.commit()
-                    except:
-                        raise Exception('Unable to add campus')
-                    type = ''
-                    lat = ''
-                    lng = ''
-                    street = ''
-                    city = ''
-                    nr = ''
-                    postcode = ''
-                line = file.readline()
-            file.close()
 
     def get_all(self):
         cursor = self.dbconnect.get_cursor()
-        cursor.execute("SELECT id,name,category,address_id FROM campus")
+        cursor.execute("SELECT id,name,category,coordinates,address FROM campus")
         result = list()
         for row in cursor:
-            school = Campus(row[0], row[1], row[2], row[3])
+            school = Campus(row[0], row[1], row[2], row[3], row[4])
             result.append(school)
         return result
 
     def get_on_id(self, school_id):
-        print('------------------------------------------', school_id)
         cursor = self.dbconnect.get_cursor()
-        cursor.execute("SELECT id,name,category,address_id FROM campus WHERE id=%s", (school_id,))
+        cursor.execute("SELECT id,name,category,coordinates,address FROM campus WHERE id=%s",
+                       (school_id,))
         # 1 result
         row = cursor.fetchone()
-        school = Campus(row[0], row[1], row[2], row[3])
-        return school
+        if row:
+            school = Campus(row[0], row[1], row[2], row[3], row[4])
+            return school
+        else:
+            return None
 
-    def get_name_if_exists(self, from_lat, from_lng):
-        from src.utils import address_access
-        addr = address_access.get_on_lat_lng(from_lat, from_lng)
+    def get_name_if_exists(self, lat, lng):
         cursor = self.dbconnect.get_cursor()
-        cursor.execute("SELECT name FROM campus WHERE address_id=%s", (addr.id,))
+        cursor.execute("SELECT campus.id "
+                       "FROM campus "
+                       "join address a on campus.address = a.id "
+                       "WHERE ST_Distance(a.coordinates, ST_MakePoint(%s, %s)) "
+                       "< 50", (lng, lat))
         # 1 result
         row = cursor.fetchone()
         if row:
@@ -105,11 +68,21 @@ class Campusses:
 
     def is_campus(self, lat, lng):
         cursor = self.dbconnect.get_cursor()
-        cursor.execute("""
-                SELECT c.id FROM campus as c join address as a on c.address_id = a.id 
-                WHERE distance_difference(%s, %s, a.latitude, a.longitude) <= 1000
-                ORDER BY distance_difference(%s, %s, a.latitude, a.longitude) LIMIT 1""", (lat, lng, lat, lng))
+        cursor.execute("SELECT campus.id "
+                       "FROM campus "
+                       "join address a on campus.address = a.id "
+                       "WHERE ST_Distance(a.coordinates, ST_MakePoint(%s, %s)) "
+                       "< 200", (lng, lat))
         if cursor.rowcount == 0:
             return None
         else:
             return cursor.fetchone()[0]
+
+    def get_distance(self, latitude, longitude, id):
+        cursor = self.dbconnect.get_cursor()
+        cursor.execute("SELECT ST_Distance(a.coordinates, ST_MakePoint(%s, %s)) "
+                       "FROM campus "
+                       "join address a on campus.address = a.id "
+                       "where campus.id=%s", (longitude, latitude, id))
+        dist = cursor.fetchone()[0]
+        return dist

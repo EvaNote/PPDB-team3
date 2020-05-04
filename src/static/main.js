@@ -28,7 +28,7 @@ L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
 
 // add OSRM support using Leaflet Routing Machine
 let control = L.Routing.control({
-    serviceUrl: 'http://127.0.0.1:5001/route/v1',
+    serviceUrl: 'http://35.195.213.223:69/route/v1',
     routeWhileDragging: true,
     draggableWaypoints: false,
     geocoder: L.Control.Geocoder.nominatim(),
@@ -613,6 +613,7 @@ $(function () {
 
             }
             if (ride_option === "find") {
+                let start = new Date();
                 $.post({
                     contentType: "application/json",
                     url: "/en/calculateCompatibleRides",
@@ -621,7 +622,7 @@ $(function () {
                     // when post request is done, get the returned data and do something with it
                     .done(function (data) { // response function
                         ride_count = data["results"].length
-                        alert("Found " + ride_count + " matches! Scroll down to see them.")
+                        alert("Found " + ride_count + " matches! Scroll down to see them.");
                         //alert("FIND: " + JSON.stringify(data));
                         if (data === null) {
                             return
@@ -630,11 +631,14 @@ $(function () {
                         result_div.empty();
                         result_div.attr("class", "row justify-content-center");
                         for (let d = 0; d < data["results"].length; d++) {
+                            let stop = new Date();
+                            console.log(stop - start);
                             let result = data.results[d];
                             let driver = data["drivers"][d]
                             let driver_name = driver["first_name"] + " " + driver["last_name"]
                             let choice = document.createElement("div");
                             choice.setAttribute("class", "border border-info rounded col-md-5 m-3 text-left");
+                            console.log(result);
                             let from = result.waypoints[0]["addr"];
                             let to = result.waypoints[result["len"] - 1]["addr"];
                             if (result.waypoints[0]["alias"] !== "") {
@@ -709,8 +713,12 @@ $(function () {
                             let driverButton = document.createElement("button");
                             driverButton.setAttribute("class", "btn btn-info m-2");
                             driverButton.innerHTML = "See driver profile";
+                            let driver_id = driver["id"];
                             driverButton.onclick = function() {
-                                alert("under construction")
+                                let current_url = window.location.href;
+                                let new_url = current_url.substring(0,current_url.length-8);
+                                new_url += "user=" + driver_id;
+                                window.open(new_url,"_blank");
                                 }
                             underColumn.appendChild(mapButton);
                             underColumn.appendChild(addButton);

@@ -9,7 +9,6 @@ from src.dbmodels.Address import Address
 from src.dbmodels.Ride import Ride
 
 
-
 class DrivesApi(Resource):  # /api/drives
     def post(self):  # TODO make it work properly
         auth_header = request.headers.get("Authorization")
@@ -61,7 +60,7 @@ class DrivesApi(Resource):  # /api/drives
             postcode = location.raw['address']['postcode']
         except Exception as e:
             postcode = ''
-        fmt = '%Y-%m-%dT%H:%M:%S.%f'
+        fmt = '%Y-%m-%dT%H:%M:%S'
         dist = distance.distance((from_a[0], from_a[1]), (to_a[0], to_a[1])).km
         arr = datetime.strptime(arrive_by, fmt)
         time_diff_sec = timedelta(seconds=(dist / 0.01))
@@ -142,13 +141,13 @@ class DrivePassengerRequestApi(Resource):
         # 2) check if car is fully occupied
         ride = ride_access.get_on_id(drive_id)
         if not passengers:
-            ride_access.registerPassenger(user_id, drive_id)
+            ride_access.register_passenger(user_id, drive_id)
             return {'status': 'success'}, 201
         elif len(passengers) >= ride.passengers:
             return {'status': 'rejected', 'reason': 'car fully occupied'}, 200
         # 3) else: subscribe for the ride (= add to passenger_ride)
         else:
-            ride_access.registerPassenger(user_id, drive_id)
+            ride_access.register_passenger(user_id, drive_id)
             return {'status': 'success'}, 201
 
 
@@ -172,9 +171,9 @@ class DrivePassengerRequestUserApi(Resource):
 class DrivesSearchAPI(Resource):
     def get(self):
         args = request.args
-        #parse available arguments
+        # parse available arguments
         results = []
-        dict = {'fLat': None, 'fLng':None, 'tLat': None, 'tLng':None, 'arrive_by': None, 'limit': 5}
+        dict = {'fLat': None, 'fLng': None, 'tLat': None, 'tLng': None, 'arrive_by': None, 'limit': 5}
         for i in args:
             if i == 'from':
                 dict['fLat'] = float(args[i].split(",")[0])
@@ -182,23 +181,30 @@ class DrivesSearchAPI(Resource):
             elif i == 'to':
                 dict['tLat'] = float(args[i].split(",")[0])
                 dict['tLng'] = float(args[i].split(",")[1])
-            dict[i] = args[i]
-        rides = ride_access.match_rides_with_passenger(
-            {'lat': dict['fLat'], 'lng': dict['fLng']},
-            {'lat': dict['tLat'], 'lng': dict['tLng']},
-            'Arrive by',
-            dict['arrive_by'])
-        n = 0
-        while n < int(dict['limit']) and n < len(rides):
-            rDict = rides[n].to_dict()
-            passengers = ride_access.findRidePassengers(rDict['id'])
-            results.append({"id": rDict['user_id'],
-                            "driver-id": rDict['user_id'],
-                            "passenger-ids": len(passengers),
-                            "from": [rDict['waypoints'][rDict['closest']]['lat'],
-                                     rDict['waypoints'][rDict['closest']]['lng']],
-                            "to": [rDict['waypoints'][4]['lat'], rDict['waypoints'][4]['lng']],
-                            "arrive-by": rDict['arrival_time'].strftime("%Y-%m-%dT%H:%M:%S"),
-                            })
-            n += 1
-        return results
+            else:
+                dict[i] = args[i]
+        if dict['fLat'] and dict['tLat']:
+            rides = ride_access.api_match_rides_with_passenger(
+                {'lat': dict['fLat'], 'lng': dict['fLng']},
+                {'lat': dict['tLat'], 'lng': dict['tLng']},
+                'Arrive by',
+                dict['arrive_by'],
+                dict['limit'])
+        elif dict['fLat']:
+            rides = ride_access.match_rides_with_passenger_missing_to(
+                {'lat': dict['fLat'], 'lng': dict['fLng']},
+                'Arrive by',
+                dict['arrive_by'],
+                dict['limit'])
+        elif dict['tLat']:
+            rides = ride_access.match_rides_with_passenger_missing_from(
+                {'lat': dict['tLat'], 'lng': dict['tLng']},
+                'Arrive by',
+                dict['arrive_by'],
+                dict['limit'])
+        else:
+            rides = ride_access.match_rides_with_passenger_missing_end_points(
+                'Arrive by',
+                dict['arrive_by'],
+                dict['limit'])
+        return rides
