@@ -938,3 +938,11 @@ add constraint one_endpoint_is_campus_check check(
     (campus_from is not null) or (campus_to is not null)
 );
 
+DROP TYPE IF EXISTS ride_role CASCADE;
+CREATE TYPE ride_role AS ENUM (
+    'driver',
+    'passenger'
+    );
+
+alter table review
+    add column author_role ride_role;

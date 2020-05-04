@@ -132,7 +132,7 @@ class DrivePassengerRequestApi(Resource):
         if token is None:
             return abort(401)
         user_id = user_access.get_user(User.verify_auth_token(token)).id
-        if user_id is None or not user_id.isdigit() or not drive_id.isdigit():
+        if user_id is None or not isinstance(user_id, int) or not drive_id.isdigit():
             return abort(401)
         # 1) check if passenger is already subscribed for the given ride
         passengers = ride_access.get_passenger_ids(drive_id)
@@ -158,7 +158,8 @@ class DrivePassengerRequestUserApi(Resource):
         if token is None:
             return abort(401)
         current_user_id = user_access.get_user(User.verify_auth_token(token)).id
-        if current_user_id is None or not user_id.isdigit() or not drive_id.isdigit() or not current_user_id.isdigit():
+        if current_user_id is None or not user_id.isdigit() or not drive_id.isdigit() or not isinstance(current_user_id,
+                                                                                                        int):
             return abort(401)
         # strategy: if user_id in passengers: return "accepted", else return "rejected"
         passengers = ride_access.get_passenger_ids(drive_id)

@@ -80,7 +80,6 @@ class Reviews:
         for row in cursor:
             review = Review(row[0], row[1], row[2], row[3], row[4], row[5], row[6], row[7])
             reviews.append(review)
-            print(review)
         return reviews
         # return self.get_on('user_for', the_id)
 

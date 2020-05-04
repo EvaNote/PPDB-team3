@@ -201,7 +201,7 @@ class Rides:
         from src.utils import address_access
         return {"passenger-places": temp[0],
                 "from": address_access.get_on_id(temp[1]).lat_lng(),
-                "to": address_access.get_on_id(temp[2].lat_lng()),
+                "to": address_access.get_on_id(temp[2]).lat_lng(),
                 "arrival_time": temp[3]}
 
     def get_passenger_ids(self, ride_id):
@@ -409,8 +409,6 @@ class Rides:
             ride.shortest_dist = shortest_dist
             ride.closest = what
             rides.append(ride)
-        stop = time()
-        print('---------------------------------------------------------------------', stop - start)
         return rides
 
     def api_match_rides_with_passenger(self, p_from, p_to, p_time_option, p_datetime, limit=20):
@@ -484,8 +482,6 @@ class Rides:
                 'arrive-by': row[2].strftime("%Y-%m-%dT%H:%M:%S")
             }
             rides.append(ride)
-        stop = time()
-        print('---------------------------------------------------------------------', stop - start)
         return rides
 
     def match_rides_with_passenger_missing_from(self, p_to, p_time_option, p_datetime, limit=20):
@@ -537,8 +533,6 @@ class Rides:
                 'arrive-by': row[2].strftime("%Y-%m-%dT%H:%M:%S")
             }
             rides.append(ride)
-        stop = time()
-        print('---------------------------------------------------------------------', stop - start)
         return rides
 
     def match_rides_with_passenger_missing_to(self, p_from, p_time_option, p_datetime, limit=20):
@@ -606,8 +600,6 @@ class Rides:
                 'arrive-by': row[2].strftime("%Y-%m-%dT%H:%M:%S"),
             }
             rides.append(ride)
-        stop = time()
-        print('---------------------------------------------------------------------', stop - start)
         return rides
 
     def match_rides_with_passenger_missing_end_points(self, p_time_option, p_datetime, limit=20):
@@ -657,8 +649,6 @@ class Rides:
                 'arrive-by': row[2].strftime("%Y-%m-%dT%H:%M:%S")
             }
             rides.append(ride)
-        stop = time()
-        print('---------------------------------------------------------------------', stop - start)
         return rides
 
     def check_passenger_registered(self, p_id, r_id):
