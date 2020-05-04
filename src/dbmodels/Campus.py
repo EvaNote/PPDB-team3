@@ -4,7 +4,7 @@ from shapely import geometry, wkb
 
 
 class Campus:
-    def __init__(self, id, name, category, latitude, longitude, coordinates, address_id):
+    def __init__(self, id, name, category, coordinates, address_id, latitude=None, longitude=None):
         self.id = id
         self.name = name
         self.category = category
@@ -33,21 +33,21 @@ class Campusses:
 
     def get_all(self):
         cursor = self.dbconnect.get_cursor()
-        cursor.execute("SELECT id,name,category,latitude,longitude,coordinates,address FROM campus")
+        cursor.execute("SELECT id,name,category,coordinates,address FROM campus")
         result = list()
         for row in cursor:
-            school = Campus(row[0], row[1], row[2], row[3], row[4], row[5], row[6])
+            school = Campus(row[0], row[1], row[2], row[3], row[4])
             result.append(school)
         return result
 
     def get_on_id(self, school_id):
         cursor = self.dbconnect.get_cursor()
-        cursor.execute("SELECT id,name,category,latitude,longitude,coordinates,address FROM campus WHERE id=%s",
+        cursor.execute("SELECT id,name,category,coordinates,address FROM campus WHERE id=%s",
                        (school_id,))
         # 1 result
         row = cursor.fetchone()
         if row:
-            school = Campus(row[0], row[1], row[2], row[3], row[4], row[5], row[6])
+            school = Campus(row[0], row[1], row[2], row[3], row[4])
             return school
         else:
             return None

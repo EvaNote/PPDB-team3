@@ -141,13 +141,13 @@ class DrivePassengerRequestApi(Resource):
         # 2) check if car is fully occupied
         ride = ride_access.get_on_id(drive_id)
         if not passengers:
-            ride_access.registerPassenger(user_id, drive_id)
+            ride_access.register_passenger(user_id, drive_id)
             return {'status': 'success'}, 201
         elif len(passengers) >= ride.passengers:
             return {'status': 'rejected', 'reason': 'car fully occupied'}, 200
         # 3) else: subscribe for the ride (= add to passenger_ride)
         else:
-            ride_access.registerPassenger(user_id, drive_id)
+            ride_access.register_passenger(user_id, drive_id)
             return {'status': 'success'}, 201
 
 

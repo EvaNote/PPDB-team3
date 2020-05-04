@@ -277,7 +277,7 @@ def myrides():
 def joinedrides():
     if not current_user.is_authenticated and not current_app.config['TESTING']:
         return redirect(url_for('users.login'))
-    allrides = ride_access.getRidesFromPassenger(current_user.id)
+    allrides = ride_access.get_rides_from_passenger(current_user.id)
     userrides = []
     addresses = []
     campuses = []

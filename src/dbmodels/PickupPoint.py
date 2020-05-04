@@ -4,7 +4,7 @@ from shapely import geometry, wkb
 
 
 class PickupPoint:
-    def __init__(self, id, latitude, longitude, estimated_time, coordinates, address_id):
+    def __init__(self, id, estimated_time, coordinates, address_id, latitude=None, longitude=None):
         self.id = id,
         self.estimated_time = estimated_time
         from src.utils import address_access
@@ -32,11 +32,11 @@ class PickupPoints:
     def get_on(self, on, val):
         cursor = self.dbconnect.get_cursor()
         cursor.execute(
-            "SELECT id, latitude, longitude, estimated_time, coordinates, address FROM pickup_point WHERE %s=%s",
+            "SELECT id, estimated_time, coordinates, address FROM pickup_point WHERE %s=%s",
             (on, val,))
         points = list()
         for row in cursor:
-            ride = PickupPoint(row[0], row[1], row[2], row[3], row[4], row[5])
+            ride = PickupPoint(row[0], row[1], row[2], row[3])
             points.append(ride)
         return points
 
@@ -53,17 +53,17 @@ class PickupPoints:
     def get_on_id(self, id):
         cursor = self.dbconnect.get_cursor()
         cursor.execute(
-            "SELECT id, latitude, longitude, estimated_time, coordinates, address FROM pickup_point WHERE id=%s", (id,))
+            "SELECT id, estimated_time, coordinates, address FROM pickup_point WHERE id=%s", (id,))
         row = cursor.fetchone()
-        return PickupPoint(id, row[1], row[2], row[3], row[4], row[5])
+        return PickupPoint(id, row[1], row[2], row[3])
 
     def get_all(self):
         cursor = self.dbconnect.get_cursor()
         cursor.execute(
-            "SELECT id, latitude, longitude, estimated_time, coordinates, address FROM pickup_point")
+            "SELECT id, estimated_time, coordinates, address FROM pickup_point")
         points = list()
         for row in cursor:
-            ride = PickupPoint(row[0], row[1], row[2], row[3], row[4], row[5])
+            ride = PickupPoint(row[0], row[1], row[2], row[3])
             points.append(ride)
         return points
 
@@ -75,8 +75,8 @@ class PickupPoints:
         from src.dbmodels.Address import Address
         the_id = address_access.add_address(Address(None, '?', '?', '?', '?', '?', p.longitude, p.latitude, None))
 
-        cursor.execute('INSERT INTO "pickup_point" VALUES(default, %s, %s, %s, ST_MakePoint(%s, %s), %s)',
-                       (p.latitude, p.longitude, p.estimated_time, p.longitude, p.latitude, the_id))
+        cursor.execute('INSERT INTO "pickup_point" VALUES(default, %s, ST_MakePoint(%s, %s), %s)',
+                       (p.estimated_time, p.longitude, p.latitude, the_id))
         self.dbconnect.commit()
 
     def get_distance(self, latitude, longitude, id):

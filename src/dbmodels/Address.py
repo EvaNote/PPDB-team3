@@ -33,7 +33,7 @@ def get_address_function(lat, lng):
 
 
 class Address:
-    def __init__(self, id, country, city, postal_code, street, nr, latitude, longitude, coordinates):
+    def __init__(self, id, country, city, postal_code, street, nr, coordinates, latitude=None, longitude=None):
         self.id = id
         if coordinates:
             self.coordinates = wkb.loads(coordinates, hex=True)
@@ -60,14 +60,21 @@ class Address:
             self.nr = nr
 
     def to_dict(self):
-        return {'id': self.id, 'country': self.country, 'city': self.city, 'postal_code': self.postal_code,
-                'street': self.street, 'nr': self.nr, 'lat': self.latitude, 'lng': self.longitude}
+        return {'id': self.id,
+                'country': self.country,
+                'city': self.city,
+                'postal_code': self.postal_code,
+                'street': self.street,
+                'nr': self.nr,
+                'lat': self.latitude,
+                'lng': self.longitude}
 
     def addr_to_string(self):
         return self.street + ' ' + self.nr + ', ' + self.postal_code + ' ' + self.city
 
     def lat_lng(self):
         return [self.latitude, self.longitude]
+
 
 class Addresses:
     def __init__(self, dbconnect):
@@ -80,7 +87,7 @@ class Addresses:
                        (on, val))
         addresses = list()
         for row in cursor:
-            address = Address(row[0], row[1], row[2], row[3], row[4], row[5], None, None, row[6])
+            address = Address(row[0], row[1], row[2], row[3], row[4], row[5], row[6])
             addresses.append(address)
         return addresses
 
@@ -91,8 +98,7 @@ class Addresses:
         address = cursor.fetchone()
         if address is None:
             return None
-        address_obj = Address(address[0], address[1], address[2], address[3], address[4], address[5], None,
-                              None, address[6])
+        address_obj = Address(address[0], address[1], address[2], address[3], address[4], address[5], address[6])
         return address_obj
 
     def get_id(self, country, city, postal_code, street, nr):
@@ -108,16 +114,16 @@ class Addresses:
         cursor.execute("SELECT id,country,city,postal_code,street,nr,coordinates FROM address")
         addresses = list()
         for row in cursor:
-            address = Address(row[0], row[1], row[2], row[3], row[4], row[5], None, None, row[6])
+            address = Address(row[0], row[1], row[2], row[3], row[4], row[5], row[6])
             addresses.append(address)
         return addresses
 
     def add_address(self, address: Address):
         cursor = self.dbconnect.get_cursor()
         try:
-            cursor.execute('INSERT INTO "address" VALUES(default, %s, %s, %s, %s, %s, %s, %s, ST_MakePoint(%s, %s))',
+            cursor.execute('INSERT INTO "address" VALUES(default, %s, %s, %s, %s, %s, ST_MakePoint(%s, %s))',
                            (address.country, address.city, address.postal_code, address.street, address.nr,
-                            address.latitude, address.longitude, address.longitude, address.latitude))
+                            address.longitude, address.latitude))
             self.dbconnect.commit()
             last_id = cursor.fetchone()['lastval']
             return last_id
@@ -137,9 +143,9 @@ class Addresses:
         address.coordinates = wkb.dumps(geometry.Point(longitude, latitude), hex=True)
         try:
             cursor.execute(
-                'UPDATE "address" SET street = %s, nr = %s, city = %s, postal_code = %s, country = %s, latitude = %s, '
-                'longitude = %s WHERE id=%s',
-                (street, nr, city, postal_code, country, latitude, longitude, address_id))
+                'UPDATE "address" SET street = %s, nr = %s, city = %s, postal_code = %s, country = %s, '
+                'coordinates = ST_MakePoint(%s, %s) WHERE id=%s',
+                (street, nr, city, postal_code, country, longitude, latitude, address_id))
             self.dbconnect.commit()
         except:
             raise Exception('Unable to edit address')
@@ -148,8 +154,8 @@ class Addresses:
         cursor = self.dbconnect.get_cursor()
         try:
             cursor.execute(
-                'UPDATE "address" SET street = %s, nr = %s, city = %s, postal_code = %s, country = %s, latitude = %s, '
-                'longitude = %s WHERE id=%s',
+                'UPDATE "address" SET street = %s, nr = %s, city = %s, postal_code = %s, country = %s, '
+                'coordinates = ST_MakePoint(%s, %s) WHERE id=%s',
                 (address.street, address.nr, address.city, address.postal_code, address.country, address.latitude,
                  address.longitude, address.id))
             self.dbconnect.commit()

@@ -64,7 +64,7 @@ def maps():
 @rides.route("/joinride", methods=['GET', 'POST'])
 def joinride():
     ride_id = request.json.get("ride_id")
-    result = ride_access.registerPassenger(current_user.id, ride_id)
+    result = ride_access.register_passenger(current_user.id, ride_id)
     if result:
         return {"result": "success"}
     return {"result": "failed"}
