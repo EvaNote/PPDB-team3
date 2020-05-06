@@ -11,11 +11,13 @@ from src.dbmodels.Picture import Picture
 from src.reviews.forms import Reviews
 from src.dbmodels.PickupPoint import PickupPoint
 from src.users.forms import LoginForm, RegistrationForm, VehicleForm, EditAccountForm, EditAddressForm, SelectSubject, \
-    DeleteUserForm
+    DeleteUserForm, getCalendar
 from src.utils import user_access, bcrypt, review_access, car_access, address_access, current_app, picture_access, ride_access, campus_access, \
     geolocator, pickup_point_access
 from flask_babel import lazy_gettext
 from math import floor
+from ics import Calendar, Event
+from datetime import *
 
 users = Blueprint('users', __name__, url_prefix='/<lang_code>')
 
@@ -43,13 +45,68 @@ def before_request():
 
 ########################################################################################################################
 
+def makeEvent(ride, isDriver):
+    e = Event()
+    if isDriver:
+        e.name = "Campus Carpool: " + lazy_gettext("driver")
+    else:
+        e.name = "Campus Carpool: " + lazy_gettext("passenger")
+    e.begin = ride.departure_time
+    e.end = ride.arrival_time
+    e.created = datetime.now()
+    locString = ""
+    address = address_access.get_on_id(ride.address_1)
+    if ride.to_campus:
+        locString += address.street + " " + str(address.nr) + ", " + address.city + " - "
+        locString += campus_access.get_on_id(ride.campus).name
+    else:
+        locString += campus_access.get_on_id(ride.campus).name + " - "
+        locString += address.street + " " + str(address.nr) + ", " + address.city
+    if isDriver:
+        e.location = locString
+        driver = user_access.get_user_on_id(ride.user_id)
+        locString += "\\n" + driver.first_name + " " + driver.last_name
+        e.description = locString
+    else:
+        e.location = locString
+        locString += "\\n" + str(ride.passengers) + " passengers"
+        e.description = locString
+    # TODO: naam bestuurder?
+    return e
 
-@users.route("/account")
+def generate_calendar(user_id):
+    # From https://pypi.org/project/ics/
+    c = Calendar()
+
+    driver_for = ride_access.get_on_user_id(user_id)
+    passenger_for = ride_access.getRidesFromPassenger(user_id)
+
+    for ride in driver_for:
+        e = makeEvent(ride,True)
+        c.events.add(e)
+
+    for ride in passenger_for:
+        e = makeEvent(ride,False)
+        c.events.add(e)
+
+
+    cal_name = "cal" + str(user_id) + ".ics"
+    #filename/path
+    path = Path(users.root_path)
+    path = path.parent
+    cal_path = os.path.join(path, 'static/ics', cal_name)
+
+    with open(cal_path, 'w') as my_file:
+        my_file.writelines(c)
+    return
+
+@users.route("/account", methods=['GET', 'POST'])
 def account():
     # makes sure user won`t be able to go to page without logging in
     if not current_user.is_authenticated and not current_app.config['TESTING']:
         return redirect(url_for('users.login'))
 
+    calForm = getCalendar()
     form = Reviews()
     user = current_user
     if current_app.config['TESTING']:
@@ -93,10 +150,21 @@ def account():
     else:
         half_stars = 0
 
+    if calForm.submit.data:
+        # Generate calendar file, give link
+        generate_calendar(current_user.id)
+        path = "ics/cal" + str(current_user.id) + ".ics"
+        file_url = url_for('static', filename=path)
+        #TODO, als iemand hier echt veel zin in heeft
+        #redirect_url = "webcal:/" + file_url
+        return redirect(file_url)
+
+
     return render_template('account.html', title=lazy_gettext('Account'), form=form, loggedIn=True, data=data,
                            current_user=user, cars=cars, address=address, carPicpaths=car_picpaths, pfp_path=pfp_path,
                            car_picpaths=car_picpaths, target_user=user, rev_pfps=rev_pfps, mean_rate=mean,
                            half_stars=half_stars, whole_stars=whole_stars, )
+                           car_picpaths=car_picpaths, target_user=user, rev_pfps=rev_pfps, calForm=calForm)
 
 
 # van https://www.youtube.com/watch?v=803Ei2Sq-Zs

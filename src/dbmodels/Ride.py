@@ -125,6 +125,7 @@ class Rides:
     def __init__(self, dbconnect):
         self.dbconnect = dbconnect
 
+    #TODO: lijkt aanhalingstekens string mee over te nemen
     def get_on(self, on, val):
         cursor = self.dbconnect.get_cursor()
         cursor.execute(
@@ -224,12 +225,18 @@ class Rides:
                  "email": row[1]})
         return results
 
-    def get_on_user_id(self, user_id):
-        found = self.get_on('user_id', user_id)
-        if len(found) > 0:
-            return found[0]
-        else:
-            return None
+
+    def get_on_user_id(self, val):
+        cursor = self.dbconnect.get_cursor()
+        cursor.execute(
+            "SELECT id, departure_time, arrival_time, user_id, address_1, campus, to_campus, car_id, passengers, pickup_point_1, pickup_point_2, pickup_point_3 FROM ride WHERE user_id=%s",
+            (val,))
+        rides = list()
+        for row in cursor:
+            ride = Ride(row[0], row[1], row[2], row[3], row[4], row[5], row[6], row[7], row[8], row[9], row[10],
+                        row[11])
+            rides.append(ride)
+        return rides
 
     def get_on_car_id(self, car_id):
         found = self.get_on('car_id', car_id)

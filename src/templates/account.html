@@ -9,6 +9,11 @@
     <a class="btn btn-info" href="{{ url_for('users.address_edit') }}" role="button">{{ _('Edit address') }}</a>
     {#        <a class="btn btn-info" href="{{ url_for('rides.exampleuser_reviews') }}" role="button">My reviews</a>#}
     <a class="btn btn-info" href="{{ url_for('users.myrides') }}" role="button">{{ _('My rides') }}</a>
+
+            <form method="POST" action="">
+                {{ calForm.submit(class="btn btn-info") }}
+        </form>
+
     <div>
         <br>
         <b>{{ _('First name') }}</b>
