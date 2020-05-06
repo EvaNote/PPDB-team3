@@ -1,4 +1,4 @@
-drop extension if exists postgis;
+drop extension if exists postgis cascade;
 create extension postgis;
 
 alter table address
