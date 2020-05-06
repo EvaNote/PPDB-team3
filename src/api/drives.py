@@ -208,4 +208,4 @@ class DrivesSearchAPI(Resource):
                 'Arrive by',
                 dict['arrive_by'],
                 dict['limit'])
-        return rides
+        return rides, 200
