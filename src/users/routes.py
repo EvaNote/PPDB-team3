@@ -159,12 +159,10 @@ def account():
         #redirect_url = "webcal:/" + file_url
         return redirect(file_url)
 
-
     return render_template('account.html', title=lazy_gettext('Account'), form=form, loggedIn=True, data=data,
                            current_user=user, cars=cars, address=address, carPicpaths=car_picpaths, pfp_path=pfp_path,
                            car_picpaths=car_picpaths, target_user=user, rev_pfps=rev_pfps, mean_rate=mean,
-                           half_stars=half_stars, whole_stars=whole_stars, )
-                           car_picpaths=car_picpaths, target_user=user, rev_pfps=rev_pfps, calForm=calForm)
+                           half_stars=half_stars, whole_stars=whole_stars, calForm=calForm)
 
 
 # van https://www.youtube.com/watch?v=803Ei2Sq-Zs
