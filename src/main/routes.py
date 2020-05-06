@@ -65,14 +65,14 @@ def contact():
 
 @main.route('/calculateCompatibleRides', methods=['POST'])
 def receiver():
+    from time import time
+    start = time()
     # read json + reply
     data = request.json
     from_coord = data.get('from')
-    print(from_coord)
     to_coord = data.get('to')
     time_option = data.get('time_option')
     datetime = data.get('datetime').replace('T', ' ') + ':00'
-    #print(from_coord, to_coord, time_option, datetime)
     rides = ride_access.match_rides_with_passenger(from_coord, to_coord, time_option, datetime)
     results = []
     drivers = []
@@ -100,7 +100,7 @@ def canceljoinedride(ride_id):
         'TESTING']:  # makes sure user won`t be able to go to page without logging in
         return redirect(url_for('users.login'))
 
-    ride_access.deletePassenger(current_user.id, ride_id)
+    ride_access.delete_passenger(current_user.id, ride_id)
     flash('Canceled ride.', 'success')
     return redirect(url_for('users.account'))
 
@@ -111,10 +111,11 @@ def deleteride(ride_id):
         'TESTING']:  # makes sure user won`t be able to go to page without logging in
         return redirect(url_for('users.login'))
 
-    ride_access.deleteFromPassengerRide(ride_id)
+    ride_access.delete_from_passenger_ride(ride_id)
     ride_access.delete_ride(ride_id)
     flash('Deleted ride.', 'success')
     return redirect(url_for('users.account'))
+
 
 @main.route('/createRide', methods=['POST'])
 def receiver_create():
@@ -200,11 +201,10 @@ def receiver_create():
         latitude = point['lat']
         longitude = point['lng']
         estimated_time = estimated_times[index]
-        point = PickupPoint(None, latitude, longitude, estimated_time)
+        point = PickupPoint(None, estimated_time, latitude, longitude)
         pickup_point_access.add_pickup_point(point)
         point_id = pickup_point_access.get_id(latitude, longitude)
         pick_up_ids.append(point_id)
-        #print(point.to_dict())
         index += 1
 
     ride = None
@@ -222,7 +222,6 @@ def receiver_create():
                     pick_up_ids[0], pick_up_ids[1], pick_up_ids[2])
 
     ride_access.add_ride(ride)
-    #print(departure_time, arrival_time)
     ride_id = ride_access.get_id_on_all(departure_time, arrival_time, user_id, address_id, campus_id)
     ride_to_return = ride_access.get_on_id(ride_id)
 

@@ -62,6 +62,7 @@
 .display_rate {
     float: left;
     height: auto;
+
 }
 
 .display_rate:not(:checked) > input {
@@ -188,4 +189,39 @@
     .submit-btn {
         margin-left: 1.25rem;
     }
+}
+
+.fa-star.checked,
+.fa-star-half.checked {
+    color: #ffc700;
+}
+
+.fa-star.not-checked,
+.fa-star-half.not-checked {
+    color: #cccccc;
+}
+
+.fa-star.not-checked.star-input:hover,
+.fa-star.star-input:hover ~ i {
+    color: #deb217;
+}
+
+.fa-star.checked.star-input:hover,
+.fa-star.checked.star-input:hover ~ i {
+    color: #c59b08;
+}
+
+
+.fa-star {
+    font-size: 330% !important;
+    color: #cccccc;
+    text-shadow: 1px 1px 4px gray;
+    margin-bottom: 10px;
+}
+
+.fa-star-half {
+    font-size: 330% !important;
+    color: #cccccc;
+    text-shadow: 1px 1px 4px gray;
+    margin-bottom: 10px;
 }

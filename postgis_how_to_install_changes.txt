@@ -1,0 +1,17 @@
+POSTGIS:
+
+1) Ga naar PPDB-team3/sql via de terminal
+
+2) Voer uit: psql dbcarpool -U [SUPERUSER] -f postgis.sql
+	---> SUPERUSER omdat user 'app' niet genoeg rechten heeft. Kan je naam zijn, of postgres (of nog iets anders)
+
+3) Install de requirements die nog missen (requirements.txt)
+
+4) Open de website, zoek de rit van Duffel naar Middelheim
+
+
+
+
+
+5) ALS de website netjes de 3 verwachte resultaten geeft zonder problemen, DAN en alléén DAN:
+		---> psql dbcarpool -U app -f drop_postgis.sql

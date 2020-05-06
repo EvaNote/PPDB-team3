@@ -10,7 +10,18 @@
     {% block profileContent %}{% endblock %}
 
     <div class="text-center pt-5 border-info" style="margin-top: 50px; margin-bottom: 30px; border-top: 3px solid">
-        <h1 class="text-info font-weight-normal">{{_('Reviews')}}</h1>
+        <h1 class="text-info font-weight-normal">{{ _('Reviews') }} {{ mean_rate }}</h1>
+        {% for i in range(whole_stars) %}
+            <i class="fa fa-star checked"></i>
+        {% endfor %}
+        {% if half_stars == 1 %}
+            <i class="fa fa-star-half checked" style="z-index: 9"></i>
+            <i class="fa fa-star-half not-checked fa-flip-horizontal" style="margin-left: -64px; z-index: 7"></i>
+
+        {% endif %}
+        {% for i in range(5-(whole_stars + half_stars)) %}
+            <i class="fa fa-star not-checked"></i>
+        {% endfor %}
     </div>
 
     <form method="POST" action="">
@@ -38,7 +49,7 @@
                             </button>
                             <div class="dropdown-menu dropdown-primary" aria-labelledby="dropdownSortButton">
                                 <a href="#" class="dropdown-item sort-review">{{ _('Rate Low-High') }}</a>
-                                <a href="#" class="dropdown-item sort-review">{{_('Rate High-Low')}}</a>
+                                <a href="#" class="dropdown-item sort-review">{{ _('Rate High-Low') }}</a>
                                 <a href="#" class="dropdown-item sort-review">{{ _('Date Old-New') }}</a>
                                 <a href="#" class="dropdown-item sort-review">{{ _('Date New-Old') }}</a>
                             </div>
@@ -72,10 +83,10 @@
                         <div class="row">
                             <div class="display_rate col-ms-auto margin-b">
                                 {% for i in range(1,6) %}
-                                    {% if review.amount_of_stars <= 5-i %}
-                                        <label>{{ _('stars') }}</label>
+                                    {% if review.amount_of_stars < i %}
+                                        <i class="fa fa-star not-checked"></i>
                                     {% else %}
-                                        <label style="color: #deb217">{{ _('stars') }}</label>
+                                        <i class="fa fa-star checked"></i>
                                     {% endif %}
                                 {% endfor %}
                             </div>
@@ -87,8 +98,13 @@
                         </div>
                         <div class="row">
                             <div class="col display-name">
-                                <b>{{ review.get_creation_date_as_string() }}</b> {{ _('by') }}
+                                <b>{{ review.get_creation_date_as_string() }}</b> <small>{{ _('by') }}</small>
                                 <b>{{ review.get_user_from_as_object().first_name }} {{ review.get_user_from_as_object().last_name }}</b>
+                                {% if review.role == 'driver' %}
+                                    <small>{{ _('(driver)') }}</small>
+                                {% else %}
+                                    <small>{{ _('(passenger)') }}</small>
+                                {% endif %}
                             </div>
                         </div>
                         <div class="row" style="margin-left: 0">
@@ -127,10 +143,10 @@
                             <input class="checkbox" type="checkbox" style="margin-right: 5px;" value={{ j }}>
                             <label class="display_rate" style="margin-bottom: 0;">
                                 {% for i in range(1,6) %}
-                                    {% if j <= 5-i %}
-                                        <label style="font-size: 150%">{{ _('stars') }}</label>
+                                    {% if j <= 6-i %}
+                                        <i class="fa fa-star checked" style="font-size: 150% !important;"></i>
                                     {% else %}
-                                        <label style="color: #deb217; font-size: 150%">{{ _('stars') }}</label>
+                                        <i class="fa fa-star not-checked" style="font-size: 150% !important;"></i>
                                     {% endif %}
                                 {% endfor %}
                             </label>
@@ -139,13 +155,13 @@
 
                     <b>{{ _('Other properties') }}</b>
                     <div class="checkbox-container" style="display: flex">
-                        {% if logged_in %}
+                        {% if allow_review %}
                             <input class="checkbox" type="checkbox" style="margin-right: 5px" value="me">
                             <label>
                                 {{ _('Written by me') }}
                             </label>
                         {% else %}
-                            <input class="checkbox" type="checkbox" style="margin-right: 5px; value=" me" disabled>
+                            <input class="checkbox" type="checkbox" style="margin-right: 5px" value="me" disabled>
                             <label style="color: gray">
                                 {{ _('Written by me (requires login)') }}
                             </label>

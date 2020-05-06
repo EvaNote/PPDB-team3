@@ -10,6 +10,7 @@ This minimum requirement needs to be implemented to receive live data.
 
 ## /users/register
 
+
 ### POST [POST]
 
 + Request (application/json)
@@ -84,6 +85,8 @@ Returns an authentication token if login credentials are correct. This token exp
 
 ## /drives
 
+Create a ride. 
+
 ### POST [POST]
 
 Locations in latitude-longitude, time in ISO 8601 format in the local timezone. A user token needs to be provided in the Authorization header.
@@ -137,6 +140,8 @@ Locations in latitude-longitude, time in ISO 8601 format in the local timezone. 
 
 ## /drives/{drive_id}
 
+Get details about a given ride.
+
 + Parameters
     + drive_id (number) - ID of the Drive in the form of an integer.
 
@@ -159,6 +164,8 @@ The field "passenger-places" indicates the total amount of passengers that can b
 
 
 ## /drives/{drive_id}/passengers
+
+Get the passenger-ids and names of a given ride.
 
 + Parameters
     + drive_id (number) - ID of the Drive in the form of an integer.
@@ -185,7 +192,8 @@ The field "passenger-places" indicates the total amount of passengers that can b
 
 ### GET [GET]
 
-Only the driver of a ride should be able to see passenger requests.
+
+The get requests always returns true, since we do not work with passenger requests.
 
 + Request (application/json)
 
@@ -207,7 +215,7 @@ Only the driver of a ride should be able to see passenger requests.
 
 ### POST [POST]
 
-
+The post request adds the given passenger to the given ride. It returns 201 success in case the subscription of a passenger to a ride succeeded. If not, code 200 is returned with status 'rejected'. In this case a reason is given for the rejection. This can either be because of a duplicate request or because there is no place left in the car.
 
 + Request (application/json)
 
@@ -225,10 +233,8 @@ Only the driver of a ride should be able to see passenger requests.
     + Body
 
             {
-                "id": 14,
-                "username": "MarkP",
-                "status": "pending",
-                "time-created": "2020-02-10T11:35:12.58"
+                "status": "rejected",
+                "reason": "duplicate_request"
             }
 
 
@@ -240,7 +246,8 @@ Only the driver of a ride should be able to see passenger requests.
 
 ### POST [POST]
 
-Decide on a passenger request. Action can either be "accept" or "reject". Checks whether the token belongs to the driver of the user and whether the passenger request is valid and in the pending state. 
+Check for a given passenger and ride whether or not this passenger has joined the right or not. If the passenger joined the ride, 'accepted' will be returned. In the other case 'rejected' will be returned.
+
 
 + Request (application/json)
 
@@ -260,11 +267,7 @@ Decide on a passenger request. Action can either be "accept" or "reject". Checks
     + Body
 
             {
-                "id": 14,
-                "username": "Mark",
-                "status": "accepted",
-                "time-created": "2020-02-10T11:35:12.58",
-                "time-updated": "2020-02-10T15:09:35.03"
+                "status": "accepted"
             }
 
 
@@ -272,6 +275,10 @@ Decide on a passenger request. Action can either be "accept" or "reject". Checks
 ## /drives/search{?from}{?to}{?arrive_by}{?limit}
 
 These are the basic parameters of search. Specific search queries can be supported, e.g.: max-from-distance, max-to-distance, max-time-difference (before and/or after), ... .
+
+<b><u>Important!</u>
+Since this application supports 'campus carpool', one of the endpoints of a ride is intended to be a campus. This means that a search with both 'to' and 'from' given that doesn't provide a location (in the close neighbourhood) of a campus as one of the endpoints won't give any results.  
+</b>
 
 ### GET [GET]
 
