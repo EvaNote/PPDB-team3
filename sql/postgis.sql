@@ -690,8 +690,8 @@ values(default, 'Belgium', 'Ottignies-Louvain-la-Neuve', '1348', 'Rue de lHocail
 insert into address
 values(default, 'Belgium', 'Mons', '7032', 'Chaussée de Binche', '', 50.4529289, 3.98450869999999, ST_MakePoint(50.4529289, 3.98450869999999));
 insert into address
-values (default, 'Belgium', 'Ottignies-Louvain-la-Neuve', '1348', 'Place des Doyens', '', 50.6678157,
-        ST_MakePoint(4.6117084, 50.6678157, 4.6117084));
+values (default, 'Belgium', 'Ottignies-Louvain-la-Neuve', '1348', 'Place des Doyens', '', 50.6678157, 4.6117084,
+        ST_MakePoint(50.6678157, 4.6117084));
 insert into address
 values(default, 'Belgium', 'Ottignies-Louvain-la-Neuve', '1348', 'Traverse Jaune', '', 50.6679955, 4.61082499999998, ST_MakePoint(50.6679955, 4.61082499999998));
 insert into address
@@ -855,7 +855,7 @@ values(default, 'Belgium', 'Boussu', '7301', 'Rue de Mons', '63', 50.436993, 3.8
 insert into address
 values(default, 'Belgium', 'Anderlecht', '1070', 'Avenue Émile Gryson - Emile Grysonlaan', '', 50.815536, 4.294664, ST_MakePoint(50.815536, 4.294664));
 insert into address
-values (default , '?', '?', '?', '?', '?', 50.6061929, 3.3975924, ST_MakePoint(50.6061929, 3.3975924))
+values (default, '?', '?', '?', '?', '?', 50.6061929, 3.3975924, ST_MakePoint(50.6061929, 3.3975924));
 
 update address
 set coordinates = ST_MakePoint(longitude, latitude);
