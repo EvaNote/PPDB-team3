@@ -906,33 +906,6 @@ set address_to = (
 )
 where ride.campus_to is not null;
 
-alter table campus
-drop column latitude;
-
-alter table campus
-drop column longitude;
-
-alter table pickup_point
-drop column latitude;
-
-alter table pickup_point
-drop column longitude;
-
-alter table address
-drop column latitude;
-
-alter table address
-drop column longitude;
-
-alter table ride
-drop column address_1;
-
-alter table ride
-drop column campus;
-
-alter table ride
-drop column to_campus;
-
 alter table ride
 add constraint one_endpoint_is_campus_check check(
     (campus_from is not null) or (campus_to is not null)
