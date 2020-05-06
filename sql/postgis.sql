@@ -1,52 +1,68 @@
+/* Create extension postgis to our database */
 drop extension if exists postgis cascade;
 create extension postgis;
 
+/* Add 'coordinates' to address as postgis geography point */
 alter table address
 add column coordinates geography(POINT);
 
+/* Fill 'coordinates' of address with point value of longitude and latitude !!longitude first!! */
 update address
 set coordinates = ST_MakePoint(longitude, latitude);
 
-SELECT ST_AsText(address.coordinates), ST_X(address.coordinates::geometry), ST_Y(address.coordinates::geometry)
-FROM address;
-
+/* Same as with address for pickup_point */
 alter table pickup_point
 add column coordinates geography(POINT);
 
+/* Again fill with points gained from longitude and latitude */
 update pickup_point
 set coordinates = ST_MakePoint(longitude, latitude);
 
+/* Once again for campus */
 alter table campus
 add column coordinates geography(POINT);
 
+/* Fill with values */
 update campus
 set coordinates = ST_MakePoint(longitude, latitude);
 
+/* Next: drop the whole 'address_1', 'to_campus' and 'campus' thing in ride by adding the following columns: */
+/* campus_from contains the id of the campus that is taken as start point if exists, or null if it doesn't exist*/
 alter table ride
 add column campus_from int references campus(id);
 
+/* campus_to is similar to campus_from for destination*/
 alter table ride
 add column campus_to int references campus(id);
 
+/* address_from contains the departure address. If the user starts from a campus, this address equals the address of
+   that campus, which means both address_from and campus_from exist*/
 alter table ride
 add column address_from int references address(id);
 
+/* address_to is similar to address_from for the destination address */
 alter table ride
 add column address_to int references address(id);
 
+/* If 'to_campus' is true, the ride is going to a campus with the id given by 'campus'. In this case 'campus_to' equals
+   the current campus value */
 update ride
 set campus_to = campus where to_campus = true;
 
+/* In the other case, same thing happens for 'campus_from' */
 update ride
 set campus_from = campus where to_campus = false;
 
+/* If 'to_campus' is false, than address_to equals the current address_1 value */
 update ride
 set address_to = address_1 where to_campus = false;
 
+/* If 'to_campus' is true, than address_from equals the current address_1 value */
 update ride
 set address_from = address_1 where to_campus = true;
 
-
+/* Next, these addresses are inserted in the address table. These addresses correspond to the addresses of the campus
+   and will be linked to the right campus later on*/
 insert into address
 values(default, 'Belgium', 'Verviers', '4800', 'Place du Palais de Justice', '15', 50.5908603, 5.86585700000001, ST_MakePoint(50.5908603, 5.86585700000001));
 insert into address
@@ -690,8 +706,7 @@ values(default, 'Belgium', 'Ottignies-Louvain-la-Neuve', '1348', 'Rue de lHocail
 insert into address
 values(default, 'Belgium', 'Mons', '7032', 'Chaussée de Binche', '', 50.4529289, 3.98450869999999, ST_MakePoint(50.4529289, 3.98450869999999));
 insert into address
-values (default, 'Belgium', 'Ottignies-Louvain-la-Neuve', '1348', 'Place des Doyens', '', 50.6678157, 4.6117084,
-        ST_MakePoint(50.6678157, 4.6117084));
+values (default, 'Belgium', 'Ottignies-Louvain-la-Neuve', '1348', 'Place des Doyens', '', 50.6678157, 4.6117084, ST_MakePoint(50.6678157, 4.6117084));
 insert into address
 values(default, 'Belgium', 'Ottignies-Louvain-la-Neuve', '1348', 'Traverse Jaune', '', 50.6679955, 4.61082499999998, ST_MakePoint(50.6679955, 4.61082499999998));
 insert into address
@@ -857,12 +872,17 @@ values(default, 'Belgium', 'Anderlecht', '1070', 'Avenue Émile Gryson - Emile G
 insert into address
 values (default, '?', '?', '?', '?', '?', 50.6061929, 3.3975924, ST_MakePoint(50.6061929, 3.3975924));
 
+/* O o... Longitude had to come first, right? But we did it wrong... No worries, this can be solved! This statement
+   sets the right values for coordinates */
 update address
 set coordinates = ST_MakePoint(longitude, latitude);
 
+/* Add an 'address' column to the campus table, which will contain an id referring to the address of the campus */
 alter table campus
 add column address int references address(id);
 
+/* Now we link the right address to the right campus by finding out which address has coordinates that are close to
+   the coordinates of the campus */
 update campus
 set address = (
     select address.id
@@ -871,15 +891,20 @@ set address = (
     limit 1
 );
 
+/* For pickup_point, we also ad an 'address' column */
 alter table pickup_point
 add column address int references address(id);
 
-
+/* But... We don't have an address of the pickup_points? How will we solve this?
+   Well, for each pickup_point we add an address with the latitude, longitude and coordinates of the pickup_point, but
+   with question marks for the unknown fields. The address will be completed when this pickup_point is fetched from
+   database, so it will be complete for the future. */
 insert into address
 (country, city, postal_code, street, nr, latitude, longitude, coordinates)
 select '?', '?', '?', '?', '?', p.latitude, p.longitude, p.coordinates
 from pickup_point p;
 
+/* Link the right address to the right pickup_point, just as with campus earlier*/
 update pickup_point
 set address = (
     select address.id
@@ -888,7 +913,7 @@ set address = (
     limit 1
 );
 
-
+/* Now we link the address of all 'campus_from' to address_from in ride */
 update ride
 set address_from = (
     select campus.address
@@ -898,6 +923,7 @@ set address_from = (
 )
 where ride.campus_from is not null;
 
+/* Same for address_to */
 update ride
 set address_to = (
     select campus.address
@@ -907,16 +933,20 @@ set address_to = (
 )
 where ride.campus_to is not null;
 
+/* Since we're deleting the original constraint of having at least one endpoint as campus, we need to add an explicit
+   check to take over the job*/
 alter table ride
 add constraint one_endpoint_is_campus_check check(
     (campus_from is not null) or (campus_to is not null)
 );
 
+/* Okay, something completely different now: for reviews we want the possibility to add a ride_roll */
 DROP TYPE IF EXISTS ride_role CASCADE;
 CREATE TYPE ride_role AS ENUM (
     'driver',
     'passenger'
     );
 
+/* Add a column of this new type to the review table */
 alter table review
     add column author_role ride_role;
