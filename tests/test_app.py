@@ -1,8 +1,7 @@
 import os
 import sys
-
 cwd = os.getcwd()
-sys.path.append(cwd)
+sys.path.append(cwd[0:len(cwd)-6])
 import tempfile
 import unittest
 from src import create_app, TestConfig
@@ -18,7 +17,9 @@ def test_login():
     from src.utils import user_access
     user = user_access.get_user_on_email('lui@campuscarpool.com')
     print(user)
-    login_user(user, remember=True)
+    result = login_user(user, remember=True)
+    print(result)
+    return 'something'
 
 
 # source: https://github.com/pallets/flask/blob/master/examples/tutorial/tests/conftest.py
