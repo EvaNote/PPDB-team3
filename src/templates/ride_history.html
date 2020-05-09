@@ -10,8 +10,8 @@
 
     <div class="row">
     {% for ride in userrides %}
-        {% set address = addresses[loop.index0] %}
-        {% set campus = campuses[loop.index0] %}
+        {% set address_from = from_locs[loop.index0] %}
+        {% set address_to = to_locs[loop.index0] %}
         {% set pfplist = pfps[loop.index0] %}
         {% set pickuppoint = pickuppoints[loop.index0] %}
         {% set pickupbool = pickupbools[loop.index0] %}
@@ -36,15 +36,9 @@
                 <div class="ride_history_wrap_5"><b> {{ _('Pickup 3: ') }}</b> {{ pickuppoint[2] }}</div>
                 <br>
             {% endif %}
-            {% if ride.to_campus %}
-                <div class="ride_history_wrap_7"><b> {{ _('From: ') }}</b> {{ address }}  </div>
+            <div class="ride_history_wrap_7"><b> {{ _('From: ') }}</b> {{ address_from }}  </div>
                 <br>
-                <div class="ride_history_wrap_7"><b> {{ _('To: ') }} </b>{{ campus }}</div>
-            {% else %}
-                <div class="ride_history_wrap_7"><b>{{ _('From: ') }} </b>{{ campus }} </div>
-                <br>
-                <div class="ride_history_wrap_7"><b> {{ _('To: ') }}</b> {{ address }}</div>
-            {% endif %}
+            <div class="ride_history_wrap_7"><b> {{ _('To: ') }} </b>{{ address_to }}</div>
         <br>
 
             {% for pfp in pfplist %}

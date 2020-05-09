@@ -51,6 +51,8 @@ class PickupPoints:
         return id
 
     def get_on_id(self, id):
+        if id is None:
+            return None
         cursor = self.dbconnect.get_cursor()
         cursor.execute(
             "SELECT id, estimated_time, coordinates, address FROM pickup_point WHERE id=%s", (id,))
