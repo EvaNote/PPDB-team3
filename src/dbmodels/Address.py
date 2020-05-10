@@ -52,6 +52,10 @@ class Address:
             self.country = 'Belgium'
             from src.utils import address_access
             address_access.edit_address_non_recursive(self)
+        elif country is None:
+            self.street, self.nr, self.postal_code, self.city = get_address_function(self.latitude, self.longitude)
+            self.country = 'Belgium'
+            print(self.to_dict())
         else:
             self.country = country
             self.city = city
@@ -74,6 +78,14 @@ class Address:
 
     def lat_lng(self):
         return [self.latitude, self.longitude]
+
+    def fetch_id(self):
+        if self.id is not None:
+            return self.id
+        else:
+            from src.utils import address_access
+            self.id = address_access.get_id(self.country, self.city, self.postal_code, self.street, self.nr)
+            return self.id
 
 
 class Addresses:
@@ -144,8 +156,6 @@ class Addresses:
                            (address.country, address.city, address.postal_code, address.street, address.nr,
                             address.longitude, address.latitude))
             self.dbconnect.commit()
-            last_id = cursor.fetchone()['lastval']
-            return last_id
         except:
             raise Exception('Unable to add address')
 

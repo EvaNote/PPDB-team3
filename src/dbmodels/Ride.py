@@ -33,6 +33,18 @@ class Ride:
     def get_id(self):
         return self.id
 
+    def campus_from_id(self):
+        if self.campus_from:
+            return self.campus_from.id
+        else:
+            return None
+
+    def campus_to_id(self):
+        if self.campus_to:
+            return self.campus_to.id
+        else:
+            return None
+
     def to_dict(self):
         way_points = dict()
 
@@ -120,6 +132,15 @@ class Ride:
             'waypoints': way_points
         }
 
+    def fetch_id(self):
+        if self.id is not None:
+            return self.id
+        else:
+            from src.utils import address_access
+            self.id = address_access.get_id(self.departure_time, self.arrival_time, self.user_id, self.address_from,
+                                            self.address_to)
+            return self.id
+
 
 class Rides:
     def __init__(self, dbconnect):
@@ -154,8 +175,9 @@ class Rides:
     def get_id_on_all(self, departure_time, arrival_time, user_id, address_from, address_to):
         cursor = self.dbconnect.get_cursor()
         cursor.execute(
-            "SELECT id FROM ride WHERE departure_time=%s AND arrival_time=%s AND user_id=%s AND address_from=%s AND address_to=%s",
-            (departure_time, arrival_time, user_id, address_from, address_to))
+            "SELECT id FROM ride WHERE departure_time=%s AND arrival_time=%s AND user_id=%s AND address_from=%s "
+            "AND address_to=%s",
+            (departure_time, arrival_time, user_id, address_from.id, address_to.id))
         row = cursor.fetchone()
         ride_id = row[0]
         return ride_id
@@ -280,9 +302,10 @@ class Rides:
     def add_ride(self, ride):
         cursor = self.dbconnect.get_cursor()
 
-        cursor.execute('INSERT INTO "ride" VALUES(default, %s, %s, %s, %s, %s, %s, %s, %s)',
-                       (ride.departure_time, ride.arrival_time, ride.user_id,
-                        ride.car_id, ride.passengers, ride.pickup_1, ride.pickup_2, ride.pickup_3))
+        cursor.execute('INSERT INTO "ride" VALUES(default, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)',
+                       (ride.departure_time, ride.arrival_time, ride.user_id, ride.car_id, ride.passengers,
+                        ride.pickup_1, ride.pickup_2, ride.pickup_3, ride.campus_from_id(), ride.campus_to_id(),
+                        ride.address_from.id, ride.address_to.id))
         self.dbconnect.commit()
 
     def delete_ride(self, ride_id):

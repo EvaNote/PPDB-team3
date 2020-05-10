@@ -19,6 +19,7 @@ class Picture:
         except AttributeError:
             raise NotImplementedError('No "filename" attribute - override "get_filename"')
 
+
 class Pictures:
     def __init__(self, dbconnect):
         self.dbconnect = dbconnect

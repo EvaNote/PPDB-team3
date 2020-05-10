@@ -5,6 +5,7 @@ from wtforms.validators import DataRequired, Length, Email, EqualTo, ValidationE
 from src.utils import user_access
 from flask_babel import lazy_gettext
 
+
 class RegistrationForm(FlaskForm):
     first_name = StringField(lazy_gettext('First name'), validators=[DataRequired()])
     last_name = StringField(lazy_gettext('Last name'), validators=[DataRequired()])
@@ -23,6 +24,7 @@ class LoginForm(FlaskForm):
     password = PasswordField(lazy_gettext('Password'), validators=[DataRequired()])
     remember_me = BooleanField(lazy_gettext('Remember me'))
     submit = SubmitField(lazy_gettext('Log in'))
+
 
 class DeleteUserForm(FlaskForm):
     delete = SubmitField(lazy_gettext('Delete account'))
@@ -43,6 +45,7 @@ class VehicleForm(FlaskForm):
     picture = FileField(lazy_gettext('Upload car picture'), validators=[FileAllowed(['jpg','png'])])
     submit = SubmitField(lazy_gettext('Register vehicle'))
 
+
 class EditAccountForm(FlaskForm):
     first_name = StringField(lazy_gettext('First name'), validators=[DataRequired()])
     last_name = StringField(lazy_gettext('Last name'), validators=[DataRequired()])
@@ -55,6 +58,7 @@ class EditAccountForm(FlaskForm):
     submit = SubmitField(lazy_gettext('Save'))
     delete = SubmitField(lazy_gettext('Delete account'))
 
+
 class EditAddressForm(FlaskForm):
     street = StringField(lazy_gettext('Street'), validators=[DataRequired()])
     nr = StringField(lazy_gettext('Number'), validators=[DataRequired()])
@@ -63,9 +67,11 @@ class EditAddressForm(FlaskForm):
 
     submit = SubmitField(lazy_gettext('Save'))
 
+
 class SelectSubject(FlaskForm):
     subject = SelectField(lazy_gettext('Subject'), choices=[('Lost item',lazy_gettext('Lost item')),('Empty',lazy_gettext('Empty'))])
     submit = SubmitField(lazy_gettext('Make Form'))
+
 
 class getCalendar(FlaskForm):
     submit = SubmitField(lazy_gettext('Calendar link'))

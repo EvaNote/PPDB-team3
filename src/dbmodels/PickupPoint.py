@@ -24,6 +24,13 @@ class PickupPoint:
                 'longitude': self.address.longitude,
                 'estimated time': self.estimated_time}
 
+    def fetch_id(self):
+        if self.id is not None:
+            return self.id
+        else:
+            from src.utils import address_access
+            self.id = address_access.get_id(self.longitude, self.latitude)
+            return self.id
 
 class PickupPoints:
     def __init__(self, dbconnect):

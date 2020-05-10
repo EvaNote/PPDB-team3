@@ -77,6 +77,7 @@ def makeEvent(ride, isDriver):
     # TODO: naam bestuurder?
     return e
 
+
 def generate_calendar(user_id):
     # From https://pypi.org/project/ics/
     c = Calendar()
@@ -91,7 +92,6 @@ def generate_calendar(user_id):
     for ride in passenger_for:
         e = makeEvent(ride,False)
         c.events.add(e)
-
 
     cal_name = "cal" + str(user_id) + ".ics"
     #filename/path
@@ -230,7 +230,7 @@ def account_edit():
 
             # first delete cars bc car has foreign key to user (error if user gets deleted first)
             cars = car_access.get_on_user_id(user.id)
-            if cars != None:
+            if cars is not None:
                 for car in cars:
                     car_access.delete_car(car.id)
 
@@ -238,7 +238,7 @@ def account_edit():
             user_access.delete_user(user.id)
 
             # finally delete address, which doesn't have ties to other entries
-            if address_id != None:
+            if address_id is not None:
                 address = address_access.get_on_id(address_id)
                 address_access.delete_address(address.id)
 

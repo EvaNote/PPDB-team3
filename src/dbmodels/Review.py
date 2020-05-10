@@ -1,5 +1,6 @@
 from datetime import date
 
+
 class Review:
     def __init__(self, id, user_for, user_from, amount_of_stars, title, review_text, creation, role):
         self.id = id
@@ -56,7 +57,8 @@ class Reviews:
     def get_on(self, on, val):
         cursor = self.dbconnect.get_cursor()
         cursor.execute(
-            "SELECT id, user_for, user_from, amount_of_stars, title, review_text, creation, author_role FROM review WHERE %s=%s",
+            "SELECT id, user_for, user_from, amount_of_stars, title, review_text, creation, author_role FROM review "
+            "WHERE %s=%s",
             (on, val))
         reviews = list()
         for row in cursor:
@@ -74,7 +76,8 @@ class Reviews:
     def get_on_user_for(self, the_id):
         cursor = self.dbconnect.get_cursor()
         cursor.execute(
-            "SELECT id, user_for, user_from, amount_of_stars, title, review_text, creation, author_role FROM review WHERE user_for=%s",
+            "SELECT id, user_for, user_from, amount_of_stars, title, review_text, creation, author_role FROM review "
+            "WHERE user_for=%s",
             (the_id,))
         reviews = list()
         for row in cursor:
