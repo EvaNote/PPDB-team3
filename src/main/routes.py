@@ -1,14 +1,11 @@
 from flask import Blueprint, render_template, g, current_app, abort, request, jsonify, url_for, redirect, flash
 from flask_login import current_user, login_user, logout_user
-from src.utils import campus_access, user_access, ride_access, address_access, pickup_point_access
+from src.utils import campus_access, user_access, ride_access, address_access, pickup_point_access, car_access
 from flask_babel import lazy_gettext
-from src.dbmodels.Campus import Campus
 from src.dbmodels.Address import Address
 from src.dbmodels.Ride import Ride
 from src.dbmodels.PickupPoint import PickupPoint
 from flask_login import current_user
-from geopy.geocoders import Nominatim
-from src.utils import geolocator
 from src.users import routes
 
 main = Blueprint('main', __name__, url_prefix='/<lang_code>')
@@ -120,69 +117,35 @@ def deleteride(ride_id):
 @main.route('/createRide', methods=['POST'])
 def receiver_create():
     data = request.json
-
-    # adressen from en to -> campussen of campus en adres
+    # adressen from en to -> campussen of campus en adress
     from_coord = data.get('from')
     to_coord = data.get('to')
     coords = list()
-    to_campus = True
-    campus_id = 0
 
-    if isinstance(from_coord, int) and not isinstance(to_coord, int):  # p_from is campus, p_to is adres
-        campus = campus_access.get_on_id(from_coord)
-        campus_id = campus.id
-        lat_to = to_coord['lat']
-        lng_to = to_coord['lng']
-        coords.append(lat_to)
-        coords.append(lng_to)
-        to_campus = False
-    if isinstance(to_coord, int) and not isinstance(from_coord, int):    # p_to is campus, p_from is adres
-        campus = campus_access.get_on_id(to_coord)
-        campus_id = campus.id
+    if isinstance(from_coord, int):
+        campus_from = from_coord
+        address_from = None
+    else:
+        campus_from = None
         lat_from = from_coord['lat']
         lng_from = from_coord['lng']
         coords.append(lat_from)
         coords.append(lng_from)
-    if isinstance(to_coord, int) and isinstance(from_coord, int):       # p_to and p_from are campussen
-        # p_to blijft campus, p_from wordt adres
-        campus = campus_access.get_on_id(to_coord)
-        campus_id = campus.id
-
-        campus_from = campus_access.get_on_id(from_coord)
-        lat_from = campus_from.latitude
-        lng_from = campus_from.longitude
-        coords.append(lat_from)
-        coords.append(lng_from)
-
-    coords_string = "{},{}".format(coords[0], coords[1])
-    location = geolocator.reverse(coords_string)
-    address = location.raw['address']
-    if 'road' in address:
-        street = address['road']
+        address_from = Address(None, None, None, None, None, None, None, lat_from, lng_from)
+        address_access.add_address(address_from)
+        address_from = address_from.fetch_id()
+    if isinstance(to_coord, int):
+        campus_to = to_coord
+        address_to = None
     else:
-        street = " "
-    if 'house_number' in address:
-        nr = address['house_number']
-    else:
-        nr = " "
-    if 'postcode' in address:
-        postcode = address['postcode']
-    else:
-        postcode = 0
-    if 'town' in address:
-        city = address['town']
-    else:
-        city = " "
-    if 'country' in address:
-        country = address['country']
-    else:
-        country = " "
-
-    geo_locatie = street + " " + str(nr) + " " + str(postcode) + " " + city + " " + country
-    loc = geolocator.geocode(geo_locatie)
-    address_obj = Address(None, country, city, postcode, street, nr, loc.latitude, loc.longitude)
-    address_access.add_address(address_obj)
-    address_id = address_access.get_id(country, city, postcode, street, nr)
+        campus_to = None
+        lat_to = to_coord['lat']
+        lng_to = to_coord['lng']
+        coords.append(lat_to)
+        coords.append(lng_to)
+        address_to = Address(None, None, None, None, None, None, None, lat_to, lng_to)
+        address_access.add_address(address_to)
+        address_to = address_to.fetch_id()
 
     time_option = data.get('time_option')
     datetime = data.get('datetime')
@@ -207,22 +170,28 @@ def receiver_create():
         pick_up_ids.append(point_id)
         index += 1
 
+    cars = car_access.get_on_user_id(user.id)
+    if len(cars) == 0:
+        car = None
+    else:
+        car = cars[0]
+
     ride = None
     if len(pick_up_ids) == 0:
-        ride = Ride(None, departure_time, arrival_time, user_id, address_id, campus_id, to_campus, None, passengers,
-                    None, None, None)
+        ride = Ride(None, departure_time, arrival_time, user_id, car.id, passengers, None, None, None, campus_from,
+                    campus_to, address_from, address_to)
     if len(pick_up_ids) == 1:
-        ride = Ride(None, departure_time, arrival_time, user_id, address_id, campus_id, to_campus, None, passengers,
-                    pick_up_ids[0], None, None)
+        ride = Ride(None, departure_time, arrival_time, user_id, car.id, passengers, pick_up_ids[0], None, None,
+                    campus_from, campus_to, address_from, address_to)
     if len(pick_up_ids) == 2:
-        ride = Ride(None, departure_time, arrival_time, user_id, address_id, campus_id, to_campus, None, passengers,
-                    pick_up_ids[0], pick_up_ids[1], None)
+        ride = Ride(None, departure_time, arrival_time, user_id, car.id, passengers, pick_up_ids[0], pick_up_ids[1],
+                    None, campus_from, campus_to, address_from, address_to)
     if len(pick_up_ids) == 3:
-        ride = Ride(None, departure_time, arrival_time, user_id, address_id, campus_id, to_campus, None, passengers,
-                    pick_up_ids[0], pick_up_ids[1], pick_up_ids[2])
+        ride = Ride(None, departure_time, arrival_time, user_id, car.id, passengers, pick_up_ids[0], pick_up_ids[1],
+                    pick_up_ids[2], campus_from, campus_to, address_from, address_to)
 
     ride_access.add_ride(ride)
-    ride_id = ride_access.get_id_on_all(departure_time, arrival_time, user_id, address_id, campus_id)
+    ride_id = ride_access.get_id_on_all(departure_time, arrival_time, user_id, ride.address_from, ride.address_to)
     ride_to_return = ride_access.get_on_id(ride_id)
 
     return jsonify({"ride": ride_to_return.to_dict()})

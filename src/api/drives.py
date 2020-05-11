@@ -3,7 +3,7 @@ from flask_restful import Resource, abort
 from geopy import distance
 from datetime import datetime, timedelta
 
-from src.utils import user_access, ride_access, campus_access, address_access, geolocator
+from src.utils import user_access, ride_access, campus_access, address_access, car_access
 from src.dbmodels.User import User
 from src.dbmodels.Address import Address
 from src.dbmodels.Ride import Ride
@@ -27,49 +27,42 @@ class DrivesApi(Resource):  # /api/drives
         # check if from or to is a campus
         from_campus_id = campus_access.is_campus(from_a[0], from_a[1])
         to_campus_id = campus_access.is_campus(to_a[0], to_a[1])
+        valid = False
         if from_campus_id is not None:
-            to_campus = False
-            campus = from_campus_id
-            address = to_a
-        elif to_campus_id is not None:
-            to_campus = True
-            campus = to_campus_id
-            address = from_a
+            campus_from = campus_access.get_on_id(from_campus_id)
+            address_from = None
+            valid = True
         else:
+            campus_from = None
+            address_from = Address(None, None, None, None, None, None, None, from_a[0], from_a[1])
+            address_access.add_address(address_from)
+            address_from = address_from.fetch_id()
+        if to_campus_id is not None:
+            campus_to = campus_access.get_on_id(to_campus_id)
+            address_to = None
+            valid = True
+        else:
+            campus_to = None
+            address_to = Address(None, None, None, None, None, None, None, to_a[0], to_a[1])
+            address_access.add_address(address_to)
+            address_to = address_to.fetch_id()
+        if not valid:
             return abort(400, message="This is Campus Carpool, so at least one of the addresses "
                                       "(departure or destination) has to be a campus.")
-        # make new address
-        location = geolocator.reverse(str(address[0]) + ", " + str(address[1]))
-        try:
-            housenr = location.raw['address']['house_number']
-        except Exception as e:
-            housenr = ''
-        try:
-            road = location.raw['address']['road']
-        except Exception as e:
-            road = ''
-            housenr = ''  # no road = no housenumber
-        try:
-            town = location.raw['address']['town']
-        except Exception as e:
-            try:
-                town = location.raw['address']['city_district']
-            except Exception as e:
-                town = ''
-        try:
-            postcode = location.raw['address']['postcode']
-        except Exception as e:
-            postcode = ''
         fmt = '%Y-%m-%dT%H:%M:%S'
         dist = distance.distance((from_a[0], from_a[1]), (to_a[0], to_a[1])).km
         arr = datetime.strptime(arrive_by, fmt)
         time_diff_sec = timedelta(seconds=(dist / 0.01))
         depart_estimate = (arr - time_diff_sec).strftime(fmt).split('.')[0]
-        address_access.add_address(Address(None, "Belgium", town, postcode, road, housenr, address[0], address[1]))
-        addr_id = address_access.get_id("Belgium", town, postcode, road, housenr)
-        new_ride = Ride(None, depart_estimate, arrive_by, user_id, addr_id, campus, to_campus, None, nr_seats, None, None, None)
+        cars = car_access.get_on_user_id(user_id)
+        if len(cars) == 0:
+            car = None
+        else:
+            car = cars[0]
+        new_ride = Ride(None, depart_estimate, arrive_by, user_id, car.id, nr_seats, None, None, None, campus_from,
+                        campus_to, address_from, address_to)
         ride_access.add_ride(new_ride)
-        ride_id = ride_access.get_id_on_all(depart_estimate, arrive_by, user_id, addr_id, campus)
+        ride_id = new_ride.fetch_id()
         resp = make_response({"id": ride_id, "driver_id": user_id, "passenger-ids": [], "passenger-places": nr_seats,
                               "from": from_a, "to": to_a, "arrive-by": arrive_by}, 201)
         resp.headers["Location"] = "/drives/" + str(ride_id)
@@ -173,7 +166,6 @@ class DrivesSearchAPI(Resource):
     def get(self):
         args = request.args
         # parse available arguments
-        results = []
         dict = {'fLat': None, 'fLng': None, 'tLat': None, 'tLng': None, 'arrive_by': None, 'limit': 5}
         for i in args:
             if i == 'from':

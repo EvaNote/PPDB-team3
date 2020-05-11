@@ -33,6 +33,18 @@ class Ride:
     def get_id(self):
         return self.id
 
+    def campus_from_id(self):
+        if self.campus_from:
+            return self.campus_from.id
+        else:
+            return None
+
+    def campus_to_id(self):
+        if self.campus_to:
+            return self.campus_to.id
+        else:
+            return None
+
     def to_dict(self):
         way_points = dict()
 
@@ -120,12 +132,20 @@ class Ride:
             'waypoints': way_points
         }
 
+    def fetch_id(self):
+        if self.id is not None:
+            return self.id
+        else:
+            from src.utils import address_access
+            self.id = address_access.get_id(self.departure_time, self.arrival_time, self.user_id, self.address_from,
+                                            self.address_to)
+            return self.id
+
 
 class Rides:
     def __init__(self, dbconnect):
         self.dbconnect = dbconnect
 
-    #TODO: lijkt aanhalingstekens string mee over te nemen
     def get_on(self, on, val):
         cursor = self.dbconnect.get_cursor()
         cursor.execute(
@@ -155,8 +175,9 @@ class Rides:
     def get_id_on_all(self, departure_time, arrival_time, user_id, address_from, address_to):
         cursor = self.dbconnect.get_cursor()
         cursor.execute(
-            "SELECT id FROM ride WHERE departure_time=%s AND arrival_time=%s AND user_id=%s AND address_from=%s AND address_to=%s",
-            (departure_time, arrival_time, user_id, address_from, address_to))
+            "SELECT id FROM ride WHERE departure_time=%s AND arrival_time=%s AND user_id=%s AND address_from=%s "
+            "AND address_to=%s",
+            (departure_time, arrival_time, user_id, address_from.id, address_to.id))
         row = cursor.fetchone()
         ride_id = row[0]
         return ride_id
@@ -225,18 +246,12 @@ class Rides:
                  "email": row[1]})
         return results
 
-
-    def get_on_user_id(self, val):
-        cursor = self.dbconnect.get_cursor()
-        cursor.execute(
-            "SELECT id, departure_time, arrival_time, user_id, address_1, campus, to_campus, car_id, passengers, pickup_point_1, pickup_point_2, pickup_point_3 FROM ride WHERE user_id=%s",
-            (val,))
-        rides = list()
-        for row in cursor:
-            ride = Ride(row[0], row[1], row[2], row[3], row[4], row[5], row[6], row[7], row[8], row[9], row[10],
-                        row[11])
-            rides.append(ride)
-        return rides
+    def get_on_user_id(self, user_id):
+        found = self.get_on('user_id', user_id)
+        if len(found) > 0:
+            return found[0]
+        else:
+            return None
 
     def get_on_car_id(self, car_id):
         found = self.get_on('car_id', car_id)
@@ -287,9 +302,10 @@ class Rides:
     def add_ride(self, ride):
         cursor = self.dbconnect.get_cursor()
 
-        cursor.execute('INSERT INTO "ride" VALUES(default, %s, %s, %s, %s, %s, %s, %s, %s)',
-                       (ride.departure_time, ride.arrival_time, ride.user_id,
-                        ride.car_id, ride.passengers, ride.pickup_1, ride.pickup_2, ride.pickup_3))
+        cursor.execute('INSERT INTO "ride" VALUES(default, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)',
+                       (ride.departure_time, ride.arrival_time, ride.user_id, ride.car_id, ride.passengers,
+                        ride.pickup_1, ride.pickup_2, ride.pickup_3, ride.campus_from_id(), ride.campus_to_id(),
+                        ride.address_from.id, ride.address_to.id))
         self.dbconnect.commit()
 
     def delete_ride(self, ride_id):
@@ -361,7 +377,7 @@ class Rides:
             from ride r
             join address a_from on r.address_from = a_from.id
             join address a_to on r.address_to = a_to.id
-            
+
             where (
                 -- driver destination is close enough to passenger destination
                 (ST_Distance(a_to.coordinates, """ + to_loc + """) < 3000)

@@ -55,12 +55,15 @@ def makeEvent(ride, isDriver):
     e.end = ride.arrival_time
     e.created = datetime.now()
     locString = ""
-    address = address_access.get_on_id(ride.address_1)
-    if ride.to_campus:
-        locString += address.street + " " + str(address.nr) + ", " + address.city + " - "
-        locString += campus_access.get_on_id(ride.campus).name
+    if ride.campus_from:
+        locString += ride.campus_from.name
     else:
-        locString += campus_access.get_on_id(ride.campus).name + " - "
+        address = ride.address_from
+        locString += address.street + " " + str(address.nr) + ", " + address.city + " - "
+    if ride.campus_to:
+        locString += ride.campus_to.name
+    else:
+        address = ride.address_to
         locString += address.street + " " + str(address.nr) + ", " + address.city
     if isDriver:
         e.location = locString
@@ -73,6 +76,7 @@ def makeEvent(ride, isDriver):
         e.description = locString
     # TODO: naam bestuurder?
     return e
+
 
 def generate_calendar(user_id):
     # From https://pypi.org/project/ics/
@@ -89,7 +93,6 @@ def generate_calendar(user_id):
         e = makeEvent(ride,False)
         c.events.add(e)
 
-
     cal_name = "cal" + str(user_id) + ".ics"
     #filename/path
     path = Path(users.root_path)
@@ -99,6 +102,7 @@ def generate_calendar(user_id):
     with open(cal_path, 'w') as my_file:
         my_file.writelines(c)
     return
+
 
 @users.route("/account", methods=['GET', 'POST'])
 def account():
@@ -226,7 +230,7 @@ def account_edit():
 
             # first delete cars bc car has foreign key to user (error if user gets deleted first)
             cars = car_access.get_on_user_id(user.id)
-            if cars != None:
+            if cars is not None:
                 for car in cars:
                     car_access.delete_car(car.id)
 
@@ -234,7 +238,7 @@ def account_edit():
             user_access.delete_user(user.id)
 
             # finally delete address, which doesn't have ties to other entries
-            if address_id != None:
+            if address_id is not None:
                 address = address_access.get_on_id(address_id)
                 address_access.delete_address(address.id)
 
@@ -300,8 +304,8 @@ def myrides():
         return redirect(url_for('users.login'))
     allrides = ride_access.get_all()
     userrides = []
-    addresses = []
-    campuses = []
+    from_places = []
+    to_places = []
     pfps = []
     allids = []
     pickuppoints = []
@@ -309,10 +313,16 @@ def myrides():
     for ride in allrides:
         if ride.user_id == current_user.id:
             userrides.append(ride)
-            temp = address_access.get_on_id(ride.address_1)
-            addresses.append(temp.city + ", " + temp.street + ", " + temp.nr)
-            temp = campus_access.get_on_id(ride.campus)
-            campuses.append(temp.name)
+            if ride.campus_from:
+                from_places.append(ride.campus_from.name)
+            else:
+                temp = ride.address_from
+                from_places.append(temp.city + ", " + temp.street + ", " + temp.nr)
+            if ride.campus_to:
+                to_places.append(ride.campus_to.name)
+            else:
+                temp = ride.address_to
+                to_places.append(temp.city + ", " + temp.street + ", " + temp.nr)
             temp = list(ride_access.get_passenger_ids(ride.id))
             allids.append(temp)
             ride_pfp = []
@@ -330,27 +340,27 @@ def myrides():
             #allids.append(userids)
             pfps.append(ride_pfp)
             if ride.pickup_1 is not None:
-                pickup_1_id = ride.pickup_1
-                time_1 = pickup_point_access.get_on_id(pickup_1_id).estimated_time
+                pickup_1 = ride.pickup_1
+                time_1 = pickup_1.estimated_time
                 points.append(time_1)
                 bools[0] = True
                 if ride.pickup_2 is not None:
-                    pickup_2_id = ride.pickup_2
-                    time_2 = pickup_point_access.get_on_id(pickup_2_id).estimated_time
+                    pickup_2 = ride.pickup_2
+                    time_2 = pickup_2.estimated_time
                     points.append(time_2)
                     bools[1] = True
                     if ride.pickup_3 is not None:
-                        pickup_3_id = ride.pickup_3
-                        time_3 = pickup_point_access.get_on_id(pickup_3_id).estimated_time
+                        pickup_3 = ride.pickup_3
+                        time_3 = pickup_3.estimated_time
                         points.append(time_3)
                         bools[2] = True
             pickupbools.append(bools)
             pickuppoints.append(points)
 
-
     return render_template('ride_history.html', title=lazy_gettext('My rides'), loggedIn=True, userrides=userrides,
-                           addresses=addresses, campuses=campuses, pfps=pfps, allids=allids, pickuppoints=pickuppoints,
+                           from_locs=from_places, to_locs=to_places, pfps=pfps, allids=allids, pickuppoints=pickuppoints,
                            pickupbools=pickupbools)
+
 
 @users.route("/joinedrides")
 def joinedrides():
@@ -358,18 +368,24 @@ def joinedrides():
         return redirect(url_for('users.login'))
     allrides = ride_access.get_rides_from_passenger(current_user.id)
     userrides = []
-    addresses = []
-    campuses = []
+    from_places = []
+    to_places = []
     pfps = []
     allids = []
     pickuppoints = []
     pickupbools = []
     for ride in allrides:
         userrides.append(ride)
-        temp = address_access.get_on_id(ride.address_1)
-        addresses.append(temp.city + ", " + temp.street + ", " + temp.nr)
-        temp = campus_access.get_on_id(ride.campus)
-        campuses.append(temp.name)
+        if ride.campus_from:
+            from_places.append(ride.campus_from.name)
+        else:
+            temp = ride.address_from
+            from_places.append(temp.city + ", " + temp.street + ", " + temp.nr)
+        if ride.campus_to:
+            to_places.append(ride.campus_to.name)
+        else:
+            temp = ride.address_to
+            to_places.append(temp.city + ", " + temp.street + ", " + temp.nr)
         temp = list(ride_access.get_passenger_ids(ride.id))
         temp2 = []
         ride_pfp = []
@@ -417,7 +433,7 @@ def joinedrides():
 
     return render_template('joined_rides.html', title=lazy_gettext('Joined rides'), loggedIn=True,
                            userrides=list(reversed(userrides)), pickuppoints=list(reversed(pickuppoints)), pickupbools=list(reversed(pickupbools)),
-                           addresses=list(reversed(addresses)), campuses=list(reversed(campuses)), pfps=list(reversed(pfps)))
+                           from_locs=list(reversed(from_places)), to_locs=list(reversed(to_places)), pfps=list(reversed(pfps)))
 
 
 @users.route("/user=<userid>", methods=['GET', 'POST'])

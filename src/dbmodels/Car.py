@@ -26,7 +26,8 @@ class Cars:
 
     def get_on(self, on, val):
         cursor = self.dbconnect.get_cursor()
-        cursor.execute("SELECT id,number_plate,color,brand,model,nr_seats,construction_year,fuel_consumption,fuel,user_id,picture FROM car WHERE %s=%s",
+        cursor.execute("SELECT id,number_plate,color,brand,model,nr_seats,construction_year,fuel_consumption,fuel,"
+                       "user_id,picture FROM car WHERE %s=%s",
                        (on, val))
         cars = list()
         for row in cursor:
@@ -36,7 +37,8 @@ class Cars:
 
     def get_on_id(self, id):
         cursor = self.dbconnect.get_cursor()
-        cursor.execute('SELECT id,number_plate,color,brand,model,nr_seats,construction_year,fuel_consumption,fuel,user_id,picture FROM car WHERE id=%s',
+        cursor.execute('SELECT id,number_plate,color,brand,model,nr_seats,construction_year,fuel_consumption,fuel,'
+                       'user_id,picture FROM car WHERE id=%s',
                        (id,))
         car = cursor.fetchone()
         if car == None:
@@ -47,7 +49,8 @@ class Cars:
     def get_on_user_id(self, user_id):
         #found = self.get_on('user_id', user_id)
         cursor = self.dbconnect.get_cursor()
-        cursor.execute("SELECT id,number_plate,color,brand,model,nr_seats,construction_year,fuel_consumption,fuel,user_id,picture FROM car WHERE user_id=%s",
+        cursor.execute("SELECT id,number_plate,color,brand,model,nr_seats,construction_year,fuel_consumption,fuel,"
+                       "user_id,picture FROM car WHERE user_id=%s",
                        (user_id,))
         cars = list()
         for row in cursor:
@@ -61,7 +64,8 @@ class Cars:
 
     def get_all(self, dbconnect):
         cursor = dbconnect.get_cursor()
-        cursor.execute("SELECT id,number_plate,color,brand,model,nr_seats,construction_year,fuel_consumption,fuel,user_id,picture FROM car")
+        cursor.execute("SELECT id,number_plate,color,brand,model,nr_seats,construction_year,fuel_consumption,fuel,"
+                       "user_id,picture FROM car")
         cars = list()
         for row in cursor:
             car = Car(row[0], row[1], row[2], row[3], row[4], row[5], row[6], row[7], row[8], row[9], row[10])
@@ -81,7 +85,8 @@ class Cars:
     def edit_car(self, car_id, brand, model, color, plateNumber, seats, constructionYear, consumption, fuelType, picture):
         cursor = self.dbconnect.get_cursor()
         try:
-            cursor.execute('UPDATE "car" SET brand=%s, model=%s, color=%s, number_plate=%s, nr_seats=%s, construction_year=%s, fuel_consumption=%s, fuel=%s, picture=%s WHERE id=%s',
+            cursor.execute('UPDATE "car" SET brand=%s, model=%s, color=%s, number_plate=%s, nr_seats=%s, '
+                           'construction_year=%s, fuel_consumption=%s, fuel=%s, picture=%s WHERE id=%s',
             (brand, model, color, plateNumber, seats, constructionYear, consumption, fuelType, picture, car_id))
             self.dbconnect.commit()
         except:
