@@ -85,13 +85,15 @@ def generate_calendar(user_id):
     driver_for = ride_access.get_on_user_id(user_id)
     passenger_for = ride_access.get_rides_from_passenger(user_id)
 
-    for ride in driver_for:
-        e = makeEvent(ride,True)
-        c.events.add(e)
+    if driver_for is not None:
+        for ride in driver_for:
+            e = makeEvent(ride,True)
+            c.events.add(e)
 
-    for ride in passenger_for:
-        e = makeEvent(ride,False)
-        c.events.add(e)
+    if passenger_for is not None:
+        for ride in passenger_for:
+            e = makeEvent(ride,False)
+            c.events.add(e)
 
     cal_name = "cal" + str(user_id) + ".ics"
     #filename/path
