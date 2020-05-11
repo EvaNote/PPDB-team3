@@ -96,7 +96,7 @@ class Addresses:
     def get_latest_id(self):
         cursor = self.dbconnect.get_cursor()
         cursor.execute(
-            "SELECT id,country,city,postal_code,street,nr,latitude,longitude FROM address order by id desc limit 1")
+            "SELECT id,country,city,postal_code,street,nr, coordinates FROM address order by id desc limit 1")
         address = cursor.fetchone()
         return address[0]
 
@@ -123,8 +123,8 @@ class Addresses:
     def get_on_lat_lng(self, latitude, longitude):
         cursor = self.dbconnect.get_cursor()
         cursor.execute(
-            'SELECT id,country,city,postal_code,street,nr,latitude,longitude FROM address WHERE latitude=%s and longitude=%s',
-            (latitude, longitude,))
+            'SELECT id,country,city,postal_code,street,nr,coordinates FROM address WHERE coordinates=ST_MakePoint(%s,%s)',
+            (longitude, latitude,))
         address = cursor.fetchone()
         if address is None:
             return None
@@ -152,9 +152,9 @@ class Addresses:
     def add_address(self, address: Address):
         cursor = self.dbconnect.get_cursor()
         try:
-            cursor.execute('INSERT INTO "address" VALUES(default, %s, %s, %s, %s, %s, ST_MakePoint(%s, %s))',
+            cursor.execute('INSERT INTO "address" VALUES(default, %s, %s, %s, %s, %s, %s)',
                            (address.country, address.city, address.postal_code, address.street, address.nr,
-                            address.longitude, address.latitude))
+                            address.coordinates))
             self.dbconnect.commit()
         except:
             raise Exception('Unable to add address')
