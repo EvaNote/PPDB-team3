@@ -163,8 +163,8 @@ class Rides:
             "campus_to, "  # 10
             "address_from, "  # 11
             "address_to "  # 12
-            "FROM ride WHERE %s=%s",
-            (on, val))
+            "FROM ride WHERE " + on + "=%s",
+            (val,))
         rides = list()
         for row in cursor:
             ride = Ride(row[0], row[1], row[2], row[3], row[4], row[5], row[6], row[7], row[8], row[9], row[10],
@@ -249,7 +249,7 @@ class Rides:
     def get_on_user_id(self, user_id):
         found = self.get_on('user_id', user_id)
         if len(found) > 0:
-            return found[0]
+            return found
         else:
             return None
 

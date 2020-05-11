@@ -83,7 +83,7 @@ def generate_calendar(user_id):
     c = Calendar()
 
     driver_for = ride_access.get_on_user_id(user_id)
-    passenger_for = ride_access.getRidesFromPassenger(user_id)
+    passenger_for = ride_access.get_rides_from_passenger(user_id)
 
     for ride in driver_for:
         e = makeEvent(ride,True)
