@@ -56,7 +56,6 @@ class Address:
         elif country is None:
             self.street, self.nr, self.postal_code, self.city = get_address_function(self.latitude, self.longitude)
             self.country = 'Belgium'
-            print(self.to_dict())
         else:
             self.country = country
             self.city = city
