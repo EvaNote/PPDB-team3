@@ -45,6 +45,7 @@ class Address:
                 self.latitude = latitude
                 self.longitude = longitude
             except Exception as e:
+                self.coordinates = Point(longitude, latitude)
                 self.latitude = latitude
                 self.longitude = longitude
         if country == '?':  # FIX: due to alter table, see above
@@ -123,7 +124,8 @@ class Addresses:
     def get_on_lat_lng(self, latitude, longitude):
         cursor = self.dbconnect.get_cursor()
         cursor.execute(
-            'SELECT id,country,city,postal_code,street,nr,coordinates FROM address WHERE coordinates=ST_MakePoint(%s,%s)',
+            'SELECT id,country,city,postal_code,street,nr,coordinates FROM address '
+            'WHERE coordinates=ST_MakePoint(%s,%s)',
             (longitude, latitude,))
         address = cursor.fetchone()
         if address is None:
