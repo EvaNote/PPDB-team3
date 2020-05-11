@@ -29,7 +29,7 @@ class DrivesApi(Resource):  # /api/drives
         to_campus_id = campus_access.is_campus(to_a[0], to_a[1])
         valid = False
         if from_campus_id is not None:
-            campus_from = campus_access.get_on_id(from_campus_id)
+            campus_from = from_campus_id
             address_from = None
             valid = True
         else:
@@ -38,7 +38,7 @@ class DrivesApi(Resource):  # /api/drives
             address_access.add_address(address_from)
             address_from = address_from.fetch_id()
         if to_campus_id is not None:
-            campus_to = campus_access.get_on_id(to_campus_id)
+            campus_to = to_campus_id
             address_to = None
             valid = True
         else:
@@ -58,8 +58,8 @@ class DrivesApi(Resource):  # /api/drives
         if len(cars) == 0:
             car = None
         else:
-            car = cars[0]
-        new_ride = Ride(None, depart_estimate, arrive_by, user_id, car.id, nr_seats, None, None, None, campus_from,
+            car = cars[0].id
+        new_ride = Ride(None, depart_estimate, arrive_by, user_id, car, nr_seats, None, None, None, campus_from,
                         campus_to, address_from, address_to)
         ride_access.add_ride(new_ride)
         ride_id = new_ride.fetch_id()

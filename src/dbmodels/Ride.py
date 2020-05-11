@@ -136,8 +136,8 @@ class Ride:
         if self.id is not None:
             return self.id
         else:
-            from src.utils import address_access
-            self.id = address_access.get_id(self.departure_time, self.arrival_time, self.user_id, self.address_from,
+            from src.utils import ride_access
+            self.id = ride_access.get_id_on_all(self.departure_time, self.arrival_time, self.user_id, self.address_from,
                                             self.address_to)
             return self.id
 

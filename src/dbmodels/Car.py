@@ -60,7 +60,7 @@ class Cars:
         if len(cars) > 0:
             return cars
         else:
-            return None
+            return []
 
     def get_all(self, dbconnect):
         cursor = dbconnect.get_cursor()
