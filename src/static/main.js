@@ -28,12 +28,7 @@ L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
 
 // add OSRM support using Leaflet Routing Machine
 let control = L.Routing.control({
-<<<<<<< HEAD
     serviceUrl: 'https://team3.ppdb.me:69/route/v1',
-=======
-    //serviceUrl: 'http://127.0.0.1:5001/route/v1',
-    serviceUrl: 'https://35.195.213.223:69/route/v1',
->>>>>>> 7cb3a6f0f9bf5e0f4ab183a35798d0332c078cfa
     routeWhileDragging: true,
     draggableWaypoints: false,
     geocoder: L.Control.Geocoder.nominatim(),
