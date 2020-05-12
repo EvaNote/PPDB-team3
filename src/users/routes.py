@@ -337,7 +337,7 @@ def myrides(before, after):
         return redirect(url_for('users.login'))
     allrides_temp = ride_access.get_on_user_id(current_user.id)
     allrides = filter_rides(allrides_temp,before2,after2)
-    allrides.sort(key=get_departure)
+    allrides.sort(key=get_departure, reverse=True)
     form = Filter_rides()
     userrides = []
     from_places = []
