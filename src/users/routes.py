@@ -304,18 +304,18 @@ def filter_rides(rides, before, after):
     else:
         newrides = []
         for ride in rides:
-            if before is not None:
+            if before is not None and after is None:
                 #TOOO: arrival/departure?
-                if before >= ride.arrival_time:
+                if before <= ride.arrival_time:
                     newrides.append(ride)
-            else:
-                newrides.append(ride)
-            if after is not None:
+            elif after is not None and before is None:
                 #TOOO: arrival/departure?
-                if after <= ride.departure_time:
+                if after >= ride.departure_time:
                     newrides.append(ride)
-            else:
-                newrides.append(ride)
+            elif after is not None and before is not None:
+                #TOOO: arrival/departure?
+                if after >= ride.departure_time and before <= ride.arrival_time:
+                    newrides.append(ride)
     return newrides
 
 def get_departure(ride):
@@ -336,7 +336,7 @@ def myrides(before, after):
     if not current_user.is_authenticated and not current_app.config['TESTING']:
         return redirect(url_for('users.login'))
     allrides_temp = ride_access.get_on_user_id(current_user.id)
-    allrides = filter_rides(allrides_temp,before2,after2)
+    allrides = filter_rides(allrides_temp,after2,before2)
     allrides.sort(key=get_departure, reverse=True)
     form = Filter_rides()
     userrides = []
@@ -395,19 +395,19 @@ def myrides(before, after):
 
     if form.submit.data:
         if form.before.data and not form.after.data:
-            return redirect(url_for(myrides, before=str(form.before.data)))
+            return redirect(url_for('users.myrides', before=str(form.before.data)))
         elif form.after.data and not form.before.data:
-            return redirect(url_for(myrides, after=str(form.after.data)))
+            return redirect(url_for('users.myrides', after=str(form.after.data)))
         elif form.after.data and form.before.data:
             before = str(form.before.data)
             after = str(form.after.data)
-            return redirect(url_for(myrides, before=before, after=after))
+            return redirect(url_for('users.myrides', before=before, after=after))
         else:
             pass
 
     return render_template('ride_history.html', title=lazy_gettext('My rides'), loggedIn=True, userrides=userrides,
                            from_locs=from_places, to_locs=to_places, pfps=pfps, allids=allids, pickuppoints=pickuppoints,
-                           pickupbools=pickupbools, form=form)
+                           pickupbools=pickupbools, form=form, before=before, after=after)
 
 
 @users.route("/joinedrides")
