@@ -409,12 +409,23 @@ def myrides(before, after):
                            from_locs=from_places, to_locs=to_places, pfps=pfps, allids=allids, pickuppoints=pickuppoints,
                            pickupbools=pickupbools, form=form, before=before, after=after)
 
-
-@users.route("/joinedrides")
-def joinedrides():
+@users.route("/joinedrides", defaults={'after':None, 'before':None},methods=['GET', 'POST'])
+@users.route("/<before>joinedrides", defaults={'after':None},methods=['GET', 'POST'])
+@users.route("/joinedrides<after>", defaults={'before':None},methods=['GET', 'POST'])
+@users.route("/<before>joinedrides<after>", methods=['GET', 'POST'])
+def joinedrides(before, after):
     if not current_user.is_authenticated and not current_app.config['TESTING']:
         return redirect(url_for('users.login'))
-    allrides = ride_access.get_rides_from_passenger(current_user.id)
+    before2 = None
+    after2 = None
+    if before is not None:
+        before2 = datetime.strptime(before, "%Y-%m-%d")
+    if after is not None:
+        after2 = datetime.strptime(after, "%Y-%m-%d")
+    allrides_temp = ride_access.get_rides_from_passenger(current_user.id)
+    allrides = filter_rides(allrides_temp,after2,before2)
+    allrides.sort(key=get_departure, reverse=True)
+    form = Filter_rides()
     userrides = []
     from_places = []
     to_places = []
@@ -479,9 +490,21 @@ def joinedrides():
         pickupbools.append(bools)
         pickuppoints.append(points)
 
+    if form.submit.data:
+        if form.before.data and not form.after.data:
+            return redirect(url_for('users.myrides', before=str(form.before.data)))
+        elif form.after.data and not form.before.data:
+            return redirect(url_for('users.myrides', after=str(form.after.data)))
+        elif form.after.data and form.before.data:
+            before = str(form.before.data)
+            after = str(form.after.data)
+            return redirect(url_for('users.myrides', before=before, after=after))
+        else:
+            pass
+
     return render_template('joined_rides.html', title=lazy_gettext('Joined rides'), loggedIn=True,
                            userrides=list(reversed(userrides)), pickuppoints=list(reversed(pickuppoints)), pickupbools=list(reversed(pickupbools)),
-                           from_locs=list(reversed(from_places)), to_locs=list(reversed(to_places)), pfps=list(reversed(pfps)))
+                           from_locs=list(reversed(from_places)), to_locs=list(reversed(to_places)), pfps=list(reversed(pfps)), form=form)
 
 
 @users.route("/user=<userid>", methods=['GET', 'POST'])
