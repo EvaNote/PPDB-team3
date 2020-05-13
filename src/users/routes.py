@@ -337,6 +337,8 @@ def myrides(before, after):
         return redirect(url_for('users.login'))
     allrides_temp = ride_access.get_on_user_id(current_user.id)
     allrides = filter_rides(allrides_temp,after2,before2)
+    if allrides is None:
+        allrides = []
     allrides.sort(key=get_departure, reverse=True)
     form = Filter_rides()
     userrides = []
@@ -424,6 +426,8 @@ def joinedrides(before, after):
         after2 = datetime.strptime(after, "%Y-%m-%d")
     allrides_temp = ride_access.get_rides_from_passenger(current_user.id)
     allrides = filter_rides(allrides_temp,after2,before2)
+    if allrides is None:
+        allrides = []
     allrides.sort(key=get_departure, reverse=True)
     form = Filter_rides()
     userrides = []
