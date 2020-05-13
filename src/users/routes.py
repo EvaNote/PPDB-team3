@@ -12,6 +12,7 @@ from src.reviews.forms import Reviews
 from src.dbmodels.PickupPoint import PickupPoint
 from src.users.forms import LoginForm, RegistrationForm, VehicleForm, EditAccountForm, EditAddressForm, SelectSubject, \
     DeleteUserForm, getCalendar
+from src.rides.forms import Filter_rides
 from src.utils import user_access, bcrypt, review_access, car_access, address_access, current_app, picture_access, ride_access, campus_access, \
     geolocator, pickup_point_access
 from flask_babel import lazy_gettext
@@ -296,15 +297,48 @@ def address_edit():
         return redirect(url_for('users.account'))
     return render_template('address_edit.html', title=lazy_gettext('Edit address'), loggedIn=True, form=form)
 
+#before/after als datetime, ride.arrival als string?
+def filter_rides(rides, before, after):
+    if before is None and after is None:
+        return rides
+    else:
+        newrides = []
+        for ride in rides:
+            if before is not None and after is None:
+                #TOOO: arrival/departure?
+                if before <= ride.arrival_time:
+                    newrides.append(ride)
+            elif after is not None and before is None:
+                #TOOO: arrival/departure?
+                if after >= ride.departure_time:
+                    newrides.append(ride)
+            elif after is not None and before is not None:
+                #TOOO: arrival/departure?
+                if after >= ride.departure_time and before <= ride.arrival_time:
+                    newrides.append(ride)
+    return newrides
 
+def get_departure(ride):
+    return ride.departure_time
 
-
-@users.route("/myrides")
-def myrides():
+@users.route("/myrides", defaults={'after':None, 'before':None},methods=['GET', 'POST'])
+@users.route("/<before>myrides", defaults={'after':None},methods=['GET', 'POST'])
+@users.route("/myrides<after>", defaults={'before':None},methods=['GET', 'POST'])
+@users.route("/<before>myrides<after>", methods=['GET', 'POST'])
+def myrides(before, after):
+    before2 = None
+    after2 = None
+    if before is not None:
+        before2 = datetime.strptime(before, "%Y-%m-%d")
+    if after is not None:
+        after2 = datetime.strptime(after, "%Y-%m-%d")
     # makes sure user won`t be able to go to page without logging in
     if not current_user.is_authenticated and not current_app.config['TESTING']:
         return redirect(url_for('users.login'))
-    allrides = ride_access.get_all()
+    allrides_temp = ride_access.get_on_user_id(current_user.id)
+    allrides = filter_rides(allrides_temp,after2,before2)
+    allrides.sort(key=get_departure, reverse=True)
+    form = Filter_rides()
     userrides = []
     from_places = []
     to_places = []
@@ -359,16 +393,39 @@ def myrides():
             pickupbools.append(bools)
             pickuppoints.append(points)
 
+    if form.submit.data:
+        if form.before.data and not form.after.data:
+            return redirect(url_for('users.myrides', before=str(form.before.data)))
+        elif form.after.data and not form.before.data:
+            return redirect(url_for('users.myrides', after=str(form.after.data)))
+        elif form.after.data and form.before.data:
+            before = str(form.before.data)
+            after = str(form.after.data)
+            return redirect(url_for('users.myrides', before=before, after=after))
+        else:
+            pass
+
     return render_template('ride_history.html', title=lazy_gettext('My rides'), loggedIn=True, userrides=userrides,
                            from_locs=from_places, to_locs=to_places, pfps=pfps, allids=allids, pickuppoints=pickuppoints,
-                           pickupbools=pickupbools)
+                           pickupbools=pickupbools, form=form, before=before, after=after)
 
-
-@users.route("/joinedrides")
-def joinedrides():
+@users.route("/joinedrides", defaults={'after':None, 'before':None},methods=['GET', 'POST'])
+@users.route("/<before>joinedrides", defaults={'after':None},methods=['GET', 'POST'])
+@users.route("/joinedrides<after>", defaults={'before':None},methods=['GET', 'POST'])
+@users.route("/<before>joinedrides<after>", methods=['GET', 'POST'])
+def joinedrides(before, after):
     if not current_user.is_authenticated and not current_app.config['TESTING']:
         return redirect(url_for('users.login'))
-    allrides = ride_access.get_rides_from_passenger(current_user.id)
+    before2 = None
+    after2 = None
+    if before is not None:
+        before2 = datetime.strptime(before, "%Y-%m-%d")
+    if after is not None:
+        after2 = datetime.strptime(after, "%Y-%m-%d")
+    allrides_temp = ride_access.get_rides_from_passenger(current_user.id)
+    allrides = filter_rides(allrides_temp,after2,before2)
+    allrides.sort(key=get_departure, reverse=True)
+    form = Filter_rides()
     userrides = []
     from_places = []
     to_places = []
@@ -433,9 +490,21 @@ def joinedrides():
         pickupbools.append(bools)
         pickuppoints.append(points)
 
+    if form.submit.data:
+        if form.before.data and not form.after.data:
+            return redirect(url_for('users.joinedrides', before=str(form.before.data)))
+        elif form.after.data and not form.before.data:
+            return redirect(url_for('users.joinedrides', after=str(form.after.data)))
+        elif form.after.data and form.before.data:
+            before = str(form.before.data)
+            after = str(form.after.data)
+            return redirect(url_for('users.joinedrides', before=before, after=after))
+        else:
+            pass
+
     return render_template('joined_rides.html', title=lazy_gettext('Joined rides'), loggedIn=True,
                            userrides=list(reversed(userrides)), pickuppoints=list(reversed(pickuppoints)), pickupbools=list(reversed(pickupbools)),
-                           from_locs=list(reversed(from_places)), to_locs=list(reversed(to_places)), pfps=list(reversed(pfps)))
+                           from_locs=list(reversed(from_places)), to_locs=list(reversed(to_places)), pfps=list(reversed(pfps)), form=form)
 
 
 @users.route("/user=<userid>", methods=['GET', 'POST'])
