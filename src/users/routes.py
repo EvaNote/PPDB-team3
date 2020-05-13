@@ -492,13 +492,13 @@ def joinedrides(before, after):
 
     if form.submit.data:
         if form.before.data and not form.after.data:
-            return redirect(url_for('users.myrides', before=str(form.before.data)))
+            return redirect(url_for('users.joinedrides', before=str(form.before.data)))
         elif form.after.data and not form.before.data:
-            return redirect(url_for('users.myrides', after=str(form.after.data)))
+            return redirect(url_for('users.joinedrides', after=str(form.after.data)))
         elif form.after.data and form.before.data:
             before = str(form.before.data)
             after = str(form.after.data)
-            return redirect(url_for('users.myrides', before=before, after=after))
+            return redirect(url_for('users.joinedrides', before=before, after=after))
         else:
             pass
 
