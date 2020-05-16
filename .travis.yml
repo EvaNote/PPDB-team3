@@ -13,6 +13,6 @@ before_script:
   - psql -c 'CREATE DATABASE dbcarpool OWNER app;'
   - sudo cp pg_hba_travis.conf /etc/postgresql/9.6/main/pg_hba.conf
   - sudo systemctl restart postgresql
-  - psql dbcarpool -U app -f sql/test_schema.sql
+  - psql dbcarpool -U app -f tests/test_script.sql
 script:
   - python -m unittest discover

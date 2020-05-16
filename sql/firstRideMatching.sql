@@ -41,35 +41,35 @@ values (default, 51.112011, 4.424566, '2020-04-14 13:08');
         eindpunt: UAntwerpen - Campus Middelheim (301)
  */
 insert into ride
-values (default , '2020-04-14 13:00', '2020-04-14 14:00', 1, 1, 301, true, 1, 3, 1, 2, 3);
+values (default , '2020-04-14 13:00', '2020-04-14 14:00', 1, 1, 4, 1, 2, 3, null, 301, 404, 301);
 
 /* route 2:
         start punt: address 1
         eindpunt: UAntwerpen - Campus Groenenborger (300)
  */
 insert into ride
-values (default, '2020-04-14 13:00', '2020-04-14 14:00', 1, 1, 300, true, 1, 3, 1, 2, 3);
+values (default, '2020-04-14 13:00', '2020-04-14 14:00', 1, 1, 3, 1, 2, 3, null, 300, 404, 300);
 
 /* route 3:
         start punt: address 1
         eindpunt: Hoger Instituut voor Godsdienstwetenschappen (148)
  */
 insert into ride
-values (default, '2020-04-14 13:00', '2020-04-14 14:00', 1, 1, 148, true, 1, 3, 1, 2, 3);
+values (default, '2020-04-14 13:00', '2020-04-14 14:00', 1, 1, 4, 1, 2, 3, null, 148, 404, 148);
 
 /* route 4:
         start punt: address 1
         eindpunt: KdG Hogeschool - Campus Hoboken (248)
  */
 insert into ride
-values (default, '2020-04-14 13:00', '2020-04-14 14:00', 1, 1, 248, true, 1, 3, 1, 2, 3);
+values (default, '2020-04-14 13:00', '2020-04-14 14:00', 1, 1, 5, 1, 2, 3, null, 248, 404, 248);
 
 /* route 5:
         start punt: address 1
         eindpunt: APB - Campus Vesta (14)
  */
 insert into ride
-values (default, '2020-04-14 13:00', '2020-04-14 14:00', 1, 1, 14, true, 1, 3, 1, 2, 3);
+values (default, '2020-04-14 13:00', '2020-04-14 14:00', 1, 1, 4, 1, 2, 3, null, 14, 404, 14);
 
 
 insert into passenger_ride

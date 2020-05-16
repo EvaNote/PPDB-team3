@@ -4,6 +4,7 @@ from flask import Blueprint, flash, render_template, g, current_app, abort, redi
 from flask_login import current_user
 import src.users.routes
 from src.utils import user_access, car_access, ride_access
+from src.rides.forms import Filter_rides
 
 rides = Blueprint('rides', __name__, url_prefix='/<lang_code>')
 
@@ -57,7 +58,8 @@ def ride_details():
 def ride_history():
     if not current_user.is_authenticated and not current_app.config['TESTING']:
         return redirect(url_for('users.login'))
-    return render_template("ride_history.html", title=lazy_gettext("Ride history"))
+    form = Filter_rides()
+    return render_template("ride_history.html", title=lazy_gettext("Ride history"), form=form)
 
 
 # @rides.route("/maps")
