@@ -42,7 +42,13 @@
                     alt="driver pic" style="border-radius: 50%"><br>
             </a>
             <a class="btn btn-info" href="{{ url_for('users.user', userid=ride.user_id) }}" role="button">{{ _('See driver profile') }}</a>
-        <a class="btn btn-info" href="{{ url_for('main.canceljoinedride', ride_id=ride.id) }}" role="button">{{ _('Cancel ride') }}</a>
+
+        {# <a class="btn btn-info" href="{{ url_for('main.canceljoinedride', ride_id=ride.id) }}" role="button">{{ _('Cancel ride') }}</a> #}
+        {% if loggedIn %}
+            <a class="btn btn-info" href="{{ url_for('rides.join', rideid=ride.id) }}" role="button">{{ _('Join ride') }}</a>
+        {% else %}
+            <a class="btn btn-info" href="{{ url_for('users.login') }}" role="button">{{ _('Log in to join') }}</a>
+        {% endif %}
 
 
         </div>

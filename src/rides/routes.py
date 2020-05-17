@@ -98,7 +98,7 @@ def view_ride(rideid):
         bools = [False,False,False]
 
         for user_id in temp:
-            if user_id is not current_user.id:
+            if not loggedIn or user_id is not current_user.id:
                 temp2.append(user_id)
                 # userids.append(user_id)
                 user = user_access.get_user_on_id(user_id)
@@ -148,6 +148,20 @@ def view_ride(rideid):
 # @rides.route("/maps")
 # def maps():
 #     return render_template("maps.html", title="maps")
+
+@rides.route("/join=<rideid>")
+def join(rideid):
+    if not rideid.isdigit:
+        abort(404)
+    if not current_user.is_authenticated:
+        return redirect(url_for("users.login"))
+    result = ride_access.register_passenger(current_user.id, rideid)
+    if result:
+        flash('joined ride.', 'success')
+        return redirect(url_for("main.home"))
+    else:
+        flash('Could not join ride.', 'danger')
+        return redirect(url_for("rides.view_ride", rideid=rideid))
 
 
 @rides.route("/joinride", methods=['GET', 'POST'])
