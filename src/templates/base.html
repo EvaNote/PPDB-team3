@@ -98,11 +98,11 @@
                        aria-haspopup="true" aria-expanded="false">{{ _('Language') }}</a>
                     <div class="dropdown-menu dropdown-primary" aria-labelledby="dropdownMenuButton">
                         <a class="dropdown-item"
-                           href="{{ url_for(request.endpoint, lang_code='nl', userid='', car_id='') }}">NL</a>
+                           href="{{ url_for(request.endpoint, lang_code='nl', userid='', car_id='', rideid='') }}">NL</a>
                         <a class="dropdown-item"
-                           href="{{ url_for(request.endpoint, lang_code='fr', userid='', car_id='') }}">FR</a>
+                           href="{{ url_for(request.endpoint, lang_code='fr', userid='', car_id='', rideid='') }}">FR</a>
                         <a class="dropdown-item"
-                           href="{{ url_for(request.endpoint, lang_code='en', userid='', car_id='') }}">EN</a>
+                           href="{{ url_for(request.endpoint, lang_code='en', userid='', car_id='', rideid='') }}">EN</a>
                     </div>
                 </li>
             </ul>

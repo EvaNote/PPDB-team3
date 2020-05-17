@@ -3,7 +3,7 @@ from flask_babel import lazy_gettext
 from flask import Blueprint, flash, render_template, g, current_app, abort, redirect, url_for, request
 from flask_login import current_user
 import src.users.routes
-from src.utils import user_access, car_access, ride_access
+from src.utils import user_access, car_access, ride_access, picture_access, pickup_point_access
 
 rides = Blueprint('rides', __name__, url_prefix='/<lang_code>')
 
@@ -59,6 +59,91 @@ def ride_history():
         return redirect(url_for('users.login'))
     return render_template("ride_history.html", title=lazy_gettext("Ride history"))
 
+@rides.route("/view_ride=<rideid>", methods=['GET', 'POST'])
+def view_ride(rideid):
+    if not rideid.isdigit():
+        abort(404)
+    loggedIn = current_user.is_authenticated
+    allrides_temp = ride_access.get_on_id(int(rideid))
+    if allrides_temp is None:
+        abort(404)
+    allrides = []
+    allrides.append(allrides_temp)
+    if allrides is None:
+        allrides = []
+    userrides = []
+    from_places = []
+    to_places = []
+    pfps = []
+    allids = []
+    pickuppoints = []
+    pickupbools = []
+    for ride in allrides:
+        userrides.append(ride)
+        if ride.campus_from:
+            from_places.append(ride.campus_from.name)
+        else:
+            temp = ride.address_from
+            from_places.append(temp.city + ", " + temp.street + ", " + temp.nr)
+        if ride.campus_to:
+            to_places.append(ride.campus_to.name)
+        else:
+            temp = ride.address_to
+            to_places.append(temp.city + ", " + temp.street + ", " + temp.nr)
+        temp = list(ride_access.get_passenger_ids(ride.id))
+        temp2 = []
+        ride_pfp = []
+        userids = []
+        points = []
+        bools = [False,False,False]
+
+        for user_id in temp:
+            if user_id is not current_user.id:
+                temp2.append(user_id)
+                # userids.append(user_id)
+                user = user_access.get_user_on_id(user_id)
+                # if user.picture is not None:
+                #     ride_pfp.append("images/" + str(picture_access.get_picture_on_id(user.picture).filename))
+                # else:
+                #     ride_pfp.append("images/temp_profile_pic.png")
+        temp2.append(ride.user_id)
+        #userids.append(user_id)
+        user = user_access.get_user_on_id(ride.user_id)
+
+        if user.picture is not None:
+            pfps.append("images/" + str(picture_access.get_picture_on_id(user.picture).filename))
+        else:
+            pfps.append("images/temp_profile_pic.png")
+
+        allids.append(temp2)
+        #pfps.append(ride_pfp)
+        if ride.pickup_1 is not None:
+            pickup_1_id = ride.pickup_1
+            time_1 = pickup_point_access.get_on_id(pickup_1_id).estimated_time
+            points.append(time_1)
+            bools[0] = True
+            if ride.pickup_2 is not None:
+                pickup_2_id = ride.pickup_2
+                time_2 = pickup_point_access.get_on_id(pickup_2_id).estimated_time
+                points.append(time_2)
+                bools[1] = True
+                if ride.pickup_3 is not None:
+                    pickup_3_id = ride.pickup_3
+                    time_3 = pickup_point_access.get_on_id(pickup_3_id).estimated_time
+                    points.append(time_3)
+                    bools[2] = True
+        pickupbools.append(bools)
+        pickuppoints.append(points)
+
+    return render_template('ride.html', title=lazy_gettext('Joined rides'),
+                           loggedIn=True,
+                           userrides=list(userrides),
+                           pickuppoints=list(pickuppoints),
+                           pickupbools=list(pickupbools),
+                           from_locs=list(from_places),
+                           to_locs=list(to_places),
+                           pfps=list(pfps),
+                           rideid=rideid)
 
 # @rides.route("/maps")
 # def maps():
