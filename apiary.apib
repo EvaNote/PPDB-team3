@@ -1,5 +1,5 @@
 FORMAT: 1A
-HOST: http://team3.ppdb.me/api
+HOST: https://team3.ppdb.me/api
 
 # PPDB 2019-2020
 
@@ -284,9 +284,9 @@ Since this application supports 'campus carpool', one of the endpoints of a ride
 
 + Parameters
 
-    + from (required, coords, `51.130215,4.571509`) ... Find rides that can pick up a person from this location. 
-    + to (required, coords, `51.184170,4.419310`) ... Find rides that can drop off a person at this location. 
-    + arrive_by (required, time, `2020-02-12T9:30:00.00`) ... Time by which the person should arrive at their location.
+    + from (optional, coords, `51.130215,4.571509`) ... Find rides that can pick up a person from this location. 
+    + to (optional, coords, `51.184170,4.419310`) ... Find rides that can drop off a person at this location. 
+    + arrive_by (optional, time, `2020-02-12T9:30:00.00`) ... Time by which the person should arrive at their location.
     + limit (optional, number) - Amount of results to return (maximum 25).
         + default: `5`
 
