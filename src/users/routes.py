@@ -394,17 +394,6 @@ def myrides_help(before, after, shared_with = None):
             pickupbools.append(bools)
             pickuppoints.append(points)
 
-    if form.submit.data:
-        if form.before.data and not form.after.data:
-            return redirect(url_for('users.myrides', before=str(form.before.data)))
-        elif form.after.data and not form.before.data:
-            return redirect(url_for('users.myrides', after=str(form.after.data)))
-        elif form.after.data and form.before.data:
-            before = str(form.before.data)
-            after = str(form.after.data)
-            return redirect(url_for('users.myrides', before=before, after=after))
-        else:
-            pass
     to_ret = {}
     to_ret["userrides"] = userrides
     to_ret["from_locs"] = from_places
@@ -423,6 +412,19 @@ def myrides_help(before, after, shared_with = None):
 def myrides(before, after):
 
     res = myrides_help(before, after)
+
+    form = res["form"]
+    if form.submit.data:
+        if form.before.data and not form.after.data:
+            return redirect(url_for('users.myrides', before=str(form.before.data)))
+        elif form.after.data and not form.before.data:
+            return redirect(url_for('users.myrides', after=str(form.after.data)))
+        elif form.after.data and form.before.data:
+            before = str(form.before.data)
+            after = str(form.after.data)
+            return redirect(url_for('users.myrides', before=before, after=after))
+        else:
+            pass
 
     return render_template('ride_history.html', title=lazy_gettext('My rides'), loggedIn=True, userrides_m=res["userrides"],
                            from_locs_m=res["from_locs"], to_locs_m=res["to_locs"], pfps_m=res["pfps"], allids_m=res["allids"], pickuppoints_m=res["pickuppoints"],
@@ -510,17 +512,6 @@ def joinedrides_help(before, after, shared_with = None):
         pickupbools.append(bools)
         pickuppoints.append(points)
 
-    if form.submit.data:
-        if form.before.data and not form.after.data:
-            return redirect(url_for('users.joinedrides', before=str(form.before.data)))
-        elif form.after.data and not form.before.data:
-            return redirect(url_for('users.joinedrides', after=str(form.after.data)))
-        elif form.after.data and form.before.data:
-            before = str(form.before.data)
-            after = str(form.after.data)
-            return redirect(url_for('users.joinedrides', before=before, after=after))
-        else:
-            pass
     to_ret = {}
     to_ret["userrides"] = list(reversed(userrides))
     to_ret["pickuppoints"] = list(reversed(pickuppoints))
@@ -538,6 +529,19 @@ def joinedrides_help(before, after, shared_with = None):
 def joinedrides(before, after):
 
     res = joinedrides_help(before, after)
+
+    form = res["form"]
+    if form.submit.data:
+        if form.before.data and not form.after.data:
+            return redirect(url_for('users.joinedrides', before=str(form.before.data)))
+        elif form.after.data and not form.before.data:
+            return redirect(url_for('users.joinedrides', after=str(form.after.data)))
+        elif form.after.data and form.before.data:
+            before = str(form.before.data)
+            after = str(form.after.data)
+            return redirect(url_for('users.joinedrides', before=before, after=after))
+        else:
+            pass
 
     return render_template('joined_rides.html', title=lazy_gettext('View ride'), loggedIn=True,
                            userrides_j=res["userrides"], pickuppoints_j=res["pickuppoints"], pickupbools_j=res["pickupbools"],
