@@ -1,0 +1,50 @@
+
+
+    <div class="row">
+        {% for ride in userrides_m %}
+            {% set address_from = from_locs_m[loop.index0] %}
+            {% set address_to = to_locs_m[loop.index0] %}
+            {% set pfplist = pfps_m[loop.index0] %}
+            {% set pickuppoint = pickuppoints_m[loop.index0] %}
+            {% set pickupbool = pickupbools_m[loop.index0] %}
+            {% set passids = allids_m[loop.index0] %}
+
+
+
+            <div class="ride_history_wrap_3">
+                <div class="ride_history_wrap_6"><b> {{ _('Departure: ') }} </b>{{ ride.departure_time }}</div>
+                <br>
+                <div class="ride_history_wrap_6"><b> {{ _('Arrival: ') }} </b>{{ ride.arrival_time }}</div>
+                <br>
+                {% if pickupbool[0] %}
+                    <div class="ride_history_wrap_5"><b> {{ _('Pickup 1: ') }} </b>{{ pickuppoint[0] }}</div>
+                    <br>
+                {% endif %}
+                {% if pickupbool[1] %}
+                    <div class="ride_history_wrap_5"><b> {{ _('Pickup 2: ') }} </b>{{ pickuppoint[1] }}</div>
+                    <br>
+                {% endif %}
+                {% if pickupbool[2] %}
+                    <div class="ride_history_wrap_5"><b> {{ _('Pickup 3: ') }}</b> {{ pickuppoint[2] }}</div>
+                    <br>
+                {% endif %}
+                <div class="ride_history_wrap_7"><b> {{ _('From: ') }}</b> {{ address_from }}  </div>
+                <br>
+                <div class="ride_history_wrap_7"><b> {{ _('To: ') }} </b>{{ address_to }}</div>
+                <br>
+
+                {% for pfp in pfplist %}
+                    {% set linkid = passids[loop.index0] %}
+                    <a href={{ url_for('users.user', userid=linkid) }}>
+                        <img src="{{ url_for('static', filename=pfp) }}" class="float-left mr-2" width="127px"
+                             alt="passenger pic" style="border-radius: 50%"><br>
+                    </a>
+                {% endfor %}
+                <a class="btn btn-info" href="{{ url_for('main.deleteride', ride_id=ride.id) }}" role="button"
+                   style="margin-left: 5px; margin-bottom: 5px; margin-top: 5px">{{ _('Delete ride') }}</a>
+            </div>
+        {% endfor %}
+
+    </div>
+
+

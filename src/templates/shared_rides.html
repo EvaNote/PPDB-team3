@@ -1,0 +1,15 @@
+{% extends "roundborder.html" %}
+
+{% block contentTitle %}{{ _('Shared rides') }}
+
+
+{% endblock contentTitle %}
+
+
+{% block contentContent %}
+    <h3 class="text-info font-weight-normal">{{ _('As driver') }}</h3>
+  {% include "ride_history_list.html" %}
+<hr>
+    <h3 class="text-info font-weight-normal">{{ _('As passenger') }}</h3>
+    {% include "joined_rides_list.html" %}
+{% endblock contentContent %}
