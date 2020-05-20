@@ -360,9 +360,9 @@ class Rides:
         from_formatted = 'from={}%2C%20{}'.format(p_from['lat'], p_from['lng'])
         to_formatted = 'to={}%2C%20{}'.format(p_to['lat'], p_to['lng'])
         if p_time_option == 'r.departure_time':
-            time = 'depart_by=' + str(p_datetime)
+            time = 'depart_by=' + str(p_datetime.replace(' ', 'T'))
         else:
-            time = 'arrive_by=' + str(p_datetime)
+            time = 'arrive_by=' + str(p_datetime.replace(' ', 'T'))
 
         url += from_formatted + '&' + to_formatted + '&' + time + '&' \
                + 'from_distance=3000&to_distance=3000&departure_delta=10&arrival_delta=10'
