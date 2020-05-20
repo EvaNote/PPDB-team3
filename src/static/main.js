@@ -28,8 +28,7 @@ L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
 
 // add OSRM support using Leaflet Routing Machine
 let control = L.Routing.control({
-    serviceUrl: 'http://127.0.0.1:5001/route/v1',
-    //serviceUrl: 'https://35.195.213.223:69/route/v1',
+    serviceUrl: 'https://team3.ppdb.me:69/route/v1',
     routeWhileDragging: true,
     draggableWaypoints: false,
     geocoder: L.Control.Geocoder.nominatim(),
@@ -656,7 +655,6 @@ $(function () {
 
             }
             if (ride_option === "find") {
-                let start = new Date();
                 $.post({
                     contentType: "application/json",
                     url: "/en/calculateCompatibleRides",
@@ -667,15 +665,22 @@ $(function () {
                         ride_count = data["results"].length
                         alert("Found " + ride_count + " matches! Scroll down to see them.");
                         //alert("FIND: " + JSON.stringify(data));
-                        if (data === null) {
-                            return
-                        }
+                        // let mapButton = document.createElement("button");
+                        //     mapButton.setAttribute("class", "btn btn-info m-2");
+                        //     mapButton.onclick = function() {
+                        //         let w2 = window.open("http://team1.ppdb.me/index");
+                        //         console.log(w2.document);
+                        //         w2.document.getElementsByName("from_location")[0].setAttribute("value", "Yeet");
+                        //     }
+                        //     mapButton.innerHTML = "Show on map";
                         let result_div = $('#result');
                         result_div.empty();
                         result_div.attr("class", "row justify-content-center");
+                        // result_div.append(mapButton);
+                        if (data === null) {
+                            return
+                        }
                         for (let d = 0; d < data["results"].length; d++) {
-                            let stop = new Date();
-                            console.log(stop - start);
                             let result = data.results[d];
                             let driver = data["drivers"][d]
                             let driver_name = driver["first_name"] + " " + driver["last_name"]
@@ -775,14 +780,12 @@ $(function () {
 
                             result_div.append(choice);
                         }
-                        if (!data[1]) {
-
-                        }
+                        /** PARTNER RESULTS **/
                         let separation = document.createElement("hr");
-                        separation.setAttribute("class", "bg-success w-100");
-                        result_div.appendChild(separation);
+                        separation.setAttribute("class", "my-5 bg-success w-100");
+                        result_div.append(separation);
                         let affiliate = document.createElement("div");
-                        affiliate.setAttribute("class", "mx-auto text-center");
+                        affiliate.setAttribute("class", "col-12 text-center");
                         let question = document.createElement("h2");
                         question.setAttribute("class", "text-dark");
                         question.innerText = "Not happy with the results?"
@@ -791,6 +794,78 @@ $(function () {
                         question.setAttribute("class", "lead text-dark");
                         question.innerHTML = "Check out our <a class=\"text-success\" href=\"http://team1.ppdb.me/\">affiliate</a>"
                         affiliate.appendChild(question);
+                        result_div.append(affiliate);
+
+                        for (let d = 0; d < data["partner_results"].length; d++) {
+                            let result = data["partner_results"][d];
+                            let choice = document.createElement("div");
+                            choice.setAttribute("class", "border border-success rounded col-md-5 m-3 text-left");
+                            let from = result.waypoints[0]["addr"];
+                            let to = result.waypoints[result["len"] - 1]["addr"];
+                            if (result.waypoints[0]["alias"] !== "") {
+                                from += " (" + result.waypoints[0]["alias"] + ")"
+                            }
+                            if (result.waypoints[result["len"] - 1]["alias"] !== "") {
+                                to += " (" + result.waypoints[result["len"] - 1]["alias"] + ")"
+                            }
+                            let innerRow = document.createElement("div");
+                            innerRow.setAttribute("class", "row");
+
+                            let leftColumn = document.createElement("div");
+                            leftColumn.setAttribute("class", "col-md-6 text-left");
+
+                            let rightColumn = document.createElement("div");
+                            rightColumn.setAttribute("class", "col-md-6 text-left");
+
+                            leftColumn.innerHTML = "<p class=\"my-3\"><b>From:</b> " + from + "</p>\n" +
+                                "<p><b>Departure:</b> " + result["departure_time"] + "</p>\n";
+
+                            rightColumn.innerHTML = "<p class=\"my-3\"><b>To:</b> " + to + "</p>\n" +
+                                "<p><b>Arrival:</b> " + result["arrival_time"] + "</p>\n";
+
+                            let underColumn = document.createElement("div");
+                            underColumn.setAttribute("class", "col-md-8 text-center");
+
+                            let mapButton = document.createElement("button");
+                            mapButton.setAttribute("class", "btn btn-success m-2");
+                            mapButton.onclick = function() {
+                                //beginCoords  find the closest maybe pickupPoint
+                                let results = data["partner_results"][d];
+                                let tempArr = [];
+                                let n = results.closest;
+                                while(n<results.len){
+                                    if(results.waypoints[n] != null){
+                                        tempArr.push(L.latLng(results.waypoints[n].lat, results.waypoints[n].lng))
+                                    }
+                                    n++;
+                                }
+                                map.removeControl(control);
+                                control = L.Routing.control({
+                                    serviceUrl: 'https://team3.ppdb.me:69/route/v1',
+                                    waypoints: tempArr,
+                                    autoRoute: true,
+                                }).addTo(map);
+                            }
+                            mapButton.innerHTML = "Show on map";
+
+
+                            let addButton = document.createElement("a");
+                            addButton.setAttribute("href", "#");
+                            addButton.setAttribute("role", "button");
+                            addButton.setAttribute("class", "btn btn-success m-2");
+                            addButton.innerHTML = "Go to site";
+
+                            underColumn.appendChild(mapButton);
+                            underColumn.appendChild(addButton);
+
+                            innerRow.appendChild(leftColumn);
+                            innerRow.appendChild(rightColumn);
+                            innerRow.appendChild(underColumn);
+
+                            choice.appendChild(innerRow);
+
+                            result_div.append(choice);
+                        }
 
                         // $('#result').attr("class", "row justify-content-center");
                         // for (let d = 0; d < data["results"].length; d++) {
