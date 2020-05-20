@@ -321,7 +321,7 @@ def filter_rides(rides, before, after):
 def get_departure(ride):
     return ride.departure_time
 
-def myrides_help(before, after):
+def myrides_help(before, after, shared_with = None):
     before2 = None
     after2 = None
     if before is not None:
@@ -425,7 +425,7 @@ def myrides(before, after):
                            from_locs_m=res["from_locs"], to_locs_m=res["to_locs"], pfps_m=res["pfps"], allids_m=res["allids"], pickuppoints_m=res["pickuppoints"],
                            pickupbools_m=res["pickupbools"], form=res["form"], before=before, after=after)
 
-def joinedrides_help(before, after):
+def joinedrides_help(before, after, shared_with = None):
     if not current_user.is_authenticated and not current_app.config['TESTING']:
         return redirect(url_for('users.login'))
     before2 = None
@@ -544,29 +544,17 @@ def shared_rides(userid):
     if not userid.isdigit():
         abort(404)
     if not current_user.is_authenticated:
-        return redirect(url_for("users.user", userid=userid))
-    rides_passenger = ride_access.get_rides_from_passenger(current_user.id)
-    rides_driver =  ride_access.get_on_user_id(current_user.id)
-    if rides_driver is None:
-        rides_driver = []
-    if rides_passenger is None:
-        rides_passenger = []
-    temp = []
-    for ride in rides_driver:
-        if userid in ride_access.find_ride_passengers():
-            temp.append(ride)
-    rides_driver = deepcopy(temp)
-    temp = []
-    for ride in rides_passenger:
-        if ride.user_id == current_user.id:
-            temp.append(ride)
-    rides_passenger = deepcopy(temp)
-    rides_driver.sort(key=get_departure, reverse=True)
-    rides_passenger.sort(key=get_departure, reverse=True)
+        return redirect(url_for('users.login'))
 
-    return render_template('shared_rides.html', title=lazy_gettext('Joined rides'), loggedIn=True,
-                           userrides=list(reversed(userrides)), pickuppoints=list(reversed(pickuppoints)), pickupbools=list(reversed(pickupbools)),
-                           from_locs=list(reversed(from_places)), to_locs=list(reversed(to_places)), pfps=list(reversed(pfps)), form=form)
+    j = joinedrides_help(None, None, userid)
+    m = myrides_help(None, None, userid)
+
+    return render_template('shared_rides.html', title=lazy_gettext('Shared rides'), loggedIn=True,
+                           userrides_m=m["userrides"],
+                           from_locs_m=m["from_locs"], to_locs_m=m["to_locs"], pfps_m=m["pfps"],
+                           allids_m=m["allids"], pickuppoints_m=m["pickuppoints"],
+                           pickupbools_m=m["pickupbools"], form=m["form"], userrides_j=j["userrides"], pickuppoints_j=j["pickuppoints"], pickupbools_j=j["pickupbools"],
+                           from_locs_j=j["from_locs"], to_locs_j=j["to_locs"], pfps_j=j["pfps"])
 
 
 @users.route("/user=<userid>", methods=['GET', 'POST'])
