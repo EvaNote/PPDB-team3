@@ -629,18 +629,18 @@ $(function () {
                         ride_count = data["results"].length
                         alert("Found " + ride_count + " matches! Scroll down to see them.");
                         //alert("FIND: " + JSON.stringify(data));
-                        let mapButton = document.createElement("button");
-                            mapButton.setAttribute("class", "btn btn-info m-2");
-                            mapButton.onclick = function() {
-                                let w2 = window.open("http://team1.ppdb.me/index");
-                                console.log(w2.document);
-                                w2.document.getElementsByName("from_location")[0].setAttribute("value", "Yeet");
-                            }
-                            mapButton.innerHTML = "Show on map";
+                        // let mapButton = document.createElement("button");
+                        //     mapButton.setAttribute("class", "btn btn-info m-2");
+                        //     mapButton.onclick = function() {
+                        //         let w2 = window.open("http://team1.ppdb.me/index");
+                        //         console.log(w2.document);
+                        //         w2.document.getElementsByName("from_location")[0].setAttribute("value", "Yeet");
+                        //     }
+                        //     mapButton.innerHTML = "Show on map";
                         let result_div = $('#result');
                         result_div.empty();
                         result_div.attr("class", "row justify-content-center");
-                        result_div.append(mapButton);
+                        // result_div.append(mapButton);
                         if (data === null) {
                             return
                         }
