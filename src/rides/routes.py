@@ -3,6 +3,7 @@ from flask_babel import lazy_gettext
 from flask import Blueprint, flash, render_template, g, current_app, abort, redirect, url_for, request
 from flask_login import current_user
 import src.users.routes
+from src.rides.forms import Filter_rides
 from src.utils import user_access, car_access, ride_access, picture_access, pickup_point_access
 
 rides = Blueprint('rides', __name__, url_prefix='/<lang_code>')
@@ -57,7 +58,8 @@ def ride_details():
 def ride_history():
     if not current_user.is_authenticated and not current_app.config['TESTING']:
         return redirect(url_for('users.login'))
-    return render_template("ride_history.html", title=lazy_gettext("Ride history"))
+    form = Filter_rides()
+    return render_template("ride_history.html", title=lazy_gettext("Ride history"), form=form)
 
 @rides.route("/view_ride=<rideid>", methods=['GET', 'POST'])
 def view_ride(rideid):

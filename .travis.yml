@@ -10,9 +10,10 @@ install:
   - pip install -r requirements.txt
 before_script:
   - psql -c 'CREATE ROLE app WITH LOGIN CREATEDB;'
-  - psql -c 'CREATE DATABASE dbcarpool OWNER app;'
+  - psql -c 'CREATE DATABASE dbcarpool_test OWNER app;'
   - sudo cp pg_hba_travis.conf /etc/postgresql/9.6/main/pg_hba.conf
   - sudo systemctl restart postgresql
-  - psql dbcarpool -U app -f sql/test_schema.sql
+  - psql dbcarpool_test -U app -f tests/test_script.sql
 script:
-  - python -m unittest discover
+  #- python -m unittest discover
+  - python tests/test_app.py

@@ -56,12 +56,7 @@ class DrivesApi(Resource):  # /api/drives
         arr = datetime.strptime(arrive_by, fmt)
         time_diff_sec = timedelta(seconds=(dist / 0.01))
         depart_estimate = (arr - time_diff_sec).strftime(fmt).split('.')[0]
-        cars = car_access.get_on_user_id(user_id)
-        if len(cars) == 0:
-            car = None
-        else:
-            car = cars[0].id
-        new_ride = Ride(None, depart_estimate, arrive_by, user_id, car, nr_seats, None, None, None, campus_from,
+        new_ride = Ride(None, depart_estimate, arrive_by, user_id, nr_seats, None, None, None, campus_from,
                         campus_to, address_from, address_to)
         ride_access.add_ride(new_ride)
         ride_id = new_ride.fetch_id()
@@ -184,22 +179,22 @@ class DrivesSearchAPI(Resource):
                 {'lat': dict['tLat'], 'lng': dict['tLng']},
                 'Arrive by',
                 dict['arrive_by'],
-                dict['limit'])
+                min(int(dict['limit']), 50))
         elif dict['fLat']:
             rides = ride_access.match_rides_with_passenger_missing_to(
                 {'lat': dict['fLat'], 'lng': dict['fLng']},
                 'Arrive by',
                 dict['arrive_by'],
-                dict['limit'])
+                min(int(dict['limit']), 50))
         elif dict['tLat']:
             rides = ride_access.match_rides_with_passenger_missing_from(
                 {'lat': dict['tLat'], 'lng': dict['tLng']},
                 'Arrive by',
                 dict['arrive_by'],
-                dict['limit'])
+                min(int(dict['limit']), 50))
         else:
             rides = ride_access.match_rides_with_passenger_missing_end_points(
                 'Arrive by',
                 dict['arrive_by'],
-                dict['limit'])
+                min(int(dict['limit']), 50))
         return rides, 200

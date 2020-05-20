@@ -1,10 +1,11 @@
 from postgis import *
 from postgis.psycopg import register
 from shapely import geometry, wkb
+import requests
 
 
 class Ride:
-    def __init__(self, id, departure_time, arrival_time, user_id, car_id, passengers, p1,
+    def __init__(self, id, departure_time, arrival_time, user_id, passengers, p1,
                  p2, p3, campus_from, campus_to, address_from, address_to):
         from src.utils import campus_access, address_access, pickup_point_access
         # address_to & address_from are id's pointing to addresses
@@ -12,7 +13,6 @@ class Ride:
         self.departure_time = departure_time
         self.arrival_time = arrival_time
         self.user_id = user_id
-        self.car_id = car_id
         self.passengers = passengers
         self.pickup_1 = pickup_point_access.get_on_id(p1)
         self.pickup_2 = pickup_point_access.get_on_id(p2)
@@ -126,7 +126,6 @@ class Ride:
             'arrival_time': self.arrival_time,
             'closest': self.closest,
             'len': i + 1,
-            'car_id': self.car_id,
             'passengers': self.passengers,
             'user_id': self.user_id,
             'waypoints': way_points
@@ -154,21 +153,20 @@ class Rides:
             "departure_time, "  # 1
             "arrival_time, "  # 2
             "user_id, "  # 3
-            "car_id, "  # 4
-            "passengers, "  # 5
-            "pickup_point_1, "  # 6
-            "pickup_point_2, "  # 7
-            "pickup_point_3, "  # 8
-            "campus_from, "  # 9
-            "campus_to, "  # 10
-            "address_from, "  # 11
-            "address_to "  # 12
+            "passengers, "  # 4
+            "pickup_point_1, "  # 5
+            "pickup_point_2, "  # 6
+            "pickup_point_3, "  # 7
+            "campus_from, "  # 8
+            "campus_to, "  # 9
+            "address_from, "  # 10
+            "address_to "  # 11
             "FROM ride WHERE " + on + "=%s",
             (val,))
         rides = list()
         for row in cursor:
             ride = Ride(row[0], row[1], row[2], row[3], row[4], row[5], row[6], row[7], row[8], row[9], row[10],
-                        row[11], row[12])
+                        row[11])
             rides.append(ride)
         return rides
 
@@ -190,32 +188,30 @@ class Rides:
             "departure_time, "  # 1
             "arrival_time, "  # 2
             "user_id, "  # 3
-            "car_id, "  # 4
-            "passengers, "  # 5
-            "pickup_point_1, "  # 6
-            "pickup_point_2, "  # 7
-            "pickup_point_3, "  # 8
-            "campus_from, "  # 9
-            "campus_to, "  # 10
-            "address_from, "  # 11
-            "address_to "  # 12
+            "passengers, "  # 4
+            "pickup_point_1, "  # 5
+            "pickup_point_2, "  # 6
+            "pickup_point_3, "  # 7
+            "campus_from, "  # 8
+            "campus_to, "  # 9
+            "address_from, "  # 10
+            "address_to "  # 11
             "FROM ride WHERE id=%s",
             (id,))
         ride = cursor.fetchone()
         if ride is None:
             return None
         ride_obj = Ride(ride[0], ride[1], ride[2], ride[3], ride[4], ride[5], ride[6], ride[7], ride[8], ride[9],
-                        ride[10], ride[11], ride[12])
+                        ride[10], ride[11])
         return ride_obj
 
     def get_data_for_api(self, id):
         cursor = self.dbconnect.get_cursor()
         cursor.execute(
             """
-            SELECT car.nr_seats, a_from.id, a_to.id, r.arrival_time
-            FROM car, address as a_from, address as a_to, ride as r
+            SELECT a_from.id, a_to.id, r.arrival_time
+            FROM address as a_from, address as a_to, ride as r
             WHERE r.id = %s AND
-                  r.car_id = car.id AND
                   r.address_from = a_from.id AND
                   r.address_to = a_to.id
             """, (id,))
@@ -253,13 +249,6 @@ class Rides:
         else:
             return None
 
-    def get_on_car_id(self, car_id):
-        found = self.get_on('car_id', car_id)
-        if len(found) > 0:
-            return found[0]
-        else:
-            return None
-
     def get_on_departure_time(self, departure_time):
         found = self.get_on('departure_time', departure_time)
         if len(found) > 0:
@@ -282,28 +271,27 @@ class Rides:
             "departure_time, "  # 1
             "arrival_time, "  # 2
             "user_id, "  # 3
-            "car_id, "  # 4
-            "passengers, "  # 5
-            "pickup_point_1, "  # 6
-            "pickup_point_2, "  # 7
-            "pickup_point_3, "  # 8
-            "campus_from, "  # 9
-            "campus_to, "  # 10
-            "address_from, "  # 11
-            "address_to "  # 12
+            "passengers, "  # 4
+            "pickup_point_1, "  # 5
+            "pickup_point_2, "  # 6
+            "pickup_point_3, "  # 7
+            "campus_from, "  # 8
+            "campus_to, "  # 9
+            "address_from, "  # 10
+            "address_to "  # 11
             "FROM ride")
         rides = list()
         for row in cursor:
             ride = Ride(row[0], row[1], row[2], row[3], row[4], row[5], row[6], row[7], row[8], row[9], row[10],
-                        row[11], row[12])
+                        row[11])
             rides.append(ride)
         return rides
 
     def add_ride(self, ride):
         cursor = self.dbconnect.get_cursor()
 
-        cursor.execute('INSERT INTO "ride" VALUES(default, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)',
-                       (ride.departure_time, ride.arrival_time, ride.user_id, ride.car_id, ride.passengers,
+        cursor.execute('INSERT INTO "ride" VALUES(default, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)',
+                       (ride.departure_time, ride.arrival_time, ride.user_id, ride.passengers,
                         ride.pickup_1, ride.pickup_2, ride.pickup_3, ride.campus_from_id(), ride.campus_to_id(),
                         ride.address_from.id, ride.address_to.id))
         self.dbconnect.commit()
@@ -358,6 +346,11 @@ class Rides:
             p_time_value = p_datetime
             p_pickup_time_value = p_time_option
 
+        url = 'http://team1.ppdb.me/api/drives/search?limit=3&from=' + '{}%2C%20{}'.format(50.2568480967175, 5.1763009240555)
+        r = requests.get(url)
+        data = r.json()
+        print(data)
+
         cursor = self.dbconnect.get_cursor()
         cursor.execute("""
             SELECT 
@@ -365,7 +358,6 @@ class Rides:
             departure_time,  
             arrival_time,  
             user_id,   
-            car_id,   
             passengers,  
             pickup_point_1,  
             pickup_point_2,   
@@ -407,14 +399,14 @@ class Rides:
 
         rides = list()
         for row in cursor:
-            # 0: r.id               5: r.passengers         10: r.campus_to
-            # 1: r.departure_time   6: r.pickup_point_1     11: r.address_from
-            # 2: r.arrival_time     7: r.pickup_point_2     12: r.address_to
-            # 3: r.user_id          8: r.pickup_point_3
-            # 4: r.car_id           9: r.campus_from
+            # 0: r.id               5: r.pickup_point_1     10: r.address_from
+            # 1: r.departure_time   6: r.pickup_point_2     11: r.address_to
+            # 2: r.arrival_time     7: r.pickup_point_3
+            # 3: r.user_id          8: r.campus_from
+            # 4: r.passengers       9: r.campus_to
 
             ride = Ride(row[0], row[1], row[2], row[3], row[4], row[5], row[6], row[7], row[8], row[9], row[10],
-                        row[11], row[12])
+                        row[11])
 
             from src.utils import pickup_point_access, address_access
             dist = address_access.get_distance(p_from['lat'], p_from['lng'], row[11])

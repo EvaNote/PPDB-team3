@@ -170,24 +170,18 @@ def receiver_create():
         pick_up_ids.append(point_id)
         index += 1
 
-    cars = car_access.get_on_user_id(user.id)
-    if len(cars) == 0:
-        car = None
-    else:
-        car = cars[0]
-
     ride = None
     if len(pick_up_ids) == 0:
-        ride = Ride(None, departure_time, arrival_time, user_id, car.id, passengers, None, None, None, campus_from,
+        ride = Ride(None, departure_time, arrival_time, user_id, passengers, None, None, None, campus_from,
                     campus_to, address_from, address_to)
     if len(pick_up_ids) == 1:
-        ride = Ride(None, departure_time, arrival_time, user_id, car.id, passengers, pick_up_ids[0], None, None,
+        ride = Ride(None, departure_time, arrival_time, user_id, passengers, pick_up_ids[0], None, None,
                     campus_from, campus_to, address_from, address_to)
     if len(pick_up_ids) == 2:
-        ride = Ride(None, departure_time, arrival_time, user_id, car.id, passengers, pick_up_ids[0], pick_up_ids[1],
+        ride = Ride(None, departure_time, arrival_time, user_id, passengers, pick_up_ids[0], pick_up_ids[1],
                     None, campus_from, campus_to, address_from, address_to)
     if len(pick_up_ids) == 3:
-        ride = Ride(None, departure_time, arrival_time, user_id, car.id, passengers, pick_up_ids[0], pick_up_ids[1],
+        ride = Ride(None, departure_time, arrival_time, user_id, passengers, pick_up_ids[0], pick_up_ids[1],
                     pick_up_ids[2], campus_from, campus_to, address_from, address_to)
 
     ride_access.add_ride(ride)

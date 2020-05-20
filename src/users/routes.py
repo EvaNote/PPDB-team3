@@ -78,7 +78,6 @@ def makeEvent(ride, isDriver):
     # TODO: naam bestuurder?
     return e
 
-
 def generate_calendar(user_id):
     # From https://pypi.org/project/ics/
     c = Calendar()

@@ -28,7 +28,8 @@ L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
 
 // add OSRM support using Leaflet Routing Machine
 let control = L.Routing.control({
-    serviceUrl: 'https://team3.ppdb.me:69/route/v1',
+    serviceUrl: 'http://127.0.0.1:5001/route/v1',
+    //serviceUrl: 'https://35.195.213.223:69/route/v1',
     routeWhileDragging: true,
     draggableWaypoints: false,
     geocoder: L.Control.Geocoder.nominatim(),
@@ -442,11 +443,13 @@ $(document).ready(function () {
     if (state.situation === 'create') {
         console.log(el);
         temp += "    <label for=\"passengers\">Available passenger seats:\n" +
-            "    <input type=\"number\" id=\"passengers\" name=\"passengers\" value=\"0\" required style='width: 30px'>\n<br>" +
+            "    <input type=\"number\" id=\"passengers\" name=\"passengers\" value=\"2\" required style='width: 30px'>\n<br>" +
             "    </label>\n";
     }
     temp +=
-        "    <input type=\"submit\" value=\"Submit\">\n" +
+        "    <input type=\"submit\" value=\"Submit\">\n"
+    temp +=
+        "    <input id=\"reset\" type=\"reset\" value=\"Reset\" style='margin-top: 2px'>\n" +
         "</form>";
     child.innerHTML = temp;
     child = child.firstChild;
@@ -504,6 +507,10 @@ $.fn.serializeObject = function () {
 };
 
 $(function () {
+    $('#reset').click(function () {
+        resetState();
+        control.setWaypoints([]);
+    })
     // make sure pressing the 'update' button doesn't refresh the entire page
     $('form').submit(function () {
         var from, to;

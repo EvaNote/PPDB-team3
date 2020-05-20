@@ -46,10 +46,11 @@ class FlaskTestCase(unittest.TestCase):
         os.close(self.db_fd)
         os.unlink(app.config['DATABASE'])
 
-    def check_status_code_three_languages(self, url):
-        assert self.client.get("/en" + url).status_code == 200
-        assert self.client.get("/fr" + url).status_code == 200
-        assert self.client.get("/nl" + url).status_code == 200
+    def check_status_code_three_languages(self, url, expected_status_code=200):
+        print(self.client.get("/en" + url).status_code)
+        assert self.client.get("/en" + url).status_code == expected_status_code
+        assert self.client.get("/fr" + url).status_code == expected_status_code
+        assert self.client.get("/nl" + url).status_code == expected_status_code
 
 
 class ProperlyLoadedMainGetRoutes(FlaskTestCase):
@@ -72,8 +73,9 @@ class ProperlyLoadedMainGetRoutes(FlaskTestCase):
 
 
 class ProperlyLoadedReviewsGetRoutes(FlaskTestCase):
-    # new review: '/user=<userid>/new_review' TODO
-    ...
+    # new review: '/user=<userid>/new_review'
+    def test_new_review_properly_loaded(self):
+        self.check_status_code_three_languages('/user=1/new_review')
 
 
 class ProperlyLoadedRidesGetRoutes(FlaskTestCase):
@@ -115,13 +117,17 @@ class ProperlyLoadedUsersGetRoutes(FlaskTestCase):
     def test_joined_rides_properly_loaded(self):
         self.check_status_code_three_languages('/joinedrides')
 
-    # user profile: '/user=<userid>' TODO
+    # user profile: '/user=<userid>'
+    def test_user_profile_properly_loaded(self):
+        self.check_status_code_three_languages('/user=1')
 
     # login: '/login'
     def test_login_properly_loaded(self):
         self.check_status_code_three_languages('/login')
 
-    # logout: '/logout' TODO
+    # logout: '/logout'
+    def test_logout_properly_loaded(self):
+        self.check_status_code_three_languages('/logout', 302)  # found, redirect
 
     # signup: '/register'
     def test_register_properly_loaded(self):
@@ -131,10 +137,13 @@ class ProperlyLoadedUsersGetRoutes(FlaskTestCase):
     def test_add_vehicle_properly_loaded(self):
         self.check_status_code_three_languages('/add_vehicle')
 
-    # edit car: '/edit_vehicle=<car_id>' TODO
+    # edit car: '/edit_vehicle=<car_id>'
+    def test_edit_vehicle_properly_loaded(self):
+        self.check_status_code_three_languages('/edit_vehicle=1')
 
-    # delete car: '/delete_vehicle=<car_id>' TODO
-
+    # delete car: '/delete_vehicle=<car_id>'
+    def test_delete_vehicle_properly_loaded(self):
+        self.check_status_code_three_languages('/delete_vehicle=2', 302)  # found, redirect
 
 # class ProperlyLoaded(FlaskTestCase):
 #     def test_homepage_properly_loaded(self):
