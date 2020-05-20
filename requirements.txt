@@ -17,5 +17,6 @@ Geopy==1.21.0
 Flask-RESTful
 WTForms-Components==0.10.4
 ics==0.7
+requests
 PostGIS
 Shapely

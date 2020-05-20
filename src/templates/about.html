@@ -3,7 +3,9 @@
     {{  _('About Campus Carpool')}}
 {% endblock contentTitle %}
 {% block contentContent %}
-    <p class="text-center">
+    <img src="{{ url_for('static', filename="images/logo.png") }}" class="float-left mr-2" width="8%"
+                 alt="logo">
+    <p class="text-center" style="margin-left: 10%">
     {{ _('
     <b>
     Campus Carpool is an application that makes it possible to carpool from and to a university. We purposefully limit
@@ -20,7 +22,7 @@
     that our app helps you find a travel buddy to your campus.
     ')}}
 </p>
-    <p class="text-center">
+    <p class="text-center" style="margin-left: 10%">
         {{ _('
     We have done our utmost to put all college- and university campusses in Belgium on the map. To achieve this, we
     mainly used <a href="https://www.google.be/maps" style="color: #333333"><b> Google Maps</b></a>, but also the Belgian

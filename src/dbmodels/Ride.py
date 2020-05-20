@@ -1,6 +1,7 @@
 from postgis import *
 from postgis.psycopg import register
 from shapely import geometry, wkb
+import requests
 
 
 class Ride:
@@ -357,6 +358,12 @@ class Rides:
             p_datetime = p_time_option
             p_time_value = p_datetime
             p_pickup_time_value = p_time_option
+
+        url = 'http://team1.ppdb.me/api/drives/search?limit=3&from=' + '{}%2C%20{}'.format(50.2568480967175, 5.1763009240555)
+        print(url)
+        r = requests.get(url)
+        data = r.json()
+        print(data)
 
         cursor = self.dbconnect.get_cursor()
         cursor.execute("""
