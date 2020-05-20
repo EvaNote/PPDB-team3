@@ -688,7 +688,7 @@ $(function () {
                                 }
                                 map.removeControl(control);
                                 control = L.Routing.control({
-                                    serviceUrl: 'http://127.0.0.1:5001/route/v1',
+                                    serviceUrl: 'https://team3.ppdb.me:69/route/v1',
                                     waypoints: tempArr,
                                     autoRoute: true,
                                 }).addTo(map);
@@ -732,14 +732,29 @@ $(function () {
                             underColumn.appendChild(driverButton)
 
                             innerRow.appendChild(leftColumn);
-                                innerRow.appendChild(rightColumn);
+                            innerRow.appendChild(rightColumn);
                             innerRow.appendChild(underColumn);
 
                             choice.appendChild(innerRow);
 
                             result_div.append(choice);
                         }
+                        if (!data[1]) {
 
+                        }
+                        let separation = document.createElement("hr");
+                        separation.setAttribute("class", "bg-success w-100");
+                        result_div.appendChild(separation);
+                        let affiliate = document.createElement("div");
+                        affiliate.setAttribute("class", "mx-auto text-center");
+                        let question = document.createElement("h2");
+                        question.setAttribute("class", "text-dark");
+                        question.innerText = "Not happy with the results?"
+                        affiliate.appendChild(question);
+                        question = document.createElement("p");
+                        question.setAttribute("class", "lead text-dark");
+                        question.innerHTML = "Check out our <a class=\"text-success\" href=\"http://team1.ppdb.me/\">affiliate</a>"
+                        affiliate.appendChild(question);
 
                         // $('#result').attr("class", "row justify-content-center");
                         // for (let d = 0; d < data["results"].length; d++) {
