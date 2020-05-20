@@ -299,6 +299,7 @@ def address_edit():
 
 #before/after als datetime, ride.arrival als string?
 def filter_rides(rides, before, after):
+    print(before, after, rides)
     if before is None and after is None:
         return rides
     else:

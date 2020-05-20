@@ -468,7 +468,7 @@ class Rides:
             shortest_dist = dist
             what = 0
 
-            for i in range(6, 9):
+            for i in range(5, 8):
                 if not row[i]:
                     continue
                 pp = pickup_point_access.get_on_id(row[i])
