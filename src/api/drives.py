@@ -49,7 +49,9 @@ class DrivesApi(Resource):  # /api/drives
         if not valid:
             return abort(400, message="This is Campus Carpool, so at least one of the addresses "
                                       "(departure or destination) has to be a campus.")
-        fmt = '%Y-%m-%dT%H:%M:%S'
+        fmt = '%Y-%m-%dT%H:%M:%S.%f'
+        if not arrive_by.endswith(".00"):
+            arrive_by += ".00"
         dist = distance.distance((from_a[0], from_a[1]), (to_a[0], to_a[1])).km
         arr = datetime.strptime(arrive_by, fmt)
         time_diff_sec = timedelta(seconds=(dist / 0.01))
