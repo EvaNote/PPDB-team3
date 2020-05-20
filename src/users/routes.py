@@ -541,7 +541,7 @@ def joinedrides(before, after):
 
     return render_template('joined_rides.html', title=lazy_gettext('View ride'), loggedIn=True,
                            userrides_j=res["userrides"], pickuppoints_j=res["pickuppoints"], pickupbools_j=res["pickupbools"],
-                           from_locs_j=res["from_locs"], to_locs_j=res["to_locs"], pfps_j=res["pfps"], form=res["form"])
+                           from_locs_j=res["from_locs"], to_locs_j=res["to_locs"], pfps_j=res["pfps"], form=res["form"], before=before, after=after)
 
 
 
@@ -560,7 +560,7 @@ def shared_rides(userid):
                            from_locs_m=m["from_locs"], to_locs_m=m["to_locs"], pfps_m=m["pfps"],
                            allids_m=m["allids"], pickuppoints_m=m["pickuppoints"],
                            pickupbools_m=m["pickupbools"], form=m["form"], userrides_j=j["userrides"], pickuppoints_j=j["pickuppoints"], pickupbools_j=j["pickupbools"],
-                           from_locs_j=j["from_locs"], to_locs_j=j["to_locs"], pfps_j=j["pfps"])
+                           from_locs_j=j["from_locs"], to_locs_j=j["to_locs"], pfps_j=j["pfps"], userid=userid)
 
 
 @users.route("/user=<userid>", methods=['GET', 'POST'])
@@ -625,7 +625,7 @@ def user(userid):
     return render_template('user.html', title=lazy_gettext('User profile'), form=form,
                            target_user=target_user, mean_rate=mean, half_stars=half_stars, whole_stars=whole_stars,
                            data=data, cars=cars, form2=form2, pfp_path=pfp_path, car_picpaths=car_picpaths,
-                           allow_review=allow_review, rev_pfps=rev_pfps)  # TODO: same
+                           allow_review=allow_review, rev_pfps=rev_pfps, userid=userid)  # TODO: same
 
 
 @users.route("/login", methods=['GET', 'POST'])
