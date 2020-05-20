@@ -1,0 +1,43 @@
+
+    {% for ride in userrides_j %}
+        {% set address_from = from_locs_j[loop.index0] %}
+        {% set address_to = to_locs_j[loop.index0] %}
+        {% set pfplist = pfps_j[loop.index0] %}
+        {% set pickuppoint = pickuppoints_j[loop.index0] %}
+        {% set pickupbool = pickupbools_j[loop.index0] %}
+
+    <div class="row">
+        <div class="ride_history_wrap_3">
+            <div class="ride_history_wrap_6"><b> {{ _('Departure: ') }} </b>{{ ride.departure_time }}</div>
+        <br>
+            <div class="ride_history_wrap_6"><b> {{ _('Arrival: ') }} </b>{{ ride.arrival_time }}</div>
+        <br>
+            {% if pickupbool[0] %}
+                <div class="ride_history_wrap_5"><b> {{ _('Pickup 1: ') }} </b>{{ pickuppoint[0] }}</div>
+                <br>
+            {% endif %}
+            {% if pickupbool[1] %}
+                <div class="ride_history_wrap_5"><b> {{ _('Pickup 2: ') }} </b>{{ pickuppoint[1] }}</div>
+                <br>
+            {% endif %}
+            {% if pickupbool[2] %}
+                <div class="ride_history_wrap_5"><b> {{ _('Pickup 3: ') }}</b> {{ pickuppoint[2] }}</div>
+                <br>
+            {% endif %}
+            <div class="ride_history_wrap_7"><b> {{ _('From: ') }}</b> {{ address_from }}  </div>
+                <br>
+            <div class="ride_history_wrap_7"><b> {{ _('To: ') }} </b>{{ address_to }}</div>
+        <br>
+
+            <a href={{ url_for('users.user', userid=ride.user_id) }}>
+                            <img src="{{ url_for('static', filename=pfplist) }}" class="float-left mr-2" width="127px"
+                    alt="driver pic" style="border-radius: 50%"><br>
+            </a>
+            <a class="btn btn-info" href="{{ url_for('users.user', userid=ride.user_id) }}" role="button">{{ _('See driver profile') }}</a>
+        <a class="btn btn-info" href="{{ url_for('main.canceljoinedride', ride_id=ride.id) }}" role="button">{{ _('Cancel ride') }}</a>
+
+
+        </div>
+    </div>
+
+    {% endfor %}

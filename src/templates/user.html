@@ -40,6 +40,10 @@
         </fieldset>
                   </form>
     <!-- Einde contactformulier -->
+
+
+                                        <a class="btn btn-info" href="{{ url_for('users.shared_rides',userid=target_user.id) }}"
+                   role="button">{{ _('new review') }}</a>
     {% endif %}
 
 <br>
