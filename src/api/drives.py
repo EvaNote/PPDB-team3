@@ -182,22 +182,22 @@ class DrivesSearchAPI(Resource):
                 {'lat': dict['tLat'], 'lng': dict['tLng']},
                 'Arrive by',
                 dict['arrive_by'],
-                dict['limit'])
+                min(int(dict['limit']), 50))
         elif dict['fLat']:
             rides = ride_access.match_rides_with_passenger_missing_to(
                 {'lat': dict['fLat'], 'lng': dict['fLng']},
                 'Arrive by',
                 dict['arrive_by'],
-                dict['limit'])
+                min(int(dict['limit']), 50))
         elif dict['tLat']:
             rides = ride_access.match_rides_with_passenger_missing_from(
                 {'lat': dict['tLat'], 'lng': dict['tLng']},
                 'Arrive by',
                 dict['arrive_by'],
-                dict['limit'])
+                min(int(dict['limit']), 50))
         else:
             rides = ride_access.match_rides_with_passenger_missing_end_points(
                 'Arrive by',
                 dict['arrive_by'],
-                dict['limit'])
+                min(int(dict['limit']), 50))
         return rides, 200
