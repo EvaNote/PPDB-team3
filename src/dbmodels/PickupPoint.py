@@ -14,7 +14,7 @@ class PickupPoint:
             self.latitude = self.coordinates.y
             self.longitude = self.coordinates.x
         else:
-            self.coordinates = wkb.dumps(coordinates, hex=True)
+            self.coordinates = Point(longitude, latitude)
             self.latitude = latitude
             self.longitude = longitude
 
@@ -31,6 +31,7 @@ class PickupPoint:
             from src.utils import address_access
             self.id = address_access.get_id(self.longitude, self.latitude)
             return self.id
+
 
 class PickupPoints:
     def __init__(self, dbconnect):
@@ -54,8 +55,9 @@ class PickupPoints:
                        "join address a on pickup_point.address = a.id "
                        "WHERE ST_Distance(a.coordinates, ST_MakePoint(%s, %s)) "
                        "< 50", (longitude, latitude))
-        id = cursor.fetchone()[0]
-        return id
+        for x in cursor:
+            return x[0]
+        return None
 
     def get_on_id(self, id):
         if id is None:
@@ -84,7 +86,9 @@ class PickupPoints:
 
         from src.utils import address_access
         from src.dbmodels.Address import Address
-        the_id = address_access.add_address(Address(None, '?', '?', '?', '?', '?', p.longitude, p.latitude, None))
+        address = Address(None, '?', '?', '?', '?', '?', None, p.latitude, p.longitude)
+        address_access.add_address(address)
+        the_id = address.fetch_id()
 
         cursor.execute('INSERT INTO "pickup_point" VALUES(default, %s, ST_MakePoint(%s, %s), %s)',
                        (p.estimated_time, p.longitude, p.latitude, the_id))

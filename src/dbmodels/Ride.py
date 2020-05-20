@@ -53,6 +53,14 @@ class Ride:
         else:
             return None
 
+    def pickup_id(self, num):
+        if num == 1 and self.pickup_1 is not None:
+            return self.pickup_1.id
+        elif num == 2 and self.pickup_2 is not None:
+            return self.pickup_2.id
+        elif self.pickup_3 is not None:
+            return self.pickup_3.id
+
     def to_dict(self):
         way_points = dict()
 
@@ -302,7 +310,7 @@ class Rides:
 
         cursor.execute('INSERT INTO "ride" VALUES(default, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)',
                        (ride.departure_time, ride.arrival_time, ride.user_id, ride.passengers,
-                        ride.pickup_1, ride.pickup_2, ride.pickup_3, ride.campus_from_id(), ride.campus_to_id(),
+                        ride.pickup_id(1), ride.pickup_id(2), ride.pickup_id(3), ride.campus_from_id(), ride.campus_to_id(),
                         ride.address_from.id, ride.address_to.id))
         self.dbconnect.commit()
 

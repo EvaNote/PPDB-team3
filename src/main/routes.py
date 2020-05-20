@@ -164,7 +164,7 @@ def receiver_create():
         latitude = point['lat']
         longitude = point['lng']
         estimated_time = estimated_times[index]
-        point = PickupPoint(None, estimated_time, latitude, longitude)
+        point = PickupPoint(None, estimated_time, None, None, latitude, longitude)
         pickup_point_access.add_pickup_point(point)
         point_id = pickup_point_access.get_id(latitude, longitude)
         pick_up_ids.append(point_id)
