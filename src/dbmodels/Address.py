@@ -151,6 +151,7 @@ class Addresses:
         return addresses
 
     def add_address(self, address: Address):
+        print(address.to_dict())
         cursor = self.dbconnect.get_cursor()
         try:
             cursor.execute('INSERT INTO "address" VALUES(default, %s, %s, %s, %s, %s, %s)',

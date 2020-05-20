@@ -443,11 +443,13 @@ $(document).ready(function () {
     if (state.situation === 'create') {
         console.log(el);
         temp += "    <label for=\"passengers\">Available passenger seats:\n" +
-            "    <input type=\"number\" id=\"passengers\" name=\"passengers\" value=\"0\" required style='width: 30px'>\n<br>" +
+            "    <input type=\"number\" id=\"passengers\" name=\"passengers\" value=\"2\" required style='width: 30px'>\n<br>" +
             "    </label>\n";
     }
     temp +=
-        "    <input type=\"submit\" value=\"Submit\">\n" +
+        "    <input type=\"submit\" value=\"Submit\">\n"
+    temp +=
+        "    <input id=\"reset\" type=\"reset\" value=\"Reset\" style='margin-top: 2px'>\n" +
         "</form>";
     child.innerHTML = temp;
     child = child.firstChild;
@@ -505,6 +507,10 @@ $.fn.serializeObject = function () {
 };
 
 $(function () {
+    $('#reset').click(function () {
+        resetState();
+        control.setWaypoints([]);
+    })
     // make sure pressing the 'update' button doesn't refresh the entire page
     $('form').submit(function () {
         var from, to;
