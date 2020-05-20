@@ -233,6 +233,9 @@ function resetState() {
 }
 
 map.on('click', function (e) {
+    if(state.situation === 'show') {
+        return; // don't click please
+    }
     var startBtn, destBtn, addWaypointBtn;
     var container = L.DomUtil.create('div');
     console.log(state);
@@ -390,6 +393,9 @@ $(document).ready(function () {
                         //     }, 2500)
                         // },
                         'click': function (e) {
+                            if(state.situation === 'show') {
+                                return;
+                            }
                             let container = L.DomUtil.create('div'),
                                 startBtn = createButton('Start from this location', container),
                                 destBtn = createButton('Go to this location', container);
@@ -437,7 +443,31 @@ $(document).ready(function () {
     if (el !== null) {
         state.situation = 'create'
     } else {
-        state.situation = 'find'
+        el = document.getElementById('find_ride');
+        if(el !== null) {
+            state.situation = 'find'
+        }
+        else {
+            var rideIcon = new L.Icon({
+                iconUrl: 'https://cdn.rawgit.com/pointhi/leaflet-color-markers/master/img/marker-icon-blue.png',
+                shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
+                iconSize: [40, 64],
+                iconAnchor: [7, 64],
+                popupAnchor: [1, -20],
+                shadowSize: [64, 64]
+            });
+
+            el = document.getElementById('show_ride');
+            state.situation = 'show';
+            let lat1 = el.getAttribute('fromlat');
+            let lng1 = el.getAttribute('fromlng');
+            let lat2 = el.getAttribute('tolat');
+            let lng2 = el.getAttribute('tolng');
+            L.marker([lat1, lng1], {icon: rideIcon}).addTo(map);
+            L.marker([lat2, lng2], {icon: rideIcon}).addTo(map);
+
+            control.setWaypoints([L.latLng(lat1, lng1), L.latLng(lat2, lng2)]);
+        }
     }
 
     if (state.situation === 'create') {
@@ -446,6 +476,10 @@ $(document).ready(function () {
             "    <input type=\"number\" id=\"passengers\" name=\"passengers\" value=\"2\" required style='width: 30px'>\n<br>" +
             "    </label>\n";
     }
+    if (state.situation === 'show') {
+        $('.leaflet-right').remove();
+    }
+
     temp +=
         "    <input type=\"submit\" value=\"Submit\">\n"
     temp +=
@@ -453,7 +487,9 @@ $(document).ready(function () {
         "</form>";
     child.innerHTML = temp;
     child = child.firstChild;
-    document.getElementsByClassName('leaflet-routing-geocoders')[0].appendChild(child);
+    if(state.situation !== 'show') {
+        document.getElementsByClassName('leaflet-routing-geocoders')[0].appendChild(child);
+    }
 
     // let rbutton = document.createElement("button");
     // rbutton.innerHTML = "Do Something";

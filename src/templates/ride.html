@@ -13,6 +13,10 @@
         {% set pfplist = pfps[loop.index0] %}
         {% set pickuppoint = pickuppoints[loop.index0] %}
         {% set pickupbool = pickupbools[loop.index0] %}
+        {% set from_lat = from_lat[loop.index0] %}
+        {% set from_lng = from_lng[loop.index0] %}
+        {% set to_lat = to_lat[loop.index0] %}
+        {% set to_lng = to_lng[loop.index0] %}
 
     <div class="row">
         <div class="ride_history_wrap_3">
@@ -50,9 +54,15 @@
             <a class="btn btn-info" href="{{ url_for('users.login') }}" role="button">{{ _('Log in to join') }}</a>
         {% endif %}
 
+        <div id="findride_map" style="margin-top: 5%; border-bottom-left-radius: 15px; border-bottom-right-radius: 15px">
+            <b id="show_ride" fromlat={{ from_lat }} tolat={{ to_lat }} fromlng={{ from_lng }} tolng={{ to_lng }} hidden></b>
+        </div>
 
         </div>
+
     </div>
+
+
 
     {% endfor %}
 {% endblock contentContent %}

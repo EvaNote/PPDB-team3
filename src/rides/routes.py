@@ -77,6 +77,10 @@ def view_ride(rideid):
     userrides = []
     from_places = []
     to_places = []
+    from_lat = []
+    from_lng = []
+    to_lat = []
+    to_lng = []
     pfps = []
     allids = []
     pickuppoints = []
@@ -93,6 +97,10 @@ def view_ride(rideid):
         else:
             temp = ride.address_to
             to_places.append(temp.city + ", " + temp.street + ", " + temp.nr)
+        from_lat.append(ride.address_from.latitude)
+        from_lng.append(ride.address_from.longitude)
+        to_lat.append(ride.address_to.latitude)
+        to_lng.append(ride.address_to.longitude)
         temp = list(ride_access.get_passenger_ids(ride.id))
         temp2 = []
         ride_pfp = []
@@ -146,7 +154,11 @@ def view_ride(rideid):
                            from_locs=list(from_places),
                            to_locs=list(to_places),
                            pfps=list(pfps),
-                           rideid=rideid)
+                           rideid=rideid,
+                           from_lat=list(from_lat),
+                           from_lng=list(from_lng),
+                           to_lat=list(to_lat),
+                           to_lng=list(to_lng))
 
 # @rides.route("/maps")
 # def maps():
