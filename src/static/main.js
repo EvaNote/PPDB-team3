@@ -471,7 +471,7 @@ $(document).ready(function () {
 
     if (state.situation === 'create') {
         console.log(el);
-        temp += "    <label for=\"passengers\">Available passenger seats:\n" + 
+        temp += "    <label for=\"passengers\">Available passenger seats:\n" +
             "    <input type=\"number\" id=\"passengers\" name=\"passengers\" value=\"2\" required style='width: 30px'>\n<br>" +
             "    </label>\n";
     }
