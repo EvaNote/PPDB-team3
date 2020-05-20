@@ -10,6 +10,7 @@ class Ride:
         from src.utils import campus_access, address_access, pickup_point_access
         # address_to & address_from are id's pointing to addresses
         self.id = id
+        self.dont_store_in_db = False
         self.departure_time = departure_time
         self.arrival_time = arrival_time
         self.user_id = user_id
@@ -20,15 +21,22 @@ class Ride:
         self.shortest_dist = 0
         self.closest = 0
         self.campus_from = campus_access.get_on_id(campus_from)
+        from src.dbmodels.Address import Address
         if campus_from:
             self.address_from = self.campus_from.address
         else:
-            self.address_from = address_access.get_on_id(address_from)
+            if isinstance(address_from, Address):
+                self.address_from = address_from
+            else:
+                self.address_from = address_access.get_on_id(address_from)
         self.campus_to = campus_access.get_on_id(campus_to)
         if campus_to:
             self.address_to = self.campus_to.address
         else:
-            self.address_to = address_access.get_on_id(address_to)
+            if isinstance(address_to, Address):
+                self.address_to = address_to
+            else:
+                self.address_to = address_access.get_on_id(address_to)
 
     def get_id(self):
         return self.id
@@ -287,7 +295,9 @@ class Rides:
             rides.append(ride)
         return rides
 
-    def add_ride(self, ride):
+    def add_ride(self, ride: Ride):
+        if ride.dont_store_in_db:
+            return
         cursor = self.dbconnect.get_cursor()
 
         cursor.execute('INSERT INTO "ride" VALUES(default, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)',
@@ -370,6 +380,17 @@ class Rides:
         data = r.json()
         print(data)
 
+        partner_rides = list()
+        from src.utils import campus_access, address_access
+        from src.dbmodels.Address import Address
+        for ride in data:
+            campus_from = campus_access.is_campus(ride['from'][0], ride['from'][1])
+            campus_to = campus_access.is_campus(ride['to'][0], ride['to'][1])
+            address_from = Address(None, None, None, None, None, None, None, ride['from'][0], ride['from'][1])
+            address_to = Address(None, None, None, None, None, None, None, ride['to'][0], ride['to'][1])
+            partner_rides.append(Ride(None, None, ride['arrive-by'], None, None, None, None, None, campus_from,
+                                      campus_to, address_from, address_to).to_dict())
+
         cursor = self.dbconnect.get_cursor()
         cursor.execute("""
             SELECT 
@@ -443,7 +464,7 @@ class Rides:
             ride.shortest_dist = shortest_dist
             ride.closest = what
             rides.append(ride)
-        return rides
+        return rides, partner_rides
 
     def api_match_rides_with_passenger(self, p_from, p_to, p_time_option, p_datetime, limit=20):
         # less information needed

@@ -35,6 +35,7 @@ def get_address_function(lat, lng):
 class Address:
     def __init__(self, id, country, city, postal_code, street, nr, coordinates, latitude=None, longitude=None):
         self.id = id
+        self.dont_store_in_db = False
         if coordinates:
             self.coordinates = wkb.loads(coordinates, hex=True)
             self.latitude = self.coordinates.y
@@ -151,7 +152,8 @@ class Addresses:
         return addresses
 
     def add_address(self, address: Address):
-        print(address.to_dict())
+        if address.dont_store_in_db:
+            return
         cursor = self.dbconnect.get_cursor()
         try:
             cursor.execute('INSERT INTO "address" VALUES(default, %s, %s, %s, %s, %s, %s)',
