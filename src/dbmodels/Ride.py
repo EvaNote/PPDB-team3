@@ -360,9 +360,9 @@ class Rides:
         from_formatted = 'from={}%2C%20{}'.format(p_from['lat'], p_from['lng'])
         to_formatted = 'to={}%2C%20{}'.format(p_to['lat'], p_to['lng'])
         if p_time_option == 'r.departure_time':
-            time = 'depart_by=' + str(p_time_value)
+            time = 'depart_by=' + str(p_datetime.replace(' ', 'T'))
         else:
-            time = 'arrive_by=' + str(p_time_value)
+            time = 'arrive_by=' + str(p_datetime.replace(' ', 'T'))
 
         url += from_formatted + '&' + to_formatted + '&' + time + '&' \
                + 'from_distance=3000&to_distance=3000&departure_delta=10&arrival_delta=10'
@@ -376,6 +376,7 @@ class Rides:
         # url += from_formatted + '&' + to_formatted + '&' + time + '&' \
         #        + 'from_distance=3000&to_distance=3000&departure_delta=10&arrival_delta=10'
 
+        print(url)
         r = requests.get(url)
         data = r.json()
         print(data)
@@ -384,6 +385,7 @@ class Rides:
         from src.utils import campus_access, address_access
         from src.dbmodels.Address import Address
         for ride in data:
+            print(ride)
             campus_from = campus_access.is_campus(ride['from'][0], ride['from'][1])
             campus_to = campus_access.is_campus(ride['to'][0], ride['to'][1])
             address_from = Address(None, None, None, None, None, None, None, ride['from'][0], ride['from'][1])

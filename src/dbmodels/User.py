@@ -173,3 +173,4 @@ class UserAccess:
             self.dbconnect.commit()
         except:
             raise Exception('Unable to delete user')
+
