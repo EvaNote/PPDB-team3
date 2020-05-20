@@ -58,6 +58,8 @@ class PickupPoints:
         return id
 
     def get_on_id(self, id):
+        if not isinstance(id, int):
+            id = id.id
         if id is None:
             return None
         cursor = self.dbconnect.get_cursor()
