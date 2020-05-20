@@ -37,6 +37,9 @@ class Ride:
                 self.address_to = address_to
             else:
                 self.address_to = address_access.get_on_id(address_to)
+        if self.dont_store_in_db:
+            self.address_from.dont_store_in_db = True
+            self.address_to.dont_store_in_db = True
 
     def get_id(self):
         return self.id
@@ -398,8 +401,10 @@ class Rides:
             campus_to = campus_access.is_campus(ride['to'][0], ride['to'][1])
             address_from = Address(None, None, None, None, None, None, None, ride['from'][0], ride['from'][1])
             address_to = Address(None, None, None, None, None, None, None, ride['to'][0], ride['to'][1])
-            partner_rides.append(Ride(None, None, ride['arrive-by'], None, None, None, None, None, campus_from,
-                                      campus_to, address_from, address_to).to_dict())
+            ride = Ride(None, None, ride['arrive-by'], None, None, None, None, None, campus_from,
+                                      campus_to, address_from, address_to).to_dict()
+            ride.dont_store_in_db = True
+            partner_rides.append(ride)
 
         cursor = self.dbconnect.get_cursor()
         cursor.execute("""
