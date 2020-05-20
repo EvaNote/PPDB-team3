@@ -61,6 +61,7 @@ def ride_history():
     form = Filter_rides()
     return render_template("ride_history.html", title=lazy_gettext("Ride history"), form=form)
 
+
 @rides.route("/view_ride=<rideid>", methods=['GET', 'POST'])
 def view_ride(rideid):
     if not rideid.isdigit():
