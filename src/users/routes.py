@@ -306,15 +306,15 @@ def filter_rides(rides, before, after):
         for ride in rides:
             if before is not None and after is None:
                 #TOOO: arrival/departure?
-                if before <= ride.arrival_time:
+                if ride.arrival_time <= before:
                     newrides.append(ride)
             elif after is not None and before is None:
                 #TOOO: arrival/departure?
-                if after >= ride.departure_time:
+                if ride.departure_time >= after:
                     newrides.append(ride)
             elif after is not None and before is not None:
                 #TOOO: arrival/departure?
-                if after >= ride.departure_time and before <= ride.arrival_time:
+                if ride.departure_time >= after and ride.arrival_time <= before:
                     newrides.append(ride)
     return newrides
 
@@ -332,7 +332,7 @@ def myrides_help(before, after, shared_with = None):
     if not current_user.is_authenticated and not current_app.config['TESTING']:
         return redirect(url_for('users.login'))
     allrides_temp = ride_access.get_on_user_id(current_user.id)
-    allrides = filter_rides(allrides_temp,after2,before2)
+    allrides = filter_rides(allrides_temp,before2,after2)
     if allrides is None:
         allrides = []
     allrides.sort(key=get_departure, reverse=True)
@@ -440,7 +440,7 @@ def joinedrides_help(before, after, shared_with = None):
     if after is not None:
         after2 = datetime.strptime(after, "%Y-%m-%d")
     allrides_temp = ride_access.get_rides_from_passenger(current_user.id)
-    allrides = filter_rides(allrides_temp,after2,before2)
+    allrides = filter_rides(allrides_temp,before2,after2)
     if allrides is None:
         allrides = []
     allrides.sort(key=get_departure, reverse=True)
