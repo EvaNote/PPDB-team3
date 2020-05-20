@@ -345,6 +345,9 @@ def myrides_help(before, after, shared_with = None):
     pickuppoints = []
     pickupbools = []
     for ride in allrides:
+        if shared_with is not None:
+            if not shared_with in ride_access.find_ride_passengers(ride.id):
+                continue
         if ride.user_id == current_user.id:
             userrides.append(ride)
             if ride.campus_from:
@@ -448,6 +451,9 @@ def joinedrides_help(before, after, shared_with = None):
     pickuppoints = []
     pickupbools = []
     for ride in allrides:
+        if shared_with is not None:
+            if ride.user_id != shared_with:
+                continue
         userrides.append(ride)
         if ride.campus_from:
             from_places.append(ride.campus_from.name)
