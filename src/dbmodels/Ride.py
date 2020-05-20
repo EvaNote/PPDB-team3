@@ -346,7 +346,26 @@ class Rides:
             p_time_value = p_datetime
             p_pickup_time_value = p_time_option
 
-        url = 'http://team1.ppdb.me/api/drives/search?limit=3&from=' + '{}%2C%20{}'.format(50.2568480967175, 5.1763009240555)
+        url = 'http://team1.ppdb.me/api/drives/search?'
+        from_formatted = 'from={}%2C%20{}'.format(p_from['lat'], p_from['lng'])
+        to_formatted = 'to={}%2C%20{}'.format(p_to['lat'], p_to['lng'])
+        if p_time_option == 'r.departure_time':
+            time = 'depart_by=' + str(p_time_value)
+        else:
+            time = 'arrive_by=' + str(p_time_value)
+
+        url += from_formatted + '&' + to_formatted + '&' + time + '&' \
+               + 'from_distance=3000&to_distance=3000&departure_delta=10&arrival_delta=10'
+
+        # TODO: verwijderen (maar pas op het einde, kan nog gebruikt worden als)
+        # url = 'http://team1.ppdb.me/api/drives/search?'
+        # from_formatted = 'from={}%2C%20{}'.format(50.2568480967175, 5.1763009240555)
+        # to_formatted = 'to={}%2C%20{}'.format(50.1619717676965, 5.15986301884755)
+        # time = 'arrive_by=' + '2020-04-22T08:40:00'
+        #
+        # url += from_formatted + '&' + to_formatted + '&' + time + '&' \
+        #        + 'from_distance=3000&to_distance=3000&departure_delta=10&arrival_delta=10'
+
         r = requests.get(url)
         data = r.json()
         print(data)
