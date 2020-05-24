@@ -77,7 +77,6 @@ def makeEvent(ride, isDriver):
         e.location = locString
         locString += "\\n" + str(ride.passengers) + " passengers"
         e.description = locString
-    # TODO: naam bestuurder?
     return e
 
 
@@ -111,7 +110,11 @@ def generate_calendar(user_id):
         result = result_file.readlines()
 
     from src.emails import send_email_calendar
-    send_email_calendar('jana.osstyn@gmail.com', 'src/static/ics/cal1.ics')
+    result = "".join(result).replace('\xc9', '')
+    result = "".join(result).replace('\xe9', '')
+    result = "".join(result).replace('\xe8', '')
+    email = user_access.get_user_on_id(current_user.id).email
+    send_email_calendar(email, cal_path)
     return
 
 
