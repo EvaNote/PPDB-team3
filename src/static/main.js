@@ -756,9 +756,16 @@ $(function () {
                                     .done(function (data2) {
                                         if (data2) {
                                             if (data2["result"] === "success") {
-                                                alert("Ride joined successfully.")
-                                            } else {
-                                                alert("You already joined this ride.")
+                                                console.log(data2["result"]);
+                                                alert("Ride joined successfully.");
+                                            }
+                                            else if (data2["result"] === "current user is driver") {
+                                                console.log(data2["result"]);
+                                                alert("You cannot join a ride you created.");
+                                            }
+                                            else if (data2["result"] === "failed") {
+                                                console.log(data2["result"]);
+                                                alert("You already joined this ride.");
                                             }
                                         }
                                     });
