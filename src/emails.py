@@ -161,3 +161,56 @@ def send_email_review(email, review_writer):
 
     session.sendmail(send_from, recipient, headers + "\r\n\r\n" + body)
     session.quit()
+
+
+def send_email_calendar(email, ics_content):
+    SMTP_SERVER = 'smtp.gmail.com'
+    SMTP_PORT = 587
+
+    send_from = 'campus.carpool.ua@gmail.com'
+    password = 'campuscarpool2020'
+    subject = 'Your calendar events are here!'
+
+    recipient = email
+
+    from email.mime.multipart import MIMEMultipart
+    from email.mime.text import MIMEText
+    from email.mime.base import MIMEBase
+    from email import encoders
+
+    msg = MIMEMultipart()
+    msg['Subject'] = subject,
+    msg['From'] = send_from,
+    msg['To'] = recipient
+
+    body = "Hi there! \n\n"
+    body += "You requested calendar events of your rides, so here they are!\n\n"
+    body += "How does it work?\n"
+    body += "In mailing apps like Outlook there is a possibility to click on the calendar symbol on the attached " \
+            "ics file.\n "
+    body += "Other apps like Gmail require some more action. For Google Calendar, this is wat you need to do:\n"
+    body += "\t 1) Open Google Calendar\n"
+    body += "\t 2) Go to settings\n"
+    body += "\t 3) Click import and export\n"
+    body += "\t 4) Choose import\n"
+    body += "\t 5) Download the file attached to this email\n"
+    body += "\t 6) Upload this file on Google calendar\n"
+    body += "\t 7) Hit 'import' and you're al done!\n"
+
+    msg.attach(MIMEText(body))
+
+    part = MIMEBase('text', 'calendar', **{'method': 'REQUEST', 'name': 'src/static/ics/cal1.ics'})
+    part.set_payload(open("src/static/ics/cal1.ics", "rb").read())
+    encoders.encode_base64(part)
+    part.add_header('Content-Disposition', 'attachment', filename='src/static/ics/cal1.ics')
+
+    msg.attach(part)
+
+    session = smtplib.SMTP(SMTP_SERVER, SMTP_PORT)
+    session.ehlo()
+    session.starttls()
+    session.ehlo()
+    session.login(send_from, password)
+
+    session.sendmail(send_from, recipient, msg)
+    session.quit()

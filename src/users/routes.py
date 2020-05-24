@@ -80,6 +80,7 @@ def makeEvent(ride, isDriver):
     # TODO: naam bestuurder?
     return e
 
+
 def generate_calendar(user_id):
     # From https://pypi.org/project/ics/
     c = Calendar()
@@ -105,6 +106,15 @@ def generate_calendar(user_id):
 
     with open(cal_path, 'w') as my_file:
         my_file.writelines(c)
+
+    with open(cal_path, 'r') as result_file:
+        result = result_file.readlines()
+
+    from src.emails import send_email_calendar
+    result = "".join(result).replace('\xc9', '')
+    result = "".join(result).replace('\xe9', '')
+    result = "".join(result).replace('\xe8', '')
+    send_email_calendar('jana.osstyn@gmail.com', "".join(result))
     return
 
 
@@ -161,11 +171,11 @@ def account():
     if calForm.submit.data:
         # Generate calendar file, give link
         generate_calendar(current_user.id)
-        path = "ics/cal" + str(current_user.id) + ".ics"
-        file_url = url_for('static', filename=path)
-        #TODO, als iemand hier echt veel zin in heeft
-        #redirect_url = "webcal:/" + file_url
-        return redirect(file_url)
+        # path = "ics/cal" + str(current_user.id) + ".ics"
+        # file_url = url_for('static', filename=path)
+        # TODO, als iemand hier echt veel zin in heeft
+        # redirect_url = "webcal:/" + file_url
+        # return redirect(file_url)
 
     return render_template('account.html', title=lazy_gettext('Account'), form=form, loggedIn=True, data=data,
                            current_user=user, cars=cars, address=address, carPicpaths=car_picpaths, pfp_path=pfp_path,
