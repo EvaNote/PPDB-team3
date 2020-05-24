@@ -542,7 +542,8 @@ $.fn.serializeObject = function () {
 };
 
 $(function () {
-    $('#reset').click(function () {
+    $('#reset').click(function (e) {
+        e.preventDefault();
         resetState();
         control.setWaypoints([]);
     })
