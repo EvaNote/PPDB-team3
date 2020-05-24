@@ -183,8 +183,11 @@ def join(rideid):
 @rides.route("/joinride", methods=['GET', 'POST'])
 def joinride():
     ride_id = request.json.get("ride_id")
-    result = ride_access.register_passenger(current_user.id, ride_id)
     ride = ride_access.get_on_id(ride_id)
+    if ride.user_id == current_user.id:
+        return {"result": "current user is driver"}
+
+    result = ride_access.register_passenger(current_user.id, ride_id)
     driver_id = ride.user_id
     driver = user_access.get_user_on_id(driver_id)
     passenger = user_access.get_user_on_id(current_user.id)
@@ -195,9 +198,10 @@ def joinride():
     else:
         dest = campus_access.get_on_id(ride.campus_to_id())
         destination = dest.name
-    if driver.send_emails is True:
-        send_email_newpassenger(driver.email, passenger_name, str(ride.departure_time), destination)
+
     if result:
+        if driver.send_emails is True:
+            send_email_newpassenger(driver.email, passenger_name, str(ride.departure_time), destination)
         return {"result": "success"}
     return {"result": "failed"}
 

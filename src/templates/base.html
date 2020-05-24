@@ -73,10 +73,10 @@
                     {#                        <a class="nav-link" href={{ url_for('reviews.reviews') }}>My reviews</a>#}
                     {#                    </li>#}
                     <li class="nav-item">
-                        <a class="nav-link" href={{ url_for('users.logout') }}>Log out</a>
+                        <a class="nav-link" href={{ url_for('users.logout') }}>{{ _('Log out')}}</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href={{ url_for('users.account') }}>Account</a>
+                        <a class="nav-link" href={{ url_for('users.account') }}>{{ _('Account') }}</a>
                     </li>
                 {% else %}
                     <li class="nav-item">

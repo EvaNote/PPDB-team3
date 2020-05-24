@@ -435,9 +435,7 @@ def myrides_help(before, after, shared_with = None):
 @users.route("/<before>myrides<after>", methods=['GET', 'POST'])
 def myrides(before, after):
 
-    res = myrides_help(before, after)
-
-    form = res["form"]
+    form = Filter_rides()
     if form.submit.data:
         if form.before.data and not form.after.data:
             return redirect(url_for('users.myrides', before=str(form.before.data)))
@@ -450,9 +448,11 @@ def myrides(before, after):
         else:
             pass
 
+    res = myrides_help(before, after)
+
     return render_template('ride_history.html', title=lazy_gettext('My rides'), loggedIn=True, userrides_m=res["userrides"],
                            from_locs_m=res["from_locs"], to_locs_m=res["to_locs"], pfps_m=res["pfps"], allids_m=res["allids"], pickuppoints_m=res["pickuppoints"],
-                           pickupbools_m=res["pickupbools"], form=res["form"], before=before, after=after)
+                           pickupbools_m=res["pickupbools"], form=form, before=before, after=after)
 
 def joinedrides_help(before, after, shared_with = None):
     if not current_user.is_authenticated and not current_app.config['TESTING']:
@@ -537,12 +537,12 @@ def joinedrides_help(before, after, shared_with = None):
         pickuppoints.append(points)
 
     to_ret = {}
-    to_ret["userrides"] = list(reversed(userrides))
-    to_ret["pickuppoints"] = list(reversed(pickuppoints))
-    to_ret["pickupbools"] = list(reversed(pickupbools))
-    to_ret["from_locs"] = list(reversed(from_places))
-    to_ret["to_locs"] = list(reversed(to_places))
-    to_ret["pfps"] = list(reversed(pfps))
+    to_ret["userrides"] = userrides
+    to_ret["pickuppoints"] = pickuppoints
+    to_ret["pickupbools"] = pickupbools
+    to_ret["from_locs"] = from_places
+    to_ret["to_locs"] = to_places
+    to_ret["pfps"] = pfps
     to_ret["form"] = form
     return to_ret
 
@@ -552,9 +552,7 @@ def joinedrides_help(before, after, shared_with = None):
 @users.route("/<before>joinedrides<after>", methods=['GET', 'POST'])
 def joinedrides(before, after):
 
-    res = joinedrides_help(before, after)
-
-    form = res["form"]
+    form = Filter_rides()
     if form.submit.data:
         if form.before.data and not form.after.data:
             return redirect(url_for('users.joinedrides', before=str(form.before.data)))
@@ -567,16 +565,18 @@ def joinedrides(before, after):
         else:
             pass
 
+    res = joinedrides_help(before, after)
+
     return render_template('joined_rides.html', title=lazy_gettext('View ride'), loggedIn=True,
                            userrides_j=res["userrides"], pickuppoints_j=res["pickuppoints"], pickupbools_j=res["pickupbools"],
-                           from_locs_j=res["from_locs"], to_locs_j=res["to_locs"], pfps_j=res["pfps"], form=res["form"], before=before, after=after)
+                           from_locs_j=res["from_locs"], to_locs_j=res["to_locs"], pfps_j=res["pfps"], form=form, before=before, after=after)
 
 
 
 @users.route("/shared_rides=<userid>")
 def shared_rides(userid):
-    if not userid.isdigit():
-        abort(404)
+    if not isinstance(userid, int):
+        userid = int(userid)
     if not current_user.is_authenticated:
         return redirect(url_for('users.login'))
 

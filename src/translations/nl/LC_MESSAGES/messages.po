@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2020-05-24 14:21+0200\n"
+"POT-Creation-Date: 2020-05-24 15:33+0200\n"
 "PO-Revision-Date: 2020-03-23 16:24+0100\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: nl\n"
@@ -17,96 +17,6 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.8.0\n"
-
-#: src/DBConnect.py:10
-msgid "ERROR: Unable to connect to database"
-msgstr "ERROR: Unable to connect to database"
-
-#: src/main/routes.py:50
-msgid "About"
-msgstr "Over"
-
-#: src/main/routes.py:55 src/templates/faq.html:3
-msgid "FAQ"
-msgstr "FAQ"
-
-#: src/main/routes.py:60 src/templates/user.html:16
-msgid "contact"
-msgstr "contact"
-
-#: src/reviews/forms.py:8
-msgid "For"
-msgstr "Voor"
-
-#: src/reviews/forms.py:9 src/templates/ride_information.html:105
-msgid "From"
-msgstr "Van"
-
-#: src/reviews/forms.py:10 src/reviews/forms.py:14
-#: src/templates/reviews.html:140
-msgid "Rating"
-msgstr "Beoordeling"
-
-#: src/reviews/forms.py:13
-msgid "Submit"
-msgstr "Indienen"
-
-#: src/reviews/forms.py:18 src/reviews/forms.py:19
-msgid "<b>Hello</b>"
-msgstr "<b>Hello</b>"
-
-#: src/reviews/forms.py:21 src/templates/reviews.html:51
-msgid "Rate Low-High"
-msgstr "Beoordeling laag-hoog"
-
-#: src/reviews/forms.py:22 src/templates/reviews.html:52
-msgid "Rate High-Low"
-msgstr "Beoordeling hoog-laag"
-
-#: src/reviews/forms.py:23 src/templates/reviews.html:53
-msgid "Date Old-New"
-msgstr "Datum oud-nieuw"
-
-#: src/reviews/forms.py:24 src/templates/reviews.html:54
-msgid "Date New-Old"
-msgstr "Datum nieuw-oud"
-
-#: src/reviews/routes.py:58
-msgid "Your review has been posted successfully!"
-msgstr "Jouw recensie is succesvol geplaatst!"
-
-#: src/reviews/routes.py:62
-msgid "New review"
-msgstr "Nieuwe recensie"
-
-#: src/rides/forms.py:22
-msgid "Before (yyyy-mm-dd)"
-msgstr "Voor yyy-mm-dd"
-
-#: src/rides/forms.py:23
-msgid "After (yyyy-mm-dd)"
-msgstr "Na yyy-mm-dd"
-
-#: src/rides/forms.py:24 src/templates/reviews.html:40
-msgid "Filter"
-msgstr "Filter"
-
-#: src/rides/routes.py:40 src/templates/base.html:60 src/templates/base.html:86
-msgid "Find a ride"
-msgstr "Vind een rit"
-
-#: src/rides/routes.py:54
-msgid "Ride information"
-msgstr "Info over de rit"
-
-#: src/rides/routes.py:62
-msgid "Ride history"
-msgstr "Rittengeschiedenis"
-
-#: src/rides/routes.py:149 src/templates/base.html:69
-#: src/templates/joined_rides.html:3
-msgid "Joined rides"
-msgstr "Ritten waar je aan deelneemt"
 
 #: src/templates/about.html:3
 msgid "About Campus Carpool"
@@ -180,27 +90,25 @@ msgstr "Mijn account"
 msgid "Edit account"
 msgstr "Bewerk account"
 
-#: src/templates/account.html:9 src/templates/account_edit.html:92
-#: src/users/routes.py:273 src/users/routes.py:298
+#: src/templates/account.html:9 src/templates/account_edit.html:105
 msgid "Edit address"
 msgstr "Adres bewerken"
 
 #: src/templates/account.html:11 src/templates/base.html:66
-#: src/templates/ride_history.html:5 src/users/routes.py:430
+#: src/templates/ride_history.html:5
 msgid "My rides"
 msgstr "Mijn ritten"
 
-#: src/templates/account.html:19 src/users/forms.py:10 src/users/forms.py:50
+#: src/templates/account.html:19
 msgid "First name"
 msgstr "Voornaam"
 
 #: src/templates/account.html:25 src/templates/user.html:58
-#: src/users/forms.py:11 src/users/forms.py:51
 msgid "Last name"
 msgstr "Achternaam"
 
 #: src/templates/account.html:31 src/templates/account_edit.html:39
-#: src/templates/user.html:64 src/users/forms.py:53
+#: src/templates/user.html:64
 msgid "Gender"
 msgstr "Geslacht"
 
@@ -208,11 +116,11 @@ msgstr "Geslacht"
 msgid "email"
 msgstr "email"
 
-#: src/templates/account.html:47 src/users/forms.py:54
+#: src/templates/account.html:47
 msgid "Age"
 msgstr "Leeftijd"
 
-#: src/templates/account.html:57 src/users/forms.py:55
+#: src/templates/account.html:57
 msgid "Phone number"
 msgstr "Telefoonnummer"
 
@@ -224,7 +132,7 @@ msgstr "Adres"
 msgid "Zip code"
 msgstr "Postcode"
 
-#: src/templates/account.html:84 src/users/forms.py:65
+#: src/templates/account.html:84
 msgid "City"
 msgstr "Stad"
 
@@ -237,12 +145,10 @@ msgid "Car:"
 msgstr "Auto:"
 
 #: src/templates/account.html:104 src/templates/car_edit.html:5
-#: src/users/routes.py:732 src/users/routes.py:755
 msgid "Edit car"
 msgstr "Bewerk auto"
 
 #: src/templates/account.html:114 src/templates/user.html:85
-#: src/users/forms.py:34
 msgid "Brand"
 msgstr "Merk"
 
@@ -251,7 +157,6 @@ msgid "Type"
 msgstr "Type"
 
 #: src/templates/account.html:126 src/templates/user.html:97
-#: src/users/forms.py:36
 msgid "Color"
 msgstr "Kleur"
 
@@ -273,7 +178,6 @@ msgstr "Brandstofverbruik"
 
 #: src/templates/account.html:156 src/templates/add_vehicle.html:104
 #: src/templates/car_edit.html:105 src/templates/user.html:114
-#: src/users/forms.py:41
 msgid "Fuel type"
 msgstr "Brandstoftype"
 
@@ -293,20 +197,35 @@ msgstr "Voeg voertuig toe"
 msgid "Edit my address"
 msgstr "Bewerk mijn adres"
 
+#: src/templates/base.html:60 src/templates/base.html:86
+msgid "Find a ride"
+msgstr "Vind een rit"
+
 #: src/templates/base.html:63
 msgid "Create a ride"
 msgstr "Maak een rit"
+
+#: src/templates/base.html:69 src/templates/joined_rides.html:3
+msgid "Joined rides"
+msgstr "Ritten waar je aan deelneemt"
+
+#: src/templates/base.html:75
+msgid "Log out"
+msgstr ""
+
+#: src/templates/base.html:78
+msgid "Account"
+msgstr "Account"
 
 #: src/templates/base.html:82
 msgid "Home"
 msgstr "Home"
 
-#: src/templates/base.html:89 src/templates/register.html:83
-#: src/users/forms.py:26
+#: src/templates/base.html:89 src/templates/register.html:97
 msgid "Log in"
 msgstr "Inloggen"
 
-#: src/templates/base.html:92 src/templates/home.html:115 src/users/forms.py:15
+#: src/templates/base.html:92 src/templates/home.html:115
 msgid "Sign up"
 msgstr "Registreren"
 
@@ -333,6 +252,10 @@ msgstr "Als er problemen zijn met de site, contacteer dan"
 #: src/templates/contact.html:11
 msgid "or"
 msgstr "of"
+
+#: src/templates/faq.html:3
+msgid "FAQ"
+msgstr "FAQ"
 
 #: src/templates/faq.html:7
 msgid ""
@@ -519,15 +442,15 @@ msgstr "Geef nieuwe rol in"
 msgid "Your role..."
 msgstr "Uw rol..."
 
-#: src/templates/new_review.html:82 src/users/routes.py:53
+#: src/templates/new_review.html:82
 msgid "driver"
 msgstr "Bestuurder"
 
-#: src/templates/new_review.html:85 src/users/routes.py:55
+#: src/templates/new_review.html:85
 msgid "passenger"
 msgstr "Passagier"
 
-#: src/templates/register.html:83
+#: src/templates/register.html:97
 msgid "Already have an account?"
 msgstr "Heb je al een account?"
 
@@ -535,9 +458,29 @@ msgstr "Heb je al een account?"
 msgid "Reviews"
 msgstr "Recensies"
 
+#: src/templates/reviews.html:40
+msgid "Filter"
+msgstr "Filter"
+
 #: src/templates/reviews.html:48
 msgid "Sort"
 msgstr "Sorteer"
+
+#: src/templates/reviews.html:51
+msgid "Rate Low-High"
+msgstr "Beoordeling laag-hoog"
+
+#: src/templates/reviews.html:52
+msgid "Rate High-Low"
+msgstr "Beoordeling hoog-laag"
+
+#: src/templates/reviews.html:53
+msgid "Date Old-New"
+msgstr "Datum oud-nieuw"
+
+#: src/templates/reviews.html:54
+msgid "Date New-Old"
+msgstr "Datum nieuw-oud"
 
 #: src/templates/reviews.html:101
 msgid "by"
@@ -550,6 +493,10 @@ msgstr "(bestuurder)"
 #: src/templates/reviews.html:106
 msgid "(passenger)"
 msgstr "(passagier)"
+
+#: src/templates/reviews.html:140
+msgid "Rating"
+msgstr "Beoordeling"
 
 #: src/templates/reviews.html:156
 msgid "Other properties"
@@ -571,7 +518,7 @@ msgstr "resultaten"
 msgid "Show results"
 msgstr "Laat resultaten zien"
 
-#: src/templates/ride.html:3 src/users/routes.py:547
+#: src/templates/ride.html:3
 msgid "View ride"
 msgstr "Bekijk rit"
 
@@ -603,6 +550,10 @@ msgstr "Vertrek"
 msgid "Arrival"
 msgstr "Aankomst"
 
+#: src/templates/ride_information.html:105
+msgid "From"
+msgstr "Van"
+
 #: src/templates/ride_information.html:111
 msgid "Destination"
 msgstr "Bestemming"
@@ -632,7 +583,7 @@ msgstr "Als bestuurder"
 msgid "As passenger"
 msgstr "Als passagier"
 
-#: src/templates/user.html:3 src/users/routes.py:633
+#: src/templates/user.html:3
 msgid "User profile"
 msgstr "Gebruikersprofiel"
 
@@ -640,7 +591,11 @@ msgstr "Gebruikersprofiel"
 msgid "new review"
 msgstr "nieuwe recensie"
 
-#: src/templates/user.html:30 src/users/forms.py:72
+#: src/templates/user.html:16
+msgid "contact"
+msgstr "contact"
+
+#: src/templates/user.html:30
 msgid "Subject"
 msgstr "Onderwerp"
 
@@ -651,227 +606,6 @@ msgstr "Gedeelde ritten"
 #: src/templates/user.html:52
 msgid "First Name"
 msgstr "Voornaam"
-
-#: src/users/forms.py:12 src/users/forms.py:23 src/users/forms.py:52
-msgid "Email"
-msgstr "Email"
-
-#: src/users/forms.py:13 src/users/forms.py:24
-msgid "Password"
-msgstr "Wachtwoord"
-
-#: src/users/forms.py:14
-msgid "Confirm password"
-msgstr "Wachtwoord bevestigen"
-
-#: src/users/forms.py:19
-msgid "The email is already registered."
-msgstr "Deze email is al geregistreerd"
-
-#: src/users/forms.py:25
-msgid "Remember me"
-msgstr "Onthoud mij"
-
-#: src/users/forms.py:30 src/users/forms.py:59
-msgid "Delete account"
-msgstr "Account verwijderen"
-
-#: src/users/forms.py:35
-msgid "Model"
-msgstr "Model"
-
-#: src/users/forms.py:37
-msgid "Plate number"
-msgstr "Nummerplaat"
-
-#: src/users/forms.py:38
-msgid "Seats"
-msgstr "Zitplaatsen"
-
-#: src/users/forms.py:39
-msgid "Construction Year"
-msgstr "Bouwjaar"
-
-#: src/users/forms.py:40
-msgid "Fuel Consumption"
-msgstr "Brandstofverbruik"
-
-#: src/users/forms.py:41
-msgid "Gasoline/Petrol/Benzine"
-msgstr "Diesel/Petroleum/Benzine"
-
-#: src/users/forms.py:41
-msgid "Diesel"
-msgstr "Dieselolie"
-
-#: src/users/forms.py:42
-msgid "Liquified Petroleum"
-msgstr "lpg"
-
-#: src/users/forms.py:42
-msgid "Electricity"
-msgstr "Elektriciteit"
-
-#: src/users/forms.py:43
-msgid "Compressed Natural Gas"
-msgstr "Gecomprimeerd aardgas"
-
-#: src/users/forms.py:44
-msgid "Ethanol"
-msgstr "Ethanol"
-
-#: src/users/forms.py:44
-msgid "Bio-diesel"
-msgstr "Bio-diesel"
-
-#: src/users/forms.py:45
-msgid "Upload car picture"
-msgstr "Upload een autofoto"
-
-#: src/users/forms.py:46
-msgid "Register vehicle"
-msgstr "Voertuig registreren"
-
-#: src/users/forms.py:53
-msgid "Male"
-msgstr "Man"
-
-#: src/users/forms.py:53
-msgid "Female"
-msgstr "Vrouw"
-
-#: src/users/forms.py:53
-msgid "Other"
-msgstr "Andere"
-
-#: src/users/forms.py:56
-msgid "Upload profile picture"
-msgstr "Profielfoto uploaden"
-
-#: src/users/forms.py:58 src/users/forms.py:68
-msgid "Save"
-msgstr "Opslaan"
-
-#: src/users/forms.py:63
-msgid "Street"
-msgstr "Straat"
-
-#: src/users/forms.py:64
-msgid "Number"
-msgstr "Huisnummer"
-
-#: src/users/forms.py:66
-msgid "Postal code"
-msgstr "Postcode"
-
-#: src/users/forms.py:72
-msgid "Lost item"
-msgstr "Verloren voorwerp"
-
-#: src/users/forms.py:72
-msgid "Empty"
-msgstr "Leeg"
-
-#: src/users/forms.py:73
-msgid "Make Form"
-msgstr "Formulier maken"
-
-#: src/users/forms.py:77
-msgid "Calendar"
-msgstr "Kalender"
-
-#: src/users/routes.py:169
-msgid "Account"
-msgstr "Account"
-
-#: src/users/routes.py:209 src/users/routes.py:251
-msgid "Edit account info"
-msgstr "Account info bewerken"
-
-#: src/users/routes.py:228
-msgid "Account edited!"
-msgstr "Account bewerkt!"
-
-#: src/users/routes.py:248
-msgid "Account deleted!"
-msgstr "Account verwijderd!"
-
-#: src/users/routes.py:296
-msgid "Address edited!"
-msgstr "Adres bewerkt!"
-
-#: src/users/routes.py:566
-msgid "Shared rides"
-msgstr "Gedeelde ritten"
-
-#: src/users/routes.py:593
-msgid "Campus Carpool: user message"
-msgstr "Capus Carpool: Gebruikersbericht"
-
-#: src/users/routes.py:594
-msgid "Dear "
-msgstr "Beste "
-
-#: src/users/routes.py:598
-msgid ": Lost item"
-msgstr ": Verloren voorwerp"
-
-#: src/users/routes.py:599
-msgid ""
-"While carpooling with you recently, I forgot my [ITEM] in your car. Can "
-"you let me know if you found it and when you can return it?"
-msgstr ""
-"Terwijl ik recent met je carpoolde, ben ik mijn [VOORWERP] vergeten in je"
-" auto. Kanje me het laten weten als je het terugvindt en kan je het dan "
-"teruggeven?"
-
-#: src/users/routes.py:601
-msgid ""
-"\n"
-"Kind regards\n"
-msgstr ""
-"\n"
-"Met vriendelijke groeten\n"
-
-#: src/users/routes.py:652
-msgid "Login failed. Please check your email and/or password."
-msgstr "Inloggen mislukt. Kijk alsjeblieft je email en/of wachtwoord na."
-
-#: src/users/routes.py:653
-msgid "Login"
-msgstr "Inloggen"
-
-#: src/users/routes.py:662
-msgid "Succesfully logged out."
-msgstr "Succesvol uitgelogd"
-
-#: src/users/routes.py:683
-msgid "Account created for"
-msgstr "Account gemaakt voor"
-
-#: src/users/routes.py:684
-msgid "! You can now log in."
-msgstr "! Je kan nu inloggen."
-
-#: src/users/routes.py:687
-msgid "Register"
-msgstr "Registreer"
-
-#: src/users/routes.py:708
-msgid "Vehicle registered!"
-msgstr "Voertuig geregistreerd!"
-
-#: src/users/routes.py:710
-msgid "Add Vehicle"
-msgstr "Voertuig toevoegen"
-
-#: src/users/routes.py:753
-msgid "Car edited!"
-msgstr "Auto bewerkt!"
-
-#: src/users/routes.py:767
-msgid "Vehicle deleted!"
-msgstr "Voertuig verwijderd!"
 
 #~ msgid "Contact"
 #~ msgstr "Contact"
@@ -904,7 +638,7 @@ msgstr "Voertuig verwijderd!"
 #~ msgstr "Vrouw"
 
 #~ msgid "Other"
-#~ msgstr "Ander"
+#~ msgstr "Andere"
 
 #~ msgid "fuelType"
 #~ msgstr ""
@@ -988,4 +722,198 @@ msgstr "Voertuig verwijderd!"
 
 #~ msgid "Calendar link"
 #~ msgstr "Kalender"
+
+#~ msgid "ERROR: Unable to connect to database"
+#~ msgstr "ERROR: Unable to connect to database"
+
+#~ msgid "About"
+#~ msgstr "Over"
+
+#~ msgid "For"
+#~ msgstr "Voor"
+
+#~ msgid "Submit"
+#~ msgstr "Indienen"
+
+#~ msgid "<b>Hello</b>"
+#~ msgstr "<b>Hello</b>"
+
+#~ msgid "Your review has been posted successfully!"
+#~ msgstr "Jouw recensie is succesvol geplaatst!"
+
+#~ msgid "New review"
+#~ msgstr "Nieuwe recensie"
+
+#~ msgid "Before (yyyy-mm-dd)"
+#~ msgstr "Voor yyy-mm-dd"
+
+#~ msgid "After (yyyy-mm-dd)"
+#~ msgstr "Na yyy-mm-dd"
+
+#~ msgid "Ride information"
+#~ msgstr "Info over de rit"
+
+#~ msgid "Ride history"
+#~ msgstr "Rittengeschiedenis"
+
+#~ msgid "Email"
+#~ msgstr "Email"
+
+#~ msgid "Password"
+#~ msgstr "Wachtwoord"
+
+#~ msgid "Confirm password"
+#~ msgstr "Wachtwoord bevestigen"
+
+#~ msgid "The email is already registered."
+#~ msgstr "Deze email is al geregistreerd"
+
+#~ msgid "Remember me"
+#~ msgstr "Onthoud mij"
+
+#~ msgid "Delete account"
+#~ msgstr "Account verwijderen"
+
+#~ msgid "Model"
+#~ msgstr "Model"
+
+#~ msgid "Plate number"
+#~ msgstr "Nummerplaat"
+
+#~ msgid "Seats"
+#~ msgstr "Zitplaatsen"
+
+#~ msgid "Construction Year"
+#~ msgstr "Bouwjaar"
+
+#~ msgid "Fuel Consumption"
+#~ msgstr "Brandstofverbruik"
+
+#~ msgid "Gasoline/Petrol/Benzine"
+#~ msgstr "Diesel/Petroleum/Benzine"
+
+#~ msgid "Diesel"
+#~ msgstr "Dieselolie"
+
+#~ msgid "Liquified Petroleum"
+#~ msgstr "lpg"
+
+#~ msgid "Electricity"
+#~ msgstr "Elektriciteit"
+
+#~ msgid "Compressed Natural Gas"
+#~ msgstr "Gecomprimeerd aardgas"
+
+#~ msgid "Ethanol"
+#~ msgstr "Ethanol"
+
+#~ msgid "Bio-diesel"
+#~ msgstr "Bio-diesel"
+
+#~ msgid "Upload car picture"
+#~ msgstr "Upload een autofoto"
+
+#~ msgid "Register vehicle"
+#~ msgstr "Voertuig registreren"
+
+#~ msgid "Upload profile picture"
+#~ msgstr "Profielfoto uploaden"
+
+#~ msgid "Save"
+#~ msgstr "Opslaan"
+
+#~ msgid "Street"
+#~ msgstr "Straat"
+
+#~ msgid "Number"
+#~ msgstr "Huisnummer"
+
+#~ msgid "Postal code"
+#~ msgstr "Postcode"
+
+#~ msgid "Lost item"
+#~ msgstr "Verloren voorwerp"
+
+#~ msgid "Empty"
+#~ msgstr "Leeg"
+
+#~ msgid "Make Form"
+#~ msgstr "Formulier maken"
+
+#~ msgid "Calendar"
+#~ msgstr "Kalender"
+
+#~ msgid "Edit account info"
+#~ msgstr "Account info bewerken"
+
+#~ msgid "Account edited!"
+#~ msgstr "Account bewerkt!"
+
+#~ msgid "Account deleted!"
+#~ msgstr "Account verwijderd!"
+
+#~ msgid "Address edited!"
+#~ msgstr "Adres bewerkt!"
+
+#~ msgid "Shared rides"
+#~ msgstr "Gedeelde ritten"
+
+#~ msgid "Campus Carpool: user message"
+#~ msgstr "Capus Carpool: Gebruikersbericht"
+
+#~ msgid "Dear "
+#~ msgstr "Beste "
+
+#~ msgid ": Lost item"
+#~ msgstr ": Verloren voorwerp"
+
+#~ msgid ""
+#~ "While carpooling with you recently, I"
+#~ " forgot my [ITEM] in your car. "
+#~ "Can you let me know if you "
+#~ "found it and when you can return"
+#~ " it?"
+#~ msgstr ""
+#~ "Terwijl ik recent met je carpoolde, "
+#~ "ben ik mijn [VOORWERP] vergeten in "
+#~ "je auto. Kanje me het laten weten"
+#~ " als je het terugvindt en kan "
+#~ "je het dan teruggeven?"
+
+#~ msgid ""
+#~ "\n"
+#~ "Kind regards\n"
+#~ msgstr ""
+#~ "\n"
+#~ "Met vriendelijke groeten\n"
+
+#~ msgid "Login failed. Please check your email and/or password."
+#~ msgstr "Inloggen mislukt. Kijk alsjeblieft je email en/of wachtwoord na."
+
+#~ msgid "Login"
+#~ msgstr "Inloggen"
+
+#~ msgid "Succesfully logged out."
+#~ msgstr "Succesvol uitgelogd"
+
+#~ msgid "Account created for"
+#~ msgstr "Account gemaakt voor"
+
+#~ msgid "! You can now log in."
+#~ msgstr "! Je kan nu inloggen."
+
+#~ msgid "Register"
+#~ msgstr "Registreer"
+
+#~ msgid "Vehicle registered!"
+#~ msgstr "Voertuig geregistreerd!"
+
+#~ msgid "Add Vehicle"
+#~ msgstr "Voertuig toevoegen"
+
+#~ msgid "Car edited!"
+#~ msgstr "Auto bewerkt!"
+
+#~ msgid "Vehicle deleted!"
+#~ msgstr "Voertuig verwijderd!"
 

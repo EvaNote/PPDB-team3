@@ -89,16 +89,19 @@
 
             </fieldset>
             <div class="form-group">
-                    {{ form.recaptcha }}
+                {{ form.recaptcha }}
+                {% if form.recaptcha.errors %}
                     <ul>
-                        <li style="color:red;"> Ha, I knew it. Mr. Robot. </li>
+                        <li style="color:red;"> Ha, I knew it. Mr. Robot.</li>
                     </ul>
+                {% endif %}
                 {{ form.submit(class="btn btn-outline-info") }}
             </div>
         </form>
         <div class="border-top pt-3">
             <small class="text-muted">
-                {{ _('Already have an account?') }} <a class="ml-2" href="{{ url_for('users.login') }}">{{ _('Log in') }}</a>
+                {{ _('Already have an account?') }} <a class="ml-2"
+                                                       href="{{ url_for('users.login') }}">{{ _('Log in') }}</a>
             </small>
         </div>
     </div>
