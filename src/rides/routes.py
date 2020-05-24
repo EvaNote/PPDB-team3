@@ -4,7 +4,8 @@ from flask import Blueprint, flash, render_template, g, current_app, abort, redi
 from flask_login import current_user
 import src.users.routes
 from src.rides.forms import Filter_rides
-from src.utils import user_access, car_access, ride_access, picture_access, pickup_point_access
+from src.utils import user_access, car_access, ride_access, picture_access, pickup_point_access, address_access, campus_access
+from src.emails import *
 
 rides = Blueprint('rides', __name__, url_prefix='/<lang_code>')
 
@@ -183,6 +184,19 @@ def join(rideid):
 def joinride():
     ride_id = request.json.get("ride_id")
     result = ride_access.register_passenger(current_user.id, ride_id)
+    ride = ride_access.get_on_id(ride_id)
+    driver_id = ride.user_id
+    driver = user_access.get_user_on_id(driver_id)
+    passenger = user_access.get_user_on_id(current_user.id)
+    passenger_name = passenger.first_name + " " + passenger.last_name
+    if ride.campus_to_id() is None:
+        dest = ride.address_to
+        destination = dest.street + " " + dest.nr + ", " + dest.city
+    else:
+        dest = campus_access.get_on_id(ride.campus_to_id())
+        destination = dest.name
+    if driver.send_emails is True:
+        send_email_newpassenger(driver.email, passenger_name, str(ride.departure_time), destination)
     if result:
         return {"result": "success"}
     return {"result": "failed"}

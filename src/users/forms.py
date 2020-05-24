@@ -12,6 +12,7 @@ class RegistrationForm(FlaskForm):
     email = StringField(lazy_gettext('Email'), validators=[DataRequired(), Email()])
     password = PasswordField(lazy_gettext('Password'), validators=[DataRequired(), Length(min=8)])
     confirm_password = PasswordField(lazy_gettext('Confirm password'), validators=[DataRequired(), EqualTo('password')])
+    send_emails = BooleanField(lazy_gettext('Send me emails with notifications'))
     submit = SubmitField(lazy_gettext('Sign up'))
 
     def validate_email(self, email):  # j
@@ -54,7 +55,7 @@ class EditAccountForm(FlaskForm):
     age = IntegerField(lazy_gettext('Age'),[validators.optional()])
     phone_number = StringField(lazy_gettext('Phone number'))
     picture = FileField(lazy_gettext('Upload profile picture'), validators=[FileAllowed(['jpg','png'])])
-
+    send_emails = BooleanField(lazy_gettext('Send me emails with notifications'))
     submit = SubmitField(lazy_gettext('Save'))
     delete = SubmitField(lazy_gettext('Delete account'))
 

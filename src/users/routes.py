@@ -20,6 +20,7 @@ from math import floor
 from ics import Calendar, Event
 from datetime import *
 from copy import deepcopy
+from src.emails import *
 
 users = Blueprint('users', __name__, url_prefix='/<lang_code>')
 
@@ -205,6 +206,10 @@ def account_edit():
         form.gender.data = user.gender
         form.age.data = user.age
         form.phone_number.data = user.phone_number
+        if user.send_emails is True:
+            form.send_emails.data = True
+        else:
+            form.send_emails.data = False
 
         return render_template('account_edit.html', title=lazy_gettext('Edit account info'), loggedIn=True, form=form)
     if form.validate_on_submit():
@@ -217,6 +222,11 @@ def account_edit():
             phone_number = form.phone_number.data
             user = user_access.get_user_on_id(current_user.id)
             picture_id = user.picture
+            send_emails = form.send_emails.data
+            if send_emails is True:
+                send_emails_data = 'TRUE'
+            else:
+                send_emails_data = 'FALSE'
 
             if form.picture.data:
                 picture_file = save_picture(form.picture.data)
@@ -224,7 +234,7 @@ def account_edit():
                 picture_access.add_picture(picture_obj)
                 picture_id = picture_access.get_picture_on_filename(picture_file).id
             user_access.edit_user(current_user.id, first_name, last_name, email, gender, age, phone_number,
-                                  user.address, picture_id)
+                                  user.address, picture_id, send_emails_data)
             flash(lazy_gettext(f'Account edited!'), 'success')
             return redirect(url_for('users.account'))
         elif form.delete.data:
@@ -675,10 +685,17 @@ def register():
         user_email = form.email.data
         user_first_name = form.first_name.data
         user_last_name = form.last_name.data
+        send_emails = form.send_emails.data
+        send_emails_data = 'FALSE'
+        if send_emails is True:
+            send_emails_data = 'TRUE'
         # decode to make sure it`s a string, not bytes
         user_password = bcrypt.generate_password_hash(form.password.data).decode('utf-8')
         user_obj = User(first_name=user_first_name, last_name=user_last_name, email=user_email, password=user_password)
+        user_obj.send_emails = send_emails_data
         user_access.add_user(user_obj)
+        if send_emails is True:
+            send_email_signedup(form.email.data)
 
         fStr1 = lazy_gettext('Account created for')
         fStr2 = lazy_gettext('! You can now log in.')

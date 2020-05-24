@@ -4,6 +4,7 @@ from flask_login import current_user
 from src.dbmodels.Review import Review
 from src.utils import user_access, review_access
 from flask_babel import lazy_gettext
+from src.emails import *
 import json
 
 reviews = Blueprint('reviews', __name__, url_prefix='/<lang_code>')
@@ -55,6 +56,12 @@ def new_review(userid):
             role = 'passenger'
         review_obj = Review(None, user_for, user_from, amount_of_stars, title, text, None, role)
         review_access.add_review(review_obj)
+        writer = user_access.get_user_on_id(current_user.id)
+        writer_name = writer.first_name + " " + writer.last_name
+        user_for_ = user_access.get_user_on_id(user_for)
+        user_for_email = user_for_.email
+        if user_for_.send_emails:
+            send_email_review(user_for_email, writer_name)
         flash(lazy_gettext('Your review has been posted successfully!'), 'success')
         return redirect(url_for('users.user',userid=userid))
     # else:

@@ -7,6 +7,7 @@ from src.dbmodels.Ride import Ride
 from src.dbmodels.PickupPoint import PickupPoint
 from flask_login import current_user
 from src.users import routes
+from src.emails import *
 
 main = Blueprint('main', __name__, url_prefix='/<lang_code>')
 
@@ -97,6 +98,18 @@ def canceljoinedride(ride_id):
         'TESTING']:  # makes sure user won`t be able to go to page without logging in
         return redirect(url_for('users.login'))
 
+    ride = ride_access.get_on_id(ride_id)
+    driver = user_access.get_user_on_id(ride.user_id)
+    passenger = user_access.get_user_on_id(current_user.id)
+    passenger_name = passenger.first_name + " " + passenger.last_name
+    if ride.campus_to_id() is None:
+        dest = ride.address_to
+        destination = dest.street + " " + dest.nr + ", " + dest.city
+    else:
+        dest = campus_access.get_on_id(ride.campus_to_id())
+        destination = dest.name
+    if driver.send_emails is True:
+        send_email_passengercancelled(driver.email, passenger_name, str(ride.departure_time), destination)
     ride_access.delete_passenger(current_user.id, ride_id)
     flash('Canceled ride.', 'success')
     return redirect(url_for('users.account'))
@@ -108,6 +121,18 @@ def deleteride(ride_id):
         'TESTING']:  # makes sure user won`t be able to go to page without logging in
         return redirect(url_for('users.login'))
 
+    passengers = ride_access.find_ride_passengers(ride_id)
+    ride = ride_access.get_on_id(ride_id)
+    if ride.campus_to_id() is None:
+        dest = ride.address_to
+        destination = dest.street + " " + dest.nr + ", " + dest.city
+    else:
+        dest = campus_access.get_on_id(ride.campus_to_id())
+        destination = dest.name
+    for p_id in passengers:
+        passenger = user_access.get_user_on_id(p_id)
+        if passenger.send_emails is True:
+            send_email_deletedride(passenger.email, str(ride.departure_time), destination)
     ride_access.delete_from_passenger_ride(ride_id)
     ride_access.delete_ride(ride_id)
     flash('Deleted ride.', 'success')
