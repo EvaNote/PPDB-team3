@@ -291,6 +291,9 @@ def address_edit():
         address_id = None
         user = user_access.get_user_on_id(current_user.id)
         loc = geolocator.geocode(str(street) + " " + str(nr) + " " + str(postal_code) + " " + str(city))
+        if loc is None:
+            flash(lazy_gettext(f'This address is unknown to us, please check for erros.'), 'danger')
+            return render_template('address_edit.html', title=lazy_gettext('Edit address'), loggedIn=True, form=form)
         if user.address is None:
             address_obj = Address(None, "Belgie", city, postal_code, street, nr, None, loc.latitude, loc.longitude)
             address_access.add_address(address_obj)
