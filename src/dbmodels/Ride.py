@@ -311,6 +311,8 @@ class Rides:
             return
         cursor = self.dbconnect.get_cursor()
 
+        print(ride.departure_time, ride.arrival_time)
+
         cursor.execute('INSERT INTO "ride" VALUES(default, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)',
                        (ride.departure_time, ride.arrival_time, ride.user_id, ride.passengers,
                         ride.pickup_id(1), ride.pickup_id(2), ride.pickup_id(3), ride.campus_from_id(), ride.campus_to_id(),
@@ -401,7 +403,7 @@ class Rides:
             campus_to = campus_access.is_campus(ride['to'][0], ride['to'][1])
             address_from = Address(None, None, None, None, None, None, None, ride['from'][0], ride['from'][1])
             address_to = Address(None, None, None, None, None, None, None, ride['to'][0], ride['to'][1])
-            ride = Ride(None, None, ride['arrive-by'], None, None, None, None, None, campus_from,
+            ride = Ride(ride['id'], None, ride['arrive-by'], None, None, None, None, None, campus_from,
                                       campus_to, address_from, address_to).to_dict()
             ride.dont_store_in_db = True
             partner_rides.append(ride)

@@ -160,7 +160,7 @@ class Addresses:
                            (address.country, address.city, address.postal_code, address.street, address.nr,
                             address.coordinates))
             self.dbconnect.commit()
-        except:
+        except Exception as e:
             raise Exception('Unable to add address')
 
     def edit_address(self, address_id, street, nr, city, postal_code, country, latitude, longitude):
