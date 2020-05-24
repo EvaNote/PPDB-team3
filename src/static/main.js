@@ -265,6 +265,18 @@ map.on('click', function (e) {
             destBtn = createButton('Go to this location instead', container);
         }
         container.setAttribute('style', 'text-align: center')
+    } else if (state.startFromThisLocationClicked && state.campusFromId === null) {
+        container.appendChild(document.createElement("br"));
+        let b = document.createElement("b");
+        b.setAttribute('style', 'color: #cc0000');
+        b.appendChild(document.createTextNode('Hi there! This is campus carpool, one of your endpoints needs to be a campus.'));
+        container.appendChild(b);
+        if (state.startFromThisLocationClicked) {
+            startBtn = createButton('Start from this location instead', container);
+        } else {
+            destBtn = createButton('Go to this location instead', container);
+        }
+        container.setAttribute('style', 'text-align: center')
     } else {
         startBtn = createButton('Start from this location', container);
         startBtn.setAttribute('id', 'start');
