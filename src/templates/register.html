@@ -89,6 +89,10 @@
 
             </fieldset>
             <div class="form-group">
+                    {{ form.recaptcha }}
+                    <ul>
+                        <li style="color:red;"> Ha, I knew it. Mr. Robot. </li>
+                    </ul>
                 {{ form.submit(class="btn btn-outline-info") }}
             </div>
         </form>

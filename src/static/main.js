@@ -655,6 +655,7 @@ $(function () {
 
             }
             if (ride_option === "find") {
+                let start = new Date();
                 $.post({
                     contentType: "application/json",
                     url: "/en/calculateCompatibleRides",
@@ -681,6 +682,8 @@ $(function () {
                             return
                         }
                         for (let d = 0; d < data["results"].length; d++) {
+                            let stop = new Date();
+                            console.log(stop - start);
                             let result = data.results[d];
                             let driver = data["drivers"][d]
                             let driver_name = driver["first_name"] + " " + driver["last_name"]
