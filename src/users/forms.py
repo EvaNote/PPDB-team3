@@ -74,4 +74,4 @@ class SelectSubject(FlaskForm):
 
 
 class getCalendar(FlaskForm):
-    submit = SubmitField(lazy_gettext('Calendar link'))
+    submit = SubmitField(lazy_gettext('Calendar'))

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2020-04-22 10:25+0200\n"
+"POT-Creation-Date: 2020-05-24 14:21+0200\n"
 "PO-Revision-Date: 2020-03-23 16:50+0100\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -22,15 +22,15 @@ msgstr ""
 msgid "ERROR: Unable to connect to database"
 msgstr "ÉCHEC: Connexion à la base de données impossible"
 
-#: src/main/routes.py:53
+#: src/main/routes.py:50
 msgid "About"
 msgstr "À propos"
 
-#: src/main/routes.py:58 src/templates/faq.html:3
+#: src/main/routes.py:55 src/templates/faq.html:3
 msgid "FAQ"
 msgstr "FAQ"
 
-#: src/main/routes.py:63 src/templates/user.html:16
+#: src/main/routes.py:60 src/templates/user.html:16
 msgid "contact"
 msgstr "contact"
 
@@ -42,7 +42,8 @@ msgstr "Pour"
 msgid "From"
 msgstr "De"
 
-#: src/reviews/forms.py:10 src/templates/reviews.html:124
+#: src/reviews/forms.py:10 src/reviews/forms.py:14
+#: src/templates/reviews.html:140
 msgid "Rating"
 msgstr "Évaluation"
 
@@ -50,51 +51,68 @@ msgstr "Évaluation"
 msgid "Submit"
 msgstr "Envoyer"
 
-#: src/reviews/forms.py:17 src/reviews/forms.py:18
+#: src/reviews/forms.py:18 src/reviews/forms.py:19
 msgid "<b>Hello</b>"
 msgstr ""
 
-#: src/reviews/forms.py:20 src/templates/reviews.html:40
+#: src/reviews/forms.py:21 src/templates/reviews.html:51
 msgid "Rate Low-High"
 msgstr ""
 
-#: src/reviews/forms.py:21 src/templates/reviews.html:41
+#: src/reviews/forms.py:22 src/templates/reviews.html:52
 msgid "Rate High-Low"
 msgstr ""
 
-#: src/reviews/forms.py:22 src/templates/reviews.html:42
+#: src/reviews/forms.py:23 src/templates/reviews.html:53
 msgid "Date Old-New"
 msgstr ""
 
-#: src/reviews/forms.py:23 src/templates/reviews.html:43
+#: src/reviews/forms.py:24 src/templates/reviews.html:54
 msgid "Date New-Old"
 msgstr ""
 
-#: src/reviews/routes.py:53
+#: src/reviews/routes.py:58
 msgid "Your review has been posted successfully!"
 msgstr "Votre revue a été publiée avec succès!"
 
-#: src/reviews/routes.py:57
+#: src/reviews/routes.py:62
 msgid "New review"
 msgstr "Nouvelle revue"
 
-#: src/rides/routes.py:39 src/templates/base.html:61 src/templates/base.html:87
+#: src/rides/forms.py:22
+msgid "Before (yyyy-mm-dd)"
+msgstr ""
+
+#: src/rides/forms.py:23
+msgid "After (yyyy-mm-dd)"
+msgstr ""
+
+#: src/rides/forms.py:24 src/templates/reviews.html:40
+msgid "Filter"
+msgstr "Filtrer"
+
+#: src/rides/routes.py:40 src/templates/base.html:60 src/templates/base.html:86
 msgid "Find a ride"
 msgstr "Trouvez un trajet"
 
-#: src/rides/routes.py:51
+#: src/rides/routes.py:54
 msgid "Ride information"
 msgstr "Information du trajet"
 
-#: src/rides/routes.py:56
+#: src/rides/routes.py:62
 msgid "Ride history"
 msgstr "Histoire de trajets"
+
+#: src/rides/routes.py:149 src/templates/base.html:69
+#: src/templates/joined_rides.html:3
+msgid "Joined rides"
+msgstr ""
 
 #: src/templates/about.html:3
 msgid "About Campus Carpool"
 msgstr "Á propos de Campus Carpool"
 
-#: src/templates/about.html:7
+#: src/templates/about.html:9
 msgid ""
 "\n"
 "    <b>\n"
@@ -145,6 +163,23 @@ msgstr ""
 "trajet vers votre campus.\n"
 "    "
 
+#: src/templates/about.html:26
+msgid ""
+"\n"
+"    We have done our utmost to put all college- and university campusses "
+"in Belgium on the map. To achieve this, we\n"
+"    mainly used <a href=\"https://www.google.be/maps\" style=\"color: "
+"#333333\"><b> Google Maps</b></a>, but also the Belgian\n"
+"    sites <a "
+"href=\"https://www.onderwijskiezer.be/v2/hoger/hoger_vestigingen.php\" "
+"style=\"color: #333333\"><b> Onderwijskiezer</b></a>\n"
+"    and <a href=\"https://www.goudengids.be/\" style=\"color: "
+"#333333\"><b> Gouden Gids</b></a>.\n"
+"    Did we still forget your campus? <a href=\"/en/contact\">Contact "
+"us!</a>\n"
+"    "
+msgstr ""
+
 #: src/templates/account.html:3
 msgid "My account"
 msgstr "Mon compte"
@@ -154,103 +189,103 @@ msgid "Edit account"
 msgstr "Modifier mon compte"
 
 #: src/templates/account.html:9 src/templates/account_edit.html:92
-#: src/users/routes.py:187 src/users/routes.py:212
+#: src/users/routes.py:273 src/users/routes.py:298
 msgid "Edit address"
 msgstr "Modifier l'addresse"
 
-#: src/templates/account.html:11 src/templates/base.html:67
-#: src/users/routes.py:251
+#: src/templates/account.html:11 src/templates/base.html:66
+#: src/templates/ride_history.html:5 src/users/routes.py:430
 msgid "My rides"
 msgstr "Mes trajets"
 
-#: src/templates/account.html:14 src/users/forms.py:9 src/users/forms.py:47
+#: src/templates/account.html:19 src/users/forms.py:10 src/users/forms.py:50
 msgid "First name"
 msgstr "Prénom"
 
-#: src/templates/account.html:20 src/templates/user.html:54
-#: src/users/forms.py:10 src/users/forms.py:48
+#: src/templates/account.html:25 src/templates/user.html:58
+#: src/users/forms.py:11 src/users/forms.py:51
 msgid "Last name"
 msgstr "Nom de famille"
 
-#: src/templates/account.html:26 src/templates/account_edit.html:39
-#: src/templates/user.html:60 src/users/forms.py:50
+#: src/templates/account.html:31 src/templates/account_edit.html:39
+#: src/templates/user.html:64 src/users/forms.py:53
 msgid "Gender"
 msgstr "Sexe"
 
-#: src/templates/account.html:36
+#: src/templates/account.html:41
 msgid "email"
 msgstr "Adresse mail"
 
-#: src/templates/account.html:42 src/users/forms.py:51
+#: src/templates/account.html:47 src/users/forms.py:54
 msgid "Age"
 msgstr "Age"
 
-#: src/templates/account.html:52 src/users/forms.py:52
+#: src/templates/account.html:57 src/users/forms.py:55
 msgid "Phone number"
 msgstr "Numéro de téléphone"
 
-#: src/templates/account.html:67
+#: src/templates/account.html:72
 msgid "Address"
 msgstr "Adresse"
 
-#: src/templates/account.html:73
+#: src/templates/account.html:78
 msgid "Zip code"
 msgstr "Code postale"
 
-#: src/templates/account.html:79 src/users/forms.py:61
+#: src/templates/account.html:84 src/users/forms.py:65
 msgid "City"
 msgstr "Ville"
 
-#: src/templates/account.html:85
+#: src/templates/account.html:90
 msgid "Country"
 msgstr "Pays"
 
-#: src/templates/account.html:97 src/templates/user.html:73
+#: src/templates/account.html:102 src/templates/user.html:77
 msgid "Car:"
 msgstr "Voiture:"
 
-#: src/templates/account.html:99 src/templates/car_edit.html:5
-#: src/users/routes.py:467 src/users/routes.py:490
+#: src/templates/account.html:104 src/templates/car_edit.html:5
+#: src/users/routes.py:732 src/users/routes.py:755
 msgid "Edit car"
 msgstr "Modifier voiture"
 
-#: src/templates/account.html:109 src/templates/user.html:81
-#: src/users/forms.py:32
+#: src/templates/account.html:114 src/templates/user.html:85
+#: src/users/forms.py:34
 msgid "Brand"
 msgstr "Marque"
 
-#: src/templates/account.html:115 src/templates/user.html:87
+#: src/templates/account.html:120 src/templates/user.html:91
 msgid "Type"
 msgstr "genre"
 
-#: src/templates/account.html:121 src/templates/user.html:93
-#: src/users/forms.py:34
+#: src/templates/account.html:126 src/templates/user.html:97
+#: src/users/forms.py:36
 msgid "Color"
 msgstr "Couleur"
 
-#: src/templates/account.html:127
+#: src/templates/account.html:132
 msgid "License plate"
 msgstr "Plaque d'immatriculation"
 
-#: src/templates/account.html:133 src/templates/user.html:99
+#: src/templates/account.html:138 src/templates/user.html:103
 msgid "nr. seats"
 msgstr "nombre de places"
 
-#: src/templates/account.html:139
+#: src/templates/account.html:144
 msgid "Year"
 msgstr "Année"
 
-#: src/templates/account.html:145 src/templates/user.html:105
+#: src/templates/account.html:150 src/templates/user.html:109
 msgid "Fuel usage"
 msgstr "Usage d'essence"
 
-#: src/templates/account.html:151 src/templates/add_vehicle.html:104
-#: src/templates/car_edit.html:105 src/templates/user.html:110
-#: src/users/forms.py:39
+#: src/templates/account.html:156 src/templates/add_vehicle.html:104
+#: src/templates/car_edit.html:105 src/templates/user.html:114
+#: src/users/forms.py:41
 msgid "Fuel type"
 msgstr "genre d'essence"
 
-#: src/templates/account.html:161
+#: src/templates/account.html:166
 msgid "Add car"
 msgstr "Ajouter une voiture"
 
@@ -266,29 +301,24 @@ msgstr "Ajouter une voiture"
 msgid "Edit my address"
 msgstr "Modifier mon adresse"
 
-#: src/templates/base.html:64
+#: src/templates/base.html:63
 msgid "Create a ride"
 msgstr ""
 
-#: src/templates/base.html:70 src/templates/joined_rides.html:3
-#: src/users/routes.py:317
-msgid "Joined rides"
-msgstr ""
-
-#: src/templates/base.html:83
+#: src/templates/base.html:82
 msgid "Home"
 msgstr "Accueil"
 
-#: src/templates/base.html:90 src/templates/register.html:83
-#: src/users/forms.py:25
+#: src/templates/base.html:89 src/templates/register.html:83
+#: src/users/forms.py:26
 msgid "Log in"
 msgstr "Se connecter"
 
-#: src/templates/base.html:93 src/templates/home.html:116 src/users/forms.py:14
+#: src/templates/base.html:92 src/templates/home.html:115 src/users/forms.py:15
 msgid "Sign up"
 msgstr "S'inscrire"
 
-#: src/templates/base.html:98
+#: src/templates/base.html:97
 msgid "Language"
 msgstr "Langue"
 
@@ -348,11 +378,11 @@ msgstr "Trouvez un trajet"
 msgid "Create A Ride"
 msgstr ""
 
-#: src/templates/home.html:31
+#: src/templates/home.html:30
 msgid "How does it work?"
 msgstr "Comment ça marche?"
 
-#: src/templates/home.html:33
+#: src/templates/home.html:32
 msgid ""
 "Just Make an account, log in, personalize your profile, then just click "
 "'Find a ride' and enter the required info. You can easily select rides "
@@ -361,89 +391,96 @@ msgid ""
 " sure to register your car on your account page."
 msgstr ""
 
-#: src/templates/home.html:42
+#: src/templates/home.html:41
 msgid "What our users say about us"
 msgstr "Ce que nos utilisateurs disent sur nous"
 
-#: src/templates/home.html:49
+#: src/templates/home.html:48
 msgid ""
 "The review system really makes sure I only have very punctual drivers. "
 "Very nice community. If this website ever breaks, I'm happy to help."
 msgstr ""
 
-#: src/templates/home.html:59
+#: src/templates/home.html:58
 msgid ""
 "Simple to use, even on mobile devices. And the drivers always let me talk"
 " all the way, without interrupting me. Amazing!"
 msgstr ""
 
-#: src/templates/home.html:69
+#: src/templates/home.html:68
 msgid ""
 "Very easy to find the rides I need thanks to the specific target "
 "audience. I always get so tired travelling from home to my university, so"
 " this is incredibly helpful."
 msgstr ""
 
-#: src/templates/home.html:79
+#: src/templates/home.html:78
 msgid ""
 "This website is user-friendly and pretty! Now I can go to the pizza hut "
 "instead of always ordering from home."
 msgstr ""
 
-#: src/templates/home.html:89
+#: src/templates/home.html:88
 msgid ""
 "Carpooling has never been so easy! Going to the grocery store to get "
 "ingredients for my plopkoeken is even more fun now!"
 msgstr ""
 
-#: src/templates/home.html:100
+#: src/templates/home.html:99
 msgid "Transport should be the least of your worries."
 msgstr "Le transport devrait être le moins de vos craintes."
 
-#: src/templates/home.html:102
+#: src/templates/home.html:101
 msgid ""
 "Bus always late? Train never arrives? Too little public transport near "
 "you? Campus just out of walking distance? Don't want to drive alone? Use "
 "Campus Carpool!"
 msgstr ""
 
-#: src/templates/home.html:113
+#: src/templates/home.html:112
 msgid "Interested? Sign up now!"
 msgstr "Interessé(e)? Enregistrez-vous maintenant!"
 
-#: src/templates/joined_rides.html:46 src/templates/ride_history.html:46
+#: src/templates/joined_rides_list.html:11 src/templates/ride.html:23
+#: src/templates/ride_history_list.html:15
 msgid "Departure: "
 msgstr ""
 
-#: src/templates/joined_rides.html:48 src/templates/ride_history.html:48
+#: src/templates/joined_rides_list.html:13 src/templates/ride.html:25
+#: src/templates/ride_history_list.html:17
 msgid "Arrival: "
 msgstr ""
 
-#: src/templates/joined_rides.html:51
+#: src/templates/joined_rides_list.html:16 src/templates/ride.html:28
+#: src/templates/ride_history_list.html:20
 msgid "Pickup 1: "
 msgstr ""
 
-#: src/templates/joined_rides.html:55
+#: src/templates/joined_rides_list.html:20 src/templates/ride.html:32
+#: src/templates/ride_history_list.html:24
 msgid "Pickup 2: "
 msgstr ""
 
-#: src/templates/joined_rides.html:59
+#: src/templates/joined_rides_list.html:24 src/templates/ride.html:36
+#: src/templates/ride_history_list.html:28
 msgid "Pickup 3: "
 msgstr ""
 
-#: src/templates/joined_rides.html:63 src/templates/joined_rides.html:67
+#: src/templates/joined_rides_list.html:27 src/templates/ride.html:39
+#: src/templates/ride_history_list.html:31
 msgid "From: "
 msgstr ""
 
-#: src/templates/joined_rides.html:65 src/templates/joined_rides.html:69
+#: src/templates/joined_rides_list.html:29 src/templates/ride.html:41
+#: src/templates/ride_history_list.html:33
 msgid "To: "
 msgstr ""
 
-#: src/templates/joined_rides.html:77
+#: src/templates/joined_rides_list.html:36 src/templates/ride.html:48
 msgid "See driver profile"
 msgstr ""
 
-#: src/templates/joined_rides.html:78
+#: src/templates/joined_rides_list.html:37
 msgid "Cancel ride"
 msgstr ""
 
@@ -451,25 +488,21 @@ msgstr ""
 msgid "Forgot your password?"
 msgstr "Oublié votre mot de passe?"
 
-#: src/templates/new_review.html:27
-msgid "5 stars"
-msgstr "5 étoiles"
+#: src/templates/new_review.html:59
+msgid "Please specify your role!"
+msgstr ""
 
-#: src/templates/new_review.html:29
-msgid "4 stars"
-msgstr "4 étoiles"
+#: src/templates/new_review.html:80
+msgid "Your role..."
+msgstr ""
 
-#: src/templates/new_review.html:31
-msgid "3 stars"
-msgstr "3 étoiles"
+#: src/templates/new_review.html:82 src/users/routes.py:53
+msgid "driver"
+msgstr ""
 
-#: src/templates/new_review.html:33
-msgid "2 stars"
-msgstr "2 étoiles"
-
-#: src/templates/new_review.html:35
-msgid "1 star"
-msgstr "1 étoile"
+#: src/templates/new_review.html:85 src/users/routes.py:55
+msgid "passenger"
+msgstr ""
 
 #: src/templates/register.html:83
 msgid "Already have an account?"
@@ -479,52 +512,55 @@ msgstr "Vous avez déjà un compte?"
 msgid "Reviews"
 msgstr "Revues"
 
-#: src/templates/reviews.html:29
-msgid "Filter"
-msgstr "Filtrer"
-
-#: src/templates/reviews.html:37
+#: src/templates/reviews.html:48
 msgid "Sort"
 msgstr "Trier"
 
-#: src/templates/reviews.html:76 src/templates/reviews.html:78
-#: src/templates/reviews.html:131 src/templates/reviews.html:133
-msgid "stars"
-msgstr "étoiles"
-
-#: src/templates/reviews.html:90
+#: src/templates/reviews.html:101
 msgid "by"
 msgstr "par"
 
-#: src/templates/reviews.html:140
+#: src/templates/reviews.html:104
+msgid "(driver)"
+msgstr ""
+
+#: src/templates/reviews.html:106
+msgid "(passenger)"
+msgstr ""
+
+#: src/templates/reviews.html:156
 msgid "Other properties"
 msgstr ""
 
-#: src/templates/reviews.html:145
+#: src/templates/reviews.html:161
 msgid "Written by me"
 msgstr ""
 
-#: src/templates/reviews.html:150
+#: src/templates/reviews.html:166
 msgid "Written by me (requires login)"
 msgstr ""
 
-#: src/templates/reviews.html:164
+#: src/templates/reviews.html:174 src/templates/reviews.html:176
+msgid "results"
+msgstr ""
+
+#: src/templates/reviews.html:180
 msgid "Show results"
 msgstr ""
 
-#: src/templates/ride_history.html:3
-msgid "Ride History"
-msgstr "Histoire de trajets"
-
-#: src/templates/ride_history.html:52 src/templates/ride_history.html:55
-msgid "From "
+#: src/templates/ride.html:3 src/users/routes.py:547
+msgid "View ride"
 msgstr ""
 
-#: src/templates/ride_history.html:52 src/templates/ride_history.html:55
-msgid " to "
+#: src/templates/ride.html:52
+msgid "Join ride"
 msgstr ""
 
-#: src/templates/ride_history.html:66
+#: src/templates/ride.html:54
+msgid "Log in to join"
+msgstr ""
+
+#: src/templates/ride_history_list.html:44
 msgid "Delete ride"
 msgstr ""
 
@@ -561,7 +597,19 @@ msgstr "Passager"
 msgid "Cancel"
 msgstr "Annuler"
 
-#: src/templates/user.html:3 src/users/routes.py:369
+#: src/templates/shared_rides.html:3
+msgid "Shared rides:"
+msgstr ""
+
+#: src/templates/shared_rides.html:10
+msgid "As driver"
+msgstr ""
+
+#: src/templates/shared_rides.html:13
+msgid "As passenger"
+msgstr ""
+
+#: src/templates/user.html:3 src/users/routes.py:633
 msgid "User profile"
 msgstr "profil d'utilisateur"
 
@@ -569,171 +617,183 @@ msgstr "profil d'utilisateur"
 msgid "new review"
 msgstr ""
 
-#: src/templates/user.html:30 src/users/forms.py:67
+#: src/templates/user.html:30 src/users/forms.py:72
 msgid "Subject"
 msgstr "Sujet"
 
-#: src/templates/user.html:48
+#: src/templates/user.html:46
+msgid "shared rides"
+msgstr ""
+
+#: src/templates/user.html:52
 msgid "First Name"
 msgstr "Prénom"
 
-#: src/users/forms.py:11 src/users/forms.py:22 src/users/forms.py:49
+#: src/users/forms.py:12 src/users/forms.py:23 src/users/forms.py:52
 msgid "Email"
 msgstr "Adresse mail"
 
-#: src/users/forms.py:12 src/users/forms.py:23
+#: src/users/forms.py:13 src/users/forms.py:24
 msgid "Password"
 msgstr "Mot de passe"
 
-#: src/users/forms.py:13
+#: src/users/forms.py:14
 msgid "Confirm password"
 msgstr "Confirmez mot de passe"
 
-#: src/users/forms.py:18
+#: src/users/forms.py:19
 msgid "The email is already registered."
 msgstr "L'addresse mail est déjà inscrit."
 
-#: src/users/forms.py:24
+#: src/users/forms.py:25
 msgid "Remember me"
 msgstr "Memorise-moi"
 
-#: src/users/forms.py:28 src/users/forms.py:56
+#: src/users/forms.py:30 src/users/forms.py:59
 msgid "Delete account"
 msgstr "Supprimer mon compte"
 
-#: src/users/forms.py:33
+#: src/users/forms.py:35
 msgid "Model"
 msgstr "Modèle"
 
-#: src/users/forms.py:35
+#: src/users/forms.py:37
 msgid "Plate number"
 msgstr "Plaque d'immatriculation"
 
-#: src/users/forms.py:36
+#: src/users/forms.py:38
 msgid "Seats"
 msgstr "Siège"
 
-#: src/users/forms.py:37
+#: src/users/forms.py:39
 msgid "Construction Year"
 msgstr "Année de construction"
 
-#: src/users/forms.py:38
+#: src/users/forms.py:40
 msgid "Fuel Consumption"
 msgstr "Usage d'essence"
 
-#: src/users/forms.py:39
+#: src/users/forms.py:41
 msgid "Gasoline/Petrol/Benzine"
 msgstr "Essence/Pétrole/Diesel"
 
-#: src/users/forms.py:39
+#: src/users/forms.py:41
 msgid "Diesel"
 msgstr "Diesel"
 
-#: src/users/forms.py:40
+#: src/users/forms.py:42
 msgid "Liquified Petroleum"
 msgstr "Pétrole liquéfié"
 
-#: src/users/forms.py:40
+#: src/users/forms.py:42
 msgid "Electricity"
 msgstr "Electricité"
 
-#: src/users/forms.py:41
+#: src/users/forms.py:43
 msgid "Compressed Natural Gas"
 msgstr "Gaz naturel comprimé"
 
-#: src/users/forms.py:42
+#: src/users/forms.py:44
 msgid "Ethanol"
 msgstr "Éthanol"
 
-#: src/users/forms.py:42
+#: src/users/forms.py:44
 msgid "Bio-diesel"
 msgstr "Diesel bio"
 
-#: src/users/forms.py:43
+#: src/users/forms.py:45
 msgid "Upload car picture"
 msgstr "Ajouter photo de voiture"
 
-#: src/users/forms.py:44
+#: src/users/forms.py:46
 msgid "Register vehicle"
 msgstr "Enregistrer le véhicule"
 
-#: src/users/forms.py:50
+#: src/users/forms.py:53
 msgid "Male"
 msgstr "Homme"
 
-#: src/users/forms.py:50
+#: src/users/forms.py:53
 msgid "Female"
 msgstr "Femme"
 
-#: src/users/forms.py:50
+#: src/users/forms.py:53
 msgid "Other"
 msgstr "Autre"
 
-#: src/users/forms.py:53
+#: src/users/forms.py:56
 msgid "Upload profile picture"
 msgstr "Ajouter photo de profil"
 
-#: src/users/forms.py:55 src/users/forms.py:64
+#: src/users/forms.py:58 src/users/forms.py:68
 msgid "Save"
 msgstr "Sauvegarder"
 
-#: src/users/forms.py:59
+#: src/users/forms.py:63
 msgid "Street"
 msgstr "Rue"
 
-#: src/users/forms.py:60
+#: src/users/forms.py:64
 msgid "Number"
 msgstr "Numéro"
 
-#: src/users/forms.py:62
+#: src/users/forms.py:66
 msgid "Postal code"
 msgstr "Code postale"
 
-#: src/users/forms.py:67
+#: src/users/forms.py:72
 msgid "Lost item"
 msgstr "Objets perdus"
 
-#: src/users/forms.py:67
+#: src/users/forms.py:72
 msgid "Empty"
 msgstr "Vide"
 
-#: src/users/forms.py:68
+#: src/users/forms.py:73
 msgid "Make Form"
 msgstr "Créer formulaire"
 
-#: src/users/routes.py:84
+#: src/users/forms.py:77
+msgid "Calendar"
+msgstr ""
+
+#: src/users/routes.py:169
 msgid "Account"
 msgstr "Compte"
 
-#: src/users/routes.py:123 src/users/routes.py:165
+#: src/users/routes.py:209 src/users/routes.py:251
 msgid "Edit account info"
 msgstr "Modifier info du compte"
 
-#: src/users/routes.py:142
+#: src/users/routes.py:228
 msgid "Account edited!"
 msgstr "Compte modifié!"
 
-#: src/users/routes.py:162
+#: src/users/routes.py:248
 msgid "Account deleted!"
 msgstr "Compte supprimé!"
 
-#: src/users/routes.py:210
+#: src/users/routes.py:296
 msgid "Address edited!"
 msgstr "Adresse modifié!"
 
-#: src/users/routes.py:341
+#: src/users/routes.py:566
+msgid "Shared rides"
+msgstr ""
+
+#: src/users/routes.py:593
 msgid "Campus Carpool: user message"
 msgstr "Campus Carpool: message d'utilisateur"
 
-#: src/users/routes.py:342
+#: src/users/routes.py:594
 msgid "Dear "
 msgstr "Cher/Chère"
 
-#: src/users/routes.py:346
+#: src/users/routes.py:598
 msgid ": Lost item"
 msgstr ": Objet perdu"
 
-#: src/users/routes.py:347
+#: src/users/routes.py:599
 msgid ""
 "While carpooling with you recently, I forgot my [ITEM] in your car. Can "
 "you let me know if you found it and when you can return it?"
@@ -742,7 +802,7 @@ msgstr ""
 "voiture. Est-ce que vous pourriez me contacter si vous l'avez trouvé et "
 "quand vous pourriez me le rendre?"
 
-#: src/users/routes.py:349
+#: src/users/routes.py:601
 msgid ""
 "\n"
 "Kind regards\n"
@@ -750,43 +810,43 @@ msgstr ""
 "\n"
 "Sincèrement\n"
 
-#: src/users/routes.py:388
+#: src/users/routes.py:652
 msgid "Login failed. Please check your email and/or password."
 msgstr "Échec de connexion. Vérifiez votre adresse mail et/ou mot de passe."
 
-#: src/users/routes.py:389
+#: src/users/routes.py:653
 msgid "Login"
 msgstr "Connexion"
 
-#: src/users/routes.py:398
+#: src/users/routes.py:662
 msgid "Succesfully logged out."
 msgstr "Déconnexion réussite."
 
-#: src/users/routes.py:419
+#: src/users/routes.py:683
 msgid "Account created for"
 msgstr "Compte créé pour"
 
-#: src/users/routes.py:420
+#: src/users/routes.py:684
 msgid "! You can now log in."
 msgstr "! Vous pouvez vous connecter."
 
-#: src/users/routes.py:423
+#: src/users/routes.py:687
 msgid "Register"
 msgstr "S'inscrire"
 
-#: src/users/routes.py:444
+#: src/users/routes.py:708
 msgid "Vehicle registered!"
 msgstr "Véhicule enregistré!"
 
-#: src/users/routes.py:446
+#: src/users/routes.py:710
 msgid "Add Vehicle"
 msgstr "Ajouter un véhicule"
 
-#: src/users/routes.py:488
+#: src/users/routes.py:753
 msgid "Car edited!"
 msgstr "Voiture modifiée!"
 
-#: src/users/routes.py:502
+#: src/users/routes.py:767
 msgid "Vehicle deleted!"
 msgstr "Voiture supprimée"
 
@@ -884,5 +944,35 @@ msgstr "Voiture supprimée"
 #~ "    <b>How do I select points on the map?</b>\n"
 #~ "        <br>\n"
 #~ "    If the map feels unresponsive, try zooming in first.."
+#~ msgstr ""
+
+#~ msgid "5 stars"
+#~ msgstr "5 étoiles"
+
+#~ msgid "4 stars"
+#~ msgstr "4 étoiles"
+
+#~ msgid "3 stars"
+#~ msgstr "3 étoiles"
+
+#~ msgid "2 stars"
+#~ msgstr "2 étoiles"
+
+#~ msgid "1 star"
+#~ msgstr "1 étoile"
+
+#~ msgid "stars"
+#~ msgstr "étoiles"
+
+#~ msgid "Ride History"
+#~ msgstr "Histoire de trajets"
+
+#~ msgid "From "
+#~ msgstr ""
+
+#~ msgid " to "
+#~ msgstr ""
+
+#~ msgid "Calendar link"
 #~ msgstr ""
 

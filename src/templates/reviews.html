@@ -171,9 +171,9 @@
                 <div class="modal-footer">
                     <div id="num-results" style="color: #444444">
                         {% if data.length == 1 %}
-                            ({{ data|length }} result)
+                            ({{ data|length }} {{ _('results') }})
                         {% else %}
-                            ({{ data|length }} results)
+                            ({{ data|length }} {{ _('results') }})
                         {% endif %}
                     </div>
                     <button type="button" class="btn btn-outline-info" data-toggle="modal" data-target="#exampleModal">

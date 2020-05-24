@@ -559,13 +559,16 @@ def shared_rides(userid):
 
     j = joinedrides_help(None, None, userid)
     m = myrides_help(None, None, userid)
+    target_user = user_access.get_user_on_id(userid)
+    if target_user is None:
+        abort(404)
 
     return render_template('shared_rides.html', title=lazy_gettext('Shared rides'), loggedIn=True,
                            userrides_m=m["userrides"],
                            from_locs_m=m["from_locs"], to_locs_m=m["to_locs"], pfps_m=m["pfps"],
                            allids_m=m["allids"], pickuppoints_m=m["pickuppoints"],
                            pickupbools_m=m["pickupbools"], form=m["form"], userrides_j=j["userrides"], pickuppoints_j=j["pickuppoints"], pickupbools_j=j["pickupbools"],
-                           from_locs_j=j["from_locs"], to_locs_j=j["to_locs"], pfps_j=j["pfps"], userid=userid)
+                           from_locs_j=j["from_locs"], to_locs_j=j["to_locs"], pfps_j=j["pfps"], userid=userid, target_user=target_user)
 
 
 @users.route("/user=<userid>", methods=['GET', 'POST'])
