@@ -1,4 +1,4 @@
-from flask_wtf import FlaskForm
+from flask_wtf import FlaskForm, RecaptchaField
 from flask_wtf.file import FileField, FileAllowed
 from wtforms import StringField, PasswordField, SubmitField, BooleanField, SelectField, DateField, IntegerField, validators
 from wtforms.validators import DataRequired, Length, Email, EqualTo, ValidationError, InputRequired
@@ -14,6 +14,7 @@ class RegistrationForm(FlaskForm):
     confirm_password = PasswordField(lazy_gettext('Confirm password'), validators=[DataRequired(), EqualTo('password')])
     send_emails = BooleanField(lazy_gettext('Send me emails with notifications'))
     submit = SubmitField(lazy_gettext('Sign up'))
+    recaptcha = RecaptchaField()
 
     def validate_email(self, email):  # j
         if user_access.get_user_on_email(email.data):
@@ -52,7 +53,7 @@ class EditAccountForm(FlaskForm):
     last_name = StringField(lazy_gettext('Last name'), validators=[DataRequired()])
     email = StringField(lazy_gettext('Email'), validators=[DataRequired(), Email()])
     gender = SelectField(lazy_gettext('Gender'), choices=[('M',lazy_gettext('Male')),('F', lazy_gettext('Female')), (None, lazy_gettext('Other'))])
-    age = IntegerField(lazy_gettext('Age'),[validators.optional()])
+    age = IntegerField(lazy_gettext('Age'), [validators.optional()])
     phone_number = StringField(lazy_gettext('Phone number'))
     picture = FileField(lazy_gettext('Upload profile picture'), validators=[FileAllowed(['jpg','png'])])
     send_emails = BooleanField(lazy_gettext('Send me emails with notifications'))
