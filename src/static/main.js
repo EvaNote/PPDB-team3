@@ -23,7 +23,10 @@ let map = L.map('findride_map').setView([51, 4.4], 10);
 
 // add a tile layer to the (empty) map
 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>, ' +
+        '<a href="https://www.google.com/maps">Google Maps</a>, ' +
+        '<a href="https://www.onderwijskiezer.be/v2/hoger/hoger_vestigingen.php">Onderwijskiezer</a>, ' +
+        '<a href="https://www.goudengids.be/">Gouden Gids</a> contributors'
 }).addTo(map);
 
 // add OSRM support using Leaflet Routing Machine
@@ -232,7 +235,7 @@ function resetState() {
 }
 
 map.on('click', function (e) {
-    if(state.situation === 'show') {
+    if (state.situation === 'show') {
         return; // don't click please
     }
     var startBtn, destBtn, addWaypointBtn;
@@ -295,7 +298,7 @@ map.on('click', function (e) {
                 state.p3 = e.latlng;
                 control.spliceWaypoints(3, 0, e.latlng);
             }
-        map.closePopup();
+            map.closePopup();
             control.spliceWaypoints(1, 0, e.latlng);
         }
     });
@@ -392,7 +395,7 @@ $(document).ready(function () {
                         //     }, 2500)
                         // },
                         'click': function (e) {
-                            if(state.situation === 'show') {
+                            if (state.situation === 'show') {
                                 return;
                             }
                             let container = L.DomUtil.create('div'),
@@ -443,10 +446,9 @@ $(document).ready(function () {
         state.situation = 'create'
     } else {
         el = document.getElementById('find_ride');
-        if(el !== null) {
+        if (el !== null) {
             state.situation = 'find'
-        }
-        else {
+        } else {
             var rideIcon = new L.Icon({
                 iconUrl: 'https://cdn.rawgit.com/pointhi/leaflet-color-markers/master/img/marker-icon-blue.png',
                 shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
@@ -486,7 +488,7 @@ $(document).ready(function () {
         "</form>";
     child.innerHTML = temp;
     child = child.firstChild;
-    if(state.situation !== 'show') {
+    if (state.situation !== 'show') {
         document.getElementsByClassName('leaflet-routing-geocoders')[0].appendChild(child);
     }
 
@@ -551,7 +553,7 @@ $(function () {
         var from, to;
         state.campusFromId ? from = state.campusFromId : from = control.getWaypoints()[0].latLng;
         var points = control.getWaypoints().length;
-        state.campusToId ? to = state.campusToId : to = control.getWaypoints()[points-1].latLng;
+        state.campusToId ? to = state.campusToId : to = control.getWaypoints()[points - 1].latLng;
 
         let form = $('form').serializeObject();
         let time_option = form.time_option;
@@ -568,57 +570,54 @@ $(function () {
                 times.push(time);
                 time = 0;
             }
-            if (instr[i].type === "DestinationReached"){
+            if (instr[i].type === "DestinationReached") {
                 //alert("ka");
                 times.push(time);
                 time = 0;
             }
         }
-        let seconds = times[times.length-1];
+        let seconds = times[times.length - 1];
         arrive_time = new Date(form.datetime.replace('T', ' ') + ":00");
         depart_time = new Date(form.datetime.replace('T', ' ') + ":00");
         var arrive = true;
-        if (time_option === "Arrive by"){
-            depart_time.setSeconds( depart_time.getSeconds() - seconds );
+        if (time_option === "Arrive by") {
+            depart_time.setSeconds(depart_time.getSeconds() - seconds);
             //alert("wiewa arrive")
         }
-        if (time_option === "Depart at"){
+        if (time_option === "Depart at") {
             arrive_time.setSeconds(arrive_time.getSeconds() + seconds);
             //alert("wiewa depart")
             arrive = false;
         }
         var pickup_points = [];
         var estimated_times = [];
-        if (points > 2){
+        if (points > 2) {
             var pickup = control.getWaypoints()[1].latLng;
             pickup_points.push(pickup);
             var estimated_time = new Date(form.datetime.replace('T', ' ') + ":00");
-            if (arrive){
+            if (arrive) {
                 estimated_time.setSeconds(arrive_time.getSeconds() - times[0]);
-            }
-            else{
+            } else {
                 estimated_time.setSeconds(depart_time.getSeconds() + times[0]);
             }
             estimated_times.push(estimated_time);
-            if (points > 3){
+            if (points > 3) {
                 var pickup2 = control.getWaypoints()[2].latLng;
                 pickup_points.push(pickup2);
                 var estimated_time2 = new Date(form.datetime.replace('T', ' ') + ":00");
-                if (arrive){
+                if (arrive) {
                     estimated_time2.setSeconds(arrive_time.getSeconds() - times[1]);
-                }
-                else{
+                } else {
                     estimated_time2.setSeconds(depart_time.getSeconds() + times[1]);
                 }
                 estimated_times.push(estimated_time2);
-                if (points > 4){
+                if (points > 4) {
                     var pickup3 = control.getWaypoints()[3].latLng;
                     pickup_points.push(pickup3);
                     var estimated_time3 = new Date(form.datetime.replace('T', ' ') + ":00");
-                    if (arrive){
+                    if (arrive) {
                         estimated_time3.setSeconds(arrive_time.getSeconds() - times[2]);
-                    }
-                    else{
+                    } else {
                         estimated_time3.setSeconds(depart_time.getSeconds() + times[2]);
                     }
                     estimated_times.push(estimated_time3);
@@ -626,10 +625,10 @@ $(function () {
             }
         }
 
-        for (let i in estimated_times){
+        for (let i in estimated_times) {
             time = estimated_times[i];
             //alert("estimated time voor omzet:" + time);
-            estimated_times[i] = time.toISOString().split('T')[0]+' '+time.toTimeString().split(' ')[0];
+            estimated_times[i] = time.toISOString().split('T')[0] + ' ' + time.toTimeString().split(' ')[0];
             //alert("estimated time na omzet:" + estimated_times[i]);
         }
 
@@ -643,9 +642,11 @@ $(function () {
                 $.post({
                     contentType: "application/json",
                     url: "/en/createRide",
-                    data: JSON.stringify({from: from, to: to, arrive_time: arrive_time.toMysqlFormat(),
+                    data: JSON.stringify({
+                        from: from, to: to, arrive_time: arrive_time.toMysqlFormat(),
                         depart_time: depart_time.toMysqlFormat(),
-                        passengers: form.passengers, pickup_points: pickup_points, estimated_times: estimated_times})
+                        passengers: form.passengers, pickup_points: pickup_points, estimated_times: estimated_times
+                    })
                 })
                     // when post request is done, get the returned data and do something with it
                     .done(function (data) { // response function
@@ -705,7 +706,7 @@ $(function () {
                             rightColumn.setAttribute("class", "col-md-6 text-left");
 
                             leftColumn.innerHTML = "<p class=\"my-3\"><b>From:</b> " + from + "</p>\n" +
-                                "<p><b>Departure:</b> " + result["departure_time"] + "</p>\n"  +
+                                "<p><b>Departure:</b> " + result["departure_time"] + "</p>\n" +
                                 "<p><b>Driver:</b> " + driver_name + "</p>\n";
 
                             rightColumn.innerHTML = "<p class=\"my-3\"><b>To:</b> " + to + "</p>\n" +
@@ -716,13 +717,13 @@ $(function () {
 
                             let mapButton = document.createElement("button");
                             mapButton.setAttribute("class", "btn btn-info m-2");
-                            mapButton.onclick = function() {
+                            mapButton.onclick = function () {
                                 //beginCoords  find the closest maybe pickupPoint
                                 let results = data.results[d];
                                 let tempArr = [];
                                 let n = results.closest;
-                                while(n<results.len){
-                                    if(results.waypoints[n] != null){
+                                while (n < results.len) {
+                                    if (results.waypoints[n] != null) {
                                         tempArr.push(L.latLng(results.waypoints[n].lat, results.waypoints[n].lng))
                                     }
                                     n++;
@@ -741,7 +742,7 @@ $(function () {
                             addButton.setAttribute("class", "btn btn-info m-2");
                             addButton.setAttribute("id", "ride-button-" + d.toString());
                             addButton.innerHTML = "Join this ride";
-                            addButton.addEventListener("click", function() {
+                            addButton.addEventListener("click", function () {
                                 $.post({
                                     contentType: "application/json",
                                     url: "/en/joinride",
@@ -749,7 +750,7 @@ $(function () {
                                 })
                                     // when post request is done, get the returned data and do something with it
                                     .done(function (data2) {
-                                        if(data2){
+                                        if (data2) {
                                             if (data2["result"] === "success") {
                                                 alert("Ride joined successfully.")
                                             } else {
@@ -757,17 +758,17 @@ $(function () {
                                             }
                                         }
                                     });
-                            } )
+                            })
                             let driverButton = document.createElement("button");
                             driverButton.setAttribute("class", "btn btn-info m-2");
                             driverButton.innerHTML = "See driver profile";
                             let driver_id = driver["id"];
-                            driverButton.onclick = function() {
+                            driverButton.onclick = function () {
                                 let current_url = window.location.href;
-                                let new_url = current_url.substring(0,current_url.length-8);
+                                let new_url = current_url.substring(0, current_url.length - 8);
                                 new_url += "user=" + driver_id;
-                                window.open(new_url,"_blank");
-                                }
+                                window.open(new_url, "_blank");
+                            }
                             underColumn.appendChild(mapButton);
                             underColumn.appendChild(addButton);
                             underColumn.appendChild(driverButton)
@@ -827,13 +828,13 @@ $(function () {
 
                             let mapButton = document.createElement("button");
                             mapButton.setAttribute("class", "btn btn-success m-2");
-                            mapButton.onclick = function() {
+                            mapButton.onclick = function () {
                                 //beginCoords  find the closest maybe pickupPoint
                                 let results = data["partner_results"][d];
                                 let tempArr = [];
                                 let n = results.closest;
-                                while(n<results.len){
-                                    if(results.waypoints[n] != null){
+                                while (n < results.len) {
+                                    if (results.waypoints[n] != null) {
                                         tempArr.push(L.latLng(results.waypoints[n].lat, results.waypoints[n].lng))
                                     }
                                     n++;
@@ -902,8 +903,8 @@ $(function () {
  * You first need to create a formatting function to pad numbers to two digits…
  **/
 function twoDigits(d) {
-    if(0 <= d && d < 10) return "0" + d.toString();
-    if(-10 < d && d < 0) return "-0" + (-1*d).toString();
+    if (0 <= d && d < 10) return "0" + d.toString();
+    if (-10 < d && d < 0) return "-0" + (-1 * d).toString();
     return d.toString();
 }
 
@@ -913,8 +914,8 @@ function twoDigits(d) {
  * to apply this to more than one Date object, having it as a prototype
  * makes sense.
  **/
-Date.prototype.toMysqlFormat = function() {
-    return this.getUTCFullYear() + "-" + twoDigits(1 + this.getUTCMonth()) + "-" + twoDigits(this.getUTCDate()) + " " + twoDigits(this.getUTCHours()+2) + ":" + twoDigits(this.getUTCMinutes()) + ":" + twoDigits(this.getUTCSeconds());
+Date.prototype.toMysqlFormat = function () {
+    return this.getUTCFullYear() + "-" + twoDigits(1 + this.getUTCMonth()) + "-" + twoDigits(this.getUTCDate()) + " " + twoDigits(this.getUTCHours() + 2) + ":" + twoDigits(this.getUTCMinutes()) + ":" + twoDigits(this.getUTCSeconds());
 };
 
 /*
