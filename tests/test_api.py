@@ -1,22 +1,30 @@
+import os
+import sys
+cwd = os.getcwd()
+sys.path.append(cwd[0:len(cwd)-6])
+import tempfile
 import unittest
 from src import create_app, TestConfig
-from src.utils import user_access, bcrypt
 from src.dbmodels.User import User
 
 app = create_app(TestConfig)
 
 
 class APITestCase(unittest.TestCase):
-    test_user = {"username": "test", "firstname": "test", "lastname": "test", "password": "test_password"}
-
-    @classmethod
-    def setUpClass(cls):
-        cls.client = app.test_client()
+    def setUp(self):
+        self.db_fd, app.config['DATABASE'] = tempfile.mkstemp()
+        app.config['TESTING'] = True
+        self.client = app.test_client()
+        self.app_context = app.app_context()
+        self.app_context.push()
+        self.test_user = {"username": "test", "firstname": "test", "lastname": "test", "password": "test_password"}
 
     def tearDown(self):
-        user_access.delete_user(self.test_user.get("username") + "@campuscarpool.com")
+        from src.utils import user_access, bcrypt
+        user = user_access.get_user_on_email(self.test_user.get("username") + "@campuscarpool.com")
+        user_access.delete_user(user.id)
 
-    def test_users_register_status_code(self):
+    def test_users_1_register_status_code(self):
         r = self.client.post("/api/users/register", json=self.test_user)
         assert r.status_code == 201
         assert r.headers["Content-Type"] == "application/json"
@@ -26,7 +34,8 @@ class APITestCase(unittest.TestCase):
         assert r.headers["Content-Type"] == "application/json"
         assert "message" in r.json  # there is an error message in the body
 
-    def test_users_auth_status_code(self):
+    def test_users_2_auth_status_code(self):
+        from src.utils import user_access, bcrypt
         user_access.add_user(User(self.test_user.get("firstname"), self.test_user.get("lastname"),
                                   self.test_user.get("username") + "@campuscarpool.com",
                                   bcrypt.generate_password_hash(self.test_user.get("password")).decode("utf-8")))

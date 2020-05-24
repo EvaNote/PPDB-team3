@@ -163,25 +163,11 @@ def send_email_review(email, review_writer):
     session.quit()
 
 
-def send_email_calendar(email, ics_content):
-    SMTP_SERVER = 'smtp.gmail.com'
-    SMTP_PORT = 587
-
-    send_from = 'campus.carpool.ua@gmail.com'
-    password = 'campuscarpool2020'
-    subject = 'Your calendar events are here!'
-
-    recipient = email
-
+def send_email_calendar(email, path_name):
     from email.mime.multipart import MIMEMultipart
     from email.mime.text import MIMEText
     from email.mime.base import MIMEBase
     from email import encoders
-
-    msg = MIMEMultipart()
-    msg['Subject'] = subject,
-    msg['From'] = send_from,
-    msg['To'] = recipient
 
     body = "Hi there! \n\n"
     body += "You requested calendar events of your rides, so here they are!\n\n"
@@ -195,22 +181,35 @@ def send_email_calendar(email, ics_content):
     body += "\t 4) Choose import\n"
     body += "\t 5) Download the file attached to this email\n"
     body += "\t 6) Upload this file on Google calendar\n"
-    body += "\t 7) Hit 'import' and you're al done!\n"
+    body += "\t 7) Hit 'import' and you're al done!\n\n"
+    body += "Enjoy your ride(s)!\n\n"
+    body += "Greetz!\n\n"
+    body += "The Campus Carpool"
 
-    msg.attach(MIMEText(body))
-
-    part = MIMEBase('text', 'calendar', **{'method': 'REQUEST', 'name': 'src/static/ics/cal1.ics'})
-    part.set_payload(open("src/static/ics/cal1.ics", "rb").read())
-    encoders.encode_base64(part)
-    part.add_header('Content-Disposition', 'attachment', filename='src/static/ics/cal1.ics')
-
-    msg.attach(part)
-
-    session = smtplib.SMTP(SMTP_SERVER, SMTP_PORT)
-    session.ehlo()
-    session.starttls()
-    session.ehlo()
-    session.login(send_from, password)
-
-    session.sendmail(send_from, recipient, msg)
+    # The mail addresses and password
+    sender_address = 'campus.carpool.ua@gmail.com'
+    sender_pass = 'campuscarpool2020'
+    receiver_address = email
+    # Setup the MIME
+    message = MIMEMultipart()
+    message['From'] = sender_address
+    message['To'] = receiver_address
+    message['Subject'] = 'Your calendar events are here!'
+    # The subject line
+    # the body and the attachments for the email
+    message.attach(MIMEText(body, 'plain'))
+    attach_file_name = path_name
+    attach_file = open(attach_file_name, 'rb')  # Open the file as binary mode
+    payload = MIMEBase('text', 'calendar')
+    payload.set_payload(attach_file.read())
+    encoders.encode_base64(payload)  # encode the attachment
+    # add payload header with filename
+    payload.add_header('Content-Decomposition', 'attachment', filename='invite.ics', type='text/calendar')
+    message.attach(payload)
+    # Create SMTP session for sending the mail
+    session = smtplib.SMTP('smtp.gmail.com', 587)  # use gmail with port
+    session.starttls()  # enable security
+    session.login(sender_address, sender_pass)  # login with mail_id and password
+    text = message.as_string()
+    session.sendmail(sender_address, receiver_address, text)
     session.quit()

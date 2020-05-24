@@ -111,10 +111,7 @@ def generate_calendar(user_id):
         result = result_file.readlines()
 
     from src.emails import send_email_calendar
-    result = "".join(result).replace('\xc9', '')
-    result = "".join(result).replace('\xe9', '')
-    result = "".join(result).replace('\xe8', '')
-    send_email_calendar('jana.osstyn@gmail.com', "".join(result))
+    send_email_calendar('jana.osstyn@gmail.com', 'src/static/ics/cal1.ics')
     return
 
 
