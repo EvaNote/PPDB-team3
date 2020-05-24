@@ -181,10 +181,9 @@ def send_email_calendar(email, path_name):
     body += "\t 4) Choose import\n"
     body += "\t 5) Download the file attached to this email\n"
     body += "\t 6) Upload this file on Google calendar\n"
-    body += "\t 7) Hit 'import' and you're al done!\n\n"
+    body += "\t 7) Hit 'import' and you're all done!\n\n"
     body += "Enjoy your ride(s)!\n\n"
-    body += "Greetz!\n\n"
-    body += "The Campus Carpool"
+    body += "Campus Carpool"
 
     # The mail addresses and password
     sender_address = 'campus.carpool.ua@gmail.com'

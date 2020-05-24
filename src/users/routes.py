@@ -115,6 +115,7 @@ def generate_calendar(user_id):
     result = "".join(result).replace('\xe8', '')
     email = user_access.get_user_on_id(current_user.id).email
     send_email_calendar(email, cal_path)
+    flash(lazy_gettext(f'Your calendar has been sent to your email address!'), 'success')
     return
 
 
