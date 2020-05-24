@@ -292,7 +292,7 @@ def address_edit():
         user = user_access.get_user_on_id(current_user.id)
         loc = geolocator.geocode(str(street) + " " + str(nr) + " " + str(postal_code) + " " + str(city))
         if user.address is None:
-            address_obj = Address(None, "Belgie", city, postal_code, street, nr, loc.latitude, loc.longitude)
+            address_obj = Address(None, "Belgie", city, postal_code, street, nr, None, loc.latitude, loc.longitude)
             address_access.add_address(address_obj)
             address_id = address_access.get_id("Belgie", city, postal_code, street, nr)
         else:
@@ -302,7 +302,7 @@ def address_edit():
 
         user = user_access.get_user_on_id(current_user.id)
         user_access.edit_user(user.id, user.first_name, user.last_name, user.email, user.gender, user.age,
-                              user.phone_number, address_id, user.picture)
+                              user.phone_number, address_id, user.picture, user.send_emails)
         flash(lazy_gettext(f'Address edited!'), 'success')
         return redirect(url_for('users.account'))
     return render_template('address_edit.html', title=lazy_gettext('Edit address'), loggedIn=True, form=form)
