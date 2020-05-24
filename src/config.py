@@ -14,8 +14,10 @@ class BaseConfig(object):
 
     # general
     SECRET_KEY = 'ce6593aceb62762cb4d3537c96100349'
-
+    RECAPTCHA_PUBLIC_KEY = '6LegnPsUAAAAAC9_XLBOsotP91rK-cOdaGJLIq-U'
+    RECAPTCHA_PRIVATE_KEY = '6LegnPsUAAAAAO1ZywFzoffkw6wt65P3qczF9MzX'
     # babel
+
     BABEL_DEFAULT_LOCALE = 'en'
     BABEL_DEFAULT_TIMEZONE = 'UTC'
     SUPPORTED_LANGUAGES = {'en': 'English', 'nl': 'Nederlands', 'fr': 'Français'}
