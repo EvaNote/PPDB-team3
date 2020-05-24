@@ -662,7 +662,7 @@ $(function () {
                 })
                     // when post request is done, get the returned data and do something with it
                     .done(function (data) { // response function
-                        ride_count = data["results"].length
+                        ride_count = data["results"].length + data["partner_results"].length
                         alert("Found " + ride_count + " matches! Scroll down to see them.");
                         //alert("FIND: " + JSON.stringify(data));
                         // let mapButton = document.createElement("button");
@@ -817,8 +817,7 @@ $(function () {
                             let rightColumn = document.createElement("div");
                             rightColumn.setAttribute("class", "col-md-6 text-left");
 
-                            leftColumn.innerHTML = "<p class=\"my-3\"><b>From:</b> " + from + "</p>\n" +
-                                "<p><b>Departure:</b> " + result["departure_time"] + "</p>\n";
+                            leftColumn.innerHTML = "<p class=\"my-3\"><b>From:</b> " + from + "</p>\n";
 
                             rightColumn.innerHTML = "<p class=\"my-3\"><b>To:</b> " + to + "</p>\n" +
                                 "<p><b>Arrival:</b> " + result["arrival_time"] + "</p>\n";
@@ -850,7 +849,7 @@ $(function () {
 
 
                             let addButton = document.createElement("a");
-                            addButton.setAttribute("href", "#");
+                            addButton.setAttribute("href", "http://team1.ppdb.me/ride/" + result["id"]);
                             addButton.setAttribute("role", "button");
                             addButton.setAttribute("class", "btn btn-success m-2");
                             addButton.innerHTML = "Go to site";
