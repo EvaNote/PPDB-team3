@@ -565,8 +565,8 @@ def joinedrides(before, after):
 
 @users.route("/shared_rides=<userid>")
 def shared_rides(userid):
-    if not userid.isdigit():
-        abort(404)
+    if not isinstance(userid, int):
+        userid = int(userid)
     if not current_user.is_authenticated:
         return redirect(url_for('users.login'))
 
