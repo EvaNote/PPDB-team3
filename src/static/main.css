@@ -306,7 +306,7 @@ hr {
         font-size: smaller !important;
     }
     .myrides-btn {
-        font-size: x-small;
+        font-size: smaller;
     }
     .mobile-hidden {
         display: none;

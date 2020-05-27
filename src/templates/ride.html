@@ -7,109 +7,93 @@
 
 
 {% block contentContent %}
-    {#    {% for ride in userrides %}#}
-    {#        {% set address_from = from_locs[loop.index0] %}#}
-    {#        {% set address_to = to_locs[loop.index0] %}#}
-    {#        {% set pfplist = pfps[loop.index0] %}#}
-    {#        {% set pickuppoint = pickuppoints[loop.index0] %}#}
-    {#        {% set pickupbool = pickupbools[loop.index0] %}#}
-    {#        {% set from_lat = from_lat[loop.index0] %}#}
-    {#        {% set from_lng = from_lng[loop.index0] %}#}
-    {#        {% set to_lat = to_lat[loop.index0] %}#}
-    {#        {% set to_lng = to_lng[loop.index0] %}#}
-    {##}
-    {#    <div class="row">#}
-    {#        <div class="ride_history_wrap_3">#}
-    {#            <div class="ride_history_wrap_6"><b> {{ _('Departure: ') }} </b>{{ ride.departure_time }}</div>#}
-    {#        <br>#}
-    {#            <div class="ride_history_wrap_6"><b> {{ _('Arrival: ') }} </b>{{ ride.arrival_time }}</div>#}
-    {#        <br>#}
-    {#            {% if pickupbool[0] %}#}
-    {#                <div class="ride_history_wrap_5"><b> {{ _('Pickup 1: ') }} </b>{{ pickuppoint[0] }}</div>#}
-    {#                <br>#}
-    {#            {% endif %}#}
-    {#            {% if pickupbool[1] %}#}
-    {#                <div class="ride_history_wrap_5"><b> {{ _('Pickup 2: ') }} </b>{{ pickuppoint[1] }}</div>#}
-    {#                <br>#}
-    {#            {% endif %}#}
-    {#            {% if pickupbool[2] %}#}
-    {#                <div class="ride_history_wrap_5"><b> {{ _('Pickup 3: ') }}</b> {{ pickuppoint[2] }}</div>#}
-    {#                <br>#}
-    {#            {% endif %}#}
-    {#            <div class="ride_history_wrap_7"><b> {{ _('From: ') }}</b> {{ address_from }}  </div>#}
-    {#                <br>#}
-    {#            <div class="ride_history_wrap_7"><b> {{ _('To: ') }} </b>{{ address_to }}</div>#}
-    {#        <br>#}
-    {##}
-    {#            <a href={{ url_for('users.user', userid=ride.user_id) }}>#}
-    {#                            <img src="{{ url_for('static', filename=pfplist) }}" class="float-left mr-2" width="127px"#}
-    {#                    alt="driver pic" style="border-radius: 50%"><br>#}
-    {#            </a>#}
-    {#            <a class="btn btn-info" href="{{ url_for('users.user', userid=ride.user_id) }}" role="button">{{ _('See driver profile') }}</a>#}
-    {##}
-    {# <a class="btn btn-info" href="{{ url_for('main.canceljoinedride', ride_id=ride.id) }}" role="button">{{ _('Cancel ride') }}</a> #}
-    {#        {% if loggedIn %}#}
-    {#            <a class="btn btn-info" href="{{ url_for('rides.join', rideid=ride.id) }}" role="button">{{ _('Join ride') }}</a>#}
-    {#        {% else %}#}
-    {#            <a class="btn btn-info" href="{{ url_for('users.login') }}" role="button">{{ _('Log in to join') }}</a>#}
-    {#        {% endif %}#}
-    {##}
-    {#        <div id="findride_map" style="margin-top: 5%; border-bottom-left-radius: 15px; border-bottom-right-radius: 15px">#}
-    {#            <b id="show_ride" fromlat={{ from_lat }} tolat={{ to_lat }} fromlng={{ from_lng }} tolng={{ to_lng }} hidden></b>#}
-    {#        </div>#}
-    {##}
-    {#        </div>#}
-    {##}
-    {#    </div>#}
-
-
-
-    {#    {% endfor %}#}
-    {#{% endblock contentContent %}#}
-
-
-    {% set address_from = from_loc %}
-    {% set address_to = to_loc %}
-    {% set pfplist = pfps %}
-    {% set pickuppoint = pickuppoints %}
-    {% set pickuptime = pickuppointtimes %}
-    {% set pickupbool = pickupbools %}
-    {% set passids = allids %}
-    {% set passengers = passengers %}
-    {% set passengernames = passengernames %}
-    {% set numpassengers = numpassengers %}
-
-
     <div class="row">
-        <div class="ride_history_wrap_7 text-center" style="font-size: x-large; color: #17a2b8; margin-top: -10px"><b>{{ address_from }} <i
-                class="fa fa-angle-double-right"></i> {{ address_to }}</b></div>
-    </div>
-    <div class="border-top pt-3"></div>
-    <div class="row">
-        <div class="col-md-3"></div>
-        <div class="col-md-4">
-            <div class="ride_history_wrap_6"><i class="far fa-clock"></i>
-                <b> {{ _('Departure: ') }} </b>{{ ride.departure_time }}</div>
-        </div>
-        <div class="col-md-4">
-            <div class="ride_history_wrap_9"><b> {{ _('From: ') }}</b> {{ address_from }}  </div>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-md-3"></div>
-        <div class="col-md-4">
-            <div class="ride_history_wrap_6"><i class="far fa-clock"></i>
-                <b> {{ _('Arrival: ') }} </b>{{ ride.arrival_time }}</div>
-        </div>
-        <div class="col-md-4">
-            <div class="ride_history_wrap_9"><b> {{ _('To: ') }}</b> {{ address_to }}  </div>
-        </div>
-    </div>
+        {% set address_from = from_loc %}
+        {% set address_to = to_loc %}
+        {% set pfplist = pfps %}
+        {% set pickuppoint = pickuppoints %}
+        {% set pickuptime = pickuppointtimes %}
+        {% set pickupbool = pickupbools %}
+        {% set passids = allids %}
+        {% set passengers = passengers %}
+        {% set passengernames = passengernames %}
+        {% set numpassengers = numpassengers %}
 
-    {% if pickupbool[0] %} {#https://jsfiddle.net/ourcodeworld/mo8Lg1hx/#}
-        <div class="row" style="margin-top: 20px">
-            <div class="col-md-3"></div>
-            <div class="col-md-4">
+
+        <div class="ride_history_wrap_3">
+            <div class="row mobile-hidden">
+                <div class="ride_history_wrap_7" style="font-size: x-large; color: #17a2b8; margin-top: 5px"><b>
+                    <div class="row text-center" style="align-content: center">
+                        <div class="col-md-auto" style="margin-left: 25px"> {{ address_from }} </div>
+                        <div class="col-md-auto text-center" style="margin-left: 25px"><i
+                                class="fa fa-angle-double-right"></i></div>
+                        <div class="col-md-auto" style="margin-left: 25px"> {{ address_to }} </div>
+                        <div class="col-md-auto"></div>
+                    </div>
+                </b>
+                </div>
+            </div>
+            <div class="row fullscreen-hidden">
+                <div class="ride_history_wrap_7" style="font-size: medium; color: #17a2b8; margin-top: 5px"><b>
+                    <div class="row text-center" style="align-content: center">
+                        <div class="col-md-auto" style="margin-left: 20px"> {{ address_from }} </div>
+                        <div class="col-md-auto text-center" style="margin-left: 10px"><i
+                                class="fa fa-angle-double-right"></i></div>
+                        <div class="col-md-auto" style="margin-left: 10px"> {{ address_to }} </div>
+                        <div class="col-md-auto"></div>
+                    </div>
+                </b>
+                </div>
+            </div>
+            <div class="border-top pt-3"></div>
+            <div class="row mobile-hidden">
+                <div class="col-md-1"></div>
+                <div class="col-md-2 tablet-hidden"></div>
+                <div class="col-md-4">
+                    <div class="ride_history_wrap_6"><i class="far fa-clock"></i>
+                        <b> {{ _('Departure: ') }} </b>{{ ride.departure_time }}</div>
+                </div>
+                <div class="col-md-4">
+                    <div class="ride_history_wrap_9"><b> {{ _('From: ') }}</b> {{ address_from }}  </div>
+                </div>
+            </div>
+            <div class="row mobile-hidden">
+                <div class="col-md-1"></div>
+                <div class="col-md-2 tablet-hidden"></div>
+                <div class="col-md-4">
+                    <div class="ride_history_wrap_6"><i class="far fa-clock"></i>
+                        <b> {{ _('Arrival: ') }} </b>{{ ride.arrival_time }}</div>
+                </div>
+                <div class="col-md-4">
+                    <div class="ride_history_wrap_9"><b> {{ _('To: ') }}</b> {{ address_to }}  </div>
+                </div>
+            </div>
+            <div class="row fullscreen-hidden">
+                <div class="col-md-3"></div>
+                <div class="col-md-4" style="margin-left: 5px">
+                    <div class="ride_history_wrap_6"><i class="far fa-clock"></i>
+                        <b> {{ _('Departure: ') }} </b>{{ ride.departure_time }}</div>
+                </div>
+                <div class="col-md-4" style="margin-left: 25px">
+                    <div class="ride_history_wrap_9"><b> {{ _('From: ') }}</b> {{ address_from }}  </div>
+                </div>
+            </div>
+            <div class="row fullscreen-hidden">
+                <div class="col-md-3"></div>
+                <div class="col-md-4" style="margin-left: 5px">
+                    <div class="ride_history_wrap_6"><i class="far fa-clock"></i>
+                        <b> {{ _('Arrival: ') }} </b>{{ ride.arrival_time }}</div>
+                </div>
+                <div class="col-md-4" style="margin-left: 25px; margin-bottom: 20px">
+                    <div class="ride_history_wrap_9"><b> {{ _('To: ') }}</b> {{ address_to }}  </div>
+                </div>
+            </div>
+
+            {% if pickupbool[0] %} {#https://jsfiddle.net/ourcodeworld/mo8Lg1hx/#}
+                <div class="row mobile-hidden" style="margin-top: 20px">
+                    <div class="col-md-1"></div>
+                    <div class="col-md-2 tablet-hidden"></div>
+                    <div class="col-md-4">
                             <span class="fa-stack" style="margin-left: -12px">
                             <!-- The icon that will wrap the number -->
                             <span class="fa fa-circle-o fa-stack-1x"></span>
@@ -118,17 +102,33 @@
                                 1
                             </strong>
                         </span>
-                <b style="margin-left: -12px">{{ _('Pickup 1: ') }} </b>{{ pickuptime[0] }}
-            </div>
-            <div class="col-md-4" style="margin-top: -8px">
-                <div class="ride_history_wrap_9"><b> {{ _('Address: ') }}</b> {{ pickuppoint[0] }}  </div>
-            </div>
-        </div>
-    {% endif %}
-    {% if pickupbool[1] %}
-        <div class="row" style="margin-top: -8px">
-            <div class="col-md-3"></div>
-            <div class="col-md-4">
+                        <b style="margin-left: -12px">{{ _('Pickup 1: ') }} </b>{{ pickuptime[0] }}
+                    </div>
+                    <div class="col-md-4" style="margin-top: -8px">
+                        <div class="ride_history_wrap_9"><b> {{ _('Address: ') }}</b> {{ pickuppoint[0] }}  </div>
+                    </div>
+                </div>
+                 <div class="row fullscreen-hidden" style="margin-left: -7px">
+                        <span class="fa-stack">
+                            <!-- The icon that will wrap the number -->
+                            <span class="fa fa-circle-o fa-stack-1x"></span>
+                            <!-- a strong element with the custom content, in this case a number -->
+                            <strong class="fa-stack-1x" style="font-size: 60%">
+                                1
+                            </strong>
+                            </span>
+                    <b style="margin-left: -7px">{{ _('Pickup 1: ') }} </b>{{ pickuptime[0] }}
+                </div>
+                <div class="row fullscreen-hidden" style="margin-top: -20px">
+                    <div class="ride_history_wrap_9" style="margin-left: 40px">
+                        <b> {{ _('Address: ') }}</b> {{ pickuppoint[0] }}  </div>
+                </div>
+            {% endif %}
+            {% if pickupbool[1] %}
+                <div class="row mobile-hidden" style="margin-top: -8px">
+                    <div class="col-md-1"></div>
+                    <div class="col-md-2 tablet-hidden"></div>
+                    <div class="col-md-4">
                             <span class="fa-stack" style="margin-left: -12px">
                             <!-- The icon that will wrap the number -->
                             <span class="fa fa-circle-o fa-stack-1x"></span>
@@ -137,17 +137,34 @@
                                 2
                             </strong>
                         </span>
-                <b style="margin-left: -12px">{{ _('Pickup 2: ') }} </b>{{ pickuptime[1] }}
-            </div>
-            <div class="col-md-4" style="margin-top: -8px">
-                <div class="ride_history_wrap_9"><b> {{ _('Address: ') }}</b> {{ pickuppoint[1] }}  </div>
-            </div>
-        </div>
-    {% endif %}
-    {% if pickupbool[2] %}
-        <div class="row" style="margin-top: -8px">
-            <div class="col-md-3"></div>
-            <div class="col-md-4">
+                        <b style="margin-left: -12px">{{ _('Pickup 2: ') }} </b>{{ pickuptime[1] }}
+                    </div>
+                    <div class="col-md-4" style="margin-top: -8px">
+                        <div class="ride_history_wrap_9"><b> {{ _('Address: ') }}</b> {{ pickuppoint[1] }}  </div>
+                    </div>
+                </div>
+                <div class="row fullscreen-hidden" style="margin-left: -7px; margin-top: 10px">
+                        <span class="fa-stack">
+                            <!-- The icon that will wrap the number -->
+                            <span class="fa fa-circle-o fa-stack-1x"></span>
+                            <!-- a strong element with the custom content, in this case a number -->
+                            <strong class="fa-stack-1x" style="font-size: 60%">
+                                2
+                            </strong>
+                            </span>
+                    <b style="margin-left: -7px">{{ _('Pickup 2: ') }} </b>{{ pickuptime[1] }}
+                </div>
+                <div class="row fullscreen-hidden" style="margin-top: -20px">
+                    <div class="ride_history_wrap_9" style="margin-left: 40px">
+                        <b> {{ _('Address: ') }}</b> {{ pickuppoint[1] }}  </div>
+                </div>
+                <br>
+            {% endif %}
+            {% if pickupbool[2] %}
+                <div class="row mobile-hidden" style="margin-top: -8px">
+                    <div class="col-md-1"></div>
+                    <div class="col-md-2 tablet-hidden"></div>
+                    <div class="col-md-4">
                             <span class="fa-stack" style="margin-left: -12px">
                             <!-- The icon that will wrap the number -->
                             <span class="fa fa-circle-o fa-stack-1x"></span>
@@ -156,73 +173,132 @@
                                 3
                             </strong>
                         </span>
-                <b style="margin-left: -12px">{{ _('Pickup 3: ') }} </b>{{ pickuptime[2] }}
+                        <b style="margin-left: -12px">{{ _('Pickup 3: ') }} </b>{{ pickuptime[2] }}
+                    </div>
+                    <div class="col-md-4 fullscreen-hidden" style="margin-top: -8px">
+                        <div class="ride_history_wrap_9"><b> {{ _('Address: ') }}</b> {{ pickuppoint[2] }}  </div>
+                    </div>
+                </div>
+                 <div class="row fullscreen-hidden" style="margin-left: -7px; margin-top: 10px">
+                        <span class="fa-stack">
+                            <!-- The icon that will wrap the number -->
+                            <span class="fa fa-circle-o fa-stack-1x"></span>
+                            <!-- a strong element with the custom content, in this case a number -->
+                            <strong class="fa-stack-1x" style="font-size: 60%">
+                                3
+                            </strong>
+                            </span>
+                    <b style="margin-left: -7px">{{ _('Pickup 3: ') }} </b>{{ pickuptime[2] }}
+                </div>
+                <div class="row" style="margin-top: -20px">
+                    <div class="ride_history_wrap_9" style="margin-left: 40px">
+                        <b> {{ _('Address: ') }}</b> {{ pickuppoint[2] }}  </div>
+                </div>
+                <br>
+            {% endif %}
+
+            <div class="border-top pt-3" style="margin-top: 20px"></div>
+            <div class="row mobile-hidden">
+                <div class="col-md-2"></div>
+                <div class="col-md-4">
+                    <b>Driver:</b>
+                </div>
             </div>
-            <div class="col-md-4" style="margin-top: -8px">
-                <div class="ride_history_wrap_9"><b> {{ _('Address: ') }}</b> {{ pickuppoint[2] }}  </div>
-            </div>
-        </div>
-        <br>
-    {% endif %}
-
-    <div class="border-top pt-3" style="margin-top: 20px"></div>
-    <div class="row">
-        <div class="col-md-2"></div>
-        <div class="col-md-4">
-            <b>Driver:</b>
-        </div>
-    </div>
-    <div class="row">
-
-
-        <div class="col-md-3"></div>
-        <div class="col-md-4">
-            <a style="color: #17a2b8" href={{ url_for('users.user', userid=ride.user_id) }}>
-                <img src="{{ url_for('static', filename=pfplist[0]) }}" class="float-left mr-2" width="70px"
-                     alt="driver pic" style="border-radius: 50%; margin-bottom: 10px"><br>
-                {{ passengernames[0] }}
-
-            </a>
-            <i style="color: gray">(click to see profile)</i>
-        </div>
-
-    </div>
-
-    {% if numpassengers > 1 %}
-        <div class="border-top pt-3"></div>
-        <div class="row">
-            <div class="col-md-2"></div>
-            <div class="col-md-4">
-                <b>Passengers:</b>
-            </div>
-        </div>
-
-        {% for p in range(1, numpassengers) %}
-            {% set linkid = passids[loop.index0] %}
-            <div class="row">
+            <div class="row mobile-hidden">
                 <div class="col-md-3"></div>
                 <div class="col-md-4">
-                    <a style="color: #17a2b8" href={{ url_for('users.user', userid=linkid) }}>
-                        <img src="{{ url_for('static', filename=pfplist[p]) }}" class="float-left mr-2" width="70px"
+                    <a style="color: #17a2b8" href={{ url_for('users.user', userid=ride.user_id) }}>
+                        <img src="{{ url_for('static', filename=pfplist[0]) }}" class="float-left mr-2" width="70px"
                              alt="driver pic" style="border-radius: 50%; margin-bottom: 10px"><br>
-                        {{ passengernames[p] }}
+                        {{ passengernames[0] }}
+
                     </a>
+                    <i style="color: gray">(click to see profile)</i>
+                </div>
+            </div>
+            <div class="row fullscreen-hidden">
+                <div class="col-md-2"></div>
+                <div class="col-md-4" style="margin-left: 10px; margin-bottom: 10px">
+                    <b>Driver:</b>
+                </div>
+            </div>
+            <div class="row fullscreen-hidden" style="margin-left: 40px">
+                <div class="col-md-6">
+                    <a style="color: #17a2b8" href={{ url_for('users.user', userid=ride.user_id) }}>
+                        <img src="{{ url_for('static', filename=pfplist[0]) }}" class="float-left mr-2" width="70px"
+                             alt="driver pic" style="border-radius: 50%; margin-bottom: 10px"><br>
+                        {{ passengernames[0] }}
+
+                    </a>
+                    <i style="color: gray">(click to see profile)</i>
+                </div>
+            </div>
+             <div class="border-top pt-3" style="margin-top: 20px"></div>
+            {% if numpassengers > 1 %}
+                <div class="row mobile-hidden">
+                    <div class="col-md-2"></div>
+                    <div class="col-md-4">
+                        <b>Passengers:</b>
+                    </div>
+                </div>
+                <div class="row fullscreen-hidden">
+                    <div class="col-md-2"></div>
+                    <div class="col-md-4" style="margin-left: 10px; margin-bottom: 10px">
+                        <b>Passengers:</b>
+                    </div>
                 </div>
 
+                {% for p in range(1, numpassengers) %}
+                    {% set linkid = passids[loop.index0] %}
+                    <div class="row mobile-hidden">
+                        <div class="col-md-3"></div>
+                        <div class="col-md-4">
+                            <a style="color: #17a2b8" href={{ url_for('users.user', userid=linkid) }}>
+                                <img src="{{ url_for('static', filename=pfplist[p]) }}" class="float-left mr-2"
+                                     width="70px"
+                                     alt="driver pic" style="border-radius: 50%; margin-bottom: 10px"><br>
+                                {{ passengernames[p] }}
+                            </a>
+                        </div>
+                    </div>
+                    <div class="row fullscreen-hidden" style="margin-left: 40px">
+                        <div class="col-md-6">
+                            <a style="color: #17a2b8" href={{ url_for('users.user', userid=linkid) }}>
+                                <img src="{{ url_for('static', filename=pfplist[p]) }}" class="float-left mr-2"
+                                     width="70px"
+                                     alt="driver pic" style="border-radius: 50%; margin-bottom: 10px"><br>
+                                {{ passengernames[p] }}
+                            </a>
+                        </div>
+
+                    </div>
+                {% endfor %}
+
+            {% else %}
+                <div class="row" style="height: 25px">
+
+                </div>
+            {% endif %}
+
+            <div class="border-top pt-3" style="margin-top: 20px; margin-bottom: 10px"></div>
+            <div id="findride_map"
+                 style="margin: 0; border-bottom-left-radius: 55px; border-bottom-right-radius: 55px; border-top-left-radius: 0 !important; border-top-right-radius: 0 !important;">
+                <b id="show_ride" fromlat={{ from_lat }} tolat={{ to_lat }} fromlng={{ from_lng }} tolng={{ to_lng }}
+                   hidden></b>
             </div>
-        {% endfor %}
-
-    {% else %}
-        <div class="row" style="height: 25px">
-
         </div>
-    {% endif %}
-    <div class="border-top pt-3" style="margin-top: 20px; margin-bottom: 10px"></div>
-    <div id="findride_map"
-         style="margin: -20px; border-bottom-left-radius: 55px; border-bottom-right-radius: 55px; border-top-left-radius: 0 !important; border-top-right-radius: 0 !important;">
-        <b id="show_ride" fromlat={{ from_lat }} tolat={{ to_lat }} fromlng={{ from_lng }} tolng={{ to_lng }}
-           hidden></b>
     </div>
 
 
 {% endblock contentContent %}
+
+
+
+
+
+
+
+
+
+
+
