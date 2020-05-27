@@ -733,6 +733,12 @@ class Rides:
             return False
         return True
 
+    def check_amount_passengers(self, r_id):
+        cursor = self.dbconnect.get_cursor()
+        cursor.execute("select count(*) from passenger_ride WHERE passenger_ride.ride_id=%s", (r_id,))
+        result = cursor.fetchone()
+        return result[0]
+
     def register_passenger(self, p_id, r_id):
         if not self.check_passenger_registered(p_id, r_id):
             cursor = self.dbconnect.get_cursor()
@@ -764,29 +770,13 @@ class Rides:
         cursor.execute('DELETE FROM passenger_ride WHERE user_id=%s AND ride_id=%s', (p_id, r_id))
         self.dbconnect.commit()
 
+    def delete_all_passenger_rides(self, p_id):
+        cursor = self.dbconnect.get_cursor()
+        cursor.execute('DELETE FROM passenger_ride WHERE user_id=%s', (p_id,))
+        self.dbconnect.commit()
+
     def delete_from_passenger_ride(self, r_id):
         cursor = self.dbconnect.get_cursor()
         cursor.execute('DELETE FROM passenger_ride WHERE ride_id=%s', (r_id,))
         self.dbconnect.commit()
 
-    # #TODO: bij users aanpassen
-    # def delete_ride(self, ride_id):
-    #     cursor = self.dbconnect.get_cursor()
-    #     try:
-    #         cursor.execute('DELETE FROM "ride" WHERE id=%s',(ride_id,))
-    #         self.dbconnect.commit()
-    #     except:
-    #         raise Exception('Unable to delete ride')
-    #
-    # #TODO: meer bewerken
-    # def edit_ride(self, ride_id, departure_time,  ):
-    #     cursor = self.dbconnect.get_cursor()
-    #     ride = self.get_on_id(ride_id)
-    #     #user_id = user.id
-    #
-    #     try:
-    #         cursor.execute('UPDATE "ride" SET departure_time=%s,  WHERE id=%s',
-    #         (departure_time,ride_id))
-    #         self.dbconnect.commit()
-    #     except:
-    #         raise Exception('Unable to edit user')

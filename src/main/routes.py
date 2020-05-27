@@ -74,6 +74,10 @@ def receiver():
     results = []
     drivers = []
     for ride in rides:
+        max_passengers = ride.passengers
+        amount_passengers = ride_access.check_amount_passengers(ride.id)
+        if max_passengers <= amount_passengers:
+            continue
         results.append(ride.to_dict())
         driver_id = ride.user_id
         driver = user_access.get_user_on_id(driver_id)
@@ -111,7 +115,7 @@ def canceljoinedride(ride_id):
         send_email_passengercancelled(driver.email, passenger_name, str(ride.departure_time), destination)
     ride_access.delete_passenger(current_user.id, ride_id)
     flash('Canceled ride.', 'success')
-    return redirect(url_for('users.account'))
+    return redirect(url_for('users.joinedrides'))
 
 
 @main.route('/deleteride=<ride_id>', methods=['POST', 'GET'])
@@ -135,7 +139,7 @@ def deleteride(ride_id):
     ride_access.delete_from_passenger_ride(ride_id)
     ride_access.delete_ride(ride_id)
     flash('Deleted ride.', 'success')
-    return redirect(url_for('users.account'))
+    return redirect(url_for('users.myrides'))
 
 
 @main.route('/createRide', methods=['POST'])

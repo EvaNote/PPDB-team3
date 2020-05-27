@@ -267,6 +267,24 @@ def account_edit():
                 for car in cars:
                     car_access.delete_car(car.id)
 
+            # then delete reviews bc reviews have foreign key to user
+            reviews = review_access.get_on_user_for(current_user.id)
+            if reviews is not None:
+                for review in reviews:
+                    print(review.to_dict())
+                    review_access.delete_review(review.id)
+
+            # then delete all rides that the user created from ride table and passenger_ride
+            rides = ride_access.get_on_user_id(current_user.id)
+            if rides is not None:
+                for ride in rides:
+                    print(ride.to_dict())
+                    ride_access.delete_from_passenger_ride(ride.id)
+                    ride_access.delete_ride(ride.id)
+
+            # then delete all passenger_ride instances where user was a passenger
+            ride_access.delete_all_passenger_rides(current_user.id)
+
             # then delete user bc user has foreign key to address (error if address gets deleted first)
             user_access.delete_user(user.id)
 
@@ -486,7 +504,7 @@ def myrides(before, after):
             pass
 
     elif form.reset.data:
-        return redirect(url_for('users.myries', before=None, after=None))
+        return redirect(url_for('users.myrides', before=None, after=None))
 
     res = myrides_help(before, after)
 
@@ -668,7 +686,8 @@ def shared_rides(userid):
         abort(404)
 
     return render_template('shared_rides.html', title=lazy_gettext('Shared rides'), loggedIn=True,
-                           userrides_m=m["userrides"],
+                           userrides_m=m["userrides"], passengers_m=m["passengers"], passengernames_m=m["passengernames"],
+                           numpassengers_m=m["numpassengers"],
                            from_locs_m=m["from_locs"], to_locs_m=m["to_locs"], pfps_m=m["pfps"],
                            allids_m=m["allids"], pickuppoints_m=m["pickuppoints"],
                            pickupbools_m=m["pickupbools"], form=m["form"], userrides_j=j["userrides"],
