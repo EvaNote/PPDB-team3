@@ -3,16 +3,20 @@
     {{ _('My account') }}
 {% endblock contentTitle %}
 {% block profileContent %}
-    <img src="{{ url_for('static', filename=pfp_path) }}" class="float-left mr-2" width="127px"
-         alt="profile pic" style="border-radius: 50%"><br>
-    <a class="btn btn-info" href="{{ url_for('users.account_edit') }}" role="button">{{ _('Edit account') }}</a>
-    <a class="btn btn-info" href="{{ url_for('users.address_edit') }}" role="button">{{ _('Edit address') }}</a>
-    {#        <a class="btn btn-info" href="{{ url_for('rides.exampleuser_reviews') }}" role="button">My reviews</a>#}
-    <a class="btn btn-info" href="{{ url_for('users.myrides') }}" role="button">{{ _('My rides') }}</a>
 
-            <form method="POST" action="">
-                {{ calForm.submit(class="btn btn-info") }}
-        </form>
+    <div class="row">
+        <div class="col-md-auto">
+            <img src="{{ url_for('static', filename=pfp_path) }}" class="float-left mr-2" width="127px"
+             alt="profile pic" style="border-radius: 50%"><br>
+        </div>
+        <div class="col-md-auto">
+            <a class="btn btn-info" href="{{ url_for('users.account_edit') }}" role="button"><i class="fa fa-user-edit"></i> {{ _('Edit account') }}</a>
+            <a class="btn btn-info" href="{{ url_for('users.address_edit') }}" role="button"><i class="fa fa-pencil-alt"></i> {{ _('Edit address') }}</a>
+            <a class="btn btn-info" href="{{ url_for('users.gen_calendar') }}" role="button"><i class="fa fa-calendar-alt"></i> {{ _('Calendar') }}</a>
+        </div>
+
+    </div>
+
 
     <div>
         <br>
@@ -38,7 +42,7 @@
     </div>
     <br>
     <div>
-        <b>{{ _('email') }}</b>
+        <b>{{ _('Email') }}</b>
         <br>
         {{ current_user.email }}
     </div>
@@ -95,21 +99,29 @@
     {% endif %}
 
     {% if cars != None %}
+        <div>
+            <font size="6" color="#17a2b8"> {{ _('My cars:') }}  </font>
+        </div>
         {% for i in cars %}
             <div class="border-top pt-3"></div>
 
             <div>
-                <font size="5" color="#17a2b8"> {{ _ ('Car:') }} </font>
-                <a class="btn btn-info" href="{{ url_for('users.edit_vehicle',car_id=i.id) }}"
-                   role="button">{{ _('Edit car') }}</a>
-
-                <br> <br>
-            </div>
-            <div>
             </div>
             {% set car_pic = car_picpaths[loop.index0] %}
-            <img src="{{ url_for('static', filename=car_pic) }}" class="float-left mr-2" width="127px"
-                 alt="car pic" style="border-radius: 50%"><br>
+            <div class="row">
+                <div class="col-md-auto">
+                    <img src="{{ url_for('static', filename=car_pic) }}" class="float-left mr-2" width="127px"
+                     alt="car pic" style="border-radius: 50%; margin-bottom: 20px"><br>
+                </div>
+
+                <div class="col-md-auto">
+
+                <a class="btn btn-info" href="{{ url_for('users.edit_vehicle',car_id=i.id) }}"
+                   role="button"><i class="fa fa-car"></i> {{ _('Edit car') }}</a>
+
+                </div>
+            </div>
+
             <div>
                 <b>{{ _('Brand') }}</b>
                 <br>
@@ -163,7 +175,7 @@
     {% endif %}
 
 
-    <a class="btn btn-info" href="{{ url_for('users.add_vehicle') }}" role="button">{{ _('Add car') }}</a>
+    <a class="btn btn-info" href="{{ url_for('users.add_vehicle') }}" role="button"><i class="fa fa-plus"></i> {{ _('Add car') }}</a>
     <br>
 
 {% endblock profileContent %}

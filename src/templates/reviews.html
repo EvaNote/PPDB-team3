@@ -140,7 +140,7 @@
                     <b>{{ _('Rating') }}</b>
                     {% for j in range(1,6) %}
                         <div class="checkbox-container" style="display: flex">
-                            <input class="checkbox" type="checkbox" style="margin-right: 5px;" value={{ j }}>
+                            <input class="checkbox" type="checkbox" style="margin-right: 5px;" value={{ 6-j }}>
                             <label class="display_rate" style="margin-bottom: 0;">
                                 {% for i in range(1,6) %}
                                     {% if j <= 6-i %}

@@ -1,125 +1,127 @@
 {% extends "reviews.html" %}
 {% block contentTitle %}
-    {{ _('User profile') }}: {{target_user.first_name}} {{ target_user.last_name }}
+    {{ _('User profile') }}: {{ target_user.first_name }} {{ target_user.last_name }}
 {% endblock contentTitle %}
 {% block profileContent %}
-    <img src="{{ url_for('static', filename=pfp_path) }}" class="float-left mr-2" width="127px"
+
+{% if allow_review %}
+    <div class="row">
+        <div class="col-md-auto">
+            <img src="{{ url_for('static', filename=pfp_path) }}" class="float-left mr-2" width="127px"
          alt="profile pic" style="border-radius: 50%"><br>
+        </div>
+        <div class="col-md-auto">
+            <a class="btn btn-info" href="{{ url_for('reviews.new_review',userid=target_user.id) }}" role="button"><i class="fa fa-edit"></i> {{ _('New review') }}</a>
 
-        {% if allow_review %}
+            <button class="btn btn-info" type="button" data-toggle="collapse" data-target="#contact_form"
+                aria-expanded="false" aria-controls="contact_form"><i class="fa fa-envelope"></i>
+                {{ _('contact') }}
+            </button>
 
-                            <a class="btn btn-info" href="{{ url_for('reviews.new_review',userid=target_user.id) }}"
-                   role="button">{{ _('new review') }}</a>
-
-
-      <button class="btn btn-info" type="button" data-toggle="collapse" data-target="#contact_form" aria-expanded="false" aria-controls="contact_form">
-    {{ _('contact') }}
-  </button>
-
+            <a class="btn btn-info" href="{{ url_for('users.gen_calendar') }}" role="button"><i class="fa fa-user-friends"></i> {{ _('Shared rides') }}</a>
+        </div>
+    </div>
 
         <!-- Begin contactformulier -->
-    <form method="POST" action="">
-        {{ form2.hidden_tag() }}
-        <!-- display the form -->
-        <fieldset class="form-group">
-            <div class="form-group">
+        <form method="POST" action="">
+            {{ form2.hidden_tag() }}
+            <!-- display the form -->
+            <fieldset class="form-group" style="margin-top: 5px">
+                <div class="form-group">
 
-<div class="collapse" id="contact_form">
-  <div class="card card-body">
-            <div class="form-group">
-                {{ _('Subject') }}:
-                {{ form2.subject}}
-            </div>
-        <div class="form-group">
-            {{ form2.submit(class="btn btn-outline-info") }}
-        </div>
+                    <div class="collapse" id="contact_form">
+                        <div class="card card-body">
+                            <div class="form-group">
+                                {{ _('Subject') }}:
+                                {{ form2.subject }}
+                            </div>
+                            <div class="form-group">
+                                {{ form2.submit(class="btn btn-outline-info") }}
+                            </div>
 
-  </div>
-</div>
-            </div>
-        </fieldset>
-                  </form>
-    <!-- Einde contactformulier -->
+                        </div>
+                    </div>
+                </div>
+            </fieldset>
+        </form>
+        <!-- Einde contactformulier -->
 
-
-                                        <a class="btn btn-info" href="{{ url_for('users.shared_rides',userid=target_user.id) }}"
-                   role="button">{{ _('shared rides') }}</a>
     {% endif %}
 
-<br>
     <div>
         <br>
-    <b>{{ _('First Name') }}</b>
+        <b>{{ _('First Name') }}</b>
         <br>
-    {{ target_user.first_name }}
+        {{ target_user.first_name }}
     </div>
     <br>
     <div>
-    <b>{{ _('Last name') }}</b>
+        <b>{{ _('Last name') }}</b>
         <br>
-    {{ target_user.last_name }}
+        {{ target_user.last_name }}
     </div>
     <br>
-        <div>
-    <b>{{ _('Gender') }}</b>
+    <div>
+        <b>{{ _('Gender') }}</b>
         <br>
-    {{ target_user.gender }}
+        {{ target_user.gender }}
     </div>
     <br>
 
     <div class="border-top pt-3"></div>
 
-                <div>{% if cars != None %}
+    <div>{% if cars != None %}
         {% for i in cars %}
-          <div class="border-top pt-3"></div>
+            <div class="border-top pt-3"></div>
 
-          <div>
-          <font size="5" color="#17a2b8"> {{_ ('Car:')}} </font>
+            <div>
+                <font size="5" color="#17a2b8"> {{ _ ('Car:') }} </font>
 
-          <br> <br>
-        </div>
+                <br> <br>
+            </div>
             {% set car_pic = car_picpaths[loop.index0] %}
-                <img src="{{ url_for('static', filename=car_pic) }}" class="float-left mr-2" width="127px"
-         alt="car pic" style="border-radius: 50%"><br>
-                  <div>
-      <b>{{_('Brand')}}</b>
-          <br>
-      {{ i.brand }}
-      </div>
-          <br>
-                  <div>
-      <b>{{_('Type')}}</b>
-          <br>
-      {{ i.model }}
-      </div>
-          <br>
-                  <div>
-      <b>{{ _('Color') }}</b>
-          <br>
-          {{ i.color }}
-      </div>
-          <br>
-                  <div>
-      <b>{{ _('nr. seats') }}</b>
-          <br>
-          {{ i.nr_seats }}
-      </div>
-          <br>
-                  <div>
-      <b>{{ _('Fuel usage') }}</b>
-          <br>
-          {{ i.fuel }}
-      </div>
-          <br>            <div>
-      <b>{{ _('Fuel type') }}</b>
-          <br>
-          {{ i.fuel_type }}
-      </div>
-          <br>
+            <img src="{{ url_for('static', filename=car_pic) }}" class="float-left mr-2" width="127px"
+                 alt="car pic" style="border-radius: 50%"><br>
+            <div>
+                <b>{{ _('Brand') }}</b>
+                <br>
+                {{ i.brand }}
+            </div>
+            <br>
+            <div>
+                <b>{{ _('Type') }}</b>
+                <br>
+                {{ i.model }}
+            </div>
+            <br>
+            <div>
+                <b>{{ _('Color') }}</b>
+                <br>
+                {{ i.color }}
+            </div>
+            <br>
+            <div>
+                <b>{{ _('nr. seats') }}</b>
+                <br>
+                {{ i.nr_seats }}
+            </div>
+            <br>
+            <div>
+                <b>{{ _('Fuel usage') }}</b>
+                <br>
+                {{ i.fuel }}
+            </div>
+            <br>
+            <div>
+                <b>{{ _('Fuel type') }}</b>
+                <br>
+                {{ i.fuel_type }}
+            </div>
+            <br>
 
         {% endfor %}
-        {% endif %}
-<br>
+    {% endif %}
+        <br>
 
     </div>
 {% endblock profileContent %}

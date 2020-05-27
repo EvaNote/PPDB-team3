@@ -145,7 +145,7 @@ hr {
 }
 .ride_history_wrap_1{
     border-radius: 15px;
-  background: #17a2b8;
+  /*background: #17a2b8;*/
   font-size:100%;
   width:20%;
   position: relative;
@@ -166,18 +166,27 @@ hr {
 }
 
 .ride_history_wrap_6 {
-    background: #40b1c4;
+    /*background: #40b1c4;*/
   font-size:100%;
-  width:25%;
   position: relative;
-    left: 10px;
+    left: 0;
     top: 10px;
   display: inline-block;
   height: auto;
-  text-align: center;
+  /*text-align: center;*/
+ }
+.ride_history_wrap_9 {
+    /*background: #40b1c4;*/
+  font-size:100%;
+  position: relative;
+    left: 0;
+    top: 10px;
+  display: inline-block;
+  height: auto;
+  /*text-align: center;*/
  }
 .ride_history_wrap_4{
-    background: #40b1c4;
+    /*background: #40b1c4;*/
   font-size:100%;
   width:70%;
   position: relative;
@@ -199,18 +208,20 @@ hr {
  }
 
 .ride_history_wrap_7 {
-    background: #40b1c4;
+    /*background: #40b1c4;*/
     font-size: 100%;
-    width: 70%;
+    /*width: 70%;*/
+    width: 100%;
     position: relative;
-    left: 28%;
+    /*left: 18%;*/
     display: inline-block;
     height: auto;
     text-align: center;
+    /*text-align: center;*/
 }
 
 .ride_history_wrap_8 {
-    background: #17a2b8;
+    /*background: #17a2b8;*/
     font-size: 100%;
     width: 20%;
     position: relative;
@@ -260,4 +271,29 @@ hr {
 
 .button[disabled] {
     pointer-events: none;
+}
+
+#findride_map {
+    border-radius: 55px;
+}
+
+.leaflet-left .leaflet-control {
+    margin-left: 20px !important;
+}
+
+.leaflet-top .leaflet-control {
+    margin-top: 20px !important;
+}
+
+.leaflet-right .leaflet-control {
+    margin-right: 20px !important;
+}
+
+.result + #findride_map {
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+}
+
+.leaflet-touch .leaflet-control-attribution {
+    margin-right: 32px !important;
 }

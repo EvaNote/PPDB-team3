@@ -62,7 +62,7 @@ $(document).ready(function () {
             if ($(this).attr('value') === "me") {
                 filter.writtenByMe = true;
             } else {
-                filter.stars.push($(this).attr('value'))
+                filter.stars.push($(this).attr('value'));
             }
         } else {
             if ($(this).attr('value') === "me") {
@@ -111,17 +111,16 @@ $(document).ready(function () {
         starRow.setAttribute('class', 'row');
         let displayRate = document.createElement('DIV');
         displayRate.setAttribute('class', 'display_rate col-ms-auto margin-b');
-        for (var i = 1; i < 6; i++) {
-            var starLabel;
+        for (var i = 5; i > 0; i--) {
+            var star;
+            star = document.createElement('I');
+            star.setAttribute('aria-hidden', 'true');
             if (review['amount_of_stars'] <= 5 - i) {
-                starLabel = document.createElement('LABEL');
+                star.setAttribute('class', 'fa fa-star not-checked');
             } else {
-                starLabel = document.createElement('LABEL');
-                starLabel.setAttribute('style', 'color: #deb217');
+                star.setAttribute('class', 'fa fa-star checked');
             }
-            let starText = document.createTextNode('stars');
-            starLabel.appendChild(starText);
-            displayRate.appendChild(starLabel)
+            displayRate.appendChild(star)
         }
         starRow.appendChild(displayRate);
         outerDiv.appendChild(starRow);
@@ -177,6 +176,7 @@ $(document).ready(function () {
             parent.append(textNode);
             return
         }
+        search = search.toLowerCase();
         let indexPrev = 0;
         let index = text.toLowerCase().indexOf(search, indexPrev);
         let c = 0;

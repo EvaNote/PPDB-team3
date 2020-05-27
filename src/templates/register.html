@@ -73,8 +73,8 @@
                         {{ form.confirm_password(class="form-control form-control-lg") }}
                     {% endif %}
                 </div>
-                <div class="form-group">
-                    {{ form.send_emails.label(class="form-control-label") }}
+                <div class="form-group" style="width: max-content">
+                    {{ form.send_emails.label(title="text") }}
                     {% if form.send_emails.errors %}
                         {{ form.send_emails(class="form-control is-invalid") }}
                         <div class="invalid-feedback">
@@ -83,19 +83,19 @@
                             {% endfor %}
                         </div>
                     {% else %}
-                        {{ form.send_emails(class="form-control form-control-lg") }}
+                        {{ form.send_emails(style="margin-left: 5px")}}
                     {% endif %}
-                </div>
+             </div>
 
             </fieldset>
             <div class="form-group">
                 {{ form.recaptcha }}
                 {% if form.recaptcha.errors %}
                     <ul>
-                        <li style="color:red;"> Ha, I knew it. Mr. Robot.</li>
+                        <p style="color:red;"> Ha, I knew it. Mr. Robot.</p>
                     </ul>
                 {% endif %}
-                {{ form.submit(class="btn btn-outline-info") }}
+                {{ form.submit(class="btn btn-outline-info", style="margin-top: 20px;") }}
             </div>
         </form>
         <div class="border-top pt-3">

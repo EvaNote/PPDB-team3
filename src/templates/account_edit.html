@@ -7,6 +7,28 @@
 {% block contentContent %}
     <form method="POST" action="" enctype="multipart/form-data">
         {{ form.hidden_tag() }}
+    <div class="col-md-auto">
+        <div class="row">
+            <div class="col-md-auto">
+                <img src="{{ url_for('static', filename=pfp_path) }}" class="float-left mr-2" width="127px"
+                     alt="profile pic" style="border-radius: 50%; margin-bottom: 20px"><br><br>
+            </div>
+
+            <div class="col-md-auto" style="margin-top: 35px">
+                <div class="form-group" style="width: max-content">
+                    {{ form.picture.label() }}
+                    {{ form.picture(class="form-control-file") }}
+                    {% if form.picture.errors %}
+                        {% for error in form.picture.errors %}
+                            <span class="text-danger">{{ error }}</span><br>
+                        {% endfor %}
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+    </div>
+
         <!-- display the form -->
         <fieldset class="form-group">
             <div class="form-group">
@@ -37,7 +59,7 @@
             </div>
             <div class="form-group">
                 {{ _('Gender') }}:
-                {{ form.gender}}
+                {{ form.gender }}
             </div>
             <div class="form-group">
                 {{ form.email.label(class="form-control-label") }}
@@ -78,44 +100,50 @@
                     {{ form.phone_number(class="form-control form-control-lg") }}
                 {% endif %}
             </div>
-            <div class="form-group">
-                    {{ form.send_emails.label(class="form-control-label") }}
-                    {% if form.send_emails.errors %}
-                        {{ form.send_emails(class="form-control is-invalid") }}
-                        <div class="invalid-feedback">
-                            {% for error in form.send_emails.errors %}
-                                <span>{{ error }}</span>
-                            {% endfor %}
-                        </div>
-                    {% else %}
-                        {{ form.send_emails(class="form-control form-control-lg") }}
-                    {% endif %}
-                </div>
-
-            <div class="form-group">
-                {{ form.picture.label() }}
-                {{ form.picture(class="form-control-file") }}
-                {% if form.picture.errors %}
-                    {% for error in form.picture.errors %}
-                        <span class = "text-danger">{{ error }}</span><br>
-                    {% endfor %}
+            <div class="form-group" style="width: max-content">
+                {{ form.send_emails.label(title="text") }}
+                {% if form.send_emails.errors %}
+                    {{ form.send_emails(class="form-control is-invalid") }}
+                    <div class="invalid-feedback">
+                        {% for error in form.send_emails.errors %}
+                            <span>{{ error }}</span>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    {{ form.send_emails(style="margin-left: 5px") }}
                 {% endif %}
             </div>
-
-            <a class="btn btn-info" href="{{ url_for('users.address_edit') }}" role="button">{{ _('Edit address') }}</a>
-
+            <div class="row">
+                <div class="col-md-auto" style="padding-right: 0">
+                    <a class="btn btn-info" href="{{ url_for('users.address_edit') }}" role="button"><i
+                            class="fa fa-pencil-alt"></i> {{ _('Edit address') }}</a>
+                </div>
+                <div class="form-group">
+                    {{ form.submit(class="btn btn-outline-info", id="save-click", style="visibility: hidden; width: 0; padding: 0; border: none") }}
+                    <a class="btn btn-info" href="#" role="button" onclick="saveClick()"><i
+                            class="fa fa-save"></i> {{ _('Save changes') }}</a>
+                </div>
+                <div class="form-group">
+                    {{ form.delete(class="btn btn-outline-info", id="delete-click", style="visibility: hidden; width: 0; padding: 0; border: none") }}
+                    <a class="btn btn-info" href="#" role="button" onclick="deleteClick()"><i
+                            class="fa fa-trash-alt"></i> {{ _('Delete account') }}</a>
+                </div>
+            </div>
 
         </fieldset>
-        <div class="form-group">
-            {{ form.submit(class="btn btn-outline-info") }}
-        </div>
-        <div class="form-group">
-            {{ form.delete(class="btn btn-outline-info") }}
-        </div>
-      </form>
+
+    </form>
 
 
+    <script>
+        function saveClick() {
+            document.getElementById('save-click').click();
+        }
 
+        function deleteClick() {
+            document.getElementById('delete-click').click();
+        }
+    </script>
 
 
 

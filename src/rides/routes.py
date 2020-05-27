@@ -68,98 +68,99 @@ def view_ride(rideid):
     if not rideid.isdigit():
         abort(404)
     loggedIn = current_user.is_authenticated
-    allrides_temp = ride_access.get_on_id(int(rideid))
-    if allrides_temp is None:
+    ride = ride_access.get_on_id(int(rideid))
+    if ride is None:
         abort(404)
-    allrides = []
-    allrides.append(allrides_temp)
-    if allrides is None:
-        allrides = []
-    userrides = []
-    from_places = []
-    to_places = []
-    from_lat = []
-    from_lng = []
-    to_lat = []
-    to_lng = []
+    from_place = None
+    to_place = None
+    from_lat = None
+    from_lng = None
+    to_lat = None
+    to_lng = None
     pfps = []
     allids = []
     pickuppoints = []
-    pickupbools = []
-    for ride in allrides:
-        userrides.append(ride)
-        if ride.campus_from:
-            from_places.append(ride.campus_from.name)
-        else:
-            temp = ride.address_from
-            from_places.append(temp.city + ", " + temp.street + ", " + temp.nr)
-        if ride.campus_to:
-            to_places.append(ride.campus_to.name)
-        else:
-            temp = ride.address_to
-            to_places.append(temp.city + ", " + temp.street + ", " + temp.nr)
-        from_lat.append(ride.address_from.latitude)
-        from_lng.append(ride.address_from.longitude)
-        to_lat.append(ride.address_to.latitude)
-        to_lng.append(ride.address_to.longitude)
-        temp = list(ride_access.get_passenger_ids(ride.id))
-        temp2 = []
-        ride_pfp = []
-        userids = []
-        points = []
-        bools = [False,False,False]
+    pickupbools = [False, False, False]
+    pickuptimes = []
+    passengers = None
+    numpassengers = None
+    passengernames = []
+    if ride.campus_from:
+        from_place = ride.campus_from.name
+    else:
+        temp = ride.address_from
+        from_place = temp.city + ", " + temp.street + ", " + temp.nr
+    if ride.campus_to:
+        to_place = ride.campus_to.name
+    else:
+        temp = ride.address_to
+        to_place = temp.city + ", " + temp.street + ", " + temp.nr
+    from_lat = ride.address_from.latitude
+    from_lng = ride.address_from.longitude
+    to_lat = ride.address_to.latitude
+    to_lng = ride.address_to.longitude
+    temp = list(ride_access.get_passenger_ids(ride.id))
+    temp2 = []
 
-        for user_id in temp:
-            if not loggedIn or user_id is not current_user.id:
-                temp2.append(user_id)
-                # userids.append(user_id)
-                user = user_access.get_user_on_id(user_id)
-                # if user.picture is not None:
-                #     ride_pfp.append("images/" + str(picture_access.get_picture_on_id(user.picture).filename))
-                # else:
-                #     ride_pfp.append("images/temp_profile_pic.png")
-        temp2.append(ride.user_id)
-        #userids.append(user_id)
-        user = user_access.get_user_on_id(ride.user_id)
+    user = user_access.get_user_on_id(ride.user_id)
 
-        if user.picture is not None:
-            pfps.append("images/" + str(picture_access.get_picture_on_id(user.picture).filename))
-        else:
-            pfps.append("images/temp_profile_pic.png")
+    if user.picture is not None:
+        pfps.append("images/" + str(picture_access.get_picture_on_id(user.picture).filename))
+    else:
+        pfps.append("images/temp_profile_pic.png")
+    passengernames.append(user.first_name + ' ' + user.last_name)
 
-        allids.append(temp2)
-        #pfps.append(ride_pfp)
-        if ride.pickup_1 is not None:
-            pickup_1_id = ride.pickup_1
-            time_1 = pickup_point_access.get_on_id(pickup_1_id).estimated_time
-            points.append(time_1)
-            bools[0] = True
-            if ride.pickup_2 is not None:
-                pickup_2_id = ride.pickup_2
-                time_2 = pickup_point_access.get_on_id(pickup_2_id).estimated_time
-                points.append(time_2)
-                bools[1] = True
-                if ride.pickup_3 is not None:
-                    pickup_3_id = ride.pickup_3
-                    time_3 = pickup_point_access.get_on_id(pickup_3_id).estimated_time
-                    points.append(time_3)
-                    bools[2] = True
-        pickupbools.append(bools)
-        pickuppoints.append(points)
+    temp2.append(ride.user_id)
+
+    for user_id in temp:
+        if not loggedIn or user_id is not current_user.id:
+            temp2.append(user_id)
+            # userids.append(user_id)
+            user = user_access.get_user_on_id(user_id)
+            passengernames.append(user.first_name + ' ' + user.last_name)
+            if user.picture is not None:
+                pfps.append("images/" + str(picture_access.get_picture_on_id(user.picture).filename))
+            else:
+                pfps.append("images/temp_profile_pic.png")
+
+    allids.append(temp2)
+    if ride.pickup_1 is not None:
+        pickup_1_id = ride.pickup_1
+        time_1 = pickup_point_access.get_on_id(pickup_1_id).estimated_time
+        pickuptimes.append(time_1)
+        pickuppoints.append(ride.pickup_1.address.addr_to_string())
+        pickupbools[0] = True
+        if ride.pickup_2 is not None:
+            pickup_2_id = ride.pickup_2
+            time_2 = pickup_point_access.get_on_id(pickup_2_id).estimated_time
+            pickuptimes.append(time_2)
+            pickuppoints.append(ride.pickup_2.address.addr_to_string())
+            pickupbools[1] = True
+            if ride.pickup_3 is not None:
+                pickup_3_id = ride.pickup_3
+                time_3 = pickup_point_access.get_on_id(pickup_3_id).estimated_time
+                pickuptimes.append(time_3)
+                pickuppoints.append(ride.pickup_3.address.addr_to_string())
+                pickupbools[2] = True
 
     return render_template('ride.html', title=lazy_gettext('Joined rides'),
                            loggedIn=True,
-                           userrides=list(userrides),
                            pickuppoints=list(pickuppoints),
+                           pickuppointtimes=list(pickuptimes),
                            pickupbools=list(pickupbools),
-                           from_locs=list(from_places),
-                           to_locs=list(to_places),
+                           from_loc=from_place,
+                           to_loc=to_place,
                            pfps=list(pfps),
                            rideid=rideid,
-                           from_lat=list(from_lat),
-                           from_lng=list(from_lng),
-                           to_lat=list(to_lat),
-                           to_lng=list(to_lng))
+                           from_lat=from_lat,
+                           from_lng=from_lng,
+                           to_lat=to_lat,
+                           to_lng=to_lng,
+                           passengernames=passengernames,
+                           numpassengers=len(passengernames),
+                           passengers=len(passengernames),
+                           allids=allids,
+                           ride=ride)
 
 # @rides.route("/maps")
 # def maps():

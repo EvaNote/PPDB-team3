@@ -1,12 +1,13 @@
-{% extends "roundborder.html" %}
-{% block contentTitle %}
-    {{ title }}
-{% endblock contentTitle %}
-{% block contentContent %}
-
-    <div id="findride_map">
-        <b id="find_ride" hidden></b>
+{% extends "base.html" %}
+{% block content %}
+    <div class="text-center pt-5">
+        <h1 class="text-info font-weight-normal">{% block contentTitle %}{{ title }}{% endblock %}</h1>
     </div>
-    <div id="result"></div>
-
-{% endblock contentContent %}
+    <div class="content-section border-info p-4 mx-4 mb-1 text-break" style="padding: 5px !important;">
+        <div class="no-result"></div>
+        <div id="findride_map">
+            <b id="find_ride" hidden></b>
+        </div>
+        <div id="result"></div>
+    </div>
+{% endblock content %}

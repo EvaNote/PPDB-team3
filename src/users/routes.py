@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, flash, redirect, url_for, g, current_app, abort, request
+from flask import Blueprint, render_template, flash, redirect, url_for, g, current_app, abort, request, jsonify
 from pathlib import Path
 import secrets
 import os
@@ -13,7 +13,8 @@ from src.dbmodels.PickupPoint import PickupPoint
 from src.users.forms import LoginForm, RegistrationForm, VehicleForm, EditAccountForm, EditAddressForm, SelectSubject, \
     DeleteUserForm, getCalendar
 from src.rides.forms import Filter_rides
-from src.utils import user_access, bcrypt, review_access, car_access, address_access, current_app, picture_access, ride_access, campus_access, \
+from src.utils import user_access, bcrypt, review_access, car_access, address_access, current_app, picture_access, \
+    ride_access, campus_access, \
     geolocator, pickup_point_access
 from flask_babel import lazy_gettext
 from math import floor
@@ -89,16 +90,16 @@ def generate_calendar(user_id):
 
     if driver_for is not None:
         for ride in driver_for:
-            e = makeEvent(ride,True)
+            e = makeEvent(ride, True)
             c.events.add(e)
 
     if passenger_for is not None:
         for ride in passenger_for:
-            e = makeEvent(ride,False)
+            e = makeEvent(ride, False)
             c.events.add(e)
 
     cal_name = "cal" + str(user_id) + ".ics"
-    #filename/path
+    # filename/path
     path = Path(users.root_path)
     path = path.parent
     cal_path = os.path.join(path, 'static/ics', cal_name)
@@ -172,11 +173,6 @@ def account():
     if calForm.submit.data:
         # Generate calendar file, give link
         generate_calendar(current_user.id)
-        # path = "ics/cal" + str(current_user.id) + ".ics"
-        # file_url = url_for('static', filename=path)
-        # TODO, als iemand hier echt veel zin in heeft
-        # redirect_url = "webcal:/" + file_url
-        # return redirect(file_url)
 
     return render_template('account.html', title=lazy_gettext('Account'), form=form, loggedIn=True, data=data,
                            current_user=user, cars=cars, address=address, carPicpaths=car_picpaths, pfp_path=pfp_path,
@@ -200,6 +196,13 @@ def save_picture(form_picture):
     return picture_fn
 
 
+@users.route('/calendar', methods=['GET', 'POST'])
+def gen_calendar():
+    user_id = current_user.id
+    generate_calendar(user_id)
+    return redirect(url_for('users.account'))
+
+
 @users.route("/edit", methods=['GET', 'POST'])
 def account_edit():
     # makes sure user won`t be able to go to page without logging in
@@ -211,6 +214,11 @@ def account_edit():
             user = user_access.get_user_on_id(1)
         else:
             user = user_access.get_user_on_id(current_user.id)
+        pfp_path = "images/"
+        if user.picture is not None:
+            pfp_path += picture_access.get_picture_on_id(user.picture).filename
+        else:
+            pfp_path += "temp_profile_pic.png"
         form.first_name.data = user.first_name
         form.last_name.data = user.last_name
         form.email.data = user.email
@@ -222,7 +230,8 @@ def account_edit():
         else:
             form.send_emails.data = False
 
-        return render_template('account_edit.html', title=lazy_gettext('Edit account info'), loggedIn=True, form=form)
+        return render_template('account_edit.html', title=lazy_gettext('Edit account info'), loggedIn=True, form=form,
+                               pfp_path=pfp_path)
     if form.validate_on_submit():
         if form.submit.data:
             first_name = form.first_name.data
@@ -311,7 +320,8 @@ def address_edit():
             address_id = address_access.get_id("Belgie", city, postal_code, street, nr)
         else:
             address = address_access.get_on_id(user.address)
-            address_access.edit_address(address.id, street, nr, city, postal_code, "Belgie", loc.latitude, loc.longitude)
+            address_access.edit_address(address.id, street, nr, city, postal_code, "Belgie", loc.latitude,
+                                        loc.longitude)
             address_id = address.id
 
         user = user_access.get_user_on_id(current_user.id)
@@ -321,7 +331,8 @@ def address_edit():
         return redirect(url_for('users.account'))
     return render_template('address_edit.html', title=lazy_gettext('Edit address'), loggedIn=True, form=form)
 
-#before/after als datetime, ride.arrival als string?
+
+# before/after als datetime, ride.arrival als string?
 def filter_rides(rides, before, after):
     print(before, after, rides)
     if before is None and after is None:
@@ -330,23 +341,25 @@ def filter_rides(rides, before, after):
         newrides = []
         for ride in rides:
             if before is not None and after is None:
-                #TOOO: arrival/departure?
+                # TOOO: arrival/departure?
                 if ride.arrival_time <= before:
                     newrides.append(ride)
             elif after is not None and before is None:
-                #TOOO: arrival/departure?
+                # TOOO: arrival/departure?
                 if ride.departure_time >= after:
                     newrides.append(ride)
             elif after is not None and before is not None:
-                #TOOO: arrival/departure?
+                # TOOO: arrival/departure?
                 if ride.departure_time >= after and ride.arrival_time <= before:
                     newrides.append(ride)
     return newrides
 
+
 def get_departure(ride):
     return ride.departure_time
 
-def myrides_help(before, after, shared_with = None):
+
+def myrides_help(before, after, shared_with=None):
     before2 = None
     after2 = None
     if before is not None:
@@ -357,7 +370,7 @@ def myrides_help(before, after, shared_with = None):
     if not current_user.is_authenticated and not current_app.config['TESTING']:
         return redirect(url_for('users.login'))
     allrides_temp = ride_access.get_on_user_id(current_user.id)
-    allrides = filter_rides(allrides_temp,before2,after2)
+    allrides = filter_rides(allrides_temp, before2, after2)
     if allrides is None:
         allrides = []
     allrides.sort(key=get_departure, reverse=True)
@@ -367,14 +380,20 @@ def myrides_help(before, after, shared_with = None):
     to_places = []
     pfps = []
     allids = []
+    pickuppointtimes = []
     pickuppoints = []
     pickupbools = []
+    passengers = []
+    passengernames = []
+    numpassengers = []
+    rideids = []
     for ride in allrides:
         if shared_with is not None:
             if not shared_with in ride_access.find_ride_passengers(ride.id):
                 continue
         if ride.user_id == current_user.id:
             userrides.append(ride)
+            rideids.append(ride)
             if ride.campus_from:
                 from_places.append(ride.campus_from.name)
             else:
@@ -386,56 +405,73 @@ def myrides_help(before, after, shared_with = None):
                 temp = ride.address_to
                 to_places.append(temp.city + ", " + temp.street + ", " + temp.nr)
             temp = list(ride_access.get_passenger_ids(ride.id))
+            temp_names = []
+            for t in temp:
+                u = user_access.get_user_on_id(t)
+                temp_names.append(u.first_name + ' ' + u.last_name)
+            passengernames.append(temp_names)
+            numpassengers.append(len(temp_names))
             allids.append(temp)
             ride_pfp = []
-            #userids = []
+            # userids = []
             points = []
+            times = []
             bools = [False, False, False]
             for user_id in temp:
-                #userids.append(user_id)
+                # userids.append(user_id)
                 user = user_access.get_user_on_id(user_id)
                 if (user.picture) is not None:
                     ride_pfp.append("images/" + str(picture_access.get_picture_on_id(user.picture).filename))
                 else:
                     ride_pfp.append("images/temp_profile_pic.png")
 
-            #allids.append(userids)
+            # allids.append(userids)
             pfps.append(ride_pfp)
+            passengers.append(len(ride_pfp))
             if ride.pickup_1 is not None:
                 pickup_1 = ride.pickup_1
                 time_1 = pickup_1.estimated_time
-                points.append(time_1)
+                times.append(time_1)
+                points.append(pickup_1.address.addr_to_string())
                 bools[0] = True
                 if ride.pickup_2 is not None:
                     pickup_2 = ride.pickup_2
                     time_2 = pickup_2.estimated_time
-                    points.append(time_2)
+                    times.append(time_2)
+                    points.append(pickup_2.address.addr_to_string())
                     bools[1] = True
                     if ride.pickup_3 is not None:
                         pickup_3 = ride.pickup_3
                         time_3 = pickup_3.estimated_time
-                        points.append(time_3)
+                        times.append(time_3)
+                        points.append(pickup_3.address.addr_to_string())
                         bools[2] = True
             pickupbools.append(bools)
+            pickuppointtimes.append(times)
             pickuppoints.append(points)
 
     to_ret = {}
+    to_ret["passengers"] = passengers
+    to_ret["passengernames"] = passengernames
+    to_ret["numpassengers"] = numpassengers
     to_ret["userrides"] = userrides
     to_ret["from_locs"] = from_places
     to_ret["to_locs"] = to_places
     to_ret["pfps"] = pfps
     to_ret["allids"] = allids
     to_ret["pickuppoints"] = pickuppoints
+    to_ret["pickuppointtimes"] = pickuppointtimes
     to_ret["pickupbools"] = pickupbools
     to_ret["form"] = form
+    to_ret["rideids"] = rideids
     return to_ret
 
-@users.route("/myrides", defaults={'after':None, 'before':None},methods=['GET', 'POST'])
-@users.route("/<before>myrides", defaults={'after':None},methods=['GET', 'POST'])
-@users.route("/myrides<after>", defaults={'before':None},methods=['GET', 'POST'])
+
+@users.route("/myrides", defaults={'after': None, 'before': None}, methods=['GET', 'POST'])
+@users.route("/<before>myrides", defaults={'after': None}, methods=['GET', 'POST'])
+@users.route("/myrides<after>", defaults={'before': None}, methods=['GET', 'POST'])
 @users.route("/<before>myrides<after>", methods=['GET', 'POST'])
 def myrides(before, after):
-
     form = Filter_rides()
     if form.submit.data:
         if form.before.data and not form.after.data:
@@ -449,13 +485,22 @@ def myrides(before, after):
         else:
             pass
 
+    elif form.reset.data:
+        return redirect(url_for('users.myries', before=None, after=None))
+
     res = myrides_help(before, after)
 
-    return render_template('ride_history.html', title=lazy_gettext('My rides'), loggedIn=True, userrides_m=res["userrides"],
-                           from_locs_m=res["from_locs"], to_locs_m=res["to_locs"], pfps_m=res["pfps"], allids_m=res["allids"], pickuppoints_m=res["pickuppoints"],
-                           pickupbools_m=res["pickupbools"], form=form, before=before, after=after)
+    return render_template('ride_history.html', title=lazy_gettext('My rides'), loggedIn=True,
+                           userrides_m=res["userrides"],
+                           from_locs_m=res["from_locs"], to_locs_m=res["to_locs"], pfps_m=res["pfps"],
+                           allids_m=res["allids"], pickuppoints_m=res["pickuppoints"],
+                           pickupbools_m=res["pickupbools"], form=form, before=before, after=after,
+                           pickuppointtimes_m=res["pickuppointtimes"],
+                           passengers_m=res["passengers"], passengernames_m=res["passengernames"],
+                           numpassengers_m=res["numpassengers"], rideids_m=res["rideids"])
 
-def joinedrides_help(before, after, shared_with = None):
+
+def joinedrides_help(before, after, shared_with=None):
     if not current_user.is_authenticated and not current_app.config['TESTING']:
         return redirect(url_for('users.login'))
     before2 = None
@@ -465,7 +510,7 @@ def joinedrides_help(before, after, shared_with = None):
     if after is not None:
         after2 = datetime.strptime(after, "%Y-%m-%d")
     allrides_temp = ride_access.get_rides_from_passenger(current_user.id)
-    allrides = filter_rides(allrides_temp,before2,after2)
+    allrides = filter_rides(allrides_temp, before2, after2)
     if allrides is None:
         allrides = []
     allrides.sort(key=get_departure, reverse=True)
@@ -477,11 +522,17 @@ def joinedrides_help(before, after, shared_with = None):
     allids = []
     pickuppoints = []
     pickupbools = []
+    rideids = []
+    numpassengers = []
+    passengernames = []
+    pickuppointtimes = []
+    pickuppoints = []
     for ride in allrides:
         if shared_with is not None:
             if ride.user_id != shared_with:
                 continue
         userrides.append(ride)
+        rideids.append(ride.id)
         if ride.campus_from:
             from_places.append(ride.campus_from.name)
         else:
@@ -494,47 +545,66 @@ def joinedrides_help(before, after, shared_with = None):
             to_places.append(temp.city + ", " + temp.street + ", " + temp.nr)
         temp = list(ride_access.get_passenger_ids(ride.id))
         temp2 = []
+        temp3 = []
         ride_pfp = []
         userids = []
         points = []
-        bools = [False,False,False]
+        times = []
+        bools = [False, False, False]
+
+        temp2.append(ride.user_id)
+        user = user_access.get_user_on_id(ride.user_id)
+        temp3.append(user.first_name + ' ' + user.last_name)
+
+        temp_pfps = []
+
+        if user.picture is not None:
+            temp_pfps.append("images/" + str(picture_access.get_picture_on_id(user.picture).filename))
+        else:
+            temp_pfps.append("images/temp_profile_pic.png")
 
         for user_id in temp:
             if user_id is not current_user.id:
                 temp2.append(user_id)
                 # userids.append(user_id)
                 user = user_access.get_user_on_id(user_id)
+                temp3.append(user.first_name + ' ' + user.last_name)
+
+                if user.picture is not None:
+                    temp_pfps.append("images/" + str(picture_access.get_picture_on_id(user.picture).filename))
+                else:
+                    temp_pfps.append("images/temp_profile_pic.png")
                 # if user.picture is not None:
                 #     ride_pfp.append("images/" + str(picture_access.get_picture_on_id(user.picture).filename))
                 # else:
                 #     ride_pfp.append("images/temp_profile_pic.png")
-        temp2.append(ride.user_id)
-        #userids.append(user_id)
-        user = user_access.get_user_on_id(ride.user_id)
 
-        if user.picture is not None:
-            pfps.append("images/" + str(picture_access.get_picture_on_id(user.picture).filename))
-        else:
-            pfps.append("images/temp_profile_pic.png")
-
+        pfps.append(temp_pfps)
         allids.append(temp2)
-        #pfps.append(ride_pfp)
+        passengernames.append(temp3)
+        numpassengers.append(len(temp3))
+        # pfps.append(ride_pfp)
+
         if ride.pickup_1 is not None:
             pickup_1_id = ride.pickup_1
             time_1 = pickup_point_access.get_on_id(pickup_1_id).estimated_time
-            points.append(time_1)
+            times.append(time_1)
+            points.append(ride.pickup_1.address.addr_to_string())
             bools[0] = True
             if ride.pickup_2 is not None:
                 pickup_2_id = ride.pickup_2
                 time_2 = pickup_point_access.get_on_id(pickup_2_id).estimated_time
-                points.append(time_2)
+                times.append(time_2)
+                points.append(ride.pickup_2.address.addr_to_string())
                 bools[1] = True
                 if ride.pickup_3 is not None:
                     pickup_3_id = ride.pickup_3
                     time_3 = pickup_point_access.get_on_id(pickup_3_id).estimated_time
-                    points.append(time_3)
+                    times.append(time_3)
+                    points.append(ride.pickup_3.address.addr_to_string())
                     bools[2] = True
         pickupbools.append(bools)
+        pickuppointtimes.append(times)
         pickuppoints.append(points)
 
     to_ret = {}
@@ -545,14 +615,20 @@ def joinedrides_help(before, after, shared_with = None):
     to_ret["to_locs"] = to_places
     to_ret["pfps"] = pfps
     to_ret["form"] = form
+    to_ret["rideids"] = rideids
+    to_ret["numpassengers"] = numpassengers
+    to_ret["passengernames"] = passengernames
+    to_ret["pickuppointtimes"] = pickuppointtimes
+    to_ret["passengers"] = numpassengers
+    to_ret["allids"] = allids
     return to_ret
 
-@users.route("/joinedrides", defaults={'after':None, 'before':None},methods=['GET', 'POST'])
-@users.route("/<before>joinedrides", defaults={'after':None},methods=['GET', 'POST'])
-@users.route("/joinedrides<after>", defaults={'before':None},methods=['GET', 'POST'])
+
+@users.route("/joinedrides", defaults={'after': None, 'before': None}, methods=['GET', 'POST'])
+@users.route("/<before>joinedrides", defaults={'after': None}, methods=['GET', 'POST'])
+@users.route("/joinedrides<after>", defaults={'before': None}, methods=['GET', 'POST'])
 @users.route("/<before>joinedrides<after>", methods=['GET', 'POST'])
 def joinedrides(before, after):
-
     form = Filter_rides()
     if form.submit.data:
         if form.before.data and not form.after.data:
@@ -569,9 +645,13 @@ def joinedrides(before, after):
     res = joinedrides_help(before, after)
 
     return render_template('joined_rides.html', title=lazy_gettext('View ride'), loggedIn=True,
-                           userrides_j=res["userrides"], pickuppoints_j=res["pickuppoints"], pickupbools_j=res["pickupbools"],
-                           from_locs_j=res["from_locs"], to_locs_j=res["to_locs"], pfps_j=res["pfps"], form=form, before=before, after=after)
-
+                           userrides_j=res["userrides"], pickuppoints_j=res["pickuppoints"],
+                           pickupbools_j=res["pickupbools"],
+                           from_locs_j=res["from_locs"], to_locs_j=res["to_locs"], pfps_j=res["pfps"], form=form,
+                           before=before, after=after,
+                           numpassengers_j=res["numpassengers"], passengernames_j=res["passengernames"],
+                           pickuppointtimes_j=res["pickuppointtimes"],
+                           allids_j=res["rideids"], passengers_j=len(res["numpassengers"]))
 
 
 @users.route("/shared_rides=<userid>")
@@ -591,8 +671,12 @@ def shared_rides(userid):
                            userrides_m=m["userrides"],
                            from_locs_m=m["from_locs"], to_locs_m=m["to_locs"], pfps_m=m["pfps"],
                            allids_m=m["allids"], pickuppoints_m=m["pickuppoints"],
-                           pickupbools_m=m["pickupbools"], form=m["form"], userrides_j=j["userrides"], pickuppoints_j=j["pickuppoints"], pickupbools_j=j["pickupbools"],
-                           from_locs_j=j["from_locs"], to_locs_j=j["to_locs"], pfps_j=j["pfps"], userid=userid, target_user=target_user)
+                           pickupbools_m=m["pickupbools"], form=m["form"], userrides_j=j["userrides"],
+                           pickuppoints_j=j["pickuppoints"], pickupbools_j=j["pickupbools"],
+                           from_locs_j=j["from_locs"], to_locs_j=j["to_locs"], pfps_j=j["pfps"], userid=userid,
+                           target_user=target_user, pickuppointtimes_j=j["pickuppointtimes"], pickuppointtimes_m=m["pickuppointtimes"],
+                           allids_j=j["allids"], passengers_j=j["passengers"], passengernames_j=j["passengernames"],
+                           numpassengers_j=j["numpassengers"])
 
 
 @users.route("/user=<userid>", methods=['GET', 'POST'])
@@ -749,6 +833,9 @@ def edit_vehicle(car_id):
         'TESTING']:  # makes sure user won`t be able to go to page without logging in
         return redirect(url_for('users.login'))
     form = VehicleForm()
+
+    car = car_access.get_on_id(car_id)
+
     if request.method != 'POST':
         car = car_access.get_on_id(car_id)
         form.brand.data = car.brand
@@ -760,7 +847,13 @@ def edit_vehicle(car_id):
         form.consumption.data = car.fuel_consumption
         form.fuelType.data = car.fuel
 
-        return render_template('car_edit.html', title=lazy_gettext('Edit car'), loggedIn=True, form=form, car_id=car_id)
+        car_picpath = None
+        if car.picture is None:
+            car_picpath = "images/temp_car_pic.jpg"
+        else:
+            car_picpath = "images/" + picture_access.get_picture_on_id(car.picture).filename
+
+        return render_template('car_edit.html', title=lazy_gettext('Edit car'), loggedIn=True, form=form, car_id=car_id, car_picpath=car_picpath)
 
     if form.validate_on_submit():
         brand = form.brand.data
@@ -771,7 +864,6 @@ def edit_vehicle(car_id):
         constructionYear = form.constructionYear.data
         consumption = form.consumption.data
         fuelType = form.fuelType.data
-        picture_id = car_access.get_on_id(car_id).picture
 
         if form.picture.data:
             picture_file = save_picture(form.picture.data)
@@ -779,11 +871,14 @@ def edit_vehicle(car_id):
             picture_access.add_picture(picture_obj)
             picture_id = picture_access.get_picture_on_filename(picture_file).id
 
+        else:
+            picture_id = car_access.get_on_id(car_id).picture
+
         car_access.edit_car(car_id, brand, model, color, plateNumber, seats, constructionYear, consumption, fuelType,
                             picture_id)
         flash(lazy_gettext(f'Car edited!'), 'success')
         return redirect(url_for('users.account'))
-    return render_template('car_edit.html', title=lazy_gettext('Edit car'), loggedIn=True, form=form, car_id=car_id)
+    return render_template('car_edit.html', title=lazy_gettext('Edit car'), loggedIn=True, form=form, car_id=car_id, car_picpath=car_picpath)
 
 
 @users.route("/delete_vehicle=<car_id>", methods=['GET', 'POST'])
