@@ -267,6 +267,24 @@ def account_edit():
                 for car in cars:
                     car_access.delete_car(car.id)
 
+            # then delete reviews bc reviews have foreign key to user
+            reviews = review_access.get_on_user_for(current_user.id)
+            if reviews is not None:
+                for review in reviews:
+                    print(review.to_dict())
+                    review_access.delete_review(review.id)
+
+            # then delete all rides that the user created from ride table and passenger_ride
+            rides = ride_access.get_on_user_id(current_user.id)
+            if rides is not None:
+                for ride in rides:
+                    print(ride.to_dict())
+                    ride_access.delete_from_passenger_ride(ride.id)
+                    ride_access.delete_ride(ride.id)
+
+            # then delete all passenger_ride instances where user was a passenger
+            ride_access.delete_all_passenger_rides(current_user.id)
+
             # then delete user bc user has foreign key to address (error if address gets deleted first)
             user_access.delete_user(user.id)
 
