@@ -733,6 +733,12 @@ class Rides:
             return False
         return True
 
+    def check_amount_passengers(self, r_id):
+        cursor = self.dbconnect.get_cursor()
+        cursor.execute("select count(*) from passenger_ride WHERE passenger_ride.ride_id=%s", (r_id,))
+        result = cursor.fetchone()
+        return result[0]
+
     def register_passenger(self, p_id, r_id):
         if not self.check_passenger_registered(p_id, r_id):
             cursor = self.dbconnect.get_cursor()
