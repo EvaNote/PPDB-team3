@@ -297,3 +297,21 @@ hr {
 .leaflet-touch .leaflet-control-attribution {
     margin-right: 32px !important;
 }
+
+/* ride_history_wrap_7 */
+
+/* Size specific properties */
+@media only screen and (max-width: 768px) {
+    .ride_history_wrap_7 {
+        font-size: x-small !important;
+    }
+    .ride_history_wrap_3 {
+        font-size: x-small !important;
+    }
+}
+
+@media only screen and (min-width: 768px) {
+    .ride_history_wrap_7 {
+        font-size: x-large !important;
+    }
+}
