@@ -222,7 +222,9 @@ let state = {
 };
 
 function resetState() {
+    let sit = state.situation;
     state = {  // do not reset situation
+        situation: sit,
         campusClicked: false,
         campusFromId: null,
         campusToId: null,
@@ -563,6 +565,7 @@ $(function () {
     })
     // make sure pressing the 'update' button doesn't refresh the entire page
     $('form').submit(function () {
+        console.log(state);
         var from, to;
         state.campusFromId ? from = state.campusFromId : from = control.getWaypoints()[0].latLng;
         var points = control.getWaypoints().length;
@@ -677,6 +680,7 @@ $(function () {
                 })
                     // when post request is done, get the returned data and do something with it
                     .done(function (data) { // response function
+                        $('.no-result').addClass('result');
                         ride_count = data["results"].length + data["partner_results"].length
                         alert("Found " + ride_count + " matches! Scroll down to see them.");
                         //alert("FIND: " + JSON.stringify(data));
@@ -695,6 +699,10 @@ $(function () {
                         if (data === null) {
                             return
                         }
+                        // let fr = document.getElementById('findride_map');
+                        // fr.setAttribute('style', 'border-bottom-left-radius: 0; border-bottom-right-radius: 0;');
+                        // <div class="border-top pt-3" style="margin-top: 20px; margin-bottom: 10px"></div>
+
                         for (let d = 0; d < data["results"].length; d++) {
                             let stop = new Date();
                             console.log(stop - start);
@@ -806,7 +814,8 @@ $(function () {
                         }
                         /** PARTNER RESULTS **/
                         let separation = document.createElement("hr");
-                        separation.setAttribute("class", "my-5 bg-success w-100");
+                        separation.setAttribute("class", "my-5 bg-success");
+                        separation.setAttribute("style", "width: 96% !important");
                         result_div.append(separation);
                         let affiliate = document.createElement("div");
                         affiliate.setAttribute("class", "col-12 text-center");

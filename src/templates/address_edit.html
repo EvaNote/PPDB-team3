@@ -64,9 +64,27 @@
             </div>
 
         </fieldset>
-        <div class="form-group">
-            {{ form.submit(class="btn btn-outline-info") }}
+        <div class="row">
+            <div class="form-group" style="margin-left: 12px;">
+                {{ form.submit(class="btn btn-outline-info", id="save-click", style="visibility: hidden; width: 0; padding: 0; border: none") }}
+                <a class="btn btn-info" href="#" role="button" onclick="saveClick()"><i class="fas fa-save"></i> {{ _('Save') }}</a>
+            </div>
+            <div class="col-md-auto" style="padding-left: 0">
+                <button class="btn btn-info" role="button" onclick="goBack()"
+                   style="margin-left: 5px"><i class="fas fa-undo"></i> {{ _('Back') }}</button>
+            </div>
         </div>
+
       </form>
+
+    <script>
+        function saveClick() {
+            document.getElementById('save-click').click();
+        }
+
+        function goBack() {
+            window.history.go(-1)
+        }
+    </script>
 
 {% endblock contentContent %}

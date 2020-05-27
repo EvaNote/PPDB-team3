@@ -76,4 +76,4 @@ class SelectSubject(FlaskForm):
 
 
 class getCalendar(FlaskForm):
-    submit = SubmitField(lazy_gettext('Calendar'))
+    submit = SubmitField(lazy_gettext('<i class="fa fa-calendar-alt"></i> Calendar'))

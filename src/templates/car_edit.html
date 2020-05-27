@@ -5,8 +5,33 @@ consumption<!-- https://stackoverflow.com/questions/51756351/how-to-get-user-sel
     {{ _('Edit car') }}
 {% endblock contentTitle %}
 {% block contentContent %}
+
     <form method="POST" action="" enctype="multipart/form-data">
         {{ form.hidden_tag() }}
+
+        <div class="col-md-auto">
+        <div class="row">
+            <div class="col-md-auto">
+                <img src="{{ url_for('static', filename=car_picpath) }}" class="float-left mr-2" width="127px"
+                     alt="profile pic" style="border-radius: 50%; margin-bottom: 20px"><br><br>
+            </div>
+            <fieldset>
+                <div class="col-md-auto" style="margin-top: 35px">
+                    <div class="form-group" style="width: max-content">
+                        {{ form.picture.label() }}
+                        {{ form.picture(class="form-control-file") }}
+                        {% if form.picture.errors %}
+                            {% for error in form.picture.errors %}
+                                <span class="text-danger">{{ error }}</span><br>
+                            {% endfor %}
+                        {% endif %}
+                    </div>
+                </div>
+            </fieldset>
+
+        </div>
+    </div>
+
         <!-- display the form -->
         <fieldset class="form-group">
 
@@ -103,26 +128,33 @@ consumption<!-- https://stackoverflow.com/questions/51756351/how-to-get-user-sel
             </div>
             <div class="form-group">
                 {{ _('Fuel type') }}:
-                {{ form.fuelType}}
-            </div>
-                    <div class="form-group">
-                {{ form.picture.label() }}
-                {{ form.picture(class="form-control-file") }}
-                {% if form.picture.errors %}
-                    {% for error in form.picture.errors %}
-                        <span class = "text-danger">{{ error }}</span><br>
-                    {% endfor %}
-                {% endif %}
+                {{ form.fuelType }}
             </div>
 
+            <div class="row">
+                <div class="form-group" style="margin-left: 12px;">
+                    {{ form.submit(class="btn btn-outline-info", id="save-click", style="visibility: hidden; width: 0; padding: 0; border: none") }}
+                    <a class="btn btn-info" href="#" role="button" onclick="saveClick()"><i class="fas fa-save"></i> {{ _('Register vehicle') }}</a>
+                </div>
+                <div class="col-md-auto" style="padding-left: 0">
+                    <a class="btn btn-info" href="{{ url_for('users.delete_vehicle', car_id=car_id) }}" role="button"
+                       style="margin-left: 5px"><i class="fas fa-trash-alt"></i> {{ _('Delete car') }}</a>
+                </div>
+            </div>
 
         </fieldset>
-        <div class="form-group">
-            {{ form.submit(class="btn btn-outline-info") }}
-        </div>
-      </form>
 
-      <a class="btn btn-info" href="{{ url_for('users.delete_vehicle', car_id=car_id) }}" role="button">{{ _('Delete car') }}</a>
+    </form>
+
+
+    <script>
+        function saveClick() {
+            document.getElementById('save-click').click();
+        }
+    </script>
+
+
 
 
 {% endblock contentContent %}
+
