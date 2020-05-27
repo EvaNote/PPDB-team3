@@ -21,6 +21,20 @@ class RegistrationForm(FlaskForm):
             raise ValidationError(lazy_gettext('The email is already registered.'))
 
 
+class APIRegistrationForm(FlaskForm):
+    first_name = StringField(lazy_gettext('First name'), validators=[DataRequired()])
+    last_name = StringField(lazy_gettext('Last name'), validators=[DataRequired()])
+    email = StringField(lazy_gettext('Email'), validators=[DataRequired(), Email()])
+    password = PasswordField(lazy_gettext('Password'), validators=[DataRequired(), Length(min=8)])
+    confirm_password = PasswordField(lazy_gettext('Confirm password'), validators=[DataRequired(), EqualTo('password')])
+    send_emails = BooleanField(lazy_gettext('Send me emails with notifications'))
+    submit = SubmitField(lazy_gettext('Sign up'))
+
+    def validate_email(self, email):  # j
+        if user_access.get_user_on_email(email.data):
+            raise ValidationError(lazy_gettext('The email is already registered.'))
+
+
 class LoginForm(FlaskForm):
     email = StringField(lazy_gettext('Email'), validators=[DataRequired(), Email()])
     password = PasswordField(lazy_gettext('Password'), validators=[DataRequired()])

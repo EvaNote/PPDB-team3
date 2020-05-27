@@ -4,7 +4,7 @@ from werkzeug.datastructures import MultiDict
 
 from src.dbmodels.User import User
 from src.utils import bcrypt, user_access
-from src.users.forms import RegistrationForm
+from src.users.forms import APIRegistrationForm
 
 
 class RegisterApi(Resource):
@@ -20,7 +20,7 @@ class RegisterApi(Resource):
             "password": request.json.get("password"),
             "confirm_password": request.json.get("password")
         })
-        form = RegistrationForm(form_data, meta={'csrf': False})
+        form = APIRegistrationForm(form_data, meta={'csrf': False})
         if form.validate():
             # if the form is valid, hash the password, add the user to the database and return its id
             user_password = bcrypt.generate_password_hash(form.password.data).decode('utf-8')
