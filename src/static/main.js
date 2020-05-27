@@ -342,6 +342,10 @@ $(document).ready(function () {
     document.getElementsByClassName('leaflet-routing-geocoder')[0].remove();
     //document.getElementsByClassName('leaflet-routing-add-waypoint')[0].remove();
 
+    let leaflet_box = document.getElementsByClassName('leaflet-top leaflet-right')[0];
+    leaflet_box.setAttribute("class", "container-fluid leaflet-top d-flex justify-content-end")
+    console.log(leaflet_box);
+
     //src: https://github.com/pointhi/leaflet-color-markers
     var universityIcon = new L.Icon({
         iconUrl: 'https://cdn.rawgit.com/pointhi/leaflet-color-markers/master/img/marker-icon-green.png',
