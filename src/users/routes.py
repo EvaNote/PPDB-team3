@@ -878,6 +878,13 @@ def edit_vehicle(car_id):
                             picture_id)
         flash(lazy_gettext(f'Car edited!'), 'success')
         return redirect(url_for('users.account'))
+
+    car_picpath = None
+    if car.picture is None:
+        car_picpath = "images/temp_car_pic.jpg"
+    else:
+        car_picpath = "images/" + picture_access.get_picture_on_id(car.picture).filename
+
     return render_template('car_edit.html', title=lazy_gettext('Edit car'), loggedIn=True, form=form, car_id=car_id, car_picpath=car_picpath)
 
 
