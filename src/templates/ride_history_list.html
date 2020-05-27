@@ -30,7 +30,8 @@
                 </div>
             <div class="border-top pt-3"></div>
                 <div class="row">
-                    <div class="col-md-3"></div>
+                    <div class="col-md-1"></div>
+                    <div class="col-md-2 tablet-hidden"></div>
                     <div class="col-md-4">
                         <div class="ride_history_wrap_6"><i class="far fa-clock"></i> <b> {{ _('Departure: ') }} </b>{{ ride.departure_time }}</div>
                     </div>
@@ -39,7 +40,8 @@
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-md-3"></div>
+                    <div class="col-md-1"></div>
+                    <div class="col-md-2 tablet-hidden"></div>
                     <div class="col-md-4">
                         <div class="ride_history_wrap_6"><i class="far fa-clock"></i> <b> {{ _('Arrival: ') }} </b>{{ ride.arrival_time }}</div>
                     </div>
@@ -165,11 +167,11 @@
 
             <div class="ride_history_wrap_3">
                 <div class="row">
-                    <div class="ride_history_wrap_7" style="font-size: x-large; color: #17a2b8; margin-top: 5px"><b>
+                    <div class="ride_history_wrap_7" style="font-size: medium; color: #17a2b8; margin-top: 5px"><b>
                         <div class="row text-center" style="align-content: center">
-                            <div class="col-md-auto" style="margin-left: 15px"> {{ address_from }} </div>
-                            <div class="col-md-auto text-center" style="margin-left: 15px"><i class="fa fa-angle-double-right"></i></div>
-                            <div class="col-md-auto" style="margin-left: 15px"> {{ address_to }} </div>
+                            <div class="col-md-auto" style="margin-left: 20px"> {{ address_from }} </div>
+                            <div class="col-md-auto text-center" style="margin-left: 10px"><i class="fa fa-angle-double-right"></i></div>
+                            <div class="col-md-auto" style="margin-left: 20px"> {{ address_to }} </div>
                             <div class="col-md-auto"></div>
                         </div>
                         </b>
@@ -180,78 +182,73 @@
             <div class="border-top pt-3"></div>
                 <div class="row">
                     <div class="col-md-3"></div>
-                    <div class="col-md-4">
+                    <div class="col-md-4" style="margin-left: 5px">
                         <div class="ride_history_wrap_6"><i class="far fa-clock"></i> <b> {{ _('Departure: ') }} </b>{{ ride.departure_time }}</div>
                     </div>
-                    <div class="col-md-4">
+                    <div class="col-md-4" style="margin-left: 25px">
                         <div class="ride_history_wrap_9"><b> {{ _('From: ') }}</b> {{ address_from }}  </div>
                     </div>
                 </div>
                 <div class="row">
                     <div class="col-md-3"></div>
-                    <div class="col-md-4">
+                    <div class="col-md-4" style="margin-left: 5px">
                         <div class="ride_history_wrap_6"><i class="far fa-clock"></i> <b> {{ _('Arrival: ') }} </b>{{ ride.arrival_time }}</div>
                     </div>
-                    <div class="col-md-4">
+                    <div class="col-md-4" style="margin-left: 25px; margin-bottom: 20px">
                         <div class="ride_history_wrap_9"><b> {{ _('To: ') }}</b> {{ address_to }}  </div>
                     </div>
                 </div>
 
                 {% if pickupbool[0] %} {#https://jsfiddle.net/ourcodeworld/mo8Lg1hx/#}
-                    <div class="row" style="margin-top: 20px">
-                        <div class="col-md-3"></div>
-                        <div class="col-md-4">
-                            <span class="fa-stack" style="margin-left: -12px">
+                    <div class="row" style="margin-left: -7px">
+                        <span class="fa-stack">
                             <!-- The icon that will wrap the number -->
                             <span class="fa fa-circle-o fa-stack-1x"></span>
                             <!-- a strong element with the custom content, in this case a number -->
                             <strong class="fa-stack-1x" style="font-size: 60%">
                                 1
                             </strong>
-                        </span>
-                        <b style="margin-left: -12px">{{ _('Pickup 1: ') }} </b>{{ pickuptime[0] }}
-                        </div>
-                        <div class="col-md-4" style="margin-top: -8px">
-                            <div class="ride_history_wrap_9"><b> {{ _('Address: ') }}</b> {{ pickuppoint[0] }}  </div>
-                        </div>
+                            </span>
+                        <b style="margin-left: -7px">{{ _('Pickup 1: ') }} </b>{{ pickuptime[0] }}
                     </div>
+                    <div class="row" style="margin-top: -20px">
+                            <div class="ride_history_wrap_9" style="margin-left: 40px"><b> {{ _('Address: ') }}</b> {{ pickuppoint[0] }}  </div>
+                        </div>
+                    <br>
                 {% endif %}
                 {% if pickupbool[1] %}
-                    <div class="row" style="margin-top: -8px">
-                        <div class="col-md-3"></div>
-                        <div class="col-md-4">
-                            <span class="fa-stack" style="margin-left: -12px">
+                    <div class="row" style="margin-left: -7px">
+                        <span class="fa-stack">
                             <!-- The icon that will wrap the number -->
                             <span class="fa fa-circle-o fa-stack-1x"></span>
                             <!-- a strong element with the custom content, in this case a number -->
                             <strong class="fa-stack-1x" style="font-size: 60%">
                                 2
                             </strong>
-                        </span>
-                        <b style="margin-left: -12px">{{ _('Pickup 2: ') }} </b>{{ pickuptime[1] }}
-                        </div>
-                        <div class="col-md-4" style="margin-top: -8px">
-                            <div class="ride_history_wrap_9"><b> {{ _('Address: ') }}</b> {{ pickuppoint[1] }}  </div>
-                        </div>
+                            </span>
+                        <b style="margin-left: -7px">{{ _('Pickup 2: ') }} </b>{{ pickuptime[1] }}
+
                     </div>
+                    <div class="row" style="margin-top: -20px">
+                            <div class="ride_history_wrap_9" style="margin-left: 40px"><b> {{ _('Address: ') }}</b> {{ pickuppoint[1] }}  </div>
+                        </div>
+                    <br>
                 {% endif %}
                 {% if pickupbool[2] %}
-                    <div class="row" style="margin-top: -8px">
-                        <div class="col-md-3"></div>
-                        <div class="col-md-4">
-                            <span class="fa-stack" style="margin-left: -12px">
+                    <div class="row"  style="margin-left: -7px">
+                        <span class="fa-stack">
                             <!-- The icon that will wrap the number -->
                             <span class="fa fa-circle-o fa-stack-1x"></span>
                             <!-- a strong element with the custom content, in this case a number -->
                             <strong class="fa-stack-1x" style="font-size: 60%">
                                 3
                             </strong>
-                        </span>
-                        <b style="margin-left: -12px">{{ _('Pickup 3: ') }} </b>{{ pickuptime[2] }}
-                        </div>
-                        <div class="col-md-4" style="margin-top: -8px">
-                            <div class="ride_history_wrap_9"><b> {{ _('Address: ') }}</b> {{ pickuppoint[2] }}  </div>
-                        </div>
+                            </span>
+                        <b style="margin-left: -7px">{{ _('Pickup 3: ') }} </b>{{ pickuptime[2] }}
+
+                    </div>
+                    <div class="row" style="margin-top: -20px">
+                        <div class="ride_history_wrap_9" style="margin-left: 40px"><b> {{ _('Address: ') }}</b> {{ pickuppoint[2] }}  </div>
                     </div>
                     <br>
                 {% endif %}
@@ -259,8 +256,7 @@
                 {% if passengers > 0 %}
                     <div class="border-top pt-3"></div>
                     <div class="row">
-                        <div class="col-md-2"></div>
-                        <div class="col-md-4">
+                        <div class="col-md-4" style="margin-left: 10px; margin-bottom: 10px">
                             <b>Passengers:</b>
                         </div>
                     </div>
@@ -272,16 +268,14 @@
 
                 {% for p in range(numpassengers) %}
                     {% set linkid = passids[loop.index0] %}
-                    <div class="row">
-                        <div class="col-md-3"></div>
-                        <div class="col-md-4">
+                    <div class="row" style="margin-left: 40px">
+                        <div class="col-md-6">
                             <a style="color: #17a2b8" href={{ url_for('users.user', userid=passids[p]) }}>
-                            <img src="{{ url_for('static', filename=pfplist[p]) }}" class="float-left mr-2" width="70px"
-                                 alt="passenger pic" style="border-radius: 50%; margin-bottom: 10px"><br>
-                            {{ passengernames[p] }}
-                        </a>
+                                <img src="{{ url_for('static', filename=pfplist[p]) }}" class="float-left mr-2" width="70px"
+                                     alt="passenger pic" style="border-radius: 50%; margin-bottom: 10px"><br>
+                                {{ passengernames[p] }}
+                            </a>
                         </div>
-
                     </div>
                 {% endfor %}
             <div class="row">

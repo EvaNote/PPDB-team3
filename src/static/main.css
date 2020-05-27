@@ -303,12 +303,18 @@ hr {
 /* Size specific properties */
 @media only screen and (max-width: 768px) {
     .ride_history_wrap_7 {
-        font-size: medium !important;
+        font-size: smaller !important;
     }
     .myrides-btn {
         font-size: x-small;
     }
     .mobile-hidden {
+        display: none;
+    }
+}
+
+@media only screen and (max-width: 1500px) {
+    .tablet-hidden {
         display: none;
     }
 }
