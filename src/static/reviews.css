@@ -211,7 +211,7 @@
     color: #c59b08;
 }
 
-
+@media only screen and (min-width: 450px) {
 .fa-star {
     font-size: 330% !important;
     color: #cccccc;
@@ -224,4 +224,21 @@
     color: #cccccc;
     text-shadow: 1px 1px 4px gray;
     margin-bottom: 10px;
+}
+}
+
+@media only screen and (max-width: 450px) {
+.fa-star {
+    font-size: 290% !important;
+    color: #cccccc;
+    text-shadow: 1px 1px 4px gray;
+    margin-bottom: 10px;
+}
+
+.fa-star-half {
+    font-size: 290% !important;
+    color: #cccccc;
+    text-shadow: 1px 1px 4px gray;
+    margin-bottom: 10px;
+}
 }

@@ -327,3 +327,7 @@ hr {
         display: none;
     }
 }
+
+.btn {
+    margin-top: 4px;
+}
