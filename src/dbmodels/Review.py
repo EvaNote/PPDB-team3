@@ -120,3 +120,11 @@ class Reviews:
             self.dbconnect.commit()
         except:
             raise Exception('Unable to add review')
+
+    def delete_review(self, id):
+        cursor = self.dbconnect.get_cursor()
+        try:
+            cursor.execute('DELETE FROM "review" WHERE id=%s',(id,))
+            self.dbconnect.commit()
+        except:
+            raise Exception('Unable to delete review')
