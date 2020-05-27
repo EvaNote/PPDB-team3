@@ -15,10 +15,10 @@
 
             <button class="btn btn-info" type="button" data-toggle="collapse" data-target="#contact_form"
                 aria-expanded="false" aria-controls="contact_form"><i class="fa fa-envelope"></i>
-                {{ _('contact') }}
+                {{ _('Contact') }}
             </button>
 
-            <a class="btn btn-info" href="{{ url_for('users.gen_calendar') }}" role="button"><i class="fa fa-user-friends"></i> {{ _('Shared rides') }}</a>
+            <a class="btn btn-info" href="{{ url_for('users.shared_rides',userid=target_user.id) }}" role="button"><i class="fa fa-user-friends"></i> {{ _('Shared rides') }}</a>
         </div>
     </div>
 

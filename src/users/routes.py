@@ -504,7 +504,7 @@ def myrides(before, after):
             pass
 
     elif form.reset.data:
-        return redirect(url_for('users.myries', before=None, after=None))
+        return redirect(url_for('users.myrides', before=None, after=None))
 
     res = myrides_help(before, after)
 
@@ -686,7 +686,8 @@ def shared_rides(userid):
         abort(404)
 
     return render_template('shared_rides.html', title=lazy_gettext('Shared rides'), loggedIn=True,
-                           userrides_m=m["userrides"],
+                           userrides_m=m["userrides"], passengers_m=m["passengers"], passengernames_m=m["passengernames"],
+                           numpassengers_m=m["numpassengers"],
                            from_locs_m=m["from_locs"], to_locs_m=m["to_locs"], pfps_m=m["pfps"],
                            allids_m=m["allids"], pickuppoints_m=m["pickuppoints"],
                            pickupbools_m=m["pickupbools"], form=m["form"], userrides_j=j["userrides"],
