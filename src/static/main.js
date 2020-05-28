@@ -337,7 +337,6 @@ map.on('click', function (e) {
 
 $(document).ready(function () {
 
-    //TODO: dropdown? Lijst? Niks?
     document.getElementsByClassName('leaflet-routing-geocoder')[1].remove();
     document.getElementsByClassName('leaflet-routing-geocoder')[0].remove();
     //document.getElementsByClassName('leaflet-routing-add-waypoint')[0].remove();

@@ -179,7 +179,7 @@ class ProperlyLoadedUsersGetRoutes(FlaskTestCase):
 #         assert self.client.get("/nl/edit").status_code == 200
 #         assert self.client.get("/fr/edit").status_code == 200
 #
-#     def test_myrides_properly_loaded(self):  # TODO: gone??
+#     def test_myrides_properly_loaded(self):
 #         assert self.client.get("/en/myrides").status_code == 200
 #         assert self.client.get("/nl/myrides").status_code == 200
 #         assert self.client.get("/fr/myrides").status_code == 200

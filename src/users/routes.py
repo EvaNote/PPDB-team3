@@ -760,7 +760,7 @@ def user(userid):
     return render_template('user.html', title=lazy_gettext('User profile'), form=form,
                            target_user=target_user, mean_rate=mean, half_stars=half_stars, whole_stars=whole_stars,
                            data=data, cars=cars, form2=form2, pfp_path=pfp_path, car_picpaths=car_picpaths,
-                           allow_review=allow_review, rev_pfps=rev_pfps, userid=userid)  # TODO: same
+                           allow_review=allow_review, rev_pfps=rev_pfps, userid=userid)
 
 
 @users.route("/login", methods=['GET', 'POST'])

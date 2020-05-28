@@ -10,7 +10,7 @@ from src.dbmodels.Ride import Ride
 
 
 class DrivesApi(Resource):  # /api/drives
-    def post(self):  # TODO make it work properly
+    def post(self):
         auth_header = request.headers.get("Authorization")
         token = auth_header.split(" ")[1]
         if token is None:

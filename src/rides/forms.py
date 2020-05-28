@@ -18,7 +18,6 @@ from flask_babel import lazy_gettext
 #             raise ValidationError(lazy_gettext('The email is already registered.'))
 
 class Filter_rides(FlaskForm):
-    #TODO: validators?
     before = DateField(lazy_gettext("Before (yyyy-mm-dd)"))
     after = DateField(lazy_gettext("After (yyyy-mm-dd)"))
     submit = SubmitField(lazy_gettext('Show results'))
