@@ -64,8 +64,6 @@ def new_review(userid):
             send_email_review(user_for_email, writer_name)
         flash(lazy_gettext('Your review has been posted successfully!'), 'success')
         return redirect(url_for('users.user',userid=userid))
-    # else:
-    #     flash(lazy_gettext('Writing review failed.'), 'danger')
     return render_template('new_review.html', title=lazy_gettext('New review'), form=form, loggedIn=True, user_from=current_user,
                            user_for=userfor, userid=userid)
 

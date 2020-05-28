@@ -1,6 +1,6 @@
 from flask_wtf import FlaskForm, RecaptchaField
 from flask_wtf.file import FileField, FileAllowed
-from wtforms import StringField, PasswordField, SubmitField, BooleanField, SelectField, DateField, IntegerField, validators
+from wtforms import StringField, PasswordField, SubmitField, BooleanField, SelectField, IntegerField, validators
 from wtforms.validators import DataRequired, Length, Email, EqualTo, ValidationError, InputRequired
 from src.utils import user_access
 from flask_babel import lazy_gettext

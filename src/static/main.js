@@ -200,8 +200,6 @@ let control = L.Routing.control({
     }
 }).addTo(map);
 
-//L.control.locate().addTo(map);
-
 function createButton(label, container) {
     var btn = L.DomUtil.create('button', '', container);
     btn.setAttribute('type', 'button');
@@ -368,7 +366,7 @@ $(document).ready(function () {
         contentType: "application/json",
         url: "/en/fillschools"
     })
-        // when post request is done, get the returned data and do something with it
+    // when post request is done, get the returned data and do something with it
         .done(function (markers) { // response function
             for (var i in markers) {
                 let hover_display = markers[i].name;
@@ -406,11 +404,6 @@ $(document).ready(function () {
                                 map.closePopup();
                             }, 15000)
                         },
-                        // 'mouseout': function (e) {
-                        //     setTimeout(function () {
-                        //         map.closePopup();
-                        //     }, 2500)
-                        // },
                         'click': function (e) {
                             if (state.situation === 'show') {
                                 return;
@@ -646,12 +639,9 @@ $(function () {
 
         for (let i in estimated_times) {
             time = estimated_times[i];
-            //alert("estimated time voor omzet:" + time);
             estimated_times[i] = time.toISOString().split('T')[0] + ' ' + time.toTimeString().split(' ')[0];
-            //alert("estimated time na omzet:" + estimated_times[i]);
         }
 
-        //alert(estimated_times);
         // check if from-to are defined. If they aren't, nothing should happen
         if (typeof from !== 'undefined' && typeof to !== 'undefined') {
             var e = document.getElementById("ride_option");
@@ -667,9 +657,8 @@ $(function () {
                         passengers: form.passengers, pickup_points: pickup_points, estimated_times: estimated_times
                     })
                 })
-                    // when post request is done, get the returned data and do something with it
+                // when post request is done, get the returned data and do something with it
                     .done(function (data) { // response function
-                        //alert("CREATE: " + JSON.stringify(data));
                         alert("Created a new ride. You can see, edit and delete your created rides on the 'My Rides' page.")
                     });
 
@@ -681,30 +670,17 @@ $(function () {
                     url: "/en/calculateCompatibleRides",
                     data: JSON.stringify({from: from, to: to, time_option: form.time_option, datetime: form.datetime})
                 })
-                    // when post request is done, get the returned data and do something with it
+                // when post request is done, get the returned data and do something with it
                     .done(function (data) { // response function
                         $('.no-result').addClass('result');
                         ride_count = data["results"].length + data["partner_results"].length
                         alert("Found " + ride_count + " matches! Scroll down to see them.");
-                        //alert("FIND: " + JSON.stringify(data));
-                        // let mapButton = document.createElement("button");
-                        //     mapButton.setAttribute("class", "btn btn-info m-2");
-                        //     mapButton.onclick = function() {
-                        //         let w2 = window.open("http://team1.ppdb.me/index");
-                        //         console.log(w2.document);
-                        //         w2.document.getElementsByName("from_location")[0].setAttribute("value", "Yeet");
-                        //     }
-                        //     mapButton.innerHTML = "Show on map";
                         let result_div = $('#result');
                         result_div.empty();
                         result_div.attr("class", "row justify-content-center");
-                        // result_div.append(mapButton);
                         if (data === null) {
                             return
                         }
-                        // let fr = document.getElementById('findride_map');
-                        // fr.setAttribute('style', 'border-bottom-left-radius: 0; border-bottom-right-radius: 0;');
-                        // <div class="border-top pt-3" style="margin-top: 20px; margin-bottom: 10px"></div>
 
                         for (let d = 0; d < data["results"].length; d++) {
                             let stop = new Date();
@@ -775,18 +751,16 @@ $(function () {
                                     url: "/en/joinride",
                                     data: JSON.stringify({ride_id: result.id})
                                 })
-                                    // when post request is done, get the returned data and do something with it
+                                // when post request is done, get the returned data and do something with it
                                     .done(function (data2) {
                                         if (data2) {
                                             if (data2["result"] === "success") {
                                                 console.log(data2["result"]);
                                                 alert("Ride joined successfully.");
-                                            }
-                                            else if (data2["result"] === "current user is driver") {
+                                            } else if (data2["result"] === "current user is driver") {
                                                 console.log(data2["result"]);
                                                 alert("You cannot join a ride you created.");
-                                            }
-                                            else if (data2["result"] === "failed") {
+                                            } else if (data2["result"] === "failed") {
                                                 console.log(data2["result"]);
                                                 alert("You already joined this ride.");
                                             }
@@ -901,27 +875,6 @@ $(function () {
 
                             result_div.append(choice);
                         }
-
-                        // $('#result').attr("class", "row justify-content-center");
-                        // for (let d = 0; d < data["results"].length; d++) {
-                        //     let result = data.results[d];
-                        //     let btn = document.createElement("button");
-                        //     btn.setAttribute("id", "result" + d.toString())
-                        //     btn.setAttribute("class","btn btn-info col-md-5 m-3 text-left");
-                        //     let from, to;
-                        //     if (result["to_campus"] === true) {
-                        //         from = result["address_1"];
-                        //         to = result["campus"];
-                        //     } else {
-                        //         from = result["campus"];
-                        //         to = result["address_1"];
-                        //     }
-                        //     btn.innerHTML = "From: " + from.toString() + "<br>\n" +
-                        //                     "To: " + to.toString() + "<br>\n" +
-                        //                     "Departure: " + result["departure_time"] + "<br>\n" +
-                        //                     "Arrival: " + result["arrival_time"] + "<br>";
-                        //     $('#result').append(btn);
-                        // }
                     });
             }
         }
@@ -953,24 +906,3 @@ Date.prototype.toMysqlFormat = function () {
     return this.getUTCFullYear() + "-" + twoDigits(1 + this.getUTCMonth()) + "-" + twoDigits(this.getUTCDate()) + " " + twoDigits(this.getUTCHours() + 2) + ":" + twoDigits(this.getUTCMinutes()) + ":" + twoDigits(this.getUTCSeconds());
 };
 
-/*
-
-function Geeks() {
-                var myDiv = document.getElementById("GFG");
-
-                // creating button element
-                var button = document.createElement('BUTTON');
-
-                // creating text to be
-                //displayed on button
-                var text = document.createTextNode("Button");
-
-                // appending text to button
-                button.appendChild(text);
-
-                // appending button to div
-                myDiv.appendChild(button);
-            }
-function showcompatibleRide(){
-
-};*/

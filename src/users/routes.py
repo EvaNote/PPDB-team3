@@ -111,9 +111,6 @@ def generate_calendar(user_id):
         result = result_file.readlines()
 
     from src.emails import send_email_calendar
-    result = "".join(result).replace('\xc9', '')
-    result = "".join(result).replace('\xe9', '')
-    result = "".join(result).replace('\xe8', '')
     email = user_access.get_user_on_id(current_user.id).email
     send_email_calendar(email, cal_path)
     flash(lazy_gettext(f'Your calendar has been sent to your email address!'), 'success')
@@ -326,7 +323,6 @@ def address_edit():
         city = form.city.data
         postal_code = form.postal_code.data
 
-        address_id = None
         user = user_access.get_user_on_id(current_user.id)
         loc = geolocator.geocode(str(street) + " " + str(nr) + " " + str(postal_code) + " " + str(city))
         if loc is None:
@@ -359,15 +355,12 @@ def filter_rides(rides, before, after):
         newrides = []
         for ride in rides:
             if before is not None and after is None:
-                # TOOO: arrival/departure?
                 if ride.arrival_time <= before:
                     newrides.append(ride)
             elif after is not None and before is None:
-                # TOOO: arrival/departure?
                 if ride.departure_time >= after:
                     newrides.append(ride)
             elif after is not None and before is not None:
-                # TOOO: arrival/departure?
                 if ride.departure_time >= after and ride.arrival_time <= before:
                     newrides.append(ride)
     return newrides

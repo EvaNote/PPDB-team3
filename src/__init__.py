@@ -32,9 +32,6 @@ def create_app(config_class):
     app = Flask(__name__)
     # load configuration from a certain Config class in config.py
     app.config.from_object(config_class)
-    #
-    #app.config['RECAPTCHA_PUBLIC_KEY'] = '6LeVm_sUAAAAAPTWm7ZRM5isH6J6PxVybQLVS84_'
-    #app.config['RECAPTCHA_PRIVATE_KEY'] = '6LeVm_sUAAAAALI9tUu6RyzqLHrqT0FfN8koWm5U'
 
     # register blueprints into the app
     app.register_blueprint(main)

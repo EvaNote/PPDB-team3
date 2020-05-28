@@ -73,7 +73,6 @@ hr {
     background-size: cover;
 }
 
-
 .center {
   display: block;
   margin-left: auto;
@@ -85,52 +84,6 @@ hr {
     background-color: tomato;
     margin-left: 10px;
 }
-/*
-.search-box{
-    position: absolute;
-    top: 10%;
-    left: 80%;
-    transform: translate(-50%, -50%);
-    background: #2f3640;
-    height: 40px;
-    border-radius: 40px;
-    padding: 10px;
-}
-
-.search-box:hover > .search-txt{
-    background: white;
-}
-.search-box:hover > .search-btn{
-    width: 240px;
-    padding: 0 6px;
-}
-.search-btn{
-    color: #e84118;
-    float: right;
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    background: #2f3640;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    transition: 0.4s;
-}
-
-.search-txt{
-    border: none;
-    background: none;
-    outline: none;
-    float: left;
-    padding: 0;
-    color: white;
-    font-size: 16px;
-    transition: 0.4s;
-    line-height: 40px;
-    width: 0px;
-}
-
- */
 
 .ride_history_wrap_3{
   margin-left: 5%;
@@ -145,7 +98,6 @@ hr {
 }
 .ride_history_wrap_1{
     border-radius: 15px;
-  /*background: #17a2b8;*/
   font-size:100%;
   width:20%;
   position: relative;
@@ -166,27 +118,22 @@ hr {
 }
 
 .ride_history_wrap_6 {
-    /*background: #40b1c4;*/
   font-size:100%;
   position: relative;
     left: 0;
     top: 10px;
   display: inline-block;
   height: auto;
-  /*text-align: center;*/
  }
 .ride_history_wrap_9 {
-    /*background: #40b1c4;*/
   font-size:100%;
   position: relative;
     left: 0;
     top: 10px;
   display: inline-block;
   height: auto;
-  /*text-align: center;*/
  }
 .ride_history_wrap_4{
-    /*background: #40b1c4;*/
   font-size:100%;
   width:70%;
   position: relative;
@@ -204,24 +151,18 @@ hr {
   height: auto;
   text-align: center;
   border-color: #17a2b8;
-
  }
 
 .ride_history_wrap_7 {
-    /*background: #40b1c4;*/
     font-size: 100%;
-    /*width: 70%;*/
     width: 100%;
     position: relative;
-    /*left: 18%;*/
     display: inline-block;
     height: auto;
     text-align: center;
-    /*text-align: center;*/
 }
 
 .ride_history_wrap_8 {
-    /*background: #17a2b8;*/
     font-size: 100%;
     width: 20%;
     position: relative;
@@ -246,7 +187,6 @@ hr {
     margin: 1rem auto;
 }
 
-
 .review-pic{
     border-radius: 100%;
     width: 100px;
@@ -255,7 +195,6 @@ hr {
 #findride_map {
     height: 80vh;
 }
-
 
 #asd{
   margin-top: 20px;
@@ -297,8 +236,6 @@ hr {
 .leaflet-touch .leaflet-control-attribution {
     margin-right: 32px !important;
 }
-
-/* ride_history_wrap_7 */
 
 /* Size specific properties */
 @media only screen and (max-width: 768px) {

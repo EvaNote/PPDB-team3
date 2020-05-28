@@ -1,12 +1,10 @@
 from flask import Blueprint, render_template, g, current_app, abort, request, jsonify, url_for, redirect, flash
-from flask_login import current_user, login_user, logout_user
-from src.utils import campus_access, user_access, ride_access, address_access, pickup_point_access, car_access
+from src.utils import campus_access, user_access, ride_access, address_access, pickup_point_access
 from flask_babel import lazy_gettext
 from src.dbmodels.Address import Address
 from src.dbmodels.Ride import Ride
 from src.dbmodels.PickupPoint import PickupPoint
 from flask_login import current_user
-from src.users import routes
 from src.emails import *
 
 main = Blueprint('main', __name__, url_prefix='/<lang_code>')
@@ -63,8 +61,6 @@ def contact():
 @main.route('/calculateCompatibleRides', methods=['POST'])
 def receiver():
     from time import time
-    start = time()
-    # read json + reply
     data = request.json
     from_coord = data.get('from')
     to_coord = data.get('to')
@@ -175,8 +171,6 @@ def receiver_create():
         address_access.add_address(address_to)
         address_to = address_to.fetch_id()
 
-    time_option = data.get('time_option')
-    datetime = data.get('datetime')
     arrival_time = data.get('arrive_time')
     departure_time = data.get('depart_time')
 

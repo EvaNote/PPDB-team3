@@ -1,10 +1,8 @@
-from flask import Blueprint, flash, render_template, g, current_app, abort
 from flask_babel import lazy_gettext
 from flask import Blueprint, flash, render_template, g, current_app, abort, redirect, url_for, request
 from flask_login import current_user
-import src.users.routes
 from src.rides.forms import Filter_rides
-from src.utils import user_access, car_access, ride_access, picture_access, pickup_point_access, address_access, campus_access
+from src.utils import user_access, ride_access, picture_access, pickup_point_access, campus_access
 from src.emails import *
 
 rides = Blueprint('rides', __name__, url_prefix='/<lang_code>')
@@ -71,19 +69,11 @@ def view_ride(rideid):
     ride = ride_access.get_on_id(int(rideid))
     if ride is None:
         abort(404)
-    from_place = None
-    to_place = None
-    from_lat = None
-    from_lng = None
-    to_lat = None
-    to_lng = None
     pfps = []
     allids = []
     pickuppoints = []
     pickupbools = [False, False, False]
     pickuptimes = []
-    passengers = None
-    numpassengers = None
     passengernames = []
     if ride.campus_from:
         from_place = ride.campus_from.name
@@ -115,7 +105,6 @@ def view_ride(rideid):
     for user_id in temp:
         if not loggedIn or user_id is not current_user.id:
             temp2.append(user_id)
-            # userids.append(user_id)
             user = user_access.get_user_on_id(user_id)
             passengernames.append(user.first_name + ' ' + user.last_name)
             if user.picture is not None:
@@ -161,10 +150,6 @@ def view_ride(rideid):
                            passengers=len(passengernames),
                            allids=allids,
                            ride=ride)
-
-# @rides.route("/maps")
-# def maps():
-#     return render_template("maps.html", title="maps")
 
 @rides.route("/join=<rideid>")
 def join(rideid):

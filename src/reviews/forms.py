@@ -1,8 +1,9 @@
 from flask_wtf import FlaskForm
 from markupsafe import Markup
-from wtforms import StringField, SubmitField, IntegerField, TextAreaField, RadioField
+from wtforms import StringField, SubmitField, IntegerField, TextAreaField
 from wtforms.validators import DataRequired, NumberRange, Length
 from flask_babel import lazy_gettext
+
 
 class ReviewForm(FlaskForm):
     user_for = IntegerField(lazy_gettext('For'))  # id of user
