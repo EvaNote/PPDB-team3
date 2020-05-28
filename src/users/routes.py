@@ -585,10 +585,7 @@ def joinedrides_help(before, after, shared_with=None):
                     temp_pfps.append("images/" + str(picture_access.get_picture_on_id(user.picture).filename))
                 else:
                     temp_pfps.append("images/temp_profile_pic.png")
-                # if user.picture is not None:
-                #     ride_pfp.append("images/" + str(picture_access.get_picture_on_id(user.picture).filename))
-                # else:
-                #     ride_pfp.append("images/temp_profile_pic.png")
+
 
         pfps.append(temp_pfps)
         allids.append(temp2)

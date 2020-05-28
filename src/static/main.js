@@ -502,17 +502,7 @@ $(document).ready(function () {
         document.getElementsByClassName('leaflet-routing-geocoders')[0].appendChild(child);
     }
 
-    // let rbutton = document.createElement("button");
-    // rbutton.innerHTML = "Do Something";
-    //
-    // // 2. Append somewhere
-    // let rbody = document.getElementsByTagName("rbody")[0];
-    // rbody.appendChild(rbutton);
-    //
-    // // 3. Add event handler
-    // rbutton.addEventListener ("click", function() {
-    //   alert("did something");
-    // });
+
 });
 
 $.fn.setNow = function (onlyBlank) {
@@ -578,12 +568,10 @@ $(function () {
         for (let i in instr) {
             time += instr[i].time;
             if (instr[i].type === "WaypointReached") {
-                //console.log("Time to waypoint: " + time);
                 times.push(time);
                 time = 0;
             }
             if (instr[i].type === "DestinationReached") {
-                //alert("ka");
                 times.push(time);
                 time = 0;
             }
@@ -594,11 +582,9 @@ $(function () {
         var arrive = true;
         if (time_option === "Arrive by") {
             depart_time.setSeconds(depart_time.getSeconds() - seconds);
-            //alert("wiewa arrive")
         }
         if (time_option === "Depart at") {
             arrive_time.setSeconds(arrive_time.getSeconds() + seconds);
-            //alert("wiewa depart")
             arrive = false;
         }
         var pickup_points = [];

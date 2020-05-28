@@ -158,7 +158,6 @@ class UserAccess:
     def edit_user(self, user_id, first_name, last_name, email, gender, age, phone_number, address_id, picture_id, send_emails):
         cursor = self.dbconnect.get_cursor()
         user = self.get_user_on_id(user_id)
-        # user_id = user.id
 
         try:
             cursor.execute('UPDATE "user" SET first_name=%s,last_name=%s,email=%s,gender=%s,age=%s,phone_number=%s,'

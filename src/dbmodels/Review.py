@@ -84,7 +84,7 @@ class Reviews:
             review = Review(row[0], row[1], row[2], row[3], row[4], row[5], row[6], row[7])
             reviews.append(review)
         return reviews
-        # return self.get_on('user_for', the_id)
+
 
     def get_on_user_from(self, the_id):
         return self.get_on('user_from', the_id)
