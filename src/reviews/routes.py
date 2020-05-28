@@ -92,7 +92,19 @@ def sort():
     data2 = list()
     for d in data:
         if str(d.id) in select or len(select) == 0:
-            data2.append(d.to_dict())
+            user_from = user_access.get_user_on_id(d.user_from)
+            pic = "images/"
+            if user_from.picture is None:
+                pic += "temp_profile_pic.png"
+            else:
+                pic += picture_access.get_picture_on_id(user_from.picture).filename
+            dict_ = d.to_dict()
+            p = url_for('static', filename=pic)
+            dict_["picture"] = p
+            link = url_for('users.user', userid=user_from.id)
+            dict_["link"] = link
+            data2.append(dict_)
+
     resp = make_response(json.dumps(data2))
     resp.status_code = 200
     resp.headers['Access-Control-Allow-Origin'] = '*'
@@ -111,17 +123,27 @@ def search():
     data2 = list()
     for d in data:
         if str(d.id) in select or len(select) == 0:
-            d = d.to_dict()
-            if search_term.lower() in d['title'].lower():
-                data2.append(d)
-            elif search_term.lower() in d['review_text'].lower():
-                data2.append(d)
-            elif search_term.lower() in d['user_from_first_name'].lower():
-                data2.append(d)
-            elif search_term.lower() in d['user_from_last_name'].lower():
-                data2.append(d)
-            elif search_term.lower() in d['creation'].lower():
-                data2.append(d)
+            user_from = user_access.get_user_on_id(d.user_from)
+            pic = "images/"
+            if user_from.picture is None:
+                pic += "temp_profile_pic.png"
+            else:
+                pic += picture_access.get_picture_on_id(user_from.picture).filename
+            dict_ = d.to_dict()
+            p = url_for('static', filename=pic)
+            dict_["picture"] = p
+            link = url_for('users.user', userid=user_from.id)
+            dict_["link"] = link
+            if search_term.lower() in dict_['title'].lower():
+                data2.append(dict_)
+            elif search_term.lower() in dict_['review_text'].lower():
+                data2.append(dict_)
+            elif search_term.lower() in dict_['user_from_first_name'].lower():
+                data2.append(dict_)
+            elif search_term.lower() in dict_['user_from_last_name'].lower():
+                data2.append(dict_)
+            elif search_term.lower() in dict_['creation'].lower():
+                data2.append(dict_)
     resp = make_response(json.dumps(data2))
     resp.status_code = 200
     resp.headers['Access-Control-Allow-Origin'] = '*'
@@ -137,11 +159,22 @@ def filter_stars():
     data2 = list()
     for d in data:
         if str(d.amount_of_stars) in stars or len(stars) == 0:
+            user_from = user_access.get_user_on_id(d.user_from)
+            pic = "images/"
+            if user_from.picture is None:
+                pic += "temp_profile_pic.png"
+            else:
+                pic += picture_access.get_picture_on_id(user_from.picture).filename
+            p = url_for('static', filename=pic)
+            dict_ = d.to_dict()
+            dict_["picture"] = p
+            link = url_for('users.user',userid=user_from.id)
+            dict_["link"] = link
             if me == 'true':
                 if d.user_from == current_user.id:
-                    data2.append(d.to_dict())
+                    data2.append(dict_)
             else:
-                data2.append(d.to_dict())
+                data2.append(dict_)
     resp = make_response(json.dumps(data2))
     resp.status_code = 200
     resp.headers['Access-Control-Allow-Origin'] = '*'

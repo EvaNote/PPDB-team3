@@ -145,19 +145,24 @@ $(document).ready(function () {
         let byText = document.createTextNode(' by ');
         let boldName = document.createElement('B');
         createTextNodeOnSearch(search, review['user_from_first_name'] + ' ' + review['user_from_last_name'], boldName);
+        let user_role = document.createTextNode(' (' + review['role'] + ')');
         displayNameCol.appendChild(boldCreation);
         displayNameCol.appendChild(byText);
         displayNameCol.appendChild(boldName);
+        displayNameCol.appendChild(user_role);
         creationRow.appendChild(displayNameCol);
         outerDiv.appendChild(creationRow);
 
         let pictureRow = document.createElement('DIV');
         pictureRow.setAttribute('class', 'content-section border-light p-4 mx-5 mb-5 display-review');
+        let hr = document.createElement('A');
+        hr.setAttribute('href', review['link']);
         let img = document.createElement('IMG');
         img.setAttribute('class', 'display-profile-pic-review');
-        img.setAttribute('src', '/static/images/temp_profile_pic.png');
+        img.setAttribute('src', review['picture']);
         img.setAttribute('alt', 'HTML5 Icon');
-        pictureRow.appendChild(img);
+        hr.appendChild(img);
+        pictureRow.appendChild(hr);
         outerDiv.appendChild(pictureRow);
 
         let textRow = document.createElement('DIV');
