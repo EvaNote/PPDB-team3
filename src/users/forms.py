@@ -49,11 +49,11 @@ class DeleteUserForm(FlaskForm):
 class VehicleForm(FlaskForm):
     brand = StringField(lazy_gettext('Brand'), validators=[DataRequired(), Length(max=30)])
     model = StringField(lazy_gettext('Model'), validators=[DataRequired(), Length(max=256)])
-    color = StringField(lazy_gettext('Color'), Length(max=30))
+    color = StringField(lazy_gettext('Color'), validators=[Length(max=30)])
     plateNumber = StringField(lazy_gettext('Plate number'), validators=[DataRequired(), Length(max=10)])
     seats = IntegerField(lazy_gettext('Seats'), validators=[InputRequired()])
     constructionYear = IntegerField(lazy_gettext('Construction Year'),[validators.optional()])
-    consumption = StringField(lazy_gettext('Fuel Consumption'), Length(max=30))
+    consumption = StringField(lazy_gettext('Fuel Consumption'), validators=[Length(max=30)])
     fuelType = SelectField(lazy_gettext('Fuel type'), choices=[('benzine', lazy_gettext('Gasoline/Petrol/Benzine')), ('diesel', lazy_gettext('Diesel')),
                                                 ('LPG', lazy_gettext('Liquified Petroleum')), ('electricity', lazy_gettext('Electricity')),
                                                 ('CNG', lazy_gettext('Compressed Natural Gas')),
@@ -68,7 +68,7 @@ class EditAccountForm(FlaskForm):
     email = StringField(lazy_gettext('Email'), validators=[DataRequired(), Email()])
     gender = SelectField(lazy_gettext('Gender'), choices=[('M',lazy_gettext('Male')),('F', lazy_gettext('Female')), (None, lazy_gettext('Other'))])
     age = IntegerField(lazy_gettext('Age'), [validators.optional()])
-    phone_number = StringField(lazy_gettext('Phone number'), Length(max=20))
+    phone_number = StringField(lazy_gettext('Phone number'), validators=[Length(max=20)])
     picture = FileField(lazy_gettext('Upload profile picture'), validators=[FileAllowed(['jpg','png'])])
     send_emails = BooleanField(lazy_gettext('Send me emails with notifications'))
     submit = SubmitField(lazy_gettext('Save'))
