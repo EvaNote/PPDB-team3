@@ -311,8 +311,6 @@ class Rides:
             return
         cursor = self.dbconnect.get_cursor()
 
-        print(ride.departure_time, ride.arrival_time)
-
         cursor.execute('INSERT INTO "ride" VALUES(default, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)',
                        (ride.departure_time, ride.arrival_time, ride.user_id, ride.passengers,
                         ride.pickup_id(1), ride.pickup_id(2), ride.pickup_id(3), ride.campus_from_id(), ride.campus_to_id(),
@@ -384,16 +382,16 @@ class Rides:
         # url = 'http://team1.ppdb.me/api/drives/search?'
         
 
-        print(url)
+        #print(url)
         r = requests.get(url)
         data = r.json()
-        print(data)
+        #print(data)
 
         partner_rides = list()
         from src.utils import campus_access, address_access
         from src.dbmodels.Address import Address
         for ride in data:
-            print(ride)
+            #print(ride)
             campus_from = campus_access.is_campus(ride['from'][0], ride['from'][1])
             campus_to = campus_access.is_campus(ride['to'][0], ride['to'][1])
             address_from = Address(None, None, None, None, None, None, None, ride['from'][0], ride['from'][1])

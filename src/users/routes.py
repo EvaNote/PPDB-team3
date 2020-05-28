@@ -268,14 +268,12 @@ def account_edit():
             reviews = review_access.get_on_user_for(current_user.id)
             if reviews is not None:
                 for review in reviews:
-                    print(review.to_dict())
                     review_access.delete_review(review.id)
 
             # then delete all rides that the user created from ride table and passenger_ride
             rides = ride_access.get_on_user_id(current_user.id)
             if rides is not None:
                 for ride in rides:
-                    print(ride.to_dict())
                     ride_access.delete_from_passenger_ride(ride.id)
                     ride_access.delete_ride(ride.id)
 
@@ -348,7 +346,6 @@ def address_edit():
 
 # before/after als datetime, ride.arrival als string?
 def filter_rides(rides, before, after):
-    print(before, after, rides)
     if before is None and after is None:
         return rides
     else:

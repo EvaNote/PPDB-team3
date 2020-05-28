@@ -98,5 +98,4 @@ class Cars:
             cursor.execute('DELETE FROM "car" WHERE id=%s',(car_id,))
             self.dbconnect.commit()
         except Exception as e:
-            print(e)
             raise Exception('Unable to delete car')
