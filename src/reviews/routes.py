@@ -2,7 +2,7 @@ from flask import Blueprint, render_template, flash, redirect, url_for, g, curre
 from src.reviews.forms import ReviewForm
 from flask_login import current_user
 from src.dbmodels.Review import Review
-from src.utils import user_access, review_access
+from src.utils import user_access, review_access, picture_access
 from flask_babel import lazy_gettext
 from src.emails import *
 import json
@@ -43,6 +43,10 @@ def new_review(userid):
         return redirect(url_for('users.login'))
     form = ReviewForm()
     userfor = user_access.get_user_on_id(userid)
+    if userfor.picture is None:
+        picture = "images/temp_profile_pic.png"
+    else:
+        picture = "images/" + str(picture_access.get_picture_on_id(userfor.picture).filename)
     if form.validate_on_submit():
         user_from = current_user.id
         user_for = userid
@@ -65,7 +69,7 @@ def new_review(userid):
         flash(lazy_gettext('Your review has been posted successfully!'), 'success')
         return redirect(url_for('users.user',userid=userid))
     return render_template('new_review.html', title=lazy_gettext('New review'), form=form, loggedIn=True, user_from=current_user,
-                           user_for=userfor, userid=userid)
+                           user_for=userfor, userid=userid, picture=picture)
 
 
 @reviews.route("/sort", methods=['POST'])

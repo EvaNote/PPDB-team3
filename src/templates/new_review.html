@@ -68,7 +68,7 @@
                 </fieldset>
                 <fieldset class="form-group">
                     <div>
-                        <img class="display-profile-pic-review" src="../../static/images/temp_profile_pic.png"
+                        <img class="display-profile-pic-review" src="{{ url_for('static', filename=picture) }}"
                              alt="HTML5 Icon">
                         <b class="display-name">{{ user_for.first_name }} {{ user_for.last_name }}</b>
                     </div>
